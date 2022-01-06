@@ -44,7 +44,7 @@ const LoginPage: NextPage = () => {
           <button
             type="submit"
             name="login"
-            className="w-full p-4 mt-5 uppercase text-sm font-bold tracking-wider bg-staytard-yellow hover:bg-black hover:text-white hover:transition-all hover:duration-300 hover:ease-in-out"
+            className="w-full p-4 mt-5 uppercase text-sm font-bold tracking-wider bg-staytard-yellow hover:bg-black hover:text-white transition-all duration-300 ease-out"
           >
             Sign In
           </button>
