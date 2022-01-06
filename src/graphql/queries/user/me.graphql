@@ -1,0 +1,17 @@
+query Me {
+  me {
+    id
+    firstName
+    lastName
+    email
+    isRegisteredWithGoogle
+    isEmailConfirmed
+    isAdmin
+    address {
+      id
+      city
+      street
+      postalCode
+    }
+  }
+}
