@@ -6,7 +6,7 @@ describe("LoginPage", () => {
   beforeEach(() => {
     cy.visit(APP_PAGE_ROUTE.LOGIN);
   });
-  describe("blurring inputs", () => {
+  describe("when invoking blur on inputs", () => {
     describe("and email is not valid", () => {
       it("should display an error message", () => {
         cy.get("input[type=email]").type("invalidEmail").blur();
@@ -16,22 +16,19 @@ describe("LoginPage", () => {
     describe("and email is valid", () => {
       it("should not display an error message", () => {
         cy.get("input[type=email]").type("some.guy@gmail.com").blur();
-        const errorMessageElement = cy.get("[data-cy=email-input-error]");
-        errorMessageElement.should("not.exist");
+        cy.get("[data-cy=email-input-error]").should("not.exist");
       });
     });
     describe("and password is empty", () => {
       it("should display an error message", () => {
         cy.get("input[type=password]").focus().blur();
-        const errorMessageElement = cy.get("[data-cy=password-input-error]");
-        errorMessageElement.should("exist");
+        cy.get("[data-cy=password-input-error]").should("exist");
       });
     });
     describe("and password is not empty", () => {
       it("should not display an error message", () => {
         cy.get("input[type=password]").type("hello").blur();
-        const errorMessageElement = cy.get("[data-cy=password-input-error]");
-        errorMessageElement.should("not.exist");
+        cy.get("[data-cy=password-input-error]").should("not.exist");
       });
     });
   });
