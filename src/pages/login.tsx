@@ -1,7 +1,10 @@
+import { LockClosedIcon, MailIcon } from "@heroicons/react/outline";
 import { NextPage } from "next";
-
 const inputClassNames =
-  "w-full text-xs placeholder-black placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold ring-black h-[50px] ring-1 ring-opacity-25 focus:ring-1 focus:ring-black focus:ring-opacity-60 border-none focus:border-none ";
+  "w-full pl-12 text-xs placeholder-black placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold ring-black h-[50px] ring-1 ring-opacity-25 focus:ring-1 focus:ring-black focus:ring-opacity-60 border-none focus:border-none ";
+
+const inputIconClassNames =
+  "w-[13px] absolute top-[18px] left-4 text-black text-opacity-40";
 const LoginPage: NextPage = () => {
   return (
     <div className="sm:max-w-md lg:max-w-lg 2xl:max-w-4xl mx-auto px-8">
@@ -16,7 +19,7 @@ const LoginPage: NextPage = () => {
         {/* form */}
         <form name="LoginUserForm" className="pt-6">
           <div className="space-y-3">
-            <div>
+            <div className="relative">
               {/* email input */}
               <input
                 type="email"
@@ -25,8 +28,9 @@ const LoginPage: NextPage = () => {
                 name="email-input"
                 placeholder="E-mail"
               />
+              <MailIcon className={inputIconClassNames} />
             </div>
-            <div>
+            <div className="relative">
               {/* password input */}
               <input
                 type="password"
@@ -35,6 +39,7 @@ const LoginPage: NextPage = () => {
                 name="password-input"
                 placeholder="Password"
               />
+              <LockClosedIcon className={inputIconClassNames} />
             </div>
           </div>
           {/* //TODO should be link */}
