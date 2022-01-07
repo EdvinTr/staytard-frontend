@@ -183,7 +183,7 @@ const LoginPage: NextPage = () => {
               {inputPasswordState.error && (
                 <p
                   className="text-red-600 text-left text-[11px]"
-                  data-cy="input-password-error"
+                  data-cy="password-input-error"
                 >
                   {inputPasswordState.error}
                 </p>
@@ -211,6 +211,7 @@ const LoginPage: NextPage = () => {
             >
               {isLoginUserLoading ? (
                 <SpinnerCircularFixed
+                  data-cy="login-button-spinner"
                   size={30}
                   thickness={80}
                   speed={300}
