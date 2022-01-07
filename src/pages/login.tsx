@@ -3,8 +3,9 @@ import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
+import { AppHeader } from "../components/AppHeader";
 import { APP_NAME, APP_PAGE_ROUTE, LOCAL_STORAGE_KEY } from "../constants";
 import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 
@@ -47,98 +48,101 @@ const LoginPage: NextPage = () => {
   };
 
   return (
-    <div className="sm:max-w-md lg:max-w-lg 2xl:max-w-4xl mx-auto px-8">
-      <Head>
-        <title>{`${APP_NAME} - Log in`}</title>
-      </Head>
-      <div className="pt-24 text-center">
-        {/* page titles */}
-        <div className="space-y-6">
-          <h1 className="text-2xl">Log in to Staytard.com</h1>
-          <h2 className="text-13 font-light">
-            Log in by filling in your e-mail address and password
-          </h2>
-        </div>
-        {/* form */}
-        <form className="pt-6" onSubmit={onFormSubmit}>
-          <div className="space-y-3">
-            <div className="relative">
-              {/* email input */}
-              <input
-                type="email"
-                required
-                className={`${inputClassNames}`}
-                placeholder="E-mail"
-                value={userLoginDetails.email}
-                onChange={(e) =>
-                  setUserLoginDetails({
-                    ...userLoginDetails,
-                    email: e.target.value,
-                  })
-                }
-              />
-              <MailIcon className={inputIconClassNames} />
-            </div>
-            <div className="relative">
-              {/* password input */}
-              <input
-                type="password"
-                required
-                className={`${inputClassNames}`}
-                placeholder="Password"
-                value={userLoginDetails.password}
-                onChange={(e) =>
-                  setUserLoginDetails({
-                    ...userLoginDetails,
-                    password: e.target.value,
-                  })
-                }
-              />
-              <LockClosedIcon className={inputIconClassNames} />
-            </div>
+    <Fragment>
+      <AppHeader />
+      <div className="sm:max-w-md lg:max-w-lg 2xl:max-w-4xl mx-auto px-8">
+        <Head>
+          <title>{`${APP_NAME} - Log in`}</title>
+        </Head>
+        <div className="pt-24 text-center">
+          {/* page titles */}
+          <div className="space-y-6">
+            <h1 className="text-2xl">Log in to Staytard.com</h1>
+            <h2 className="text-13 font-light">
+              Log in by filling in your e-mail address and password
+            </h2>
           </div>
-          {/* login error */}
-          {error && (
-            <div className="text-red-600 text-13 bg-red-50 p-4 mt-4">
-              <div>
-                Login failed, make sure you entered the correct email and
-                password.
+          {/* form */}
+          <form className="pt-6" onSubmit={onFormSubmit}>
+            <div className="space-y-3">
+              <div className="relative">
+                {/* email input */}
+                <input
+                  type="email"
+                  required
+                  className={`${inputClassNames}`}
+                  placeholder="E-mail"
+                  value={userLoginDetails.email}
+                  onChange={(e) =>
+                    setUserLoginDetails({
+                      ...userLoginDetails,
+                      email: e.target.value,
+                    })
+                  }
+                />
+                <MailIcon className={inputIconClassNames} />
+              </div>
+              <div className="relative">
+                {/* password input */}
+                <input
+                  type="password"
+                  required
+                  className={`${inputClassNames}`}
+                  placeholder="Password"
+                  value={userLoginDetails.password}
+                  onChange={(e) =>
+                    setUserLoginDetails({
+                      ...userLoginDetails,
+                      password: e.target.value,
+                    })
+                  }
+                />
+                <LockClosedIcon className={inputIconClassNames} />
               </div>
             </div>
-          )}
-          <div className="text-13 pt-4 font-light hover:underline cursor-pointer">
-            {/* //TODO should be link */}
-            Forgot password?
-          </div>
-          {/* submit button */}
-          <button
-            type="submit"
-            className="w-full p-4 mt-5 uppercase text-sm font-bold tracking-wider bg-staytard-yellow hover:bg-black hover:text-white transition-all duration-300 ease-out"
-          >
-            {loading ? (
-              <SpinnerCircularFixed
-                size={30}
-                thickness={80}
-                speed={300}
-                color="rgba(0,0,0,1)"
-                secondaryColor="rgba(172, 57, 57, 0)"
-                className="inline"
-              />
-            ) : (
-              "Sign In"
+            {/* login error */}
+            {error && (
+              <div className="text-red-600 text-13 bg-red-50 p-4 mt-4">
+                <div>
+                  Login failed, make sure you entered the correct email and
+                  password.
+                </div>
+              </div>
             )}
-          </button>
-        </form>
-        {/* divider */}
-        <div className="h-[1px] w-full bg-black bg-opacity-10 my-6"></div>
-        {/* register link */}
-        <Link href={APP_PAGE_ROUTE.REGISTER}>
-          <a className="block p-4 w-full  border border-black text-sm border-opacity-40  hover:ring-1 hover:ring-black">
-            New customer
-          </a>
-        </Link>
+            <div className="text-13 pt-4 font-light hover:underline cursor-pointer">
+              {/* //TODO should be link */}
+              Forgot password?
+            </div>
+            {/* submit button */}
+            <button
+              type="submit"
+              className="w-full p-4 mt-5 uppercase text-sm font-bold tracking-wider bg-staytard-yellow hover:bg-black hover:text-white transition-all duration-300 ease-out"
+            >
+              {loading ? (
+                <SpinnerCircularFixed
+                  size={30}
+                  thickness={80}
+                  speed={300}
+                  color="rgba(0,0,0,1)"
+                  secondaryColor="rgba(172, 57, 57, 0)"
+                  className="inline"
+                />
+              ) : (
+                "Sign In"
+              )}
+            </button>
+          </form>
+          {/* divider */}
+          <div className="h-[1px] w-full bg-black bg-opacity-10 my-6"></div>
+          {/* register link */}
+          <Link href={APP_PAGE_ROUTE.REGISTER}>
+            <a className="block p-4 w-full  border border-black text-sm border-opacity-40  hover:ring-1 hover:ring-black">
+              New customer
+            </a>
+          </Link>
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

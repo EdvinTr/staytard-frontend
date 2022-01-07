@@ -48,10 +48,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           >
             <SpinnerCircularFixed
               size={100}
-              thickness={80}
+              thickness={100}
               speed={300}
-              color="rgba(239, 68, 68,1)"
-              secondaryColor="rgba(172, 57, 57, 0)"
+              color="rgba(255, 221, 2,1)"
+              secondaryColor="rgba(0,0,0, 0)"
               className="mt-4"
             />
           </motion.div>
