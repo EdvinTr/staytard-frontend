@@ -1,5 +1,6 @@
 import {
   ApolloClient,
+  ApolloLink,
   Context,
   HttpLink,
   InMemoryCache,
@@ -7,15 +8,27 @@ import {
 } from "@apollo/client";
 import { useMemo } from "react";
 
+const httpLink = new HttpLink({
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT,
+  credentials: "include",
+});
+const authLink = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem("access_token");
+  operation.setContext({
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  });
+  // Call the next link in the middleware chain.
+  return forward(operation);
+});
+
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: new HttpLink({
-      uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT, // Server URL (must be absolute)
-      credentials: "include", // Additional fetch() options like `credentials` or `headers`
-    }),
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

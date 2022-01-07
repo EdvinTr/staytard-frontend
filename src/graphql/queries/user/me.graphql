@@ -1,17 +1,8 @@
 query Me {
   me {
-    id
-    firstName
-    lastName
-    email
-    isRegisteredWithGoogle
-    isEmailConfirmed
-    isAdmin
+    ...CoreUserFields
     address {
-      id
-      city
-      street
-      postalCode
+      ...CoreAddressFields
     }
   }
 }

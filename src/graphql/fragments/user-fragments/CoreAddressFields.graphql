@@ -1,0 +1,6 @@
+fragment CoreAddressFields on UserAddress {
+  id
+  city
+  street
+  postalCode
+}

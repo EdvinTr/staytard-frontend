@@ -96,31 +96,86 @@ export type UserWithTokensDto = {
   user: User;
 };
 
+export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
+
+export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean };
+
+export type LoginUserMutationVariables = Exact<{
+  input: LoginUserDto;
+}>;
+
+
+export type LoginUserMutation = { __typename?: 'Mutation', login: { __typename?: 'UserWithTokensDto', accessToken: string, refreshToken: string } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
 
-
-export const MeDocument = gql`
-    query Me {
-  me {
-    id
-    firstName
-    lastName
-    email
-    isRegisteredWithGoogle
-    isEmailConfirmed
-    isAdmin
-    address {
-      id
-      city
-      street
-      postalCode
-    }
+export const CoreAddressFieldsFragmentDoc = gql`
+    fragment CoreAddressFields on UserAddress {
+  id
+  city
+  street
+  postalCode
+}
+    `;
+export const CoreUserFieldsFragmentDoc = gql`
+    fragment CoreUserFields on User {
+  id
+  firstName
+  lastName
+  email
+  isRegisteredWithGoogle
+  isEmailConfirmed
+  isAdmin
+}
+    `;
+export const LoginUserDocument = gql`
+    mutation LoginUser($input: LoginUserDto!) {
+  login(input: $input) {
+    accessToken
+    refreshToken
   }
 }
     `;
+export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
+
+/**
+ * __useLoginUserMutation__
+ *
+ * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
+export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
+export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
+export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    ...CoreUserFields
+    address {
+      ...CoreAddressFields
+    }
+  }
+}
+    ${CoreUserFieldsFragmentDoc}
+${CoreAddressFieldsFragmentDoc}`;
 
 /**
  * __useMeQuery__

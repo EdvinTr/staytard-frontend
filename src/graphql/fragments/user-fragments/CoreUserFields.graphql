@@ -1,0 +1,9 @@
+fragment CoreUserFields on User {
+  id
+  firstName
+  lastName
+  email
+  isRegisteredWithGoogle
+  isEmailConfirmed
+  isAdmin
+}
