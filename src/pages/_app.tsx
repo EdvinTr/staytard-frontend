@@ -10,12 +10,13 @@ import { useApollo } from "../lib/apolloClient";
 import "../styles/globals.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   const [isRouteLoading, setIsRouteLoading] = useState(false);
   useEffect(() => {
-    const start = (url: string) => {
+    const start = () => {
       setIsRouteLoading(true);
     };
-    const end = (url: string) => {
+    const end = () => {
       setIsRouteLoading(false);
     };
     Router.events.on("routeChangeStart", start);
@@ -27,7 +28,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       Router.events.off("routeChangeError", end);
     };
   }, []);
-  const apolloClient = useApollo(pageProps.initialApolloState);
 
   return (
     <ApolloProvider client={apolloClient}>
