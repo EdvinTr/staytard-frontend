@@ -30,14 +30,10 @@ const exclamationIconClassNames =
   "w-[13px] absolute top-[19px] right-3 text-red-600";
 
 const {
-  page: {
-    login: {
-      loginFailedErrorMessage,
-      loginEmailInputErrorMessage,
-      loginPasswordInputErrorMessage,
-    },
-  },
-} = Localized;
+  loginFailedErrorMessage,
+  loginEmailInputErrorMessage,
+  loginPasswordInputErrorMessage,
+} = Localized.page.login;
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -143,7 +139,10 @@ const LoginPage: NextPage = () => {
               </div>
               {/* email error */}
               {inputEmailState.error && (
-                <p className="text-red-600 text-left text-[11px]">
+                <p
+                  className="text-red-600 text-left text-[11px]"
+                  data-cy="email-input-error"
+                >
                   {inputEmailState.error}
                 </p>
               )}
@@ -182,7 +181,10 @@ const LoginPage: NextPage = () => {
               </div>
               {/* password field error */}
               {inputPasswordState.error && (
-                <p className="text-red-600 text-left text-[11px]">
+                <p
+                  className="text-red-600 text-left text-[11px]"
+                  data-cy="input-password-error"
+                >
                   {inputPasswordState.error}
                 </p>
               )}
@@ -190,7 +192,9 @@ const LoginPage: NextPage = () => {
             {/* login error */}
             {loginUserGqlError && (
               <div className="text-red-600 text-13 bg-red-50 p-4 mt-4">
-                <div>{loginFailedErrorMessage}</div>
+                <div data-cy="login-failed-error">
+                  {loginFailedErrorMessage}
+                </div>
               </div>
             )}
             <div className="text-13 pt-4 font-light hover:underline cursor-pointer">
