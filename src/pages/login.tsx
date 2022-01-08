@@ -3,6 +3,7 @@ import {
   LockClosedIcon,
   MailIcon,
 } from "@heroicons/react/outline";
+import { CheckIcon } from "@heroicons/react/solid";
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -16,18 +17,10 @@ import { useLoginUserMutation } from "../lib/graphql";
 import { Localized } from "../Localized";
 import { isEmailAddress } from "../utils/isEmailAddress";
 
-const inputClassNames =
-  "w-full pl-12 text-xs placeholder-black placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold ring-black h-[50px] ring-1 ring-opacity-25 focus:ring-1 focus:ring-black focus:ring-opacity-60 border-none focus:border-none ";
 const inputIconClassNames =
   "w-[13px] absolute top-[19px] left-4 text-black text-opacity-40";
 
-const inputErrorClassNames = [
-  "ring-red-500",
-  "ring-opacity-100",
-  "placeholder-red-600",
-  "placeholder-opacity-100",
-];
-const exclamationIconClassNames = "w-[13px] absolute top-[19px] right-3 ";
+const exclamationIconClassNames = "w-[13px] absolute top-[19px] right-4 ";
 
 const {
   loginFailedErrorMessage,
@@ -81,6 +74,8 @@ const LoginPage: NextPage = () => {
   };
   const [isEmailInputFocused, setIsEmailInputFocused] = useState(false);
   const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
+  const [isDisplayPasswordCheckMark, setIsDisplayPasswordCheckMark] =
+    useState(false);
   return (
     <Fragment>
       <AppHeader />
@@ -136,7 +131,11 @@ const LoginPage: NextPage = () => {
                     });
                   }}
                 />
-                <MailIcon className={inputIconClassNames} />
+                <MailIcon
+                  className={`${inputIconClassNames} ${
+                    isEmailInputFocused && "opacity-50"
+                  }`}
+                />
                 {inputEmailState.error && (
                   <ExclamationIcon
                     className={`${exclamationIconClassNames} ${
@@ -149,52 +148,56 @@ const LoginPage: NextPage = () => {
               </div>
               <div className="relative">
                 {/* password input */}
-                <input
+                <BaseInput
                   type="password"
                   required
-                  className={`${inputClassNames}`}
                   placeholder="Password"
-                  onChange={(e) => {
-                    setInputPasswordState({
-                      password: e.target.value,
-                      error: null,
-                    });
-                  }}
-                  onFocus={(e) => {
-                    e.target.classList.remove(...inputErrorClassNames);
+                  label="Password"
+                  errorMessage={inputPasswordState.error}
+                  hasLeftIcon
+                  hasError={!!inputPasswordState.error}
+                  isFocused={isPasswordInputFocused}
+                  onFocus={() => {
+                    setIsPasswordInputFocused(true);
                   }}
                   onBlur={(e) => {
+                    setIsPasswordInputFocused(false);
+                    setIsDisplayPasswordCheckMark(false);
                     const value = e.target.value;
                     if (value.length === 0) {
-                      setInputPasswordState({
+                      return setInputPasswordState({
                         ...inputPasswordState,
                         error: loginPasswordInputErrorMessage,
                       });
-                      e.target.classList.add(...inputErrorClassNames);
                     }
+                    setInputPasswordState({
+                      ...inputPasswordState,
+                      error: null,
+                    });
+                    setIsDisplayPasswordCheckMark(true);
+                  }}
+                  value={inputPasswordState.password}
+                  onChange={(e) => {
+                    setInputPasswordState({
+                      ...inputPasswordState,
+                      password: e.target.value,
+                    });
                   }}
                 />
                 {/* icons */}
-                <LockClosedIcon className={inputIconClassNames} />
+                <LockClosedIcon className={`${inputIconClassNames} `} />
                 {inputPasswordState.error && (
                   <ExclamationIcon
                     className={`${exclamationIconClassNames} ${
-                      isEmailInputFocused
-                        ? "text-black opacity-50"
-                        : "text-red-600"
+                      isPasswordInputFocused ? "opacity-50" : "text-red-600"
                     }`}
                   />
                 )}
+                {/* check mark */}
+                {isDisplayPasswordCheckMark && (
+                  <CheckIcon className="w-4 absolute top-[19px] right-4 opacity-40" />
+                )}
               </div>
-              {/* password field error */}
-              {inputPasswordState.error && (
-                <p
-                  className="text-red-600 text-left text-[11px]"
-                  data-cy="password-input-error"
-                >
-                  {inputPasswordState.error}
-                </p>
-              )}
             </div>
             {/* login error */}
             {loginUserGqlError && (
@@ -212,7 +215,8 @@ const LoginPage: NextPage = () => {
             <button
               type="submit"
               className={
-                `w-full p-4 mt-5 outline-none uppercase text-sm font-bold tracking-wider bg-staytard-yellow transition-all duration-300 ease-out ` +
+                /* //TODO: when tabbing and pressing enter key, should color the button back again to yellow or do this in the loading spinner (change to white spinner)*/
+                `w-full p-4 mt-5 outline-none focus-visible:bg-black  focus-visible:text-white  uppercase text-sm font-bold tracking-wider bg-staytard-yellow transition-all duration-300 ease-out ` +
                 (isLoginUserLoading ? "" : "hover:bg-black hover:text-white ")
               }
             >
