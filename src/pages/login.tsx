@@ -188,7 +188,11 @@ const LoginPage: NextPage = () => {
                   }}
                 />
                 {/* icons */}
-                <LockClosedIcon className={`${inputIconClassNames} `} />
+                <LockClosedIcon
+                  className={`${inputIconClassNames} ${
+                    isPasswordInputFocused && "opacity-50"
+                  } `}
+                />
                 {inputPasswordState.error && (
                   <ExclamationIcon
                     className={`${exclamationIconClassNames} ${
