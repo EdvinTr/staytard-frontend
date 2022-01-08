@@ -80,6 +80,7 @@ const LoginPage: NextPage = () => {
     } catch {}
   };
   const [isEmailInputFocused, setIsEmailInputFocused] = useState(false);
+  const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
   return (
     <Fragment>
       <AppHeader />
@@ -97,55 +98,13 @@ const LoginPage: NextPage = () => {
           </div>
           {/* form */}
           <form className="pt-6" onSubmit={onFormSubmit}>
-            <div className="space-y-3">
-              <div className="relative">
+            <div>
+              <div className={`relative`}>
                 {/* email input */}
-                {/* <input
-                  type="email"
-                  className={`${inputClassNames} ${
-                    inputEmailState.email.length > 0 && "pt-6"
-                  }`}
-                  placeholder="E-mail"
-                  required
-                  onFocus={(e) => {
-                    e.target.classList.remove(...inputErrorClassNames);
-                  }}
-                  onChange={(e) => {
-                    setInputEmailState({
-                      email: e.target.value,
-                      error: null,
-                    });
-                  }}
-                  onBlur={(e) => {
-                    const value = e.target.value.trim();
-                    if (value.length > 0) {
-                      if (isEmailAddress(value)) {
-                        return setInputEmailState({
-                          ...inputEmailState,
-                          error: null, // reset error
-                        });
-                      }
-                    }
-                    // email field was not valid
-                    setInputEmailState({
-                      ...inputEmailState,
-                      error: loginEmailInputErrorMessage,
-                    });
-                    e.target.classList.add(...inputErrorClassNames);
-                  }}
-                />
-                <MailIcon className={inputIconClassNames} />
-                {inputEmailState.error && (
-                  <ExclamationIcon className={`${exclamationIconClassNames}`} />
-                )}
-                {inputEmailState.email.length > 0 && (
-                  <span className="absolute top-2 left-12 py-0 text-[10px]">
-                    E-MAIL
-                  </span>
-                )} */}
                 <BaseInput
                   type="email"
                   required
+                  className={`${!inputEmailState.error && "mb-3"} `}
                   placeholder="E-mail"
                   value={inputEmailState.email}
                   label="E-mail"

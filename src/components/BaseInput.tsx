@@ -25,7 +25,7 @@ export const BaseInput = ({
       <input
         {...props}
         className={`
-        w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold ring-black h-[50px] ring-1 ring-opacity-25 focus:ring-1 focus:ring-black focus:ring-opacity-60 border-none focus:border-none focus:placeholder-opacity-50 focus:placeholder-black
+        w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold ring-black h-[50px] ring-1 ring-opacity-25  focus:ring-black focus:ring-opacity-60 border-none focus:border-none focus:placeholder-opacity-50 focus:placeholder-black
         ${props.className} 
         ${label && currentValueLength > 0 ? "pt-6" : ""} 
         ${hasError && inputErrorClassNames} 
@@ -37,16 +37,17 @@ export const BaseInput = ({
         <span
           className={`absolute top-2 py-0 text-[10px] 
           ${hasLeftIcon ? "left-12" : "left-3"}  
-          ${hasError && "text-red-600"}
-          ${isFocused && "opacity-50 text-black"}
+          ${hasError && !isFocused && "text-red-600"}
+          ${isFocused && "opacity-50 "}
           `}
         >
           {label?.toUpperCase()}
         </span>
       )}
+      {/* error message */}
       {hasError && (
         <p
-          className={`pt-2 text-left text-[11px] 
+          className={`py-2 text-left text-[11px] 
           ${isFocused ? "opacity-50 text-black" : "text-red-600 opacity-100"}`}
           // data-cy="email-input-error"
         >
