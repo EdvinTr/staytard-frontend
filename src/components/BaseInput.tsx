@@ -49,7 +49,6 @@ export const BaseInput = ({
         <p
           className={`py-2 text-left text-[11px] 
           ${isFocused ? "opacity-50 text-black" : "text-red-600 opacity-100"}`}
-          // data-cy="email-input-error"
         >
           {errorMessage}
         </p>
