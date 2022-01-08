@@ -27,8 +27,7 @@ const inputErrorClassNames = [
   "placeholder-red-600",
   "placeholder-opacity-100",
 ];
-const exclamationIconClassNames =
-  "w-[13px] absolute top-[19px] right-3 text-red-600";
+const exclamationIconClassNames = "w-[13px] absolute top-[19px] right-3 ";
 
 const {
   loginFailedErrorMessage,
@@ -156,8 +155,8 @@ const LoginPage: NextPage = () => {
                   hasLeftIcon={true}
                   onChange={(e) => {
                     setInputEmailState({
+                      ...inputEmailState,
                       email: e.target.value,
-                      error: null,
                     });
                   }}
                   onFocus={() => {
@@ -180,7 +179,13 @@ const LoginPage: NextPage = () => {
                 />
                 <MailIcon className={inputIconClassNames} />
                 {inputEmailState.error && (
-                  <ExclamationIcon className={`${exclamationIconClassNames}`} />
+                  <ExclamationIcon
+                    className={`${exclamationIconClassNames} ${
+                      isEmailInputFocused
+                        ? "text-black opacity-30"
+                        : "text-red-600"
+                    }`}
+                  />
                 )}
               </div>
               <div className="relative">
@@ -213,7 +218,13 @@ const LoginPage: NextPage = () => {
                 {/* icons */}
                 <LockClosedIcon className={inputIconClassNames} />
                 {inputPasswordState.error && (
-                  <ExclamationIcon className={`${exclamationIconClassNames}`} />
+                  <ExclamationIcon
+                    className={`${exclamationIconClassNames} ${
+                      isEmailInputFocused
+                        ? "text-black opacity-50"
+                        : "text-red-600"
+                    }`}
+                  />
                 )}
               </div>
               {/* password field error */}
