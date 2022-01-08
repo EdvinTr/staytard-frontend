@@ -31,8 +31,8 @@ const exclamationIconClassNames =
 
 const {
   loginFailedErrorMessage,
-  loginEmailInputErrorMessage,
-  loginPasswordInputErrorMessage,
+  emailInputErrorMessage: loginEmailInputErrorMessage,
+  passwordInputErrorMessage: loginPasswordInputErrorMessage,
 } = Localized.page.login;
 
 const LoginPage: NextPage = () => {
@@ -238,7 +238,7 @@ const LoginPage: NextPage = () => {
   );
 };
 
-// TODO: should SSR and check if user is already logged in
-// alternatively, should check if user is logged in on client side, but then you get weird flickering
+// TODO: should SSR and check if user is already logged in, incase it should return props with redirect to index page.
+// alternatively, should check if user is logged in on client side, but then you get weird flickering on page load since it actually renders the login page then redirects
 
 export default LoginPage;

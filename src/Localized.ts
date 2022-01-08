@@ -3,8 +3,8 @@ export class Localized {
     login: {
       loginFailedErrorMessage:
         "Login failed, make sure you entered the correct email and password.",
-      loginPasswordInputErrorMessage: "Enter your password to log in.",
-      loginEmailInputErrorMessage:
+      passwordInputErrorMessage: "Enter your password to log in.",
+      emailInputErrorMessage:
         "Please enter a correct e-mail address (ex.name@example.com).",
     },
   };

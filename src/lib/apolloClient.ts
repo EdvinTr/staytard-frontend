@@ -7,13 +7,14 @@ import {
   NormalizedCacheObject,
 } from "@apollo/client";
 import { useMemo } from "react";
+import { LOCAL_STORAGE_KEY } from "../constants";
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT,
   credentials: "include",
 });
 const authLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
   operation.setContext({
     headers: {
       authorization: token ? `Bearer ${token}` : "",
@@ -33,16 +34,16 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            /* medias: {
+            /* products: {
               keyArgs: false,
               merge(existing, incoming) {
                 if (!incoming) return existing;
                 if (!existing) return incoming; // existing will be empty the first time
 
-                const { medias, ...rest } = incoming;
+                const { products, ...rest } = incoming;
 
                 let result = rest;
-                result.medias = [...existing.medias, ...medias]; // Merge existing items with the items from incoming
+                result.products = [...existing.products, ...products]; // Merge existing items with the items from incoming
 
                 return result;
               },
