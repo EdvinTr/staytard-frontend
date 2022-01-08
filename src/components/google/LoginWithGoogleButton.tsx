@@ -19,7 +19,6 @@ export const LoginWithGoogleButton = ({
     if ("accessToken" in response) {
       const googleAccessToken = response.accessToken;
       try {
-        console.log(googleAccessToken);
         // throw new Error();
       } catch (err) {
         setErrorMessage(
@@ -36,7 +35,7 @@ export const LoginWithGoogleButton = ({
         buttonText="Login"
         render={(renderProps) => (
           <button
-            className={`w-full relative border ${props.className} py-4 text-sm font-semibold tracking-wide `}
+            className={`w-full relative border ${props.className} py-4 text-sm font-semibold tracking-wide bg-blue-700 hover:bg-blue-600 text-white transition-all duration-300 ease-out`}
             onClick={renderProps.onClick}
             disabled={renderProps.disabled}
           >
@@ -45,9 +44,10 @@ export const LoginWithGoogleButton = ({
                 src={"/svg/colored-google-icon.svg"}
                 height={28}
                 width={28}
+                alt="Google icon"
               />
             </div>
-            <span className="opacity-90">Sign in with Google</span>
+            <span>Sign in with Google</span>
           </button>
         )}
         onSuccess={loginSuccess}

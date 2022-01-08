@@ -7,8 +7,6 @@ interface BaseInputProps extends React.ComponentPropsWithRef<"input"> {
   hasLeftIcon?: boolean;
   errorMessage?: string | null;
 }
-const inputErrorClassNames =
-  "ring-red-500 ring-opacity-100 placeholder-red-600 placeholder-opacity-100";
 
 export const BaseInput = ({
   label,
@@ -25,10 +23,14 @@ export const BaseInput = ({
       <input
         {...props}
         className={`
-        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold ring-black h-[50px] ring-1 ring-opacity-25  focus:ring-black focus:ring-opacity-60 border-none focus:border-none focus:placeholder-opacity-50 focus:placeholder-black
+        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold  h-[50px] ring-0 focus:ring-0 focus:ring-black border-black border-opacity-50 focus:border-opacity-50 focus:placeholder-opacity-50 focus:placeholder-black
         ${props.className} 
         ${label && currentValueLength > 0 ? "pt-6" : ""} 
-        ${hasError && inputErrorClassNames} 
+        ${
+          hasError
+            ? "border-red-600 placeholder-red-600 placeholder-opacity-100"
+            : "border-black"
+        } 
         ${hasLeftIcon ? "pl-12" : "pl-4"}`}
       />
 

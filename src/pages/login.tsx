@@ -224,7 +224,7 @@ const LoginPage: NextPage = () => {
               type="submit"
               className={
                 /* //TODO: when tabbing and pressing enter key, should color the button back again to yellow or do this in the loading spinner (change to white spinner)*/
-                `w-full p-4 mt-5 outline-none focus-visible:bg-black  focus-visible:text-white  uppercase text-sm font-bold tracking-wider bg-staytard-yellow transition-all duration-300 ease-out ` +
+                `w-full p-4 mt-5 outline-none focus-visible:bg-black  focus-visible:text-white uppercase text-sm font-bold tracking-wider bg-staytard-yellow transition-all duration-300 ease-out ` +
                 (isLoginUserLoading ? "" : "hover:bg-black hover:text-white ")
               }
             >
@@ -244,8 +244,14 @@ const LoginPage: NextPage = () => {
             </button>
           </form>
           {/* divider */}
-          <LoginWithGoogleButton className="mt-6" />
-          <div className="h-[1px] w-full bg-black bg-opacity-10 my-6"></div>
+          <div className="flex justify-center items-center py-4">
+            <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
+            <span className="px-8 opacity-75 text-sm">or</span>
+            <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
+          </div>
+          <LoginWithGoogleButton className="mb-7" />
+          <div className="h-[1px] w-full bg-black bg-opacity-10 mb-6"></div>
+
           {/* register link */}
           <Link href={APP_PAGE_ROUTE.REGISTER}>
             <a className="block p-4 w-full  border border-black text-sm border-opacity-40  hover:ring-1 hover:ring-black">

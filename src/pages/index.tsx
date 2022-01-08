@@ -17,6 +17,7 @@ const IndexPage: NextPage = () => {
           <a>Login</a>
         </Link>
       ) : (
+        /* // TODO: clear apollo cache on logout */
         <button>Logout</button>
       )}
     </div>
