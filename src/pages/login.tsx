@@ -51,8 +51,11 @@ const LoginPage: NextPage = () => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    if (isLoginUserLoading) {
+    if (inputEmailState.error || inputPasswordState.error) {
       return;
+    }
+    if (isLoginUserLoading) {
+      return; // prevent spamming
     }
     try {
       const { data } = await loginUser({
