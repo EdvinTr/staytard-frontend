@@ -12,6 +12,7 @@ import React, { Fragment, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
 import { AppHeader } from "../components/AppHeader";
 import { BaseInput } from "../components/BaseInput";
+import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { APP_NAME, APP_PAGE_ROUTE, LOCAL_STORAGE_KEY } from "../constants";
 import { useLoginUserMutation } from "../lib/graphql";
 import { Localized } from "../Localized";
@@ -243,6 +244,7 @@ const LoginPage: NextPage = () => {
             </button>
           </form>
           {/* divider */}
+          <LoginWithGoogleButton className="mt-6" />
           <div className="h-[1px] w-full bg-black bg-opacity-10 my-6"></div>
           {/* register link */}
           <Link href={APP_PAGE_ROUTE.REGISTER}>
