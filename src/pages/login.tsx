@@ -30,14 +30,14 @@ const {
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
-  const [inputEmailState, setInputEmailState] = useState<{
+  const [emailInputState, setEmailInputState] = useState<{
     email: string;
     error: string | null;
   }>({
     email: "",
     error: null,
   });
-  const [inputPasswordState, setInputPasswordState] = useState<{
+  const [passwordInputState, setPasswordInputState] = useState<{
     password: string;
     error: string | null;
   }>({
@@ -51,7 +51,7 @@ const LoginPage: NextPage = () => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    if (inputEmailState.error || inputPasswordState.error) {
+    if (emailInputState.error || passwordInputState.error) {
       return;
     }
     if (isLoginUserLoading) {
@@ -61,8 +61,8 @@ const LoginPage: NextPage = () => {
       const { data } = await loginUser({
         variables: {
           input: {
-            email: inputEmailState.email,
-            password: inputPasswordState.password,
+            email: emailInputState.email,
+            password: passwordInputState.password,
           },
         },
       });
@@ -97,22 +97,22 @@ const LoginPage: NextPage = () => {
           {/* form */}
           <form className="pt-6" onSubmit={onFormSubmit}>
             <div>
-              <div className={`relative`}>
+              <div className={`relative`} data-cy="email-input-container">
                 {/* email input */}
                 <BaseInput
                   type="email"
                   required
-                  className={`${!inputEmailState.error && "mb-3"} `}
+                  className={`${!emailInputState.error && "mb-3"} `}
                   placeholder="E-mail"
-                  value={inputEmailState.email}
+                  value={emailInputState.email}
                   label="E-mail"
                   isFocused={isEmailInputFocused}
-                  hasError={!!inputEmailState.error}
-                  errorMessage={inputEmailState.error}
+                  hasError={!!emailInputState.error}
+                  errorMessage={emailInputState.error}
                   hasLeftIcon={true}
                   onChange={(e) => {
-                    setInputEmailState({
-                      ...inputEmailState,
+                    setEmailInputState({
+                      ...emailInputState,
                       email: e.target.value,
                     });
                   }}
@@ -123,13 +123,13 @@ const LoginPage: NextPage = () => {
                     setIsEmailInputFocused(false);
                     const value = e.target.value.trim();
                     if (value.length === 0 || !isEmailAddress(value)) {
-                      return setInputEmailState({
-                        ...inputEmailState,
+                      return setEmailInputState({
+                        ...emailInputState,
                         error: emailInputErrorMessage,
                       });
                     }
-                    return setInputEmailState({
-                      ...inputEmailState,
+                    return setEmailInputState({
+                      ...emailInputState,
                       error: null, // reset error
                     });
                   }}
@@ -139,7 +139,7 @@ const LoginPage: NextPage = () => {
                     isEmailInputFocused && "opacity-50"
                   }`}
                 />
-                {inputEmailState.error && (
+                {emailInputState.error && (
                   <ExclamationIcon
                     className={`${exclamationIconClassNames} ${
                       isEmailInputFocused
@@ -149,16 +149,16 @@ const LoginPage: NextPage = () => {
                   />
                 )}
               </div>
-              <div className="relative">
+              <div className="relative" data-cy="password-input-container">
                 {/* password input */}
                 <BaseInput
                   type="password"
                   required
                   placeholder="Password"
                   label="Password"
-                  errorMessage={inputPasswordState.error}
+                  errorMessage={passwordInputState.error}
                   hasLeftIcon
-                  hasError={!!inputPasswordState.error}
+                  hasError={!!passwordInputState.error}
                   isFocused={isPasswordInputFocused}
                   onFocus={() => {
                     setIsPasswordInputFocused(true);
@@ -168,21 +168,21 @@ const LoginPage: NextPage = () => {
                     setIsDisplayPasswordCheckMark(false);
                     const value = e.target.value;
                     if (value.length === 0) {
-                      return setInputPasswordState({
-                        ...inputPasswordState,
+                      return setPasswordInputState({
+                        ...passwordInputState,
                         error: passwordInputErrorMessage,
                       });
                     }
-                    setInputPasswordState({
-                      ...inputPasswordState,
+                    setPasswordInputState({
+                      ...passwordInputState,
                       error: null,
                     });
                     setIsDisplayPasswordCheckMark(true);
                   }}
-                  value={inputPasswordState.password}
+                  value={passwordInputState.password}
                   onChange={(e) => {
-                    setInputPasswordState({
-                      ...inputPasswordState,
+                    setPasswordInputState({
+                      ...passwordInputState,
                       password: e.target.value,
                     });
                   }}
@@ -193,7 +193,7 @@ const LoginPage: NextPage = () => {
                     isPasswordInputFocused && "opacity-50"
                   } `}
                 />
-                {inputPasswordState.error && (
+                {passwordInputState.error && (
                   <ExclamationIcon
                     className={`${exclamationIconClassNames} ${
                       isPasswordInputFocused ? "opacity-50" : "text-red-600"
