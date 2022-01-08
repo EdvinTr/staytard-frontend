@@ -24,8 +24,8 @@ const exclamationIconClassNames = "w-[13px] absolute top-[19px] right-4 ";
 
 const {
   loginFailedErrorMessage,
-  emailInputErrorMessage: loginEmailInputErrorMessage,
-  passwordInputErrorMessage: loginPasswordInputErrorMessage,
+  emailInputErrorMessage,
+  passwordInputErrorMessage,
 } = Localized.page.login;
 
 const LoginPage: NextPage = () => {
@@ -125,7 +125,7 @@ const LoginPage: NextPage = () => {
                     if (value.length === 0 || !isEmailAddress(value)) {
                       return setInputEmailState({
                         ...inputEmailState,
-                        error: loginEmailInputErrorMessage,
+                        error: emailInputErrorMessage,
                       });
                     }
                     return setInputEmailState({
@@ -170,7 +170,7 @@ const LoginPage: NextPage = () => {
                     if (value.length === 0) {
                       return setInputPasswordState({
                         ...inputPasswordState,
-                        error: loginPasswordInputErrorMessage,
+                        error: passwordInputErrorMessage,
                       });
                     }
                     setInputPasswordState({
