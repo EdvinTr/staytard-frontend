@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import React, { Fragment, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
 import { AppHeader } from "../components/AppHeader";
+import { BaseInput } from "../components/BaseInput";
 import { APP_NAME, APP_PAGE_ROUTE, LOCAL_STORAGE_KEY } from "../constants";
 import { useLoginUserMutation } from "../lib/graphql";
 import { Localized } from "../Localized";
@@ -79,7 +80,7 @@ const LoginPage: NextPage = () => {
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
-
+  const [isEmailInputFocused, setIsEmailInputFocused] = useState(false);
   return (
     <Fragment>
       <AppHeader />
@@ -100,9 +101,11 @@ const LoginPage: NextPage = () => {
             <div className="space-y-3">
               <div className="relative">
                 {/* email input */}
-                <input
+                {/* <input
                   type="email"
-                  className={`${inputClassNames}`}
+                  className={`${inputClassNames} ${
+                    inputEmailState.email.length > 0 && "pt-6"
+                  }`}
                   placeholder="E-mail"
                   required
                   onFocus={(e) => {
@@ -136,16 +139,50 @@ const LoginPage: NextPage = () => {
                 {inputEmailState.error && (
                   <ExclamationIcon className={`${exclamationIconClassNames}`} />
                 )}
+                {inputEmailState.email.length > 0 && (
+                  <span className="absolute top-2 left-12 py-0 text-[10px]">
+                    E-MAIL
+                  </span>
+                )} */}
+                <BaseInput
+                  type="email"
+                  required
+                  placeholder="E-mail"
+                  value={inputEmailState.email}
+                  label="E-mail"
+                  isFocused={isEmailInputFocused}
+                  hasError={!!inputEmailState.error}
+                  errorMessage={inputEmailState.error}
+                  hasLeftIcon={true}
+                  onChange={(e) => {
+                    setInputEmailState({
+                      email: e.target.value,
+                      error: null,
+                    });
+                  }}
+                  onFocus={() => {
+                    setIsEmailInputFocused(true);
+                  }}
+                  onBlur={(e) => {
+                    setIsEmailInputFocused(false);
+                    const value = e.target.value.trim();
+                    if (value.length === 0 || !isEmailAddress(value)) {
+                      return setInputEmailState({
+                        ...inputEmailState,
+                        error: loginEmailInputErrorMessage,
+                      });
+                    }
+                    return setInputEmailState({
+                      ...inputEmailState,
+                      error: null, // reset error
+                    });
+                  }}
+                />
+                <MailIcon className={inputIconClassNames} />
+                {inputEmailState.error && (
+                  <ExclamationIcon className={`${exclamationIconClassNames}`} />
+                )}
               </div>
-              {/* email error */}
-              {inputEmailState.error && (
-                <p
-                  className="text-red-600 text-left text-[11px]"
-                  data-cy="email-input-error"
-                >
-                  {inputEmailState.error}
-                </p>
-              )}
               <div className="relative">
                 {/* password input */}
                 <input
