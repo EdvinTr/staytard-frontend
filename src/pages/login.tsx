@@ -10,7 +10,7 @@ import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButto
 import { LoginForm } from "../components/login-form/LoginForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
-import { onLoginOrRegistration } from "../utils/onLoginOrRegistration";
+import { setTokensInLocalStorage } from "../utils/setTokensInLocalStorage";
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -44,7 +44,7 @@ const LoginPage: NextPage = () => {
         throw new Error();
       }
       const { accessToken, refreshToken } = data.login;
-      onLoginOrRegistration({ accessToken, refreshToken });
+      setTokensInLocalStorage({ accessToken, refreshToken });
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };

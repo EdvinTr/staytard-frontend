@@ -1,13 +1,29 @@
+import { useApolloClient } from "@apollo/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { APP_PAGE_ROUTE } from "../constants";
-import { useMeQuery } from "../lib/graphql";
+import { useLogoutMutation, useMeQuery } from "../lib/graphql";
 const IndexPage: NextPage = () => {
   const { data: meData, loading } = useMeQuery();
+  const [logout, { loading: logoutLoading }] = useLogoutMutation();
+  const apollo = useApolloClient();
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  const onLogoutClick = async () => {
+    try {
+      const { data } = await logout();
+      if (!data || !data.logout) {
+        throw new Error();
+      }
+      await apollo.resetStore();
+      localStorage.clear();
+      window.location.reload();
+    } catch {
+      // i refuse to do more error handling than this
+    }
+  };
   return (
     <div className="container mx-auto">
       <h1 className="text-5xl font-semibold uppercase">Staytard</h1>
@@ -24,7 +40,9 @@ const IndexPage: NextPage = () => {
         </div>
         <div>
           {/* //TODO: reset apollo cache, and clear local storage, hard reload after. */}
-          <button className="p-4 border">Logout</button>
+          <button className="p-4 border" onClick={onLogoutClick}>
+            Logout
+          </button>
         </div>
       </div>
       <h1>

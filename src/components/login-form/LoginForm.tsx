@@ -60,7 +60,7 @@ export const LoginForm = ({
   return (
     <form
       className="pt-6"
-      onSubmit={(e) =>
+      onSubmit={(e) => {
         onSubmit(
           e,
           {
@@ -68,8 +68,8 @@ export const LoginForm = ({
             password: passwordState.value,
           },
           hasUnresolvedFieldErrors()
-        )
-      }
+        );
+      }}
     >
       <div>
         <div className={`relative`} data-cy="email-input-container">
@@ -77,7 +77,9 @@ export const LoginForm = ({
           <BaseInput
             required
             type="email"
+            name="email"
             label="E-mail"
+            autoComplete="on"
             placeholder="E-mail"
             data-cy="email-input"
             className={`${!emailState.error && "mb-3"} `}
@@ -142,6 +144,7 @@ export const LoginForm = ({
           {/* password input */}
           <BaseInput
             required
+            name="password"
             type="password"
             label="Password"
             placeholder="Password"
@@ -221,6 +224,7 @@ export const LoginForm = ({
       {/* submit button */}
       <button
         type="submit"
+        name="action"
         className={
           /* //TODO: when tabbing and pressing enter key, should color the button back again to yellow or do this in the loading spinner (change to white spinner)*/
           `w-full p-4 mt-5 outline-none focus-visible:bg-black  focus-visible:text-white uppercase text-sm font-bold tracking-wider bg-staytard-yellow transition-all duration-300 ease-out ` +

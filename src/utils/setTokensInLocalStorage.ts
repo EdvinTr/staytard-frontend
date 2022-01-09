@@ -1,6 +1,6 @@
 import { LOCAL_STORAGE_KEY } from "../constants";
 
-export const onLoginOrRegistration = ({
+export const setTokensInLocalStorage = ({
   accessToken,
   refreshToken,
 }: {
