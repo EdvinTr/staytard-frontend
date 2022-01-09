@@ -81,6 +81,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
         {/* first name input */}
         <div>
           <BaseInput
+            data-cy="first-name-input"
             type="text"
             className={`${!firstNameInput.error && "mb-3"} `}
             placeholder="First name"
@@ -136,6 +137,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
         {/* last name input */}
         <div>
           <BaseInput
+            data-cy="last-name-input"
             type="text"
             placeholder="Last name"
             required
@@ -191,6 +193,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       {/* address input */}
       <BaseInput
         type="text"
+        data-cy="address-input"
         placeholder="Address"
         className={`${!addressInput.error && "mb-3"} `}
         required
@@ -233,7 +236,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       />
       {addressInput.error && (
         <InputFieldErrorText
-          data-cy="last-name-error-message"
+          data-cy="address-error-message"
           isInputFocused={addressInput.isFocused}
         >
           {addressInput.error}
@@ -245,6 +248,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
           <div>
             <BaseInput
               type="text"
+              data-cy="zip-code-input"
               placeholder="ZIP code"
               required
               label="ZIP code"
@@ -300,6 +304,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
             <BaseInput
               type="text"
               placeholder="City"
+              data-cy="city-input"
               className={`${!cityInput.error && "mb-3"} `}
               required
               label="City"
@@ -354,6 +359,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
         <BaseInput
           type="tel"
           placeholder="Mobile number"
+          data-cy="phone-number-input"
           required
           label="Mobile number"
           errorMessage={phoneNumberInput.error}
