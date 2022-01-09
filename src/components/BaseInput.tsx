@@ -22,7 +22,7 @@ export const BaseInput = ({
       <input
         {...props}
         className={`
-        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold  h-[50px] ring-0 focus:ring-0 focus:border-black focus:border-opacity-25 border-opacity-25 focus:placeholder-opacity-50 focus:placeholder-black
+        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold  h-[50px] ring-0 focus:ring-0 focus:border-black focus:border-opacity-50 border-opacity-50 focus:placeholder-opacity-50 focus:placeholder-black
         ${props.className} 
         ${label && currentValueLength > 0 ? "pt-6" : ""} 
         ${

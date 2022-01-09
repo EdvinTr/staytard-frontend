@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import { AppHeader } from "../components/AppHeader";
-import { FormContainer } from "../components/form/FormContainer";
-import { RegisterForm } from "../components/form/RegisterForm";
+import { FormContainer } from "../components/register-form/FormContainer";
+import { RegisterForm } from "../components/register-form/RegisterForm";
 import { APP_NAME } from "../constants";
 
 const RegisterPage: NextPage = () => {
