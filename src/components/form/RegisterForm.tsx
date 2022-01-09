@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Localized } from "../../Localized";
+import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
 import { BaseButton } from "../BaseButton";
 import { BaseInput } from "../BaseInput";
 import { InputFieldErrorText } from "../InputFieldErrorText";
@@ -14,6 +15,7 @@ const {
   addressFieldErrorMessage,
   zipCodeValidationErrorMessage,
   cityInputValidationErrorMessage,
+  phoneNumberValidationErrorMessage,
 } = Localized.page.register;
 
 const containsLettersRegex = new RegExp(
@@ -56,9 +58,25 @@ export const RegisterForm = ({}: RegisterFormProps) => {
     isFocused: false,
     error: null,
   });
+  const onFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const errors = [
+      firstNameInput.error,
+      lastNameInput.error,
+      addressInput.error,
+      zipCodeInput.error,
+      phoneNumberInput.error,
+      firstNameInput.error,
+      lastNameInput.error,
+    ].filter((error) => error);
+    if (errors.length) {
+      return;
+    }
+    console.log("is now valid form");
+  };
 
   return (
-    <form className="pt-4">
+    <form className="pt-4" onSubmit={onFormSubmit}>
       <div className="grid grid-cols-2 gap-x-3 ">
         {/* first name input */}
         <div>
@@ -174,7 +192,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       <BaseInput
         type="text"
         placeholder="Address"
-        className={`${!firstNameInput.error && "mb-3"} `}
+        className={`${!addressInput.error && "mb-3"} `}
         required
         label="Address"
         errorMessage={addressInput.error}
@@ -282,6 +300,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
             <BaseInput
               type="text"
               placeholder="City"
+              className={`${!cityInput.error && "mb-3"} `}
               required
               label="City"
               errorMessage={cityInput.error}
@@ -322,7 +341,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
             />
             {cityInput.error && (
               <InputFieldErrorText
-                data-cy="zip-code-error-message"
+                data-cy="city-error-message"
                 isInputFocused={cityInput.isFocused}
               >
                 {cityInput.error}
@@ -330,6 +349,59 @@ export const RegisterForm = ({}: RegisterFormProps) => {
             )}
           </div>
         </div>
+
+        {/* phone number input */}
+        <BaseInput
+          type="tel"
+          placeholder="Mobile number"
+          required
+          label="Mobile number"
+          errorMessage={phoneNumberInput.error}
+          hasError={!!phoneNumberInput.error}
+          value={phoneNumberInput.value || ""}
+          isFocused={phoneNumberInput.isFocused}
+          onFocus={() =>
+            setPhoneNumberInput({ ...phoneNumberInput, isFocused: true })
+          }
+          onChange={(e) =>
+            setPhoneNumberInput({
+              ...phoneNumberInput,
+              value: e.target.value.trim(),
+            })
+          }
+          onBlur={(e) => {
+            const value = e.target.value.trim();
+            if (value.length === 0) {
+              return setPhoneNumberInput({
+                ...phoneNumberInput,
+                isFocused: false,
+                error: phoneNumberValidationErrorMessage,
+              });
+            }
+            // check is cell phone number
+            if (!isCellPhoneNumber(value)) {
+              return setPhoneNumberInput({
+                ...phoneNumberInput,
+                isFocused: false,
+                error: phoneNumberValidationErrorMessage,
+              });
+            }
+            // no error
+            return setPhoneNumberInput({
+              ...phoneNumberInput,
+              isFocused: false,
+              error: null,
+            });
+          }}
+        />
+        {phoneNumberInput.error && (
+          <InputFieldErrorText
+            data-cy="cell-phone-error-message"
+            isInputFocused={phoneNumberInput.isFocused}
+          >
+            {phoneNumberInput.error}
+          </InputFieldErrorText>
+        )}
       </div>
       <BaseButton type="submit" className="hover:bg-black hover:text-white ">
         Continue

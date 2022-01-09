@@ -16,6 +16,8 @@ export class Localized {
       zipCodeValidationErrorMessage:
         "Enter a postcode with 5 digits (ex. 44233).",
       cityInputValidationErrorMessage: "Please enter your location.",
+      phoneNumberValidationErrorMessage:
+        "Please enter a valid mobile number (ex. 0707123123).",
     },
   };
 }

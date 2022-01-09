@@ -1,0 +1,9 @@
+mutation RegisterUser($input: RegisterUserDto!) {
+  registerUser(input: $input) {
+    user {
+      id
+    }
+    accessToken
+    refreshToken
+  }
+}
