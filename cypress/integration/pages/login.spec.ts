@@ -11,6 +11,7 @@ const cypressIds = {
   passwordInputError: "password-input-error-text",
   emailInput: "email-input",
   passwordInput: "password-input",
+  spinner: "login-button-spinner",
 };
 
 describe("LoginPage", () => {
@@ -47,6 +48,14 @@ describe("LoginPage", () => {
       .type("password")
       .blur();
     cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should("not.exist");
+  });
+
+  it("should not submit the form if inputs are valid", () => {
+    cy.visit(APP_PAGE_ROUTE.LOGIN);
+    cy.get(`[data-cy=${cypressIds.emailInput}]`).type("something");
+
+    cy.get("button[type=submit]").click();
+    cy.get(`[data-cy=${cypressIds.spinner}]`).should("not.exist");
   });
 });
 
