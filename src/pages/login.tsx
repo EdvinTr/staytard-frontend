@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { AppHeader } from "../components/AppHeader";
+import { FadeInContainer } from "../components/global/FadeInContainer";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
@@ -55,36 +56,38 @@ const LoginPage: NextPage = () => {
         <Head>
           <title>{`${APP_NAME} - Log in`}</title>
         </Head>
-        <div className="pt-16 text-center">
-          {/* page titles */}
-          <div className="space-y-6">
-            <h1 className="text-2xl">Log in to {APP_NAME}.com</h1>
-            <h2 className="text-13 font-light">
-              Log in by filling in your e-mail address and password
-            </h2>
-          </div>
-          {/* form */}
-          <LoginForm
-            isSubmitting={isLoginUserLoading}
-            loginError={loginUserGqlError?.message}
-            onSubmit={onFormSubmit}
-          />
-          {/* divider */}
-          <div className="flex justify-center items-center py-4">
-            <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
-            <span className="px-8 opacity-75 text-sm">or</span>
-            <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
-          </div>
-          <LoginWithGoogleButton className="mb-7" />
-          <div className="h-[1px] w-full bg-black bg-opacity-10 mb-6"></div>
+        <FadeInContainer>
+          <div className="pt-16 text-center">
+            {/* page titles */}
+            <div className="space-y-6">
+              <h1 className="text-2xl">Log in to {APP_NAME}.com</h1>
+              <h2 className="text-13 font-light">
+                Log in by filling in your e-mail address and password
+              </h2>
+            </div>
+            {/* form */}
+            <LoginForm
+              isSubmitting={isLoginUserLoading}
+              loginError={loginUserGqlError?.message}
+              onSubmit={onFormSubmit}
+            />
+            {/* divider */}
+            <div className="flex justify-center items-center py-4">
+              <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
+              <span className="px-8 opacity-75 text-sm">or</span>
+              <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
+            </div>
+            <LoginWithGoogleButton className="mb-7" />
+            <div className="h-[1px] w-full bg-black bg-opacity-10 mb-6"></div>
 
-          {/* register link */}
-          <Link href={APP_PAGE_ROUTE.REGISTER}>
-            <a className="block p-4 w-full  border border-black text-sm border-opacity-40  hover:ring-1 hover:ring-black">
-              New customer
-            </a>
-          </Link>
-        </div>
+            {/* register link */}
+            <Link href={APP_PAGE_ROUTE.REGISTER}>
+              <a className="block p-4 w-full  border border-black text-sm border-opacity-40  hover:ring-1 hover:ring-black">
+                New customer
+              </a>
+            </Link>
+          </div>
+        </FadeInContainer>
       </div>
     </Fragment>
   );
