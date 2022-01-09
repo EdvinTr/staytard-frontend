@@ -13,14 +13,12 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
       <header className="relative text-center pt-4 max-w-3xl mx-auto">
         <div className="absolute  top-6">
           <button
-            className="flex items-center hover:underline"
-            role="link"
+            className="flex items-center hover:underline uppercase font-light text-13 tracking-widest"
             onClick={() => router.back()}
+            role="link"
           >
             <ChevronLeftIcon className="w-4" />
-            <a className=" uppercase font-light text-13 tracking-widest">
-              back
-            </a>
+            back
           </button>
         </div>
         <Link href={APP_PAGE_ROUTE.INDEX}>
