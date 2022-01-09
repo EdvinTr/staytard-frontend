@@ -3,11 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { APP_PAGE_ROUTE } from "../constants";
+import { useWindowSize } from "../hooks/useWindowSize";
 import { MyContainer } from "./MyContainer";
 interface AppHeaderProps {}
 
 export const AppHeader: React.FC<AppHeaderProps> = () => {
   const router = useRouter();
+  const windowSize = useWindowSize();
   return (
     <MyContainer>
       <header className="relative text-center pt-4 max-w-3xl mx-auto">
@@ -18,7 +20,9 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
             role="link"
           >
             <ChevronLeftIcon className="w-4" />
-            back
+            {windowSize && windowSize.width && windowSize?.width > 640
+              ? "Back"
+              : ""}
           </button>
         </div>
         <Link href={APP_PAGE_ROUTE.INDEX}>
