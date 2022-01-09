@@ -13,6 +13,9 @@ export class Localized {
       addressFieldErrorMessage: "Enter address",
       addressValidationErrorMessage:
         "Use only letters and numbers. Max 36 characters.",
+      zipCodeValidationErrorMessage:
+        "Enter a postcode with 5 digits (ex. 44233).",
+      cityInputValidationErrorMessage: "Please enter your location.",
     },
   };
 }

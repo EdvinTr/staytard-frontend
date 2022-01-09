@@ -17,7 +17,7 @@ import { InputFieldErrorText } from "../components/InputFieldErrorText";
 import { APP_NAME, APP_PAGE_ROUTE, LOCAL_STORAGE_KEY } from "../constants";
 import { useLoginUserMutation } from "../lib/graphql";
 import { Localized } from "../Localized";
-import { isEmailAddress } from "../utils/isEmailAddress";
+import { isEmailAddress } from "../utils/validation/isEmailAddress";
 
 const inputIconClassNames =
   "w-[13px] absolute top-[19px] left-4 text-black text-opacity-40";

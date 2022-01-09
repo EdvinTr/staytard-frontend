@@ -12,6 +12,8 @@ const {
   inputContainsNumberErrorMessage,
   addressValidationErrorMessage,
   addressFieldErrorMessage,
+  zipCodeValidationErrorMessage,
+  cityInputValidationErrorMessage,
 } = Localized.page.register;
 
 const containsLettersRegex = new RegExp(
@@ -39,6 +41,17 @@ export const RegisterForm = ({}: RegisterFormProps) => {
     error: null,
   });
   const [zipCodeInput, setZipCodeInput] = useState<InputState>({
+    value: null,
+    isFocused: false,
+    error: null,
+  });
+  const [cityInput, setCityInput] = useState<InputState>({
+    value: null,
+    isFocused: false,
+    error: null,
+  });
+
+  const [phoneNumberInput, setPhoneNumberInput] = useState<InputState>({
     value: null,
     isFocused: false,
     error: null,
@@ -161,6 +174,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       <BaseInput
         type="text"
         placeholder="Address"
+        className={`${!firstNameInput.error && "mb-3"} `}
         required
         label="Address"
         errorMessage={addressInput.error}
@@ -208,7 +222,114 @@ export const RegisterForm = ({}: RegisterFormProps) => {
         </InputFieldErrorText>
       )}
       <div>
-        <div className="grid grid-cols-2 gap-x-3 ">{/* zip code input */}</div>
+        <div className="grid grid-cols-2 gap-x-3 ">
+          {/* zip code input */}
+          <div>
+            <BaseInput
+              type="text"
+              placeholder="ZIP code"
+              required
+              label="ZIP code"
+              errorMessage={zipCodeInput.error}
+              hasError={!!zipCodeInput.error}
+              value={zipCodeInput.value || ""}
+              isFocused={zipCodeInput.isFocused}
+              onFocus={() =>
+                setZipCodeInput({ ...zipCodeInput, isFocused: true })
+              }
+              onChange={(e) =>
+                setZipCodeInput({
+                  ...zipCodeInput,
+                  value: e.target.value.trim(),
+                })
+              }
+              onBlur={(e) => {
+                const value = e.target.value.trim();
+                if (value.length === 0) {
+                  return setZipCodeInput({
+                    ...zipCodeInput,
+                    isFocused: false,
+                    error: zipCodeValidationErrorMessage,
+                  });
+                }
+
+                if (!isZipCodeRegex.test(value)) {
+                  return setZipCodeInput({
+                    ...zipCodeInput,
+                    isFocused: false,
+                    error: zipCodeValidationErrorMessage,
+                  });
+                }
+                // no error
+                return setZipCodeInput({
+                  ...zipCodeInput,
+                  isFocused: false,
+                  error: null,
+                });
+              }}
+            />
+            {zipCodeInput.error && (
+              <InputFieldErrorText
+                data-cy="zip-code-error-message"
+                isInputFocused={zipCodeInput.isFocused}
+              >
+                {zipCodeInput.error}
+              </InputFieldErrorText>
+            )}
+          </div>
+          {/* city input */}
+          <div>
+            <BaseInput
+              type="text"
+              placeholder="City"
+              required
+              label="City"
+              errorMessage={cityInput.error}
+              hasError={!!cityInput.error}
+              value={cityInput.value || ""}
+              isFocused={cityInput.isFocused}
+              onFocus={() => setCityInput({ ...cityInput, isFocused: true })}
+              onChange={(e) =>
+                setCityInput({
+                  ...cityInput,
+                  value: e.target.value.trim(),
+                })
+              }
+              onBlur={(e) => {
+                const value = e.target.value.trim();
+                if (value.length === 0) {
+                  return setCityInput({
+                    ...cityInput,
+                    isFocused: false,
+                    error: cityInputValidationErrorMessage,
+                  });
+                }
+                // check it contains only letters
+                if (!containsLettersRegex.test(value)) {
+                  return setCityInput({
+                    ...cityInput,
+                    isFocused: false,
+                    error: cityInputValidationErrorMessage,
+                  });
+                }
+                // no error
+                return setCityInput({
+                  ...cityInput,
+                  isFocused: false,
+                  error: null,
+                });
+              }}
+            />
+            {cityInput.error && (
+              <InputFieldErrorText
+                data-cy="zip-code-error-message"
+                isInputFocused={cityInput.isFocused}
+              >
+                {cityInput.error}
+              </InputFieldErrorText>
+            )}
+          </div>
+        </div>
       </div>
       <BaseButton type="submit" className="hover:bg-black hover:text-white ">
         Continue
