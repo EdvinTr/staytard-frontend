@@ -38,20 +38,12 @@ export const BaseInput = ({
         <span
           className={`absolute top-2 py-0 text-[10px] tracking-[1.6px] opacity-50
           ${hasLeftIcon ? "left-12" : "left-4"}  
-          ${hasError && !isFocused && "text-red-600"}
+          ${hasError && !isFocused && "text-red-600 opacity-100"}
+          ${isFocused && "opacity-50"}
           `}
         >
           {label?.toUpperCase()}
         </span>
-      )}
-      {/* error message */}
-      {hasError && (
-        <p
-          className={`py-2 text-left text-[11px] 
-          ${isFocused ? "opacity-50 text-black" : "text-red-600 opacity-100"}`}
-        >
-          {errorMessage}
-        </p>
       )}
     </div>
   );

@@ -13,6 +13,7 @@ import { SpinnerCircularFixed } from "spinners-react";
 import { AppHeader } from "../components/AppHeader";
 import { BaseInput } from "../components/BaseInput";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
+import { InputFieldErrorText } from "../components/InputFieldErrorText";
 import { APP_NAME, APP_PAGE_ROUTE, LOCAL_STORAGE_KEY } from "../constants";
 import { useLoginUserMutation } from "../lib/graphql";
 import { Localized } from "../Localized";
@@ -142,13 +143,22 @@ const LoginPage: NextPage = () => {
                   }`}
                 />
                 {emailInputState.error && (
-                  <ExclamationIcon
-                    className={`${exclamationIconClassNames} ${
-                      isEmailInputFocused
-                        ? "text-black opacity-30"
-                        : "text-red-600"
-                    }`}
-                  />
+                  <Fragment>
+                    <ExclamationIcon
+                      className={`${exclamationIconClassNames} ${
+                        isEmailInputFocused
+                          ? "text-black opacity-30"
+                          : "text-red-600"
+                      }`}
+                    />
+                    {/* error message text */}
+                    <InputFieldErrorText
+                      data-cy="email-input-error-text"
+                      isInputFocused={isEmailInputFocused}
+                    >
+                      {emailInputState.error}
+                    </InputFieldErrorText>
+                  </Fragment>
                 )}
               </div>
               <div className="relative" data-cy="password-input-container">
@@ -196,11 +206,19 @@ const LoginPage: NextPage = () => {
                   } `}
                 />
                 {passwordInputState.error && (
-                  <ExclamationIcon
-                    className={`${exclamationIconClassNames} ${
-                      isPasswordInputFocused ? "opacity-50" : "text-red-600"
-                    }`}
-                  />
+                  <Fragment>
+                    <ExclamationIcon
+                      className={`${exclamationIconClassNames} ${
+                        isPasswordInputFocused ? "opacity-50" : "text-red-600"
+                      }`}
+                    />
+                    <InputFieldErrorText
+                      data-cy="password-input-error-text"
+                      isInputFocused={isPasswordInputFocused}
+                    >
+                      {passwordInputState.error}
+                    </InputFieldErrorText>
+                  </Fragment>
                 )}
                 {/* check mark */}
                 {isDisplayPasswordCheckMark && (

@@ -7,8 +7,8 @@ const { passwordInputErrorMessage, emailInputErrorMessage } =
   Localized.page.login;
 
 const cypressIds = {
-  emailInputContainer: "email-input-container",
-  passwordInputContainer: "password-input-container",
+  emailInputErrorText: "email-input-error-text",
+  passwordInputError: "password-input-error-text",
 };
 describe("LoginPage", () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe("LoginPage", () => {
     describe("and email is not valid", () => {
       it("should display an error message", () => {
         cy.get("input[type=email]").type("invalidEmail").blur();
-        cy.get(`[data-cy=${cypressIds.emailInputContainer}]`).should(
+        cy.get(`[data-cy=${cypressIds.emailInputErrorText}]`).should(
           "contain",
           emailInputErrorMessage
         );
@@ -27,16 +27,15 @@ describe("LoginPage", () => {
     describe("and email is valid", () => {
       it("should not display an error message", () => {
         cy.get("input[type=email]").type("some.guy@gmail.com").blur();
-        cy.get(`[data-cy=${cypressIds.emailInputContainer}]`).should(
-          "not.contain",
-          emailInputErrorMessage
+        cy.get(`[data-cy=${cypressIds.emailInputErrorText}]`).should(
+          "not.exist"
         );
       });
     });
     describe("and password is empty", () => {
       it("should display an error message", () => {
         cy.get("input[type=password]").focus().blur();
-        cy.get(`[data-cy=${cypressIds.passwordInputContainer}]`).should(
+        cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should(
           "contain",
           passwordInputErrorMessage
         );
@@ -45,9 +44,8 @@ describe("LoginPage", () => {
     describe("and password is not empty", () => {
       it("should not display an error message", () => {
         cy.get("input[type=password]").type("hello").blur();
-        cy.get(`[data-cy=${cypressIds.emailInputContainer}]`).should(
-          "not.contain",
-          passwordInputErrorMessage
+        cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should(
+          "not.exist"
         );
       });
     });
