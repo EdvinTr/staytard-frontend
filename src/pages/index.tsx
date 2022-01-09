@@ -9,17 +9,23 @@ const IndexPage: NextPage = () => {
   }
 
   return (
-    <div>
+    <div className="container mx-auto">
       <h1 className="text-5xl font-semibold uppercase">Staytard</h1>
-      {meData && meData.me && <div>{meData.me.email}</div>}
-      {meData?.me ? (
-        <Link href={APP_PAGE_ROUTE.LOGIN}>
-          <a>Login</a>
-        </Link>
-      ) : (
-        /* // TODO: clear apollo cache on logout */
-        <button>Logout</button>
-      )}
+      <div className=" space-y-8 pt-20">
+        <div>
+          <Link href={APP_PAGE_ROUTE.LOGIN}>
+            <a className="p-4 border">Login</a>
+          </Link>
+        </div>
+        <div>
+          <Link href={APP_PAGE_ROUTE.REGISTER}>
+            <a className="p-4 border">Register</a>
+          </Link>
+        </div>
+        <div>
+          <button className="p-4 border">Logout</button>
+        </div>
+      </div>
     </div>
   );
 };

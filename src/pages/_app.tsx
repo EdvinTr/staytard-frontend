@@ -50,8 +50,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               size={100}
               thickness={100}
               speed={300}
-              color="rgba(255, 221, 2,1)"
-              secondaryColor="rgba(0,0,0, 0)"
+              color="rgba(0,0,0,1)"
+              //secondaryColor="rgba(255, 221, 2,1)"
+              secondaryColor="rgba(255,255,255,1)"
               className="mt-4"
             />
           </motion.div>
