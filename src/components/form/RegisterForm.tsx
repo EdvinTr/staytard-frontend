@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { Localized } from "../../Localized";
 import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
+import { isEmailAddress } from "../../utils/validation/isEmailAddress";
 import { BaseButton } from "../BaseButton";
 import { BaseInput } from "../BaseInput";
 import { InputFieldErrorText } from "../InputFieldErrorText";
 import { InputState } from "./types";
+import {
+  containsLettersRegex,
+  isAddressRegex,
+  isZipCodeRegex,
+  passwordValidationRegex,
+} from "./utils/validation";
 
 interface RegisterFormProps {}
 
@@ -16,17 +23,22 @@ const {
   zipCodeValidationErrorMessage,
   cityInputValidationErrorMessage,
   phoneNumberValidationErrorMessage,
+  emailInputErrorMessage,
+  passwordInputErrorMessage,
 } = Localized.page.register;
 
-const containsLettersRegex = new RegExp(
-  /^([\s'\-\.\/:A-Za-z\xC0-\xCB\xCC\xCD\xCF\xCE\xC9\xD1\xD6\xD8\xDA\xDC\xDD\xDE\xDF\xD9\xF9\xEC\xCD\xE0-\xEB\xED\xEE\xEF\xE9\xFF\xF0\xF1\xF3\xF6\xF8\xFA\xFC\xFD\xD5\xF5\xDB\xD0\xFB\xFB\xFE\xD2\xD3\xF2\xD4\xF4\xF3\u0178\u1E9E\u0105\u0104\u0107\u0106\u0119\u0118\u0142\u0141\u0144\u0143\u00f3\u00d3\u015b\u015a\u017a\u0179\u017c\u017b]){1,100}$/
-);
-
-const isAddressRegex = new RegExp(/^[a-zA-Z0-9\s]{1,36}$/);
-
-const isZipCodeRegex = new RegExp(/^[0-9]{3,3}\ ?[0-9]{2,2}$/);
-
 export const RegisterForm = ({}: RegisterFormProps) => {
+  const [emailInput, setEmailInput] = useState<InputState>({
+    value: null,
+    isFocused: false,
+    error: null,
+  });
+  const [passwordInput, setPasswordInput] = useState<InputState>({
+    value: null,
+    isFocused: false,
+    error: null,
+  });
+
   const [firstNameInput, setFirstNameInput] = useState<InputState>({
     value: null,
     isFocused: false,
@@ -58,25 +70,148 @@ export const RegisterForm = ({}: RegisterFormProps) => {
     isFocused: false,
     error: null,
   });
+
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const errors = [
-      firstNameInput.error,
-      lastNameInput.error,
-      addressInput.error,
-      zipCodeInput.error,
-      phoneNumberInput.error,
-      firstNameInput.error,
-      lastNameInput.error,
-    ].filter((error) => error);
-    if (errors.length) {
+    if (formHasErrors()) {
       return;
     }
-    console.log("is now valid form");
+    console.log("Register form is valid, proceed.");
+  };
+
+  const formHasErrors = (): boolean => {
+    return (
+      [
+        emailInput.error,
+        passwordInput.error,
+        firstNameInput.error,
+        lastNameInput.error,
+        addressInput.error,
+        zipCodeInput.error,
+        phoneNumberInput.error,
+      ].filter((error) => error).length > 0
+    );
   };
 
   return (
     <form className="pt-4" onSubmit={onFormSubmit}>
+      {/* email input */}
+      <BaseInput
+        data-cy="email-input"
+        type="email"
+        className={`${!emailInput.error && "mb-3"} `}
+        placeholder="E-mail"
+        label="E-mail"
+        required
+        errorMessage={emailInput.error}
+        hasError={!!emailInput.error}
+        value={emailInput.value || ""}
+        isFocused={emailInput.isFocused}
+        onFocus={() => setEmailInput({ ...emailInput, isFocused: true })}
+        onChange={(e) =>
+          setEmailInput({
+            ...emailInput,
+            value: e.target.value,
+          })
+        }
+        onBlur={(e) => {
+          const value = e.target.value.trim();
+          if (value.length === 0) {
+            return setEmailInput({
+              ...emailInput,
+              isFocused: false,
+              error: emailInputErrorMessage,
+            });
+          }
+          // check length and if it contains only letters
+          if (!isEmailAddress(value)) {
+            return setEmailInput({
+              ...emailInput,
+              isFocused: false,
+              error: emailInputErrorMessage,
+            });
+          }
+          // no error
+          return setEmailInput({
+            ...emailInput,
+            isFocused: false,
+            error: null,
+          });
+        }}
+      />
+      {emailInput.error && (
+        <InputFieldErrorText
+          data-cy="email-error-message"
+          isInputFocused={emailInput.isFocused}
+        >
+          {emailInput.error}
+        </InputFieldErrorText>
+      )}
+      {/* password input */}
+      <div className="relative">
+        <BaseInput
+          data-cy="password-input"
+          type={isPasswordShown ? "text" : "password"}
+          className={`${!passwordInput.error && "mb-3"} `}
+          placeholder="Password"
+          label="Password"
+          required
+          errorMessage={passwordInput.error}
+          hasError={!!passwordInput.error}
+          value={passwordInput.value || ""}
+          isFocused={passwordInput.isFocused}
+          onFocus={() =>
+            setPasswordInput({ ...passwordInput, isFocused: true })
+          }
+          onChange={(e) =>
+            setPasswordInput({
+              ...passwordInput,
+              value: e.target.value,
+            })
+          }
+          onBlur={(e) => {
+            const value = e.target.value.trim();
+            if (value.length === 0) {
+              return setPasswordInput({
+                ...passwordInput,
+                isFocused: false,
+                error: passwordInputErrorMessage,
+              });
+            }
+            // validate against regex
+            if (!passwordValidationRegex.test(value)) {
+              return setPasswordInput({
+                ...passwordInput,
+                isFocused: false,
+                error: passwordInputErrorMessage,
+              });
+            }
+            // no error
+            return setPasswordInput({
+              ...passwordInput,
+              isFocused: false,
+              error: null,
+            });
+          }}
+        />
+        {passwordInput.error && (
+          <InputFieldErrorText
+            data-cy="password-error-message"
+            isInputFocused={passwordInput.isFocused}
+          >
+            {passwordInput.error}
+          </InputFieldErrorText>
+        )}
+        <button
+          type="button"
+          onClick={() => setIsPasswordShown(!isPasswordShown)}
+          className="absolute top-4 right-10 text-13 font-light"
+        >
+          {isPasswordShown ? "Hide" : "Show"}
+        </button>
+      </div>
+      {/* grid */}
       <div className="grid grid-cols-2 gap-x-3 ">
         {/* first name input */}
         <div>

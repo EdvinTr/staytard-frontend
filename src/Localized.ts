@@ -18,6 +18,10 @@ export class Localized {
       cityInputValidationErrorMessage: "Please enter your location.",
       phoneNumberValidationErrorMessage:
         "Please enter a valid mobile number (ex. 0707123123).",
+      emailInputErrorMessage:
+        "Please enter a correct e-mail address (ex.name@example.com).",
+      passwordInputErrorMessage:
+        "Use at least 8 characters with both letters and numbers.",
     },
   };
 }
