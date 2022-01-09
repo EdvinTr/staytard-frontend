@@ -3,6 +3,10 @@ import { APP_PAGE_ROUTE } from "../../../src/constants";
 import { Localized } from "../../../src/Localized";
 
 const cypressIds = {
+  emailInput: "email-input",
+  emailInputError: "email-error-message",
+  passwordInput: "password-input",
+  passwordInputError: "password-error-message",
   firstNameInput: "first-name-input",
   firstNameError: "first-name-error-message",
   lastNameInput: "last-name-input",
@@ -15,6 +19,7 @@ const cypressIds = {
   cityError: "city-error-message",
   phoneErrorMessage: "cell-phone-error-message",
   phoneNumberInput: "phone-number-input",
+  submitButton: "submit-button",
 };
 const {
   inputContainsNumberErrorMessage,
@@ -24,6 +29,16 @@ const {
 describe("RegisterPage", () => {
   it("should display form errors when inputs do not pass validation", () => {
     cy.visit(APP_PAGE_ROUTE.REGISTER);
+    // email input
+    cy.get(`[data-cy=${cypressIds.emailInputError}]`).should("not.exist");
+    cy.get(`[data-cy=${cypressIds.emailInput}]`).type("!@").blur();
+    cy.get(`[data-cy=${cypressIds.emailInputError}]`).should("exist");
+
+    // password input
+    cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should("not.exist");
+    cy.get(`[data-cy=${cypressIds.passwordInput}]`).type("x23").blur();
+    cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should("exist");
+
     // first name input
     cy.get(`[data-cy=${cypressIds.firstNameError}]`).should("not.exist");
     cy.get(`[data-cy=${cypressIds.firstNameInput}]`).clear().type("123").blur();
@@ -62,6 +77,9 @@ describe("RegisterPage", () => {
       .type("123")
       .blur();
     cy.get(`[data-cy=${cypressIds.phoneErrorMessage}]`).should("exist");
+  });
+  it("should not submit form when inputs have errors", () => {
+    cy.get(`[data-cy=${cypressIds.submitButton}]`).click();
   });
 });
 export {};

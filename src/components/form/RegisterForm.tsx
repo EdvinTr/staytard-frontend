@@ -544,7 +544,11 @@ export const RegisterForm = ({}: RegisterFormProps) => {
           </InputFieldErrorText>
         )}
       </div>
-      <BaseButton type="submit" className="hover:bg-black hover:text-white ">
+      <BaseButton
+        data-cy="submit-button"
+        type="submit"
+        className="hover:bg-black hover:text-white "
+      >
         Continue
       </BaseButton>
     </form>

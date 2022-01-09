@@ -50,7 +50,7 @@ describe("LoginPage", () => {
     cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should("not.exist");
   });
 
-  it("should not submit the form if inputs are valid", () => {
+  it("should not submit the form if data is not valid", () => {
     cy.visit(APP_PAGE_ROUTE.LOGIN);
     cy.get(`[data-cy=${cypressIds.emailInput}]`).type("something");
 
