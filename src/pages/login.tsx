@@ -105,6 +105,7 @@ const LoginPage: NextPage = () => {
                 <BaseInput
                   type="email"
                   required
+                  data-cy="email-input"
                   className={`${!emailInputState.error && "mb-3"} `}
                   placeholder="E-mail"
                   value={emailInputState.email}
@@ -166,6 +167,7 @@ const LoginPage: NextPage = () => {
                 <BaseInput
                   type="password"
                   required
+                  data-cy="password-input"
                   placeholder="Password"
                   label="Password"
                   errorMessage={passwordInputState.error}
