@@ -31,6 +31,10 @@ const {
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
+  const [isEmailInputFocused, setIsEmailInputFocused] = useState(false);
+  const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
+  const [isDisplayPasswordCheckMark, setIsDisplayPasswordCheckMark] =
+    useState(false);
   const [emailInputState, setEmailInputState] = useState<{
     email: string;
     error: string | null;
@@ -76,10 +80,7 @@ const LoginPage: NextPage = () => {
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
-  const [isEmailInputFocused, setIsEmailInputFocused] = useState(false);
-  const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
-  const [isDisplayPasswordCheckMark, setIsDisplayPasswordCheckMark] =
-    useState(false);
+
   return (
     <Fragment>
       <AppHeader />
@@ -90,7 +91,7 @@ const LoginPage: NextPage = () => {
         <div className="pt-16 text-center">
           {/* page titles */}
           <div className="space-y-6">
-            <h1 className="text-2xl">Log in to Staytard.com</h1>
+            <h1 className="text-2xl">Log in to {APP_NAME}.com</h1>
             <h2 className="text-13 font-light">
               Log in by filling in your e-mail address and password
             </h2>
