@@ -23,6 +23,7 @@ const IndexPage: NextPage = () => {
           </Link>
         </div>
         <div>
+          {/* //TODO: reset apollo cache, and clear local storage, hard reload after. */}
           <button className="p-4 border">Logout</button>
         </div>
       </div>

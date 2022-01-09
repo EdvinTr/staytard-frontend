@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 interface BaseInputProps extends React.ComponentPropsWithRef<"input"> {
   label?: string;
@@ -17,13 +17,12 @@ export const BaseInput = ({
   ...props
 }: BaseInputProps) => {
   const currentValueLength = props.value?.toString().length ?? 0;
-
   return (
-    <Fragment>
+    <div className="relative">
       <input
         {...props}
         className={`
-        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold  h-[50px] ring-0 focus:ring-0 focus:border-black focus:border-opacity-50 border-opacity-50 focus:placeholder-opacity-50 focus:placeholder-black
+        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold  h-[50px] ring-0 focus:ring-0 focus:border-black focus:border-opacity-25 border-opacity-25 focus:placeholder-opacity-50 focus:placeholder-black
         ${props.className} 
         ${label && currentValueLength > 0 ? "pt-6" : ""} 
         ${
@@ -37,10 +36,9 @@ export const BaseInput = ({
       {currentValueLength > 0 && (
         /* floating label */
         <span
-          className={`absolute top-2 py-0 text-[10px] tracking-[1.6px]
-          ${hasLeftIcon ? "left-12" : "left-3"}  
+          className={`absolute top-2 py-0 text-[10px] tracking-[1.6px] opacity-50
+          ${hasLeftIcon ? "left-12" : "left-4"}  
           ${hasError && !isFocused && "text-red-600"}
-          ${isFocused && "opacity-50 "}
           `}
         >
           {label?.toUpperCase()}
@@ -55,6 +53,6 @@ export const BaseInput = ({
           {errorMessage}
         </p>
       )}
-    </Fragment>
+    </div>
   );
 };
