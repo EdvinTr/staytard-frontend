@@ -14,7 +14,10 @@ const httpLink = new HttpLink({
   credentials: "include",
 });
 const authLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
+  let token;
+  if (typeof localStorage !== "undefined") {
+    token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
+  }
   operation.setContext({
     headers: {
       authorization: token ? `Bearer ${token}` : "",
@@ -30,6 +33,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: authLink.concat(httpLink),
+
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

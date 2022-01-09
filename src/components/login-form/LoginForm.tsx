@@ -224,7 +224,6 @@ export const LoginForm = ({
       {/* submit button */}
       <button
         type="submit"
-        name="action"
         className={
           /* //TODO: when tabbing and pressing enter key, should color the button back again to yellow or do this in the loading spinner (change to white spinner)*/
           `w-full p-4 mt-5 outline-none focus-visible:bg-black  focus-visible:text-white uppercase text-sm font-bold tracking-wider bg-staytard-yellow transition-all duration-300 ease-out ` +

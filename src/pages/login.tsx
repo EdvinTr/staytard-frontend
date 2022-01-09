@@ -96,4 +96,22 @@ const LoginPage: NextPage = () => {
 // TODO: should SSR and check if user is already logged in, incase it should return props with redirect to index page.
 // alternatively, should check if user is logged in on client side, but then you get weird flickering on page load since it actually renders the login page then redirects
 
+/* export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  try {
+    const { props } = await ssrMe.getServerPage({}, ctx);
+    if (props.data.me) {
+      return {
+        props: {},
+        redirect: APP_PAGE_ROUTE.INDEX,
+      };
+    }
+    throw new Error();
+  } catch (err) {
+    console.log("ERROR", err);
+    return {
+      props: {},
+    };
+  }
+}; */
+
 export default LoginPage;
