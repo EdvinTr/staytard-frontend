@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import {
   ExclamationIcon,
   LockClosedIcon,
@@ -14,9 +15,10 @@ import { AppHeader } from "../components/AppHeader";
 import { BaseInput } from "../components/BaseInput";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { InputFieldErrorText } from "../components/InputFieldErrorText";
-import { APP_NAME, APP_PAGE_ROUTE, LOCAL_STORAGE_KEY } from "../constants";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { useLoginUserMutation } from "../lib/graphql";
 import { Localized } from "../Localized";
+import { onLoginOrRegistration } from "../utils/onLoginOrRegistration";
 import { isEmailAddress } from "../utils/validation/isEmailAddress";
 
 const inputIconClassNames =
@@ -50,7 +52,7 @@ const LoginPage: NextPage = () => {
     password: "",
     error: null,
   });
-
+  const apolloClient = useApolloClient();
   const [loginUser, { loading: isLoginUserLoading, error: loginUserGqlError }] =
     useLoginUserMutation();
   const onFormSubmit = async (
@@ -64,6 +66,7 @@ const LoginPage: NextPage = () => {
       return; // prevent spamming
     }
     try {
+      await apolloClient.resetStore();
       const { data } = await loginUser({
         variables: {
           input: {
@@ -76,8 +79,7 @@ const LoginPage: NextPage = () => {
         throw new Error();
       }
       const { accessToken, refreshToken } = data.login;
-      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken);
-      localStorage.setItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken);
+      onLoginOrRegistration({ accessToken, refreshToken });
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };

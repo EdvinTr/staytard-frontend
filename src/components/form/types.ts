@@ -1,5 +1,5 @@
 export interface InputState {
-  value: null | string;
+  value: string;
   isFocused: boolean;
   error: null | string;
 }

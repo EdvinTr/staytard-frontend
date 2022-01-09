@@ -27,6 +27,10 @@ const IndexPage: NextPage = () => {
           <button className="p-4 border">Logout</button>
         </div>
       </div>
+      <h1>
+        {meData?.me.firstName} {meData?.me.lastName} is logged in
+      </h1>
+      <h2>email: {meData?.me.email}</h2>
     </div>
   );
 };

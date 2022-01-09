@@ -22,6 +22,7 @@ export class Localized {
         "Please enter a correct e-mail address (ex.name@example.com).",
       passwordInputErrorMessage:
         "Use at least 8 characters with both letters and numbers.",
+      registrationFailedErrorMessage: "Registration failed, please try again.",
     },
   };
 }

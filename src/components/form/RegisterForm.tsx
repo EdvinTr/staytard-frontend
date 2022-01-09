@@ -1,5 +1,11 @@
+import { useApolloClient } from "@apollo/client";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { SpinnerCircularFixed } from "spinners-react";
+import { APP_PAGE_ROUTE } from "../../constants";
+import { useRegisterUserMutation } from "../../lib/graphql";
 import { Localized } from "../../Localized";
+import { onLoginOrRegistration } from "../../utils/onLoginOrRegistration";
 import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
 import { isEmailAddress } from "../../utils/validation/isEmailAddress";
 import { BaseButton } from "../BaseButton";
@@ -24,60 +30,93 @@ const {
   cityInputValidationErrorMessage,
   phoneNumberValidationErrorMessage,
   emailInputErrorMessage,
+  registrationFailedErrorMessage,
   passwordInputErrorMessage,
 } = Localized.page.register;
 
 export const RegisterForm = ({}: RegisterFormProps) => {
   const [emailInput, setEmailInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
   const [passwordInput, setPasswordInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
 
   const [firstNameInput, setFirstNameInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
   const [lastNameInput, setLastNameInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
   const [addressInput, setAddressInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
   const [zipCodeInput, setZipCodeInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
   const [cityInput, setCityInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
 
   const [phoneNumberInput, setPhoneNumberInput] = useState<InputState>({
-    value: null,
+    value: "",
     isFocused: false,
     error: null,
   });
-
+  const apolloClient = useApolloClient();
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const router = useRouter();
+  const [
+    registerUser,
+    { loading: isRegisterUserLoading, error: registerUserError },
+  ] = useRegisterUserMutation();
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formHasErrors()) {
       return;
     }
-    console.log("Register form is valid, proceed.");
+    if (isRegisterUserLoading) {
+      return; // prevent spam
+    }
+    try {
+      await apolloClient.resetStore();
+      const { data } = await registerUser({
+        variables: {
+          input: {
+            email: emailInput.value,
+            password: passwordInput.value,
+            firstName: firstNameInput.value,
+            lastName: lastNameInput.value,
+            street: addressInput.value,
+            postalCode: zipCodeInput.value,
+            city: cityInput.value,
+            mobilePhoneNumber: phoneNumberInput.value,
+          },
+        },
+      });
+      if (!data || !data.registerUser) {
+        throw new Error();
+      }
+      const { accessToken, refreshToken } = data.registerUser;
+      onLoginOrRegistration({ accessToken, refreshToken });
+      router.push(APP_PAGE_ROUTE.INDEX);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const formHasErrors = (): boolean => {
@@ -544,12 +583,33 @@ export const RegisterForm = ({}: RegisterFormProps) => {
           </InputFieldErrorText>
         )}
       </div>
+      {registerUserError && (
+        <div className="text-red-600 text-13 bg-red-50 p-4 mt-4">
+          <div data-cy="registration-failed-error">
+            {registerUserError.message}
+          </div>
+        </div>
+      )}
       <BaseButton
         data-cy="submit-button"
         type="submit"
-        className="hover:bg-black hover:text-white "
+        className={`hover:bg-black hover:text-white ${
+          isRegisterUserLoading ? "" : "hover:bg-black hover:text-white "
+        } `}
       >
-        Continue
+        {isRegisterUserLoading ? (
+          <SpinnerCircularFixed
+            data-cy="login-button-spinner"
+            size={30}
+            thickness={80}
+            speed={300}
+            color="rgba(0,0,0,1)"
+            secondaryColor="rgba(172, 57, 57, 0)"
+            className="inline"
+          />
+        ) : (
+          "Continue"
+        )}
       </BaseButton>
     </form>
   );
