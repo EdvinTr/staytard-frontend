@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <div className="flex items-center space-x-2">
               {/* open search modal button */}
               <SearchIcon className="w-5 " />
-              <div className="opacity-50 hidden lg:block">search</div>
+              <div className="opacity-50 hidden lg:block">Search</div>
             </div>
             {/* app name */}
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
