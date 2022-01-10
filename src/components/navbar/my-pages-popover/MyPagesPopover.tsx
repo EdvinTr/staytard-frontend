@@ -1,7 +1,9 @@
+import { useApolloClient } from "@apollo/client";
 import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
 import React, { Fragment } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
+import { useLogoutMutation } from "../../../lib/graphql";
 import {
   LogoutIcon,
   MyOrdersIcon,
@@ -34,6 +36,8 @@ const popoverItems: PopoverItem[] = [
 ];
 
 export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
+  const [logoutUser, { data, error, loading }] = useLogoutMutation();
+  const apollo = useApolloClient();
   return (
     <div className={`px-4 ${props.className}`} {...props}>
       <Popover className="relative ">
@@ -71,7 +75,22 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                     ))}
                     <button>
                       <PopoverItemContainer
-                        onClick={() => window.location.reload()}
+                        onClick={async () => {
+                          if (loading) {
+                            return;
+                          }
+                          try {
+                            await apollo.resetStore();
+                            const response = await logoutUser();
+                            if (response.data) {
+                              window.location.reload();
+                            } else {
+                              console.log(error);
+                            }
+                          } catch (err) {
+                            console.log("CATCH ERR:", err);
+                          }
+                        }}
                       >
                         <p className="text-base text-staytard-dark">Log out</p>
                         <PopoverIconContainer>
