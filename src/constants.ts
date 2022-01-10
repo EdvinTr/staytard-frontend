@@ -7,6 +7,9 @@ export enum APP_PAGE_ROUTE {
   INDEX = "/",
   LOGIN = "/login",
   REGISTER = "/register",
+  MY_PROFILE = "/my-profile",
+  MY_ORDERS = "/my-orders",
+  MY_OFFERS = "my-offers",
 }
 
 export const APP_NAME = "Staytard";
