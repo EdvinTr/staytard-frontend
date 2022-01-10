@@ -103,9 +103,6 @@ const LoginPage: NextPage = () => {
   );
 };
 
-// TODO: should SSR and check if user is already logged in, incase it should return props with redirect to index page.
-// alternatively, should check if user is logged in on client side, but then you get weird flickering on page load since it actually renders the login page then redirects
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const client = initializeApollo({ headers: ctx.req.headers });
   try {
@@ -121,9 +118,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
+    // should never get here actually
     throw new Error();
   } catch (err: any) {
-    // probably got a 401 response from AuthGuard (user is not logged in)
+    // probably got a 401 response from AuthGuard meaning: user is not logged in
     return {
       props: {},
     };
