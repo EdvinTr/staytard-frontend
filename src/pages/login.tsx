@@ -1,5 +1,5 @@
 import { useApolloClient } from "@apollo/client";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,7 +9,13 @@ import { FadeInContainer } from "../components/global/FadeInContainer";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
-import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
+import { initializeApollo } from "../lib/apolloClient";
+import {
+  LoginUserDto,
+  MeDocument,
+  MeQuery,
+  useLoginUserMutation,
+} from "../lib/graphql";
 import { setTokensInLocalStorage } from "../utils/setTokensInLocalStorage";
 
 const LoginPage: NextPage = () => {
@@ -45,6 +51,10 @@ const LoginPage: NextPage = () => {
       }
       const { accessToken, refreshToken } = data.login;
       setTokensInLocalStorage({ accessToken, refreshToken });
+      /* apolloClient.writeQuery({
+        data: accessToken,
+        query: `{ me { id } }`
+      }) */
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
@@ -96,22 +106,28 @@ const LoginPage: NextPage = () => {
 // TODO: should SSR and check if user is already logged in, incase it should return props with redirect to index page.
 // alternatively, should check if user is logged in on client side, but then you get weird flickering on page load since it actually renders the login page then redirects
 
-/* export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const client = initializeApollo({ headers: ctx.req.headers });
   try {
-    const { props } = await ssrMe.getServerPage({}, ctx);
-    if (props.data.me) {
+    const { data } = await client.query<MeQuery>({
+      query: MeDocument,
+    });
+    if (data && data.me) {
+      // is logged in
       return {
         props: {},
-        redirect: APP_PAGE_ROUTE.INDEX,
+        redirect: {
+          destination: APP_PAGE_ROUTE.INDEX,
+        },
       };
     }
     throw new Error();
-  } catch (err) {
-    console.log("ERROR", err);
+  } catch (err: any) {
+    // probably got a 401 response from AuthGuard (user is not logged in)
     return {
       props: {},
     };
   }
-}; */
+};
 
 export default LoginPage;

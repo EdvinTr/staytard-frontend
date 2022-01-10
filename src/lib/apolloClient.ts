@@ -1,19 +1,14 @@
 import {
   ApolloClient,
-  ApolloLink,
   Context,
-  HttpLink,
+  createHttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
+import { IncomingHttpHeaders } from "http";
 import { useMemo } from "react";
-import { LOCAL_STORAGE_KEY } from "../constants";
 
-const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT,
-  credentials: "include",
-});
-const authLink = new ApolloLink((operation, forward) => {
+/* const authLink = new ApolloLink((operation, forward) => {
   let token;
   if (typeof localStorage !== "undefined") {
     token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
@@ -25,15 +20,32 @@ const authLink = new ApolloLink((operation, forward) => {
   });
   // Call the next link in the middleware chain.
   return forward(operation);
-});
+}); */
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function createApolloClient() {
+function createApolloClient(headers: IncomingHttpHeaders | null = null) {
+  const enhancedFetch = (url: RequestInfo, init: RequestInit) => {
+    return fetch(url, {
+      ...init,
+      headers: {
+        ...init.headers,
+        "Access-Control-Allow-Origin": "*",
+        // here we pass the cookie along for each request
+        Cookie: headers?.cookie ?? "",
+      },
+    }).then((response) => response);
+  };
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: authLink.concat(httpLink),
-
+    link: createHttpLink({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT,
+      credentials: "include",
+      fetchOptions: {
+        mode: "cors",
+      },
+      fetch: enhancedFetch,
+    }),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
@@ -59,10 +71,19 @@ function createApolloClient() {
   });
 }
 
+type InitialState = NormalizedCacheObject | undefined;
+interface IInitializeApollo {
+  headers?: IncomingHttpHeaders | null;
+  initialState?: InitialState | null;
+}
+
 export function initializeApollo(
-  initialState: NormalizedCacheObject | null = null
+  { headers, initialState }: IInitializeApollo = {
+    headers: null,
+    initialState: null,
+  }
 ) {
-  const _apolloClient = apolloClient ?? createApolloClient();
+  const _apolloClient = apolloClient ?? createApolloClient(headers);
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here
@@ -82,7 +103,10 @@ export function initializeApollo(
 }
 
 export function useApollo(initialState: NormalizedCacheObject | null) {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+  const store = useMemo(
+    () => initializeApollo({ initialState }),
+    [initialState]
+  );
   return store;
 }
 
@@ -90,5 +114,5 @@ export const getApolloClient = (
   ctx?: Context,
   initialState?: NormalizedCacheObject
 ) => {
-  return initializeApollo(initialState);
+  return initializeApollo({ initialState });
 };

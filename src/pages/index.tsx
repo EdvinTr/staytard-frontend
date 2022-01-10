@@ -1,9 +1,11 @@
 import { useApolloClient } from "@apollo/client";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { APP_PAGE_ROUTE } from "../constants";
 import { useLogoutMutation, useMeQuery } from "../lib/graphql";
 const IndexPage: NextPage = () => {
+  const router = useRouter();
   const { data: meData, loading } = useMeQuery();
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const apollo = useApolloClient();
@@ -14,14 +16,16 @@ const IndexPage: NextPage = () => {
   const onLogoutClick = async () => {
     try {
       const { data } = await logout();
+      console.log(data);
+
       if (!data || !data.logout) {
         throw new Error();
       }
-      await apollo.resetStore();
-      localStorage.clear();
-      window.location.reload();
+      await apollo.resetStore(); // TODO: fix this ordering, it works, but it's not ideal
+      console.log("i reset apollo cache");
     } catch {
       // i refuse to do more error handling than this
+      router.reload();
     }
   };
   return (
@@ -40,7 +44,7 @@ const IndexPage: NextPage = () => {
         </div>
         <div>
           {/* //TODO: reset apollo cache, and clear local storage, hard reload after. */}
-          <button className="p-4 border" onClick={onLogoutClick}>
+          <button className="p-4 border" onClick={() => onLogoutClick()}>
             Logout
           </button>
         </div>
