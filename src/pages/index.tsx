@@ -21,8 +21,7 @@ const IndexPage: NextPage = () => {
       if (!data || !data.logout) {
         throw new Error();
       }
-      await apollo.resetStore(); // TODO: fix this ordering, it works, but it's not ideal
-      console.log("i reset apollo cache");
+      await apollo.resetStore();
     } catch {
       // i refuse to do more error handling than this
       router.reload();

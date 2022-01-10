@@ -24,9 +24,15 @@ export type LoginUserDto = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  authenticateWithGoogle: UserWithTokensDto;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
   registerUser: UserWithTokensDto;
+};
+
+
+export type MutationAuthenticateWithGoogleArgs = {
+  googleAuthToken: Scalars['String'];
 };
 
 
@@ -100,6 +106,13 @@ export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number
 
 export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean };
 
+export type AuthenticateWithGoogleMutationVariables = Exact<{
+  googleAuthToken: Scalars['String'];
+}>;
+
+
+export type AuthenticateWithGoogleMutation = { __typename?: 'Mutation', authenticateWithGoogle: { __typename?: 'UserWithTokensDto', accessToken: string, refreshToken: string } };
+
 export type LoginUserMutationVariables = Exact<{
   input: LoginUserDto;
 }>;
@@ -143,6 +156,40 @@ export const CoreUserFieldsFragmentDoc = gql`
   isAdmin
 }
     `;
+export const AuthenticateWithGoogleDocument = gql`
+    mutation AuthenticateWithGoogle($googleAuthToken: String!) {
+  authenticateWithGoogle(googleAuthToken: $googleAuthToken) {
+    accessToken
+    refreshToken
+  }
+}
+    `;
+export type AuthenticateWithGoogleMutationFn = Apollo.MutationFunction<AuthenticateWithGoogleMutation, AuthenticateWithGoogleMutationVariables>;
+
+/**
+ * __useAuthenticateWithGoogleMutation__
+ *
+ * To run a mutation, you first call `useAuthenticateWithGoogleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAuthenticateWithGoogleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [authenticateWithGoogleMutation, { data, loading, error }] = useAuthenticateWithGoogleMutation({
+ *   variables: {
+ *      googleAuthToken: // value for 'googleAuthToken'
+ *   },
+ * });
+ */
+export function useAuthenticateWithGoogleMutation(baseOptions?: Apollo.MutationHookOptions<AuthenticateWithGoogleMutation, AuthenticateWithGoogleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AuthenticateWithGoogleMutation, AuthenticateWithGoogleMutationVariables>(AuthenticateWithGoogleDocument, options);
+      }
+export type AuthenticateWithGoogleMutationHookResult = ReturnType<typeof useAuthenticateWithGoogleMutation>;
+export type AuthenticateWithGoogleMutationResult = Apollo.MutationResult<AuthenticateWithGoogleMutation>;
+export type AuthenticateWithGoogleMutationOptions = Apollo.BaseMutationOptions<AuthenticateWithGoogleMutation, AuthenticateWithGoogleMutationVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($input: LoginUserDto!) {
   login(input: $input) {

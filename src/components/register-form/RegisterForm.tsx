@@ -5,7 +5,6 @@ import { SpinnerCircularFixed } from "spinners-react";
 import { APP_PAGE_ROUTE } from "../../constants";
 import { useRegisterUserMutation } from "../../lib/graphql";
 import { Localized } from "../../Localized";
-import { setTokensInLocalStorage } from "../../utils/setTokensInLocalStorage";
 import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
 import { isEmailAddress } from "../../utils/validation/isEmailAddress";
 import { BaseButton } from "../BaseButton";
@@ -85,6 +84,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
     { loading: isRegisterUserLoading, error: registerUserError },
   ] = useRegisterUserMutation();
   const onFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (formHasErrors()) {
       return;
     }
@@ -110,11 +110,9 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       if (!data || !data.registerUser) {
         throw new Error();
       }
-      const { accessToken, refreshToken } = data.registerUser;
-      setTokensInLocalStorage({ accessToken, refreshToken });
       router.push(APP_PAGE_ROUTE.INDEX);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      // TODO: show error when backend is offline
     }
   };
 
@@ -589,6 +587,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
           </div>
         </div>
       )}
+      {/*  TODO: basebutton should have isLoading prop automatically */}
       <BaseButton
         data-cy="submit-button"
         type="submit"

@@ -8,20 +8,6 @@ import {
 import { IncomingHttpHeaders } from "http";
 import { useMemo } from "react";
 
-/* const authLink = new ApolloLink((operation, forward) => {
-  let token;
-  if (typeof localStorage !== "undefined") {
-    token = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
-  }
-  operation.setContext({
-    headers: {
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  });
-  // Call the next link in the middleware chain.
-  return forward(operation);
-}); */
-
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function createApolloClient(headers: IncomingHttpHeaders | null = null) {
@@ -31,8 +17,7 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
       headers: {
         ...init.headers,
         "Access-Control-Allow-Origin": "*",
-        // here we pass the cookie along for each request
-        Cookie: headers?.cookie ?? "",
+        Cookie: headers?.cookie ?? "", // pass cookies
       },
     }).then((response) => response);
   };

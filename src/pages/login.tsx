@@ -16,7 +16,6 @@ import {
   MeQuery,
   useLoginUserMutation,
 } from "../lib/graphql";
-import { setTokensInLocalStorage } from "../utils/setTokensInLocalStorage";
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -49,12 +48,7 @@ const LoginPage: NextPage = () => {
       if (!data || !data.login) {
         throw new Error();
       }
-      const { accessToken, refreshToken } = data.login;
-      setTokensInLocalStorage({ accessToken, refreshToken });
-      /* apolloClient.writeQuery({
-        data: accessToken,
-        query: `{ me { id } }`
-      }) */
+
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };

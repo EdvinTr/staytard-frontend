@@ -1,0 +1,6 @@
+mutation AuthenticateWithGoogle($googleAuthToken: String!) {
+  authenticateWithGoogle(googleAuthToken: $googleAuthToken) {
+    accessToken
+    refreshToken
+  }
+}

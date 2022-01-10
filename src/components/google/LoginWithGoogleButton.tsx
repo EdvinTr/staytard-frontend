@@ -1,16 +1,23 @@
+import { useApolloClient } from "@apollo/client";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import {
   GoogleLogin,
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
+import { APP_PAGE_ROUTE } from "../../constants";
+import { useAuthenticateWithGoogleMutation } from "../../lib/graphql";
 interface LoginWithGoogleButtonProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const LoginWithGoogleButton = ({
   ...props
 }: LoginWithGoogleButtonProps) => {
+  const [authenticateWithGoogle] = useAuthenticateWithGoogleMutation();
+  const router = useRouter();
+  const apollo = useApolloClient();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const loginSuccess = async (
     response: GoogleLoginResponse | GoogleLoginResponseOffline
@@ -19,7 +26,16 @@ export const LoginWithGoogleButton = ({
     if ("accessToken" in response) {
       const googleAccessToken = response.accessToken;
       try {
-        // throw new Error();
+        const response = await authenticateWithGoogle({
+          variables: {
+            googleAuthToken: googleAccessToken,
+          },
+        });
+        if (!response || !response.data) {
+          throw new Error();
+        }
+        await apollo.resetStore();
+        router.push(APP_PAGE_ROUTE.INDEX);
       } catch (err) {
         setErrorMessage(
           "An error occurred while logging in with Google. Try again later."
