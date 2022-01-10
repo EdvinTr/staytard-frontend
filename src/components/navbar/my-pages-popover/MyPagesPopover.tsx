@@ -10,7 +10,12 @@ import {
 } from "../../icons/Icons";
 interface MyPagesPopoverProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const links = [
+interface PopoverItem {
+  name: string;
+  href: APP_PAGE_ROUTE;
+  icon: any;
+}
+const popoverItems: PopoverItem[] = [
   {
     name: "My orders",
     href: APP_PAGE_ROUTE.MY_ORDERS,
@@ -26,15 +31,9 @@ const links = [
     href: APP_PAGE_ROUTE.MY_PROFILE,
     icon: MyUserIcon,
   },
-  {
-    name: "Log out",
-    href: "##", // TODO: implement logout
-    icon: LogoutIcon,
-  },
 ];
 
 export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
-  const createPopoverLink = () => {};
   return (
     <div className={`px-4 ${props.className}`} {...props}>
       <Popover className="relative ">
@@ -56,20 +55,30 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
               <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-8 transform -translate-x-1/2 -left-14 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden shadow-lg ">
                   <div className="relative grid gap-6 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
-                    {links.map((item) => (
+                    {popoverItems.map((item) => (
                       <Link href={item.href} key={item.name}>
-                        <a className="flex items-center justify-between p-2 -m-3 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50">
-                          <div className="ml-4">
+                        <a>
+                          <PopoverItemContainer>
                             <p className="text-base text-staytard-dark">
                               {item.name}
                             </p>
-                          </div>
-                          <div className="flex items-center justify-center w-10 h-10 text-white sm:h-12 sm:w-12">
-                            <item.icon aria-hidden="true" className="w-8" />
-                          </div>
+                            <PopoverIconContainer>
+                              <item.icon aria-hidden="true" className="w-8" />
+                            </PopoverIconContainer>
+                          </PopoverItemContainer>
                         </a>
                       </Link>
                     ))}
+                    <button>
+                      <PopoverItemContainer
+                        onClick={() => window.location.reload()}
+                      >
+                        <p className="text-base text-staytard-dark">Log out</p>
+                        <PopoverIconContainer>
+                          <LogoutIcon className="w-8" />
+                        </PopoverIconContainer>
+                      </PopoverItemContainer>
+                    </button>
                   </div>
                 </div>
               </Popover.Panel>
@@ -77,6 +86,34 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
           </>
         )}
       </Popover>
+    </div>
+  );
+};
+
+const PopoverItemContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <div
+      {...props}
+      className="ml-0 flex items-center justify-between p-2 -m-3 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
+    >
+      {children}
+    </div>
+  );
+};
+
+const PopoverIconContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <div
+      {...props}
+      className="flex items-center justify-center w-10 h-10 text-white sm:h-12 sm:w-12"
+    >
+      {children}
     </div>
   );
 };
