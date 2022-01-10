@@ -12,4 +12,9 @@ export enum APP_PAGE_ROUTE {
   MY_OFFERS = "my-offers",
 }
 
+export enum COOKIE_NAME {
+  ACCESS_TOKEN = "access_token",
+  REFRESH_TOKEN = "refresh_token",
+}
+
 export const APP_NAME = "Staytard";

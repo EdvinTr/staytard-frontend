@@ -8,14 +8,8 @@ import { AppHeader } from "../components/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
-import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
-import { initializeApollo } from "../lib/apolloClient";
-import {
-  LoginUserDto,
-  MeDocument,
-  MeQuery,
-  useLoginUserMutation,
-} from "../lib/graphql";
+import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
+import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -98,30 +92,18 @@ const LoginPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const client = initializeApollo({ headers: ctx.req.headers });
-  try {
-    const { data } = await client.query<MeQuery>({
-      query: MeDocument,
-    });
-    if (data && data.me) {
-      // user is logged in
-      return {
-        props: {},
-        redirect: {
-          destination: APP_PAGE_ROUTE.INDEX,
-        },
-      };
-    }
-    // should probably never end up here
+  const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
+  if (accessToken) {
     return {
       props: {},
-    };
-  } catch {
-    // probably got a 401 response from AuthGuard meaning: user is not logged in
-    return {
-      props: {},
+      redirect: {
+        destination: APP_PAGE_ROUTE.INDEX,
+      },
     };
   }
+  return {
+    props: {},
+  };
 };
 
 export default LoginPage;
