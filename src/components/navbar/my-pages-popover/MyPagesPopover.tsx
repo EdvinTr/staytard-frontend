@@ -84,8 +84,6 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                             const response = await logoutUser();
                             if (response.data) {
                               window.location.reload();
-                            } else {
-                              console.log(error);
                             }
                           } catch (err) {
                             console.log("CATCH ERR:", err);
@@ -95,6 +93,7 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                         <p className="text-base text-staytard-dark">Log out</p>
                         <PopoverIconContainer>
                           <LogoutIcon className="w-8" />
+                          {/* //TODO: when logging out, display a loading spinner instead */}
                         </PopoverIconContainer>
                       </PopoverItemContainer>
                     </button>
