@@ -110,7 +110,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       query: MeDocument,
     });
     if (data && data.me) {
-      // is logged in
+      // user is logged in
       return {
         props: {},
         redirect: {
@@ -118,9 +118,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    // should never get here actually
-    throw new Error();
-  } catch (err: any) {
+    // should probably never end up here
+    return {
+      props: {},
+    };
+  } catch {
     // probably got a 401 response from AuthGuard meaning: user is not logged in
     return {
       props: {},
