@@ -66,6 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               <Link key={category.id} href={category.path}>
                 <a
                   className="underline"
+                  onClick={() => setIsHoverMenuOpen(false)}
                   onMouseEnter={() => {
                     if (category.children) {
                       setHoverMenuItems(category.children);

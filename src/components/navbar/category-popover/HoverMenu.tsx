@@ -20,7 +20,7 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
 
   const renderListItem = (item: CategoryItem) => {
     return (
-      <li key={item.id}>
+      <li key={item.id} onClick={() => setIsCursorInMenu(false)}>
         <Link href={item.path}>
           <a className="hover:underline cursor-pointer">{item.name}</a>
         </Link>
