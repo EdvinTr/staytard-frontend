@@ -10,6 +10,7 @@ import {
   MyPriceTagIcon,
   MyUserIcon,
 } from "../../icons/Icons";
+import { LoadingSpinner } from "../../LoadingSpinner";
 interface MyPagesPopoverProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface PopoverItem {
@@ -36,7 +37,8 @@ const popoverItems: PopoverItem[] = [
 ];
 
 export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
-  const [logoutUser, { data, error, loading }] = useLogoutMutation();
+  const [logoutUser, { data, error, loading: isLogoutUserLoading }] =
+    useLogoutMutation();
   const apollo = useApolloClient();
   return (
     <div className={`px-4 ${props.className}`} {...props}>
@@ -76,7 +78,7 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                     <button>
                       <PopoverItemContainer
                         onClick={async () => {
-                          if (loading) {
+                          if (isLogoutUserLoading) {
                             return;
                           }
                           try {
@@ -90,10 +92,15 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                           }
                         }}
                       >
-                        <p className="text-base text-staytard-dark">Log out</p>
+                        <span className="text-base text-staytard-dark">
+                          Log out
+                        </span>
                         <PopoverIconContainer>
-                          <LogoutIcon className="w-8" />
-                          {/* //TODO: when logging out, display a loading spinner instead */}
+                          {isLogoutUserLoading ? (
+                            <LoadingSpinner size={30} />
+                          ) : (
+                            <LogoutIcon className="w-8" />
+                          )}
                         </PopoverIconContainer>
                       </PopoverItemContainer>
                     </button>

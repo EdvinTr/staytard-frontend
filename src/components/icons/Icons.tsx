@@ -1,5 +1,4 @@
 import { SVGProps } from "react";
-
 export function MyOrdersIcon({ ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -7,7 +6,7 @@ export function MyOrdersIcon({ ...props }: SVGProps<SVGSVGElement>) {
       focusable="false"
       aria-hidden="true"
       viewBox="0 0 32 32"
-      className={props.className}
+      className={`${props.className} `}
     >
       <path
         fillRule="evenodd"

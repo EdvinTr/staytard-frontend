@@ -1,0 +1,9 @@
+.myclass {
+  --color: #00ff00;
+  @media (prefers-color-scheme: light) {
+    --color: #0000ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    --color: #ff0000;
+  }
+}
