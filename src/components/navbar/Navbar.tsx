@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             {/* app name */}
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <Link href={APP_PAGE_ROUTE.INDEX}>
-                <a className="text-[32px] uppercase font-bold">{APP_NAME}</a>
+                <a className="text-4xl uppercase font-bold">{APP_NAME}</a>
               </Link>
             </div>
             <div className="flex items-center space-x-9">
