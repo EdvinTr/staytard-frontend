@@ -5,12 +5,12 @@ import {
   MailIcon,
 } from "@heroicons/react/solid";
 import React, { Fragment, useState } from "react";
-import { SpinnerCircularFixed } from "spinners-react";
 import { LoginUserDto } from "../../lib/graphql";
 import { Localized } from "../../Localized";
 import { isEmailAddress } from "../../utils/validation/isEmailAddress";
 import { BaseInput } from "../BaseInput";
 import { InputFieldErrorText } from "../InputFieldErrorText";
+import { LoadingSpinner } from "../LoadingSpinner";
 import { InputState } from "../register-form/types";
 
 interface LoginFormProps {
@@ -231,15 +231,7 @@ export const LoginForm = ({
         }
       >
         {isSubmitting ? (
-          <SpinnerCircularFixed
-            data-cy="login-button-spinner"
-            size={30}
-            thickness={80}
-            speed={300}
-            color="rgba(0,0,0,1)"
-            secondaryColor="rgba(172, 57, 57, 0)"
-            className="inline"
-          />
+          <LoadingSpinner data-cy="login-button-spinner" />
         ) : (
           "Sign In"
         )}

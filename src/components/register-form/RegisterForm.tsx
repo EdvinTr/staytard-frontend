@@ -1,7 +1,6 @@
 import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { SpinnerCircularFixed } from "spinners-react";
 import { APP_PAGE_ROUTE } from "../../constants";
 import { useRegisterUserMutation } from "../../lib/graphql";
 import { Localized } from "../../Localized";
@@ -10,6 +9,7 @@ import { isEmailAddress } from "../../utils/validation/isEmailAddress";
 import { BaseButton } from "../BaseButton";
 import { BaseInput } from "../BaseInput";
 import { InputFieldErrorText } from "../InputFieldErrorText";
+import { LoadingSpinner } from "../LoadingSpinner";
 import { InputState } from "./types";
 import {
   containsLettersRegex,
@@ -596,15 +596,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
         } `}
       >
         {isRegisterUserLoading ? (
-          <SpinnerCircularFixed
-            data-cy="login-button-spinner"
-            size={30}
-            thickness={80}
-            speed={300}
-            color="rgba(0,0,0,1)"
-            secondaryColor="rgba(172, 57, 57, 0)"
-            className="inline"
-          />
+          <LoadingSpinner data-cy="login-button-spinner" />
         ) : (
           "Continue"
         )}

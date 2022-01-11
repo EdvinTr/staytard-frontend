@@ -5,7 +5,7 @@ import App from "next/app";
 import Head from "next/head";
 import { Router } from "next/router";
 import { useEffect, useState } from "react";
-import { SpinnerCircularFixed } from "spinners-react";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import { useApollo } from "../lib/apolloClient";
 import "../styles/globals.css";
 
@@ -46,15 +46,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             exit={{ opacity: 0 }}
             className="flex items-center align-middle justify-center min-h-[100vh]"
           >
-            <SpinnerCircularFixed
-              size={100}
-              thickness={100}
-              speed={300}
-              color="rgba(0,0,0,1)"
-              //secondaryColor="rgba(255, 221, 2,1)"
-              secondaryColor="rgba(255,255,255,1)"
-              className="mt-4"
-            />
+            <LoadingSpinner size={100} className="mt-4" />
           </motion.div>
         )}
       </AnimatePresence>
