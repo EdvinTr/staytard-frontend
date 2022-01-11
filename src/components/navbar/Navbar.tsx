@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
 
   const { data: categoriesData } = useGetCategoriesQuery();
-  const { data, loading, error } = useMeQuery();
+  const { data: userData, loading, error } = useMeQuery();
 
   return (
     <div className="text-sm ">
@@ -45,7 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               </Link>
             </div>
             <div className="flex items-center space-x-9">
-              {!data ? (
+              {!userData ? (
                 <Link href={APP_PAGE_ROUTE.LOGIN}>
                   <a className="flex items-center space-x-3">
                     <p className="font-medium">Sign In</p>
@@ -59,26 +59,27 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </div>
           </div>
         </MyContainer>
-
+        {/* hover menu stuff */}
         <div className="flex justify-center space-x-7 pt-8">
           {categoriesData?.getCategories.map((category) => {
             return (
-              <button
-                key={category.id}
-                className="underline"
-                onMouseEnter={() => {
-                  if (category.children) {
-                    setHoverMenuItems(category.children);
-                    setHoverMenuTitle(category.name);
-                  }
-                  setIsHoverMenuOpen(true);
-                }}
-                onMouseLeave={() => {
-                  setIsHoverMenuOpen(false);
-                }}
-              >
-                {category.name}
-              </button>
+              <Link key={category.id} href={category.path}>
+                <a
+                  className="underline"
+                  onMouseEnter={() => {
+                    if (category.children) {
+                      setHoverMenuItems(category.children);
+                      setHoverMenuTitle(category.name);
+                    }
+                    setIsHoverMenuOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    setIsHoverMenuOpen(false);
+                  }}
+                >
+                  {category.name}
+                </a>
+              </Link>
             );
           })}
         </div>

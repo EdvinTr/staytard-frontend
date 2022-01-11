@@ -1,7 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { GetCategoriesQuery } from "../../../lib/graphql";
+
+type CategoryItem = GetCategoriesQuery["getCategories"][0];
 interface HoverMenuProps {
   items: GetCategoriesQuery["getCategories"];
   isButtonHovered: boolean;
@@ -14,7 +17,16 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
   title,
 }) => {
   const [isCursorInMenu, setIsCursorInMenu] = useState(false);
-  console.log("ITEMS:", items);
+
+  const renderListItem = (item: CategoryItem) => {
+    return (
+      <li key={item.id}>
+        <Link href={item.path}>
+          <a className="hover:underline cursor-pointer">{item.name}</a>
+        </Link>
+      </li>
+    );
+  };
 
   return (
     <div className="w-full relative">
@@ -44,25 +56,13 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
                 <div className="space-y-6">
                   {/* left side categories */}
                   {items.slice(0, 9).map((item) => {
-                    return (
-                      <li key={item.id}>
-                        <a href="#" className="hover:underline cursor-pointer">
-                          {item.name}
-                        </a>
-                      </li>
-                    );
+                    return renderListItem(item);
                   })}
                 </div>
                 {/* right side categories */}
                 <div className="space-y-6">
                   {items.slice(9, items.length).map((item) => {
-                    return (
-                      <li key={item.id}>
-                        <a href="#" className="hover:underline cursor-pointer">
-                          {item.name}
-                        </a>
-                      </li>
-                    );
+                    return renderListItem(item);
                   })}
                 </div>
               </div>

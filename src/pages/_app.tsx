@@ -1,23 +1,29 @@
 import { ApolloProvider } from "@apollo/client";
-import { AnimatePresence, motion } from "framer-motion";
 import type { AppContext, AppProps } from "next/app";
 import App from "next/app";
 import Head from "next/head";
-import { Router } from "next/router";
-import { useEffect, useState } from "react";
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { Router, useRouter } from "next/router";
+import NProgress from "nprogress";
+import { Fragment, useEffect } from "react";
+import { Navbar } from "../components/navbar/Navbar";
+import { APP_PAGE_ROUTE } from "../constants";
 import { useApollo } from "../lib/apolloClient";
 import "../styles/globals.css";
 
+NProgress.configure({ showSpinner: false });
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
-  const [isRouteLoading, setIsRouteLoading] = useState(false);
+  const router = useRouter();
+  const currentPath = router.pathname;
+  console.log(currentPath);
+
   useEffect(() => {
     const start = () => {
-      setIsRouteLoading(true);
+      NProgress.start();
     };
     const end = () => {
-      setIsRouteLoading(false);
+      NProgress.done();
     };
     Router.events.on("routeChangeStart", start);
     Router.events.on("routeChangeComplete", end);
@@ -38,19 +44,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           content="Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands."
         />
       </Head>
-      <AnimatePresence>
-        {isRouteLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center align-middle justify-center min-h-[100vh]"
-          >
-            <LoadingSpinner size={100} className="mt-4" />
-          </motion.div>
+      <Fragment>
+        {currentPath === APP_PAGE_ROUTE.LOGIN ||
+        currentPath === APP_PAGE_ROUTE.REGISTER ? null : (
+          <Navbar />
         )}
-      </AnimatePresence>
-      {!isRouteLoading && <Component {...pageProps} />}
+        <Component {...pageProps} />
+      </Fragment>
     </ApolloProvider>
   );
 }
