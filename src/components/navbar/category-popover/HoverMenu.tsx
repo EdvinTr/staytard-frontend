@@ -77,6 +77,7 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
                       width={300}
                       height={140}
                       objectFit="contain"
+                      alt="brand"
                     />
                     <div className="font-bold mt-1">LES DEUX</div>
                   </div>

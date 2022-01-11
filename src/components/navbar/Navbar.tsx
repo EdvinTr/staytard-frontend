@@ -62,7 +62,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </div>
           </div>
         </MyContainer>
-        {/* hover menu stuff */}
         {categoriesLoading && (
           <div className="flex justify-center space-x-7 pt-8">
             <Skeleton inline width={60} />
@@ -71,6 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <Skeleton inline width={60} />
           </div>
         )}
+        {/* hover menu stuff */}
         {categoriesData && (
           <FadeInContainer className="flex justify-center space-x-7 pt-8">
             {categoriesData?.getCategories.map((category) => {
@@ -82,8 +82,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                     onMouseEnter={() => {
                       if (category.children) {
                         setHoverMenuItems(category.children);
-                        setHoverMenuTitle(category.name);
                       }
+                      setHoverMenuTitle(category.name);
                       setIsHoverMenuOpen(true);
                     }}
                     onMouseLeave={() => {
