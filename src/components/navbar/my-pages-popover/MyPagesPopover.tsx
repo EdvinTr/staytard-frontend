@@ -58,7 +58,7 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-4"
             >
-              <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-8 transform -translate-x-1/2 -left-14 sm:px-0 lg:max-w-3xl">
+              <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-12 transform -translate-x-1/2 -left-14 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden shadow-lg ">
                   <div className="relative grid gap-6 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
                     {popoverItems.map((item) => (

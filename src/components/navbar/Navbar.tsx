@@ -5,6 +5,7 @@ import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import { useMeQuery } from "../../lib/graphql";
 import { MyCartIcon, MyUserIcon } from "../icons/Icons";
 import { MyContainer } from "../MyContainer";
+import { TestDropdownMenu } from "./category-popover/TestDropdownMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
 interface NavbarProps {}
 
@@ -13,7 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   return (
     <div className="text-sm ">
       <div
-        className="py-8"
+        className="pt-8 pb-4"
         style={{
           boxShadow: "0 4px 8px 0 rgb(0 0 0 / 4%)",
         }}
@@ -46,6 +47,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </div>
           </div>
         </MyContainer>
+        <div className="flex justify-center mt-5">
+          {/* <CategoryPopover />
+          <CategoryPopover />
+          <CategoryPopover />
+          <CategoryPopover />
+          <CategoryPopover /> */}
+          <TestDropdownMenu />
+        </div>
       </div>
     </div>
   );
