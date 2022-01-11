@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
-interface TestDropdownMenuProps {}
+interface HoverMenuProps {}
 
-export const TestDropdownMenu: React.FC<TestDropdownMenuProps> = ({}) => {
+export const HoverMenu: React.FC<HoverMenuProps> = ({}) => {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const [isCursorInMenu, setIsCursorInMenu] = useState(false);
@@ -27,7 +27,7 @@ export const TestDropdownMenu: React.FC<TestDropdownMenuProps> = ({}) => {
         {(isButtonHovered || isCursorInMenu) && (
           <motion.div
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             exit={{ opacity: 0 }}
             onMouseEnter={() => {
               setIsCursorInMenu(true);

@@ -5,7 +5,7 @@ import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import { useMeQuery } from "../../lib/graphql";
 import { MyCartIcon, MyUserIcon } from "../icons/Icons";
 import { MyContainer } from "../MyContainer";
-import { TestDropdownMenu } from "./category-popover/TestDropdownMenu";
+import { HoverMenu } from "./category-popover/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
 interface NavbarProps {}
 
@@ -47,14 +47,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </div>
           </div>
         </MyContainer>
-        <div className="flex justify-center mt-5">
-          {/* <CategoryPopover />
-          <CategoryPopover />
-          <CategoryPopover />
-          <CategoryPopover />
-          <CategoryPopover /> */}
-          <TestDropdownMenu />
+
+        <div className="flex justify-center space-x-8 pt-8">
+          <button>Hover me</button>
+          <button>Hover me</button>
+          <button>Hover me</button>
         </div>
+        <HoverMenu />
       </div>
     </div>
   );
