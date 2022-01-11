@@ -1,16 +1,23 @@
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import React, { useState } from "react";
-interface HoverMenuProps {}
+interface HoverMenuProps {
+  links: string[];
+  isButtonHovered: boolean;
+}
 
-export const HoverMenu: React.FC<HoverMenuProps> = ({}) => {
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
+export const HoverMenu: React.FC<HoverMenuProps> = ({
+  links,
+  isButtonHovered,
+}) => {
+  // const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const [isCursorInMenu, setIsCursorInMenu] = useState(false);
 
   return (
     <div className="w-full relative">
       <div className="flex justify-center ">
-        <button
+        {/*   <button
           className="p-2 -m-2 hover:underline"
           onMouseEnter={() => {
             setIsButtonHovered(true);
@@ -21,6 +28,17 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({}) => {
         >
           Hover me
         </button>
+        <button
+          className="p-2 -m-2 hover:underline"
+          onMouseEnter={() => {
+            setIsButtonHovered(true);
+          }}
+          onMouseLeave={() => {
+            setIsButtonHovered(false);
+          }}
+        >
+          Hover me
+        </button> */}
       </div>
       {/* menu */}
       <AnimatePresence>
@@ -35,44 +53,55 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({}) => {
             onMouseLeave={() => {
               setIsCursorInMenu(false);
             }}
-            className="bg-orange-50 opacity-0 hover:opacity-100 z-20 p-8 absolute w-full mt-4 flex justify-center"
+            className=" absolute w-full h-[29rem] flex justify-center bg-white pt-12 space-x-12 z-20 shadow-sm opacity-0 hover:opacity-100"
           >
-            <h1 className="uppercase text-2xl font-bold px-8 border-r border-opacity-20 border-r-staytard-dark">
-              Clothes
-            </h1>
-            <ul className="relative grid grid-cols-2 gap-y-6 gap-x-12  px-8 pb-8 pt-1 border-l-black border-r-black border-b-black border-opacity-5  ">
-              <a href="#" className="hover:underline cursor-pointer">
-                Jeans
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Pants
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Sweaters
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Shirts
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Overshirts
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Overshirts
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Overshirts
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Overshirts
-              </a>
-              <a href="#" className="hover:underline cursor-pointer">
-                Shorts
-              </a>
-              <a
-                href="#"
-                className="hover:underline cursor-pointer"
-              >{`Socks & underwear`}</a>
+            <div className="border-r border-r-black border-opacity-20 pr-12 max-h-96">
+              <h4 className=" text-2xl font-bold ">Clothes</h4>
+            </div>
+            <ul className="relative w-[19%]  ">
+              <div className="flex space-x-32">
+                <div className="space-y-6">
+                  {/* left side categories */}
+                  {links.slice(0, 9).map((link, idx) => {
+                    return (
+                      <li key={idx}>
+                        <a href="#" className="hover:underline cursor-pointer">
+                          {link}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </div>
+                {/* right side categories */}
+                <div className="space-y-6">
+                  {links.slice(9, links.length).map((link, idx) => {
+                    return (
+                      <li key={idx}>
+                        <a href="#" className="hover:underline cursor-pointer">
+                          {link}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </div>
+              </div>
             </ul>
+            {/* brand images */}
+            <div className="grid grid-cols-2 text-center gap-y-4">
+              {[...Array(4)].map((_, idx) => {
+                return (
+                  <div key={idx}>
+                    <Image
+                      src="https://assets.ellosgroup.com/i/ellos/2140_navimg_studio?w=420&$sc$&fmt=webp"
+                      width={300}
+                      height={140}
+                      objectFit="contain"
+                    />
+                    <div className="font-bold mt-1">LES DEUX</div>
+                  </div>
+                );
+              })}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
