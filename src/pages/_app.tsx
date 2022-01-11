@@ -11,7 +11,7 @@ import { APP_PAGE_ROUTE } from "../constants";
 import { useApollo } from "../lib/apolloClient";
 import "../styles/globals.css";
 
-NProgress.configure({ showSpinner: false });
+NProgress.configure({ showSpinner: false, easing: "ease", speed: 500 });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
