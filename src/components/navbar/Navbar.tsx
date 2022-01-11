@@ -1,12 +1,14 @@
 import { SearchIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import {
   GetCategoriesQuery,
   useGetCategoriesQuery,
   useMeQuery,
 } from "../../lib/graphql";
+import { FadeInContainer } from "../global/FadeInContainer";
 import { MyCartIcon, MyUserIcon } from "../icons/Icons";
 import { MyContainer } from "../MyContainer";
 import { HoverMenu } from "./category-popover/HoverMenu";
@@ -20,7 +22,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [hoverMenuTitle, setHoverMenuTitle] = useState("");
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
 
-  const { data: categoriesData } = useGetCategoriesQuery();
+  const { data: categoriesData, loading: categoriesLoading } =
+    useGetCategoriesQuery();
   const { data: userData, loading, error } = useMeQuery();
 
   return (
@@ -60,30 +63,40 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </div>
         </MyContainer>
         {/* hover menu stuff */}
-        <div className="flex justify-center space-x-7 pt-8">
-          {categoriesData?.getCategories.map((category) => {
-            return (
-              <Link key={category.id} href={category.path}>
-                <a
-                  className="underline"
-                  onClick={() => setIsHoverMenuOpen(false)}
-                  onMouseEnter={() => {
-                    if (category.children) {
-                      setHoverMenuItems(category.children);
-                      setHoverMenuTitle(category.name);
-                    }
-                    setIsHoverMenuOpen(true);
-                  }}
-                  onMouseLeave={() => {
-                    setIsHoverMenuOpen(false);
-                  }}
-                >
-                  {category.name}
-                </a>
-              </Link>
-            );
-          })}
-        </div>
+        {categoriesLoading && (
+          <div className="flex justify-center space-x-7 pt-8">
+            <Skeleton inline width={60} />
+            <Skeleton inline width={60} />
+            <Skeleton inline width={60} />
+            <Skeleton inline width={60} />
+          </div>
+        )}
+        {categoriesData && (
+          <FadeInContainer className="flex justify-center space-x-7 pt-8">
+            {categoriesData?.getCategories.map((category) => {
+              return (
+                <Link key={category.id} href={category.path}>
+                  <a
+                    className="underline"
+                    onClick={() => setIsHoverMenuOpen(false)}
+                    onMouseEnter={() => {
+                      if (category.children) {
+                        setHoverMenuItems(category.children);
+                        setHoverMenuTitle(category.name);
+                      }
+                      setIsHoverMenuOpen(true);
+                    }}
+                    onMouseLeave={() => {
+                      setIsHoverMenuOpen(false);
+                    }}
+                  >
+                    {category.name}
+                  </a>
+                </Link>
+              );
+            })}
+          </FadeInContainer>
+        )}
         {hoverMenuItems && (
           <HoverMenu
             items={hoverMenuItems}
