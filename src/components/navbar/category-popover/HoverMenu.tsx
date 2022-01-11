@@ -1,16 +1,21 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import React, { useState } from "react";
+import { GetCategoriesQuery } from "../../../lib/graphql";
 interface HoverMenuProps {
-  links: string[];
+  items: GetCategoriesQuery["getCategories"];
   isButtonHovered: boolean;
+  title?: string;
 }
 
 export const HoverMenu: React.FC<HoverMenuProps> = ({
-  links,
+  items,
   isButtonHovered,
+  title,
 }) => {
   const [isCursorInMenu, setIsCursorInMenu] = useState(false);
+  console.log("ITEMS:", items);
+
   return (
     <div className="w-full relative">
       <div className="flex justify-center "></div>
@@ -18,7 +23,7 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
       <AnimatePresence>
         {(isButtonHovered || isCursorInMenu) && (
           <motion.div
-            key={links[0]}
+            key={items[0].id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -32,17 +37,17 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             className=" absolute w-full h-[30rem] flex justify-center bg-white pt-12 space-x-12 z-20 shadow-sm opacity-0  hover:opacity-100"
           >
             <div className="border-r border-r-black border-opacity-20 pr-12 max-h-96">
-              <h4 className=" text-2xl font-bold ">{links[0]}</h4>
+              <h4 className=" text-2xl font-bold ">{title}</h4>
             </div>
             <ul className="relative w-[19%]  ">
-              <div className="flex space-x-32">
+              <div className="flex space-x-24">
                 <div className="space-y-6">
                   {/* left side categories */}
-                  {links.slice(0, 9).map((link, idx) => {
+                  {items.slice(0, 9).map((item) => {
                     return (
-                      <li key={idx}>
+                      <li key={item.id}>
                         <a href="#" className="hover:underline cursor-pointer">
-                          {link}
+                          {item.name}
                         </a>
                       </li>
                     );
@@ -50,11 +55,11 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
                 </div>
                 {/* right side categories */}
                 <div className="space-y-6">
-                  {links.slice(9, links.length).map((link, idx) => {
+                  {items.slice(9, items.length).map((item) => {
                     return (
-                      <li key={idx}>
+                      <li key={item.id}>
                         <a href="#" className="hover:underline cursor-pointer">
-                          {link}
+                          {item.name}
                         </a>
                       </li>
                     );

@@ -1,0 +1,8 @@
+query GetCategories {
+  getCategories {
+    ...CoreCategoryFields
+    children {
+      ...CoreCategoryFields
+    }
+  }
+}

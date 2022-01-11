@@ -2,45 +2,27 @@ import { SearchIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { useState } from "react";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
-import { useMeQuery } from "../../lib/graphql";
+import {
+  GetCategoriesQuery,
+  useGetCategoriesQuery,
+  useMeQuery,
+} from "../../lib/graphql";
 import { MyCartIcon, MyUserIcon } from "../icons/Icons";
 import { MyContainer } from "../MyContainer";
 import { HoverMenu } from "./category-popover/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
 interface NavbarProps {}
 
-const shoesCategories = [
-  "Alla Skor",
-  "Sneakers & textilskor",
-  "Boots & kängor",
-  "Gummistövlar",
-  "Flip flops & sandaler",
-  "Skovård",
-  "Dressade skor",
-];
-const clothesCategories = [
-  " Alla Kläder",
-  "Basics",
-  "Byxor",
-  "Jackor",
-  "Jeans",
-  "Kavaj & Kostym",
-  "Linnen",
-  "Overshirts",
-  "Plus Size",
-  "Pyjamas & loungewear",
-  "Shorts",
-  "Skjortor",
-  "Strumpor & underkläder",
-  "T-shirts & pikéer",
-  "Träning & funktion",
-  "Tröjor",
-];
-
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const [currentLinks, setCurrentLinks] = useState(shoesCategories);
+  const [hoverMenuItems, setHoverMenuItems] = useState<
+    GetCategoriesQuery["getCategories"] | null
+  >(null);
+  const [hoverMenuTitle, setHoverMenuTitle] = useState("");
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
+
+  const { data: categoriesData } = useGetCategoriesQuery();
   const { data, loading, error } = useMeQuery();
+
   return (
     <div className="text-sm ">
       <div
@@ -78,51 +60,35 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </div>
         </MyContainer>
 
-        <div className="flex justify-center space-x-5 pt-8">
-          <button
-            className="underline"
-            onMouseEnter={() => {
-              setCurrentLinks(shoesCategories);
-              setIsHoverMenuOpen(true);
-            }}
-            onMouseLeave={() => {
-              setIsHoverMenuOpen(false);
-            }}
-          >
-            Clothes
-          </button>
-          <button
-            onMouseEnter={() => {
-              setCurrentLinks(clothesCategories);
-              setIsHoverMenuOpen(true);
-            }}
-            onMouseLeave={() => {
-              setIsHoverMenuOpen(false);
-            }}
-            className="underline"
-          >
-            Other Links
-          </button>
+        <div className="flex justify-center space-x-7 pt-8">
+          {categoriesData?.getCategories.map((category) => {
+            return (
+              <button
+                key={category.id}
+                className="underline"
+                onMouseEnter={() => {
+                  if (category.children) {
+                    setHoverMenuItems(category.children);
+                    setHoverMenuTitle(category.name);
+                  }
+                  setIsHoverMenuOpen(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHoverMenuOpen(false);
+                }}
+              >
+                {category.name}
+              </button>
+            );
+          })}
         </div>
-        <HoverMenu links={currentLinks} isButtonHovered={isHoverMenuOpen} />
-
-        <div className="flex items-center flex-wrap gap-8 mt-20">
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-          <div className="w-72 h-72 bg-red-500"></div>
-        </div>
+        {hoverMenuItems && (
+          <HoverMenu
+            items={hoverMenuItems}
+            title={hoverMenuTitle}
+            isButtonHovered={isHoverMenuOpen}
+          />
+        )}
       </div>
     </div>
   );

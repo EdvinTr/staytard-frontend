@@ -1,0 +1,6 @@
+fragment CoreCategoryFields on ProductCategory {
+  id
+  name
+  path
+  slug
+}
