@@ -78,9 +78,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </div>
         </MyContainer>
 
-        <div className="flex justify-center space-x-8 pt-8">
+        <div className="flex justify-center space-x-5 pt-8">
           <button
-            className="hover:underline transition duration-300"
+            className="underline"
             onMouseEnter={() => {
               setCurrentLinks(shoesCategories);
               setIsHoverMenuOpen(true);
@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             onMouseLeave={() => {
               setIsHoverMenuOpen(false);
             }}
-            className="hover:underline transition duration-300"
+            className="underline"
           >
             Other Links
           </button>

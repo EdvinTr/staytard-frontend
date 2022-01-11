@@ -10,40 +10,16 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
   links,
   isButtonHovered,
 }) => {
-  // const [isButtonHovered, setIsButtonHovered] = useState(false);
-
   const [isCursorInMenu, setIsCursorInMenu] = useState(false);
-
   return (
     <div className="w-full relative">
-      <div className="flex justify-center ">
-        {/*   <button
-          className="p-2 -m-2 hover:underline"
-          onMouseEnter={() => {
-            setIsButtonHovered(true);
-          }}
-          onMouseLeave={() => {
-            setIsButtonHovered(false);
-          }}
-        >
-          Hover me
-        </button>
-        <button
-          className="p-2 -m-2 hover:underline"
-          onMouseEnter={() => {
-            setIsButtonHovered(true);
-          }}
-          onMouseLeave={() => {
-            setIsButtonHovered(false);
-          }}
-        >
-          Hover me
-        </button> */}
-      </div>
+      <div className="flex justify-center "></div>
       {/* menu */}
       <AnimatePresence>
         {(isButtonHovered || isCursorInMenu) && (
           <motion.div
+            key={links[0]}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             exit={{ opacity: 0 }}
@@ -53,10 +29,10 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             onMouseLeave={() => {
               setIsCursorInMenu(false);
             }}
-            className=" absolute w-full h-[29rem] flex justify-center bg-white pt-12 space-x-12 z-20 shadow-sm opacity-0 hover:opacity-100"
+            className=" absolute w-full h-[30rem] flex justify-center bg-white pt-12 space-x-12 z-20 shadow-sm opacity-0  hover:opacity-100"
           >
             <div className="border-r border-r-black border-opacity-20 pr-12 max-h-96">
-              <h4 className=" text-2xl font-bold ">Clothes</h4>
+              <h4 className=" text-2xl font-bold ">{links[0]}</h4>
             </div>
             <ul className="relative w-[19%]  ">
               <div className="flex space-x-32">
