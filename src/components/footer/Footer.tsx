@@ -1,7 +1,9 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
+import { useWindowSize } from "@react-hook/window-size";
+import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment } from "react";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { Accordion } from "../global/Accordion";
 import {
   FacebookIcon,
@@ -12,13 +14,57 @@ import {
 import { footerItems } from "./footer-items.data";
 interface FooterProps {}
 
+let renders = 0;
+
 export const Footer: React.FC<FooterProps> = ({}) => {
-  const { width: windowWidth } = useWindowSize();
+  renders++;
+  console.log(renders);
+  const [windowWidth] = useSsrCompatible(useWindowSize(), [0, 0]);
+  const imageSize = windowWidth >= 768 ? 24 : 48;
+
   return (
     <Fragment>
       <div className="bg-staytard-dark text-white">
         {/* customer service link */}
-        <article className="text-center font-bold space-y-6 py-16">
+        <section className="md:flex md:justify-center md:items-center md:space-x-28 space-y-8 md:space-y-0 py-12 text-center text-xl md:text-sm text-staytard-dark bg-[#ebebeb] ">
+          {/* free shipping */}
+          <div className="">
+            <Image
+              width={imageSize}
+              height={imageSize}
+              objectFit="contain"
+              src="https://img.icons8.com/material-outlined/48/000000/truck.png"
+              alt="Free shipping"
+            />
+            <div className="underline font-semibold">Free shipping*</div>
+            <span className="text-lg md:text-xs">Orders over SEK 499</span>
+          </div>
+          <div>
+            <Image
+              width={imageSize}
+              height={imageSize}
+              objectFit="contain"
+              src="https://img.icons8.com/glyph-neue/64/000000/forward-30.png"
+              alt="30 days return policy"
+            />
+            <div className="underline font-semibold">Easy return*</div>
+            <span className="text-lg md:text-xs">30 days return policy</span>
+          </div>
+          <div>
+            <Image
+              width={imageSize}
+              height={imageSize}
+              objectFit="contain"
+              src="https://img.icons8.com/ios-filled/50/000000/coconut-cocktail.png"
+              alt="Pay later"
+            />
+            <div className="underline font-semibold">Pay later</div>
+            <span className="text-lg md:text-xs">
+              Select invoice at checkout
+            </span>
+          </div>
+        </section>
+        <article className="text-center font-bold space-y-6 pb-14 pt-10">
           <p>Need help?</p>
           <Link href="#">
             <a className="bg-white font-semibold text-staytard-dark inline-block text-13 px-12 py-4">
@@ -58,6 +104,17 @@ export const Footer: React.FC<FooterProps> = ({}) => {
           <FacebookIcon />
           <TikTokIcon />
           <YouTubeIcon />
+        </div>
+
+        <div className="text-center">
+          <a
+            className="text-blue-600 text-xs hover:text-blue-700"
+            href="https://icons8.com/license"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            icons8
+          </a>
         </div>
       </div>
     </Fragment>
