@@ -6,6 +6,7 @@ import { Router, useRouter } from "next/router";
 import NProgress from "nprogress";
 import { Fragment, useEffect } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Footer } from "../components/footer/Footer";
 import { Navbar } from "../components/navbar/Navbar";
 import { APP_PAGE_ROUTE } from "../constants";
 import { useApollo } from "../lib/apolloClient";
@@ -51,6 +52,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <Navbar />
         )}
         <Component {...pageProps} />
+        <Footer />
       </Fragment>
     </ApolloProvider>
   );
