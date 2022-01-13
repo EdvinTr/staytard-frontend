@@ -1,43 +1,8 @@
 import React, { Fragment } from "react";
-import { APP_NAME } from "../../constants";
 import { Accordion } from "./Accordion";
+import { footerItems } from "./footer-items.data";
 interface FooterProps {}
 
-interface FooterItem {
-  title: string;
-  listItems: string[];
-}
-const footerItems: FooterItem[] = [
-  {
-    title: "Shop Safe",
-    listItems: [
-      "Returns",
-      "Terms and Conditions",
-      "Deliveries",
-      "Personal data policy",
-    ],
-  },
-  {
-    title: "Information",
-    listItems: [
-      `About ${APP_NAME}`,
-      "Sustainability",
-      "Cookies",
-      "Affiliate",
-      `Work at ${APP_NAME}`,
-      `#yes${APP_NAME.toLowerCase()}`,
-      "About Ellos Group",
-    ],
-  },
-  {
-    title: "Gift Cards",
-    listItems: ["Buy gift cards"],
-  },
-  {
-    title: "Our friends",
-    listItems: ["Elpy", "Ellos", "Jotex", "Homeroom"],
-  },
-];
 export const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <Fragment>
