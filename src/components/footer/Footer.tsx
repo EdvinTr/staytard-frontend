@@ -75,7 +75,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </a>
           </Link>
         </article>
-        {windowWidth && windowWidth <= 1024 && (
+        {windowWidth <= 1024 ? (
           /* accordions */
           <div>
             {footerItems.map(({ listItems, title }, idx, arr) => {
@@ -96,6 +96,28 @@ export const Footer: React.FC<FooterProps> = ({}) => {
                 </Accordion>
               );
             })}
+          </div>
+        ) : (
+          /* large device grid */
+          <div className="container mx-auto">
+            <ul className="grid grid-cols-4 px-12 content-center ">
+              {footerItems.map(({ title, listItems }, idx) => {
+                return (
+                  <div key={idx}>
+                    <p className="font-bold">{title}</p>
+                    <div className="space-y-3 pt-5">
+                      {listItems.map((listItem, idx) => {
+                        return (
+                          <li className="text-sm text-[#bdbec1]" key={idx}>
+                            {listItem}
+                          </li>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </ul>
           </div>
         )}
         {/* social media icons */}
