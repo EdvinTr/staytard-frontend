@@ -1,14 +1,26 @@
+import { ChevronRightIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 import React, { Fragment } from "react";
-import { Accordion } from "./Accordion";
+import { Accordion } from "../global/Accordion";
 import { footerItems } from "./footer-items.data";
 interface FooterProps {}
 
 export const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <Fragment>
-      <div className="bg-staytard-dark text-white  ">
+      <div className="bg-staytard-dark text-white">
         {/* accordion button */}
-        <div className="h-10"></div>
+        <article className="text-center font-bold space-y-6 py-16">
+          <p>Need help?</p>
+          <Link href="#">
+            <a className="bg-white font-semibold text-staytard-dark inline-block text-13 px-12 py-4">
+              <div className="flex items-center">
+                <span>Customer service</span>
+                <ChevronRightIcon className="w-5" />
+              </div>
+            </a>
+          </Link>
+        </article>
         <div>
           {footerItems.map(({ listItems, title }, idx, arr) => {
             const isLastItem = idx === arr.length - 1;
