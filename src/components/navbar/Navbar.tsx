@@ -1,5 +1,6 @@
 import { SearchIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
@@ -8,6 +9,7 @@ import {
   useGetCategoriesQuery,
   useMeQuery,
 } from "../../lib/graphql";
+import { Localized } from "../../Localized";
 import { FadeInContainer } from "../global/FadeInContainer";
 import { MyCartIcon, MyUserIcon } from "../icons/Icons";
 import { MyContainer } from "../MyContainer";
@@ -15,19 +17,28 @@ import { HoverMenu } from "./category-popover/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
 interface NavbarProps {}
 
+const { deliveryTimeText, freeShippingText, rightOfReturnText } =
+  Localized.page.index;
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [hoverMenuItems, setHoverMenuItems] = useState<
     GetCategoriesQuery["getCategories"] | null
   >(null);
   const [hoverMenuTitle, setHoverMenuTitle] = useState("");
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
-
+  const router = useRouter();
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
   const { data: userData, loading, error } = useMeQuery();
 
   return (
     <div className="text-sm ">
+      {router.pathname === APP_PAGE_ROUTE.INDEX && (
+        <div className="bg-staytard-dark text-[10px] py-1 tracking-wider  uppercase flex justify-center items-center space-x-8 text-white">
+          <div>{freeShippingText}</div>
+          <div>{deliveryTimeText}</div>
+          <div>{rightOfReturnText}</div>
+        </div>
+      )}
       <div
         className="pt-8 pb-4"
         style={{

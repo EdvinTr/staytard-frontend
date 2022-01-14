@@ -1,5 +1,10 @@
 export class Localized {
   static readonly page = {
+    index: {
+      freeShippingText: "Free shipping over SEK 499 & FREE RETURNS",
+      deliveryTimeText: "1-3 days delivery",
+      rightOfReturnText: "30 days right of return",
+    },
     login: {
       loginFailedErrorMessage:
         "Login failed, make sure you entered the correct email and password.",
