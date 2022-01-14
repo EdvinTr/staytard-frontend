@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 const BrandPage: NextPage = () => {
   const router = useRouter();
-  console.log(router.query);
 
   return (
     <FadeInContainer className="text-stayhard-dark">

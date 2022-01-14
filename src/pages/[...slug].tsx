@@ -5,7 +5,6 @@ const SlugPage: NextPage = () => {
   const router = useRouter();
 
   const routeParams = router.query;
-  console.log(routeParams);
 
   // make fetch with lastProp as key
   return (

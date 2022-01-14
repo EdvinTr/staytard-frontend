@@ -4,7 +4,6 @@ import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { Navbar } from "../../components/navbar/Navbar";
 const OneBrandPage: NextPage = () => {
   const router = useRouter();
-  console.log(router.query);
 
   return (
     <FadeInContainer className="text-stayhard-dark">

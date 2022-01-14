@@ -18,7 +18,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const router = useRouter();
   const currentPath = router.pathname;
-  console.log(currentPath);
 
   useEffect(() => {
     const start = () => {

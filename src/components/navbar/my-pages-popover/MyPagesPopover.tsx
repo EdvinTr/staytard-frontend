@@ -87,8 +87,8 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                             if (response.data) {
                               window.location.reload();
                             }
-                          } catch (err) {
-                            console.log("CATCH ERR:", err);
+                          } catch {
+                            // TODO: handle logout error
                           }
                         }}
                       >
