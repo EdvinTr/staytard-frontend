@@ -50,7 +50,7 @@ const LoginPage: NextPage = () => {
   return (
     <Fragment>
       <AppHeader />
-      <div className="sm:max-w-md lg:max-w-lg 2xl:max-w-4xl mx-auto px-8">
+      <div className="min-h-screen sm:max-w-md lg:max-w-lg 2xl:max-w-4xl mx-auto px-8">
         <Head>
           <title>{`${APP_NAME} - Log in`}</title>
         </Head>

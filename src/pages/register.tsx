@@ -13,7 +13,7 @@ const RegisterPage: NextPage = () => {
         <title>{APP_NAME} - Register</title>
       </Head>
       <AppHeader />
-      <FadeInContainer>
+      <FadeInContainer className="min-h-screen">
         <FormContainer className="text-center">
           <div>
             <div className="space-y-6 pt-16">

@@ -8,7 +8,7 @@ const SlugPage: NextPage = () => {
 
   // make fetch with lastProp as key
   return (
-    <FadeInContainer className="text-stayhard-dark">
+    <FadeInContainer className="text-stayhard-dark min-h-screen">
       <div className=" text-staytard-dark">
         <div className="flex items-center justify-center flex-wrap gap-8 mt-20">
           <h2 className="text-center">

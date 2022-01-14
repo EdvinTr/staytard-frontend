@@ -9,7 +9,7 @@ module.exports = {
         13: ["13px", "18px"],
       },
       colors: {
-        "staytard-yellow": "#FFDD02",
+        "staytard-yellow": "#ffeb00",
         "staytard-pink": "#EA4262",
         "staytard-dark": "#222222",
       },

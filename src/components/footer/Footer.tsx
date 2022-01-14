@@ -24,7 +24,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
       <div className="bg-staytard-dark text-white">
         {/* newsletter section */}
         <section className="bg-staytard-yellow leading-8">
-          <div className="py-16 md:py-[4.5rem] xl:py-20 px-8 xl:px-0 text-center md:max-w-xl xl:max-w-[84rem] md:mx-auto xl:flex xl:items-center  xl:space-x-40">
+          <div className="py-16 md:py-[4.5rem] xl:py-20 px-8 xl:px-0 text-center md:max-w-xl xl:max-w-[84rem] md:mx-auto xl:flex xl:items-center xl:space-x-36">
             <h3 className="block text-[26px] text-staytard-dark font-medium">
               Do not miss the latest, subscribe to our newsletter
             </h3>
@@ -106,7 +106,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
                     className={`${isLastItem && "border-b border-opacity-10"}`}
                   >
                     <Accordion.Body>
-                      <ul className="space-y-5 px-2 pb-6">
+                      <ul className="space-y-5 px-14 pb-6">
                         {listItems.map((item, idx) => (
                           <li key={idx}>{item}</li>
                         ))}
