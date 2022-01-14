@@ -1,19 +1,19 @@
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { SortBy, SortDirection } from "../../lib/graphql";
 import { ssrGetProductBrands } from "../../lib/page";
 
-const BrandPage: NextPage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
-  const { data } = ssrGetProductBrands.usePage();
+const BrandPage: NextPage = () => {
+  const { data, error } = ssrGetProductBrands.usePage();
 
-  if (!data) {
-    return <div>NO DATA...</div>;
+  console.log("ERROR client:", error?.message);
+  if (!data || error) {
+    return (
+      <div>
+        NO DATA
+        <span>{error?.message}</span>
+      </div>
+    );
   }
 
   return (
@@ -32,16 +32,22 @@ const BrandPage: NextPage = (
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { props } = await ssrGetProductBrands.getServerPage({
-    variables: {
-      input: { sortBy: SortBy.Name, sortDirection: SortDirection.Asc },
-    },
-  });
-  return {
-    props: {
-      initialApolloState: props.apolloState,
-    },
-  };
+  try {
+    const { props } = await ssrGetProductBrands.getServerPage({
+      variables: {
+        input: { sortBy: SortBy.Name, sortDirection: SortDirection.Asc },
+      },
+    });
+    return {
+      props: {
+        initialApolloState: props.apolloState,
+      },
+    };
+  } catch {
+    return {
+      props: {},
+    };
+  }
 };
 
 export default BrandPage;
