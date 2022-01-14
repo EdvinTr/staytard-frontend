@@ -1,30 +1,32 @@
+import { useWindowWidth } from "@react-hook/window-size";
 import { NextPage } from "next";
+import Image from "next/image";
 import { FadeInContainer } from "../components/global/FadeInContainer";
-import { MyContainer } from "../components/MyContainer";
+import { useSsrCompatible } from "../hooks/useSsrCompatible";
 const IndexPage: NextPage = () => {
+  const windowWidth = useSsrCompatible(useWindowWidth(), 0);
   return (
-    <FadeInContainer className="text-stayhard-dark">
+    <FadeInContainer className="text-stayhard-dark min-h-screen">
       <div className=" text-staytard-dark">
-        <MyContainer>
-          <div className="flex items-center justify-center py-12 flex-wrap gap-8 mt-20">
-            <div className="w-72 h-72 bg-red-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-green-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-green-500"></div>
-            <div className="w-72 h-72 bg-purple-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-orange-500"></div>
-            <div className="w-72 h-72 bg-green-500"></div>
-            <div className="w-72 h-72 bg-blue-500"></div>
-            <div className="w-72 h-72 bg-blue-500"></div>
-          </div>
-        </MyContainer>
+        {windowWidth >= 768 ? (
+          <Image
+            width={1600}
+            height={400}
+            alt="winter sale"
+            layout="responsive"
+            src="/img/staytard-winter-sale-full-screen.png"
+          />
+        ) : (
+          <Image
+            width={580}
+            height={580}
+            alt="winter sale"
+            objectFit="contain"
+            layout="responsive"
+            src="/img/staytard-winter-sale-mobile-size.png"
+            className="max-h-[2rem]"
+          />
+        )}
       </div>
     </FadeInContainer>
   );
