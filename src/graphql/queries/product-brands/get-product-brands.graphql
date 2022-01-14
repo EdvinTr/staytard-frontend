@@ -1,0 +1,7 @@
+query GetProductBrands($input: GetProductBrandsInput!) {
+  productBrands(input: $input) {
+    id
+    name
+    path
+  }
+}

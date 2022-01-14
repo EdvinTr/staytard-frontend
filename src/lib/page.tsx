@@ -38,6 +38,34 @@ export const ssrGetCategories = {
       
       usePage: useGetCategories,
     }
+export async function getServerPageGetProductBrands
+    (options: Omit<Apollo.QueryOptions<Types.GetProductBrandsQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.GetProductBrandsQuery>({ ...options, query: Operations.GetProductBrandsDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useGetProductBrands = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.GetProductBrandsQuery, Types.GetProductBrandsQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.GetProductBrandsDocument, options);
+};
+export type PageGetProductBrandsComp = React.FC<{data?: Types.GetProductBrandsQuery, error?: Apollo.ApolloError}>;
+export const ssrGetProductBrands = {
+      getServerPage: getServerPageGetProductBrands,
+      
+      usePage: useGetProductBrands,
+    }
 export async function getServerPageMe
     (options: Omit<Apollo.QueryOptions<Types.MeQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

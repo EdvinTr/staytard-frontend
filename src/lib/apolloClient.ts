@@ -35,17 +35,26 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
       typePolicies: {
         Query: {
           fields: {
-            /* products: {
+            productBrands: {
+              keyArgs: false,
+              read(brands) {
+                return brands; // had to add this type policy for SSR to work
+              },
+            },
+            /*products: {
               keyArgs: false,
               merge(existing, incoming) {
                 if (!incoming) return existing;
                 if (!existing) return incoming; // existing will be empty the first time
-
+                console.log(existing);
+                
                 const { products, ...rest } = incoming;
 
                 let result = rest;
-                result.products = [...existing.products, ...products]; // Merge existing items with the items from incoming
-
+                result.products = [
+                  ...existing.products,
+                  ...products,
+                ]; // Merge existing items with the items from incoming
                 return result;
               },
             }, */

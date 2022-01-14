@@ -17,6 +17,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type GetProductBrandsInput = {
+  sortBy?: InputMaybe<SortBy>;
+  sortDirection?: InputMaybe<SortDirection>;
+};
+
 export type LoginUserDto = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -45,6 +50,13 @@ export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
 };
 
+export type ProductBrand = {
+  __typename?: 'ProductBrand';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  path: Scalars['String'];
+};
+
 export type ProductCategory = {
   __typename?: 'ProductCategory';
   children?: Maybe<Array<ProductCategory>>;
@@ -61,7 +73,19 @@ export type ProductCategory = {
 export type Query = {
   __typename?: 'Query';
   getCategories: Array<ProductCategory>;
+  getOneCategory: ProductCategory;
   me: User;
+  productBrands: Array<ProductBrand>;
+};
+
+
+export type QueryGetOneCategoryArgs = {
+  slug: Scalars['String'];
+};
+
+
+export type QueryProductBrandsArgs = {
+  input: GetProductBrandsInput;
 };
 
 export type RegisterUserDto = {
@@ -75,9 +99,22 @@ export type RegisterUserDto = {
   street: Scalars['String'];
 };
 
+/** Field to sort the result by */
+export enum SortBy {
+  Id = 'ID',
+  Name = 'NAME'
+}
+
+/** The basic directions */
+export enum SortDirection {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
 export type User = {
   __typename?: 'User';
   address?: Maybe<UserAddress>;
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['String'];
@@ -86,6 +123,7 @@ export type User = {
   isRegisteredWithGoogle: Scalars['Boolean'];
   lastName: Scalars['String'];
   mobilePhoneNumber: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type UserAddress = {
@@ -139,6 +177,13 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined }> };
+
+export type GetProductBrandsQueryVariables = Exact<{
+  input: GetProductBrandsInput;
+}>;
+
+
+export type GetProductBrandsQuery = { __typename?: 'Query', productBrands: Array<{ __typename?: 'ProductBrand', id: number, name: string, path: string }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -346,6 +391,46 @@ export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategorie
 export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export function refetchGetCategoriesQuery(variables?: GetCategoriesQueryVariables) {
       return { query: GetCategoriesDocument, variables: variables }
+    }
+export const GetProductBrandsDocument = gql`
+    query GetProductBrands($input: GetProductBrandsInput!) {
+  productBrands(input: $input) {
+    id
+    name
+    path
+  }
+}
+    `;
+
+/**
+ * __useGetProductBrandsQuery__
+ *
+ * To run a query within a React component, call `useGetProductBrandsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductBrandsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductBrandsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetProductBrandsQuery(baseOptions: Apollo.QueryHookOptions<GetProductBrandsQuery, GetProductBrandsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductBrandsQuery, GetProductBrandsQueryVariables>(GetProductBrandsDocument, options);
+      }
+export function useGetProductBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductBrandsQuery, GetProductBrandsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductBrandsQuery, GetProductBrandsQueryVariables>(GetProductBrandsDocument, options);
+        }
+export type GetProductBrandsQueryHookResult = ReturnType<typeof useGetProductBrandsQuery>;
+export type GetProductBrandsLazyQueryHookResult = ReturnType<typeof useGetProductBrandsLazyQuery>;
+export type GetProductBrandsQueryResult = Apollo.QueryResult<GetProductBrandsQuery, GetProductBrandsQueryVariables>;
+export function refetchGetProductBrandsQuery(variables: GetProductBrandsQueryVariables) {
+      return { query: GetProductBrandsDocument, variables: variables }
     }
 export const MeDocument = gql`
     query Me {
