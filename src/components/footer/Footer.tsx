@@ -3,6 +3,7 @@ import { useWindowSize } from "@react-hook/window-size";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment } from "react";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { Accordion } from "../global/Accordion";
 import {
@@ -21,11 +22,27 @@ export const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <Fragment>
       <div className="bg-staytard-dark text-white">
-        {/* customer service link */}
+        {/* newsletter section */}
+        <section className="bg-staytard-yellow leading-8">
+          <div className="py-16 md:py-[4.5rem] xl:py-20 px-8 xl:px-0 text-center md:max-w-xl xl:max-w-[84rem] md:mx-auto xl:flex xl:items-center  xl:space-x-40">
+            <h3 className="block text-[26px] text-staytard-dark font-medium">
+              Do not miss the latest, subscribe to our newsletter
+            </h3>
+            <div className="pt-10 xl:pt-0">
+              <Link href={APP_PAGE_ROUTE.REGISTER}>
+                <a className="text-sm font-medium text-white bg-staytard-dark py-4 px-5">
+                  Register here
+                </a>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* customer service section*/}
         <section className="text-staytard-dark bg-[#ebebeb] ">
           <div className="md:grid md:grid-cols-3 max-w-3xl mx-auto space-y-8 md:space-y-0 py-12 xl:py-7 text-center text-xl md:text-sm ">
-            {/* free shipping */}
             <div className="">
+              {/* free shipping */}
               <Image
                 width={imageSize}
                 height={imageSize}
@@ -37,6 +54,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
               <span className="text-lg md:text-xs">Orders over SEK 499</span>
             </div>
             <div>
+              {/* easy return */}
               <Image
                 width={imageSize}
                 height={imageSize}
@@ -48,6 +66,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
               <span className="text-lg md:text-xs">30 days return policy</span>
             </div>
             <div>
+              {/* pay later */}
               <Image
                 width={imageSize}
                 height={imageSize}
@@ -63,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
           </div>
         </section>
         {/* customer service */}
-        <div className="xl:flex xl:justify-center xl:pt-12 xl:space-x-12 xl:px-20">
+        <div className="xl:flex xl:justify-center xl:pt-12 xl:space-x-12 xl:px-12">
           <article className="text-center xl:text-left font-bold space-y-6 pb-14 pt-10 xl:pt-0">
             <p>Need help?</p>
             <Link href="#">
@@ -76,7 +95,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </Link>
           </article>
           {windowWidth <= 1024 ? (
-            /* accordions */
+            /* accordions on device < lg */
             <div>
               {footerItems.map(({ listItems, title }, idx, arr) => {
                 const isLastItem = idx === arr.length - 1;
@@ -87,7 +106,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
                     className={`${isLastItem && "border-b border-opacity-10"}`}
                   >
                     <Accordion.Body>
-                      <ul className="space-y-5 px-16 pb-6">
+                      <ul className="space-y-5 px-2 pb-6">
                         {listItems.map((item, idx) => (
                           <li key={idx}>{item}</li>
                         ))}
@@ -126,12 +145,21 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </div>
           )}
         </div>
-        {/* social media icons */}
-        <div className="flex items-center justify-center space-x-12 pb-12 pt-32 min-h-[10rem]">
-          <InstagramIcon />
-          <FacebookIcon />
-          <TikTokIcon />
-          <YouTubeIcon />
+        <div className="border-t border-white border-opacity-10 mt-20 px-12">
+          <div className=" lg:flex lg:items-center lg:justify-between max-w-[84rem] mx-auto pb-6 pt-32 xl:pt-2 min-h-[10rem]">
+            <Link href={APP_PAGE_ROUTE.INDEX}>
+              <a className="text-4xl uppercase font-bold hidden lg:block">
+                {APP_NAME}
+              </a>
+            </Link>
+            {/* social media icons */}
+            <div className="flex items-center justify-center space-x-12">
+              <InstagramIcon />
+              <FacebookIcon />
+              <TikTokIcon />
+              <YouTubeIcon />
+            </div>
+          </div>
         </div>
 
         <div className="text-center">
