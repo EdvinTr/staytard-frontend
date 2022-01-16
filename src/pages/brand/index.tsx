@@ -54,7 +54,7 @@ const BrandPage: NextPage = () => {
       </div>
     );
   }
-
+  const newData = data.productBrands.map((item) => {});
   return (
     <FadeInContainer className="text-stayhard-dark">
       <MyContainer>
@@ -86,11 +86,11 @@ const BrandPage: NextPage = () => {
             })}
           </div>
           <div className="flex items-center flex-wrap gap-8 mt-20">
-            {/*   <ul>
+            <ul>
               {data.productBrands.map((brand) => (
                 <li key={brand.id}>{brand.name}</li>
               ))}
-            </ul> */}
+            </ul>
           </div>
         </div>
       </MyContainer>

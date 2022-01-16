@@ -17,6 +17,26 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AttributeValueType = {
+  value: Scalars['String'];
+};
+
+export type CreateProductAttributeInput = {
+  color: AttributeValueType;
+  quantity: Scalars['Float'];
+  size: AttributeValueType;
+};
+
+export type CreateProductInput = {
+  attributes: Array<CreateProductAttributeInput>;
+  brandId: Scalars['Float'];
+  categoryId: Scalars['Float'];
+  description: Scalars['String'];
+  imageUrls: Array<Scalars['String']>;
+  name: Scalars['String'];
+  unitPrice: Scalars['Float'];
+};
+
 export type GetProductBrandsInput = {
   sortBy?: InputMaybe<SortBy>;
   sortDirection?: InputMaybe<SortDirection>;
@@ -30,6 +50,7 @@ export type LoginUserDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
+  createProduct: Product;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
   registerUser: UserWithTokensDto;
@@ -41,6 +62,11 @@ export type MutationAuthenticateWithGoogleArgs = {
 };
 
 
+export type MutationCreateProductArgs = {
+  input: CreateProductInput;
+};
+
+
 export type MutationLoginArgs = {
   input: LoginUserDto;
 };
@@ -48,6 +74,30 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
+};
+
+export type Product = {
+  __typename?: 'Product';
+  attributes: Array<ProductAttribute>;
+  brand: ProductBrand;
+  brandId: Scalars['Float'];
+  categoryId: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['Float'];
+  images?: Maybe<Array<ProductImage>>;
+  isDiscontinued: Scalars['Boolean'];
+  name: Scalars['String'];
+  unitPrice: Scalars['Float'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ProductAttribute = {
+  __typename?: 'ProductAttribute';
+  color: ProductColor;
+  quantity: Scalars['Float'];
+  size: ProductSize;
+  sku: Scalars['String'];
 };
 
 export type ProductBrand = {
@@ -70,12 +120,31 @@ export type ProductCategory = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ProductColor = {
+  __typename?: 'ProductColor';
+  id: Scalars['Float'];
+  value: Scalars['String'];
+};
+
+export type ProductImage = {
+  __typename?: 'ProductImage';
+  id: Scalars['Float'];
+  imageUrl: Scalars['String'];
+};
+
+export type ProductSize = {
+  __typename?: 'ProductSize';
+  id: Scalars['Float'];
+  value: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getCategories: Array<ProductCategory>;
   getOneCategory: ProductCategory;
   me: User;
   productBrands: Array<ProductBrand>;
+  products: Array<Product>;
 };
 
 
@@ -118,7 +187,6 @@ export type User = {
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['String'];
-  isAdmin: Scalars['Boolean'];
   isEmailConfirmed: Scalars['Boolean'];
   isRegisteredWithGoogle: Scalars['Boolean'];
   lastName: Scalars['String'];
@@ -145,7 +213,7 @@ export type CoreCategoryFieldsFragment = { __typename?: 'ProductCategory', id: n
 
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
-export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean };
+export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
 
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
@@ -188,7 +256,7 @@ export type GetProductBrandsQuery = { __typename?: 'Query', productBrands: Array
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
 
 export const CoreCategoryFieldsFragmentDoc = gql`
     fragment CoreCategoryFields on ProductCategory {
@@ -214,7 +282,6 @@ export const CoreUserFieldsFragmentDoc = gql`
   email
   isRegisteredWithGoogle
   isEmailConfirmed
-  isAdmin
 }
     `;
 export const AuthenticateWithGoogleDocument = gql`
