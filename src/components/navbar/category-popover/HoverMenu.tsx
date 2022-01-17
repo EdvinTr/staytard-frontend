@@ -4,9 +4,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { GetCategoriesQuery } from "../../../lib/graphql";
 
-type CategoryItem = GetCategoriesQuery["getCategories"][0];
+type CategoryItem = GetCategoriesQuery["categories"][0];
 interface HoverMenuProps {
-  items: GetCategoriesQuery["getCategories"];
+  items: GetCategoriesQuery["categories"];
   isButtonHovered: boolean;
   title?: string;
 }

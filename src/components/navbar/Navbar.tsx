@@ -21,7 +21,7 @@ const { deliveryTimeText, freeShippingText, rightOfReturnText } =
   Localized.page.index;
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [hoverMenuItems, setHoverMenuItems] = useState<
-    GetCategoriesQuery["getCategories"] | null
+    GetCategoriesQuery["categories"] | null
   >(null);
   const [hoverMenuTitle, setHoverMenuTitle] = useState("");
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
@@ -84,12 +84,12 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         {/* hover menu stuff */}
         {categoriesData && (
           <FadeInContainer className="flex justify-center space-x-7 pt-8">
-            {categoriesData?.getCategories.map((category) => {
+            {categoriesData?.categories.map((category) => {
               return (
                 <Link key={category.id} href={category.path}>
                   <a
                     className="underline"
-                    onClick={() => setIsHoverMenuOpen(false)}
+                    onClick={() => setIsHoverMenuOpen(false)} // TODO: refactor with useCallback on all user interactions that mutate state
                     onMouseEnter={() => {
                       if (category.children) {
                         setHoverMenuItems(category.children);

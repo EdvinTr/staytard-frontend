@@ -13,21 +13,19 @@ import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
-
   const apolloClient = useApolloClient();
+
   const [loginUser, { loading: isLoginUserLoading, error: loginUserGqlError }] =
     useLoginUserMutation();
+
   const onFormSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
     { email, password }: LoginUserDto,
     hasUnresolvedFieldErrors: boolean
   ): Promise<void> => {
     e.preventDefault();
-    if (hasUnresolvedFieldErrors) {
+    if (hasUnresolvedFieldErrors || isLoginUserLoading) {
       return;
-    }
-    if (isLoginUserLoading) {
-      return; // prevent spamming
     }
     try {
       await apolloClient.resetStore();

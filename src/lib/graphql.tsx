@@ -76,6 +76,13 @@ export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
 };
 
+/** The permissions of the user */
+export enum Permission {
+  CreateProduct = 'CREATE_PRODUCT',
+  DeleteProduct = 'DELETE_PRODUCT',
+  UpdateProduct = 'UPDATE_PRODUCT'
+}
+
 export type Product = {
   __typename?: 'Product';
   attributes: Array<ProductAttribute>;
@@ -140,7 +147,7 @@ export type ProductSize = {
 
 export type Query = {
   __typename?: 'Query';
-  getCategories: Array<ProductCategory>;
+  categories: Array<ProductCategory>;
   getOneCategory: ProductCategory;
   me: User;
   productBrands: Array<ProductBrand>;
@@ -191,6 +198,7 @@ export type User = {
   isRegisteredWithGoogle: Scalars['Boolean'];
   lastName: Scalars['String'];
   mobilePhoneNumber: Scalars['String'];
+  permissions: Array<Permission>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -244,7 +252,7 @@ export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined }> };
+export type GetCategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined }> };
 
 export type GetProductBrandsQueryVariables = Exact<{
   input: GetProductBrandsInput;
@@ -421,7 +429,7 @@ export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutat
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
-  getCategories {
+  categories {
     ...CoreCategoryFields
     children {
       ...CoreCategoryFields

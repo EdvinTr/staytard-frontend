@@ -15,7 +15,7 @@ export const Accordion: React.FC<AccordionProps> & {
   return (
     <div
       {...rest}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => setIsHovered(true)} // TODO: refactor with useCallback
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="border-t border-white border-opacity-10">

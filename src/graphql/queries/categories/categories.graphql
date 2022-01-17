@@ -1,5 +1,5 @@
 query GetCategories {
-  getCategories {
+  categories {
     ...CoreCategoryFields
     children {
       ...CoreCategoryFields

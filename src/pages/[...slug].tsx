@@ -6,7 +6,7 @@ const SlugPage: NextPage = () => {
 
   const routeParams = router.query;
 
-  // make fetch with lastProp as key
+  // TODO: SSR products on this page
   return (
     <FadeInContainer className="text-stayhard-dark min-h-screen">
       <div className=" text-staytard-dark">

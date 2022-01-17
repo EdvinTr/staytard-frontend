@@ -45,7 +45,10 @@ const brandImages = [
 const BrandPage: NextPage = () => {
   const { data, error } = ssrGetProductBrands.usePage();
 
-  console.log("ERROR client:", error?.message);
+  console.log(
+    "BrandPage ERROR in client ssrGetProductBrand.usePage():",
+    error?.message
+  );
   if (!data || error) {
     return (
       <div>
