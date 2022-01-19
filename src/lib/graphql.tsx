@@ -98,7 +98,7 @@ export type Product = {
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['Float'];
-  images?: Maybe<Array<ProductImage>>;
+  images: Array<ProductImage>;
   isDiscontinued: Scalars['Boolean'];
   name: Scalars['String'];
   priceLabel: Scalars['String'];
@@ -240,7 +240,7 @@ export type CoreCategoryFieldsFragment = { __typename?: 'ProductCategory', id: n
 
 export type CoreAttributeFieldsFragment = { __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } };
 
-export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images?: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> | null | undefined };
+export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> };
 
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
@@ -289,7 +289,7 @@ export type FindProductsQueryVariables = Exact<{
 }>;
 
 
-export type FindProductsQuery = { __typename?: 'Query', products: { __typename?: 'QueryProductsOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images?: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> | null | undefined }> } };
+export type FindProductsQuery = { __typename?: 'Query', products: { __typename?: 'QueryProductsOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
