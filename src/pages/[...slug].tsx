@@ -8,18 +8,21 @@ const getFullPath = (slug: string[]) => {
   const fullUrl = `/${first}/${rest.join("/")}`;
   return fullUrl;
 };
-const SlugPage: NextPage = () => {
+const SlugPage: NextPage = (props) => {
+  console.log("SlugPage rendered");
+  console.log("props:", props);
+
   const { data, fetchMore } = ssrFindProducts.usePage();
+
   const router = useRouter();
   const fullPath = getFullPath(router.query.slug as string[]);
 
-  // TODO: use infinite scrolling
   return (
     <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 text-center">
       <div className=" text-staytard-dark">
         <h2 className="text-center">Hello this is the products page</h2>
-        {data?.products.items.map((item) => {
-          return <div key={item.id}>{item.name}</div>;
+        {data?.products.items.map((item, idx) => {
+          return <div key={idx}>{item.name}</div>;
         })}
       </div>
       {data?.products.hasMore && (
@@ -57,15 +60,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       },
     });
-
     return {
       props: {
         initialApolloState: props.apolloState,
       },
     };
   } catch (err) {
-    console.log("I AM ERROR", err);
-
     return {
       props: {},
     };

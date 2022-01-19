@@ -4,8 +4,9 @@ import App from "next/app";
 import Head from "next/head";
 import { Router, useRouter } from "next/router";
 import NProgress from "nprogress";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { BeatLoader } from "react-spinners";
 import { Footer } from "../components/footer/Footer";
 import { Navbar } from "../components/navbar/Navbar";
 import { APP_PAGE_ROUTE } from "../constants";
@@ -18,12 +19,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const router = useRouter();
   const currentPath = router.pathname;
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const start = () => {
+      setIsLoading(true);
       NProgress.start();
     };
     const end = () => {
+      setIsLoading(false);
       NProgress.done();
     };
     Router.events.on("routeChangeStart", start);
@@ -50,7 +53,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         currentPath === APP_PAGE_ROUTE.REGISTER ? null : (
           <Navbar />
         )}
-        <Component {...pageProps} />
+        {isLoading ? (
+          <BeatLoader
+            color="#faba"
+            css="display:flex; justify-content:center; padding: 4rem 0;"
+          />
+        ) : (
+          <Component {...pageProps} />
+        )}
         <Footer />
       </Fragment>
     </ApolloProvider>
