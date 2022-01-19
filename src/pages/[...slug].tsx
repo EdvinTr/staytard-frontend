@@ -1,9 +1,9 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
+import { ProductCard } from "../components/products/ProductCard";
 import { ssrFindProducts } from "../lib/page";
 
 const getFullPath = (slug: string[]) => {
@@ -29,33 +29,10 @@ const SlugPage: NextPage = (props) => {
     <FadeInContainer className="text-stayhard-dark min-h-screen pb-40">
       <MyContainer className=" text-staytard-dark">
         {/* grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-4 xl:gap-x-6 gap-y-12">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-y-12">
           {/* product cards */}
           {data?.products.items.map((item, idx) => {
-            const imageUrl = item.images[0].imageUrl.replace("{size}", "400");
-            return (
-              <article key={idx}>
-                <Image
-                  src={imageUrl}
-                  placeholder="blur"
-                  priority
-                  blurDataURL={imageUrl}
-                  objectFit="contain"
-                  width={400}
-                  height={600}
-                  alt={`${item.brand} - ${item.name}`}
-                />
-                <h2>
-                  <b className="text-xs block w-full uppercase">
-                    {item.brand.name}
-                  </b>
-                  <span className="text-[10px] block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
-                    {" "}
-                    {item.name}
-                  </span>
-                </h2>
-              </article>
-            );
+            return <ProductCard key={idx} product={item} />;
           })}
         </div>
       </MyContainer>
