@@ -1,5 +1,5 @@
 import NextImage from "next/image";
-import React, { Fragment, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FindProductsQuery } from "../../lib/graphql";
 interface ProductCardProps {
   product: FindProductsQuery["products"]["items"][0];
@@ -28,7 +28,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     });
     await Promise.all(promises);
   };
-
+  // TODO: small images should not include currently viewed image
   const onMouseEnter = useCallback(async () => {
     setIsHovered(true);
     setActiveImage(slicedImages[1].imageUrl.replace("{size}", largeImageSize));
@@ -56,48 +56,58 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         height={600}
         alt={`${product.brand} - ${product.name}`}
       />
-      {isHovered ? (
-        <div className="flex items-center space-x-2">
-          {slicedImages.map((image, idx) => {
-            const smallImageUrl = image.imageUrl.replace(
-              "{size}",
-              smallImageSize
-            );
-            return (
-              <div key={idx}>
-                <NextImage
-                  src={smallImageUrl}
-                  placeholder="blur"
-                  blurDataURL={smallImageUrl}
-                  key={idx}
-                  width={34}
-                  height={51}
-                  alt={`${product.brand} - ${product.name}`}
-                  objectFit="contain"
-                  quality={65}
-                  onMouseEnter={() => {
-                    setActiveImage(image.imageUrl.replace("{size}", "380"));
-                  }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <Fragment>
-          <h2>
-            <b className="text-xs block w-full uppercase">
-              {product.brand.name}
-            </b>
-            <span className="text-[10px] block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {product.name}
-            </span>
-          </h2>
-          <strong className="text-13 font-semibold flex">
-            {product.priceLabel}
-          </strong>
-        </Fragment>
-      )}
+      <div className="h-[4.5rem]">
+        {isHovered ? (
+          <div>
+            <div className="flex items-center space-x-2">
+              {slicedImages.map((image, idx) => {
+                const smallImageUrl = image.imageUrl.replace(
+                  "{size}",
+                  smallImageSize
+                );
+                return (
+                  <div key={idx}>
+                    <NextImage
+                      src={smallImageUrl}
+                      placeholder="blur"
+                      blurDataURL={smallImageUrl}
+                      key={idx}
+                      width={34}
+                      height={51}
+                      alt={`${product.brand} - ${product.name}`}
+                      objectFit="contain"
+                      quality={65}
+                      onMouseEnter={() => {
+                        setActiveImage(image.imageUrl.replace("{size}", "380"));
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <ul className="flex space-x-4 text-xs">
+              <li>S</li>
+              <li>M</li>
+              <li>L</li>
+              <li>XL</li>
+            </ul>
+          </div>
+        ) : (
+          <div>
+            <h2>
+              <b className="text-xs block w-full uppercase">
+                {product.brand.name}
+              </b>
+              <span className="text-[10px] block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {product.name}
+              </span>
+            </h2>
+            <strong className="text-13 font-semibold flex">
+              {product.priceLabel}
+            </strong>
+          </div>
+        )}
+      </div>
     </article>
   );
 };
