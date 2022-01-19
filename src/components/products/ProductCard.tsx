@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import NextImage from "next/image";
 import React, { useCallback, useState } from "react";
 import { FindProductsQuery } from "../../lib/graphql";
@@ -16,7 +17,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [activeImage, setActiveImage] = useState(
     slicedImages[0].imageUrl.replace("{size}", largeImageSize)
   );
-
   const cacheImages = async () => {
     const promises = slicedImages.map(({ imageUrl }) => {
       return new Promise(function (resolve, reject) {
@@ -31,8 +31,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   // TODO: small images should not include currently viewed image
   const onMouseEnter = useCallback(async () => {
     setIsHovered(true);
-    setActiveImage(slicedImages[1].imageUrl.replace("{size}", largeImageSize));
-    await cacheImages();
+    if (slicedImages.length > 1) {
+      setActiveImage(
+        slicedImages[1].imageUrl.replace("{size}", largeImageSize)
+      );
+    }
+    await cacheImages(); // TODO: should cancel if mouse leaves
   }, [setIsHovered]);
 
   const onMouseLeave = useCallback(() => {
@@ -41,11 +45,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }, [setIsHovered]);
 
   return (
-    <article
-      className=" p-3 hover:shadow-md hover:transition-shadow hover:duration-300 hover:ease-in-out"
-      onMouseLeave={onMouseLeave}
-    >
+    <article className=" p-3" onMouseLeave={onMouseLeave}>
       <NextImage
+        className="hover:shadow-md hover:transition-shadow hover:duration-300 hover:ease-in-out"
         src={activeImage}
         placeholder="blur"
         priority
@@ -57,56 +59,84 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         alt={`${product.brand} - ${product.name}`}
       />
       <div className="h-[4.5rem]">
-        {isHovered ? (
-          <div>
-            <div className="flex items-center space-x-2">
-              {slicedImages.map((image, idx) => {
-                const smallImageUrl = image.imageUrl.replace(
-                  "{size}",
-                  smallImageSize
-                );
-                return (
-                  <div key={idx}>
-                    <NextImage
-                      src={smallImageUrl}
-                      placeholder="blur"
-                      blurDataURL={smallImageUrl}
-                      key={idx}
-                      width={34}
-                      height={51}
-                      alt={`${product.brand} - ${product.name}`}
-                      objectFit="contain"
-                      quality={65}
-                      onMouseEnter={() => {
-                        setActiveImage(image.imageUrl.replace("{size}", "380"));
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <ul className="flex space-x-4 text-xs">
-              <li>S</li>
-              <li>M</li>
-              <li>L</li>
-              <li>XL</li>
-            </ul>
-          </div>
-        ) : (
-          <div>
-            <h2>
-              <b className="text-xs block w-full uppercase">
-                {product.brand.name}
-              </b>
-              <span className="text-[10px] block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
-                {product.name}
-              </span>
-            </h2>
-            <strong className="text-13 font-semibold flex">
-              {product.priceLabel}
-            </strong>
-          </div>
-        )}
+        <AnimatePresence initial={false}>
+          {isHovered ? (
+            <motion.div
+              key="small-images"
+              initial="collapsed"
+              animate="open"
+              exit="collapsed"
+              variants={{
+                open: { opacity: 1 },
+                collapsed: {
+                  height: 0,
+                  opacity: 0,
+                },
+              }}
+            >
+              <div className="flex items-center space-x-2">
+                {slicedImages.map((image, idx) => {
+                  const smallImageUrl = image.imageUrl.replace(
+                    "{size}",
+                    smallImageSize
+                  );
+                  return (
+                    <div key={idx}>
+                      <NextImage
+                        src={smallImageUrl}
+                        placeholder="blur"
+                        blurDataURL={smallImageUrl}
+                        key={idx}
+                        width={34}
+                        height={51}
+                        alt={`${product.brand} - ${product.name}`}
+                        objectFit="contain"
+                        quality={65}
+                        onMouseEnter={() => {
+                          setActiveImage(
+                            image.imageUrl.replace("{size}", largeImageSize)
+                          );
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <ul className="flex space-x-4 text-xs">
+                <li>S</li>
+                <li>M</li>
+                <li>L</li>
+                <li>XL</li>
+              </ul>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="product-details"
+              initial="collapsed"
+              animate="open"
+              exit="collapsed"
+              variants={{
+                open: { opacity: 1, height: 0 },
+                collapsed: {
+                  height: 0,
+                  opacity: 0,
+                },
+              }}
+            >
+              <h2>
+                <b className="text-xs block w-full uppercase">
+                  {product.brand.name}
+                </b>
+                <span className="text-[10px] block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+                  {product.name}
+                </span>
+              </h2>
+              <strong className="text-13 font-semibold flex">
+                {product.priceLabel}
+              </strong>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </article>
   );
