@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { FadeInContainer } from "../components/global/FadeInContainer";
@@ -9,14 +10,19 @@ const getFullPath = (slug: string[]) => {
   return fullUrl;
 };
 const SlugPage: NextPage = (props) => {
-  console.log("SlugPage rendered");
-  console.log("props:", props);
-
   const { data, fetchMore } = ssrFindProducts.usePage();
-
   const router = useRouter();
   const fullPath = getFullPath(router.query.slug as string[]);
 
+  // TODO: do something else when no data
+  if (!data || data.products.totalCount === 0) {
+    return (
+      <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 text-center">
+        <h2 className="text-center">No Products.</h2>
+      </FadeInContainer>
+    );
+  }
+  const { hasMore, items, totalCount } = data.products;
   return (
     <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 text-center">
       <div className=" text-staytard-dark">
@@ -25,24 +31,41 @@ const SlugPage: NextPage = (props) => {
           return <div key={idx}>{item.name}</div>;
         })}
       </div>
-      {data?.products.hasMore && (
-        <button
-          className="bg-staytard-yellow text-black p-4"
-          onClick={async () => {
-            await fetchMore({
-              variables: {
-                input: {
-                  offset: data.products.items.length,
-                  limit: 50,
-                  categoryPath: fullPath,
+      <div className="pt-8 max-w-xs mx-auto space-y-4">
+        <div className="px-6 space-y-1">
+          <p className="text-[#6b6b6b]">
+            You have seen {items.length} of {totalCount} products
+          </p>
+          <progress
+            max={totalCount}
+            value={items.length}
+            className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
+            style={{
+              color: "#222",
+            }}
+          ></progress>
+        </div>
+
+        {hasMore && (
+          <button
+            className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
+            onClick={async () => {
+              await fetchMore({
+                variables: {
+                  input: {
+                    offset: data.products.items.length,
+                    limit: 50,
+                    categoryPath: fullPath,
+                  },
                 },
-              },
-            });
-          }}
-        >
-          Load more
-        </button>
-      )}
+              });
+            }}
+          >
+            <span>Show more</span>
+            <ChevronDownIcon className="w-6" />
+          </button>
+        )}
+      </div>
     </FadeInContainer>
   );
 };
