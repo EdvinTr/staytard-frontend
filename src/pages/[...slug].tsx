@@ -29,7 +29,7 @@ const SlugPage: NextPage = (props) => {
     <FadeInContainer className="text-stayhard-dark min-h-screen pb-40">
       <MyContainer className=" text-staytard-dark">
         {/* grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-y-12">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-y-4">
           {/* product cards */}
           {data?.products.items.map((item, idx) => {
             return <ProductCard key={idx} product={item} />;
