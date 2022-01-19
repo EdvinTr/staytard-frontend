@@ -41,23 +41,20 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
                 return brands; // had to add this type policy for SSR to work
               },
             },
-            /*products: {
-              keyArgs: false,
-              merge(existing, incoming) {
+            products: {
+              keyArgs: ["limit", "offset", "categoryPath"],
+              merge(existing, incoming, { args }) {
+                console.log(args);
+
                 if (!incoming) return existing;
                 if (!existing) return incoming; // existing will be empty the first time
-                console.log(existing);
-                
-                const { products, ...rest } = incoming;
 
+                const { items, ...rest } = incoming;
                 let result = rest;
-                result.products = [
-                  ...existing.products,
-                  ...products,
-                ]; // Merge existing items with the items from incoming
+                result.items = [...existing.items, ...items]; // Merge existing items with the items from incoming
                 return result;
               },
-            }, */
+            },
           },
         },
       },

@@ -1,0 +1,12 @@
+fragment CoreAttributeFields on ProductAttribute {
+  sku
+  quantity
+  size {
+    id
+    value
+  }
+  color {
+    id
+    value
+  }
+}

@@ -1,0 +1,15 @@
+fragment CoreProductFields on Product {
+  id
+  name
+  unitPrice
+  priceLabel
+  isDiscontinued
+  brand {
+    id
+    name
+  }
+  images {
+    id
+    imageUrl
+  }
+}

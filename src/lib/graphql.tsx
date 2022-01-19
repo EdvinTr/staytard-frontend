@@ -37,6 +37,12 @@ export type CreateProductInput = {
   unitPrice: Scalars['Float'];
 };
 
+export type FindProductsInput = {
+  categoryPath: Scalars['String'];
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+};
+
 export type GetProductBrandsInput = {
   sortBy?: InputMaybe<SortBy>;
   sortDirection?: InputMaybe<SortDirection>;
@@ -95,6 +101,7 @@ export type Product = {
   images?: Maybe<Array<ProductImage>>;
   isDiscontinued: Scalars['Boolean'];
   name: Scalars['String'];
+  priceLabel: Scalars['String'];
   unitPrice: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
@@ -151,7 +158,7 @@ export type Query = {
   getOneCategory: ProductCategory;
   me: User;
   productBrands: Array<ProductBrand>;
-  products: Array<Product>;
+  products: QueryProductsOutput;
 };
 
 
@@ -162,6 +169,18 @@ export type QueryGetOneCategoryArgs = {
 
 export type QueryProductBrandsArgs = {
   input: GetProductBrandsInput;
+};
+
+
+export type QueryProductsArgs = {
+  input: FindProductsInput;
+};
+
+export type QueryProductsOutput = {
+  __typename?: 'QueryProductsOutput';
+  hasMore: Scalars['Boolean'];
+  items: Array<Product>;
+  totalCount: Scalars['Float'];
 };
 
 export type RegisterUserDto = {
@@ -219,6 +238,10 @@ export type UserWithTokensDto = {
 
 export type CoreCategoryFieldsFragment = { __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string };
 
+export type CoreAttributeFieldsFragment = { __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } };
+
+export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images?: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> | null | undefined };
+
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
 export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
@@ -261,6 +284,13 @@ export type GetProductBrandsQueryVariables = Exact<{
 
 export type GetProductBrandsQuery = { __typename?: 'Query', productBrands: Array<{ __typename?: 'ProductBrand', id: number, name: string, path: string }> };
 
+export type FindProductsQueryVariables = Exact<{
+  input: FindProductsInput;
+}>;
+
+
+export type FindProductsQuery = { __typename?: 'Query', products: { __typename?: 'QueryProductsOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images?: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> | null | undefined }> } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -272,6 +302,37 @@ export const CoreCategoryFieldsFragmentDoc = gql`
   name
   path
   slug
+}
+    `;
+export const CoreAttributeFieldsFragmentDoc = gql`
+    fragment CoreAttributeFields on ProductAttribute {
+  sku
+  quantity
+  size {
+    id
+    value
+  }
+  color {
+    id
+    value
+  }
+}
+    `;
+export const CoreProductFieldsFragmentDoc = gql`
+    fragment CoreProductFields on Product {
+  id
+  name
+  unitPrice
+  priceLabel
+  isDiscontinued
+  brand {
+    id
+    name
+  }
+  images {
+    id
+    imageUrl
+  }
 }
     `;
 export const CoreAddressFieldsFragmentDoc = gql`
@@ -506,6 +567,48 @@ export type GetProductBrandsLazyQueryHookResult = ReturnType<typeof useGetProduc
 export type GetProductBrandsQueryResult = Apollo.QueryResult<GetProductBrandsQuery, GetProductBrandsQueryVariables>;
 export function refetchGetProductBrandsQuery(variables: GetProductBrandsQueryVariables) {
       return { query: GetProductBrandsDocument, variables: variables }
+    }
+export const FindProductsDocument = gql`
+    query FindProducts($input: FindProductsInput!) {
+  products(input: $input) {
+    totalCount
+    hasMore
+    items {
+      ...CoreProductFields
+    }
+  }
+}
+    ${CoreProductFieldsFragmentDoc}`;
+
+/**
+ * __useFindProductsQuery__
+ *
+ * To run a query within a React component, call `useFindProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindProductsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindProductsQuery(baseOptions: Apollo.QueryHookOptions<FindProductsQuery, FindProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindProductsQuery, FindProductsQueryVariables>(FindProductsDocument, options);
+      }
+export function useFindProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindProductsQuery, FindProductsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindProductsQuery, FindProductsQueryVariables>(FindProductsDocument, options);
+        }
+export type FindProductsQueryHookResult = ReturnType<typeof useFindProductsQuery>;
+export type FindProductsLazyQueryHookResult = ReturnType<typeof useFindProductsLazyQuery>;
+export type FindProductsQueryResult = Apollo.QueryResult<FindProductsQuery, FindProductsQueryVariables>;
+export function refetchFindProductsQuery(variables: FindProductsQueryVariables) {
+      return { query: FindProductsDocument, variables: variables }
     }
 export const MeDocument = gql`
     query Me {
