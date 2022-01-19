@@ -12,7 +12,7 @@ const getFullPath = (slug: string[]) => {
   return fullUrl;
 };
 const SlugPage: NextPage = (props) => {
-  const { data, fetchMore } = ssrFindProducts.usePage();
+  const { data, fetchMore, loading } = ssrFindProducts.usePage();
   const router = useRouter();
   const fullPath = getFullPath(router.query.slug as string[]);
 
@@ -26,7 +26,7 @@ const SlugPage: NextPage = (props) => {
   }
   const { hasMore, items, totalCount } = data.products;
   return (
-    <FadeInContainer className="text-stayhard-dark min-h-screen pb-40">
+    <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 relative">
       <MyContainer className=" text-staytard-dark">
         {/* grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-y-4">

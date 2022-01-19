@@ -45,9 +45,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }, [setIsHovered]);
 
   return (
-    <article className=" p-3" onMouseLeave={onMouseLeave}>
+    <article
+      className={`p-3 ${
+        isHovered && "shadow-lg transition-shadow duration-300 ease-in-out"
+      }`}
+      onMouseLeave={onMouseLeave}
+    >
       <NextImage
-        className="hover:shadow-md hover:transition-shadow hover:duration-300 hover:ease-in-out"
+        className=""
         src={activeImage}
         placeholder="blur"
         priority
@@ -74,14 +79,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 },
               }}
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 ">
                 {slicedImages.map((image, idx) => {
                   const smallImageUrl = image.imageUrl.replace(
                     "{size}",
                     smallImageSize
                   );
                   return (
-                    <div key={idx}>
+                    <div key={idx} className="">
                       <NextImage
                         src={smallImageUrl}
                         placeholder="blur"
@@ -123,6 +128,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 },
               }}
             >
+              {/* names and price */}
               <h2>
                 <b className="text-xs block w-full uppercase">
                   {product.brand.name}
