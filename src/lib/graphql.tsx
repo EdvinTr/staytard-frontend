@@ -21,6 +21,11 @@ export type AttributeValueType = {
   value: Scalars['String'];
 };
 
+export enum Brand_Sort_By {
+  Id = 'ID',
+  Name = 'NAME'
+}
+
 export type CreateProductAttributeInput = {
   color: AttributeValueType;
   quantity: Scalars['Float'];
@@ -44,8 +49,8 @@ export type FindProductsInput = {
 };
 
 export type GetProductBrandsInput = {
-  sortBy?: InputMaybe<SortBy>;
-  sortDirection?: InputMaybe<SortDirection>;
+  sortBy?: InputMaybe<Brand_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
 };
 
 export type LoginUserDto = {
@@ -194,14 +199,7 @@ export type RegisterUserDto = {
   street: Scalars['String'];
 };
 
-/** Field to sort the result by */
-export enum SortBy {
-  Id = 'ID',
-  Name = 'NAME'
-}
-
-/** The basic directions */
-export enum SortDirection {
+export enum Sort_Direction {
   Asc = 'ASC',
   Desc = 'DESC'
 }

@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/MyContainer";
-import { SortBy, SortDirection } from "../../lib/graphql";
+import { Brand_Sort_By, Sort_Direction } from "../../lib/graphql";
 import { ssrGetProductBrands } from "../../lib/page";
 const brandImages = [
   {
@@ -105,7 +105,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const { props } = await ssrGetProductBrands.getServerPage({
       variables: {
-        input: { sortBy: SortBy.Name, sortDirection: SortDirection.Asc },
+        input: {
+          sortBy: Brand_Sort_By.Name,
+          sortDirection: Sort_Direction.Asc,
+        },
       },
     });
     return {
