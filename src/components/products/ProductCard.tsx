@@ -1,6 +1,8 @@
+import { useWindowWidth } from "@react-hook/window-size";
 import { AnimatePresence, motion } from "framer-motion";
 import NextImage from "next/image";
 import React, { useCallback, useState } from "react";
+import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { FindProductsQuery } from "../../lib/graphql";
 interface ProductCardProps {
   product: FindProductsQuery["products"]["items"][0];
@@ -11,13 +13,21 @@ let renders = 0;
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   renders++;
   console.log(renders);
+  const [firstImage] = product.images;
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const slicedImages = product.images.slice(0, 4);
+
   const [isHovered, setIsHovered] = useState(false);
 
   const [activeImage, setActiveImage] = useState(
     slicedImages[0].imageUrl.replace("{size}", largeImageSize)
   );
-  const cacheImages = async () => {
+  const smallImages =
+    product.images.length >= 1
+      ? [firstImage, ...product.images.slice(3, 5)]
+      : [];
+  const cacheImages = useCallback(async () => {
+    if (currentWindowWidth < 768) return;
     const promises = slicedImages.map(({ imageUrl }) => {
       return new Promise(function (resolve, reject) {
         const img = new Image();
@@ -27,9 +37,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       });
     });
     await Promise.all(promises);
-  };
+  }, [currentWindowWidth]);
+
   // TODO: small images should not include currently viewed image
   const onMouseEnter = useCallback(async () => {
+    if (currentWindowWidth < 768) return;
     setIsHovered(true);
     if (slicedImages.length > 1) {
       setActiveImage(
@@ -37,12 +49,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       );
     }
     await cacheImages(); // TODO: should cancel if mouse leaves
-  }, [setIsHovered]);
+  }, [setIsHovered, currentWindowWidth]);
 
   const onMouseLeave = useCallback(() => {
+    if (currentWindowWidth < 768) return;
     setActiveImage(slicedImages[0].imageUrl.replace("{size}", largeImageSize));
     setIsHovered(false);
-  }, [setIsHovered]);
+  }, [setIsHovered, currentWindowWidth]);
 
   return (
     <article
@@ -61,7 +74,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         width={400}
         onMouseEnter={onMouseEnter}
         height={600}
-        alt={`${product.brand} - ${product.name}`}
+        alt={`${product.brand.name} - ${product.name}`}
       />
       <div className="h-[4.5rem]">
         <AnimatePresence initial={false}>
@@ -80,7 +93,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               }}
             >
               <div className="flex items-center space-x-2 ">
-                {slicedImages.map((image, idx) => {
+                {smallImages.map((image, idx) => {
                   const smallImageUrl = image.imageUrl.replace(
                     "{size}",
                     smallImageSize
@@ -94,7 +107,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         key={idx}
                         width={34}
                         height={51}
-                        alt={`${product.brand} - ${product.name}`}
+                        alt={`${product.brand.name} - ${product.name}`}
                         objectFit="contain"
                         quality={65}
                         onMouseEnter={() => {

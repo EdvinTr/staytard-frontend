@@ -101,7 +101,7 @@ const BrandPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const { props } = await ssrGetProductBrands.getServerPage({
       variables: {
