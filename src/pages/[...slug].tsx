@@ -1,12 +1,15 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import { GetServerSideProps, NextPage } from "next";
+import NextHead from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { ProductCard } from "../components/products/ProductCard";
+import { APP_NAME } from "../constants";
 import { useSsrCompatible } from "../hooks/useSsrCompatible";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrFindProducts, ssrGetOneCategory } from "../lib/page";
@@ -55,16 +58,25 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
 
   const CategoryDescriptionJsx = () => (
     <p className="text-[11px] pt-3 md:text-sm md:pr-8 ">
-      {category.description}
+      {category.description.slice(0, 800)}
     </p>
   );
 
   const { hasMore, items, totalCount } = productData.products;
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
+      <NextHead>
+        <title>
+          {category.name} | Large assortment for men - Buy online at {APP_NAME}
+          .com
+        </title>
+        <meta name="description" content={category.description} />
+      </NextHead>
       <MyContainer className=" text-staytard-dark">
+        {/* category */}
         <h1 className="text-3xl font-semibold">{category.name}</h1>
         <div className="overflow-x-auto overflow-y-hidden">
+          {/* sub category list */}
           <ul className="py-4 flex items-start flex-shrink-0   space-x-3 text-sm">
             {category.children?.map((child, idx) => {
               return (
@@ -72,13 +84,14 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
                   key={idx}
                   className="p-3 border flex-shrink-0  font-medium border-black border-opacity-20"
                 >
-                  {child.name}
+                  <Link href={child.path}>
+                    <a>{child.name}</a>
+                  </Link>
                 </li>
               );
             })}
           </ul>
         </div>
-
         {/* product grid */}
         {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
@@ -135,7 +148,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [first, ...rest] = ctx.query.slug as string[];
   const fullUrl = `/${first}/${rest.join("/")}`;
   try {
-    const { props } = await ssrFindProducts.getServerPage({
+    const { props: productProps } = await ssrFindProducts.getServerPage({
       variables: {
         input: {
           categoryPath: fullUrl,
@@ -144,20 +157,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       },
     });
-    const { props: propsTwo } = await ssrGetOneCategory.getServerPage({
+    const { props: categoryProps } = await ssrGetOneCategory.getServerPage({
       variables: {
         path: fullUrl,
       },
     });
     return {
       props: {
-        initialApolloState: props.apolloState,
-        category: propsTwo.data.getOneCategory,
+        initialApolloState: productProps.apolloState,
+        category: categoryProps.data.getOneCategory,
       },
     };
   } catch (err) {
     return {
       props: {}, // TODO: return NotFound page
+      notFound: true,
     };
   }
 };
