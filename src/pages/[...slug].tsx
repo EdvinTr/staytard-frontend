@@ -1,4 +1,5 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useWindowWidth } from "@react-hook/window-size";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -6,21 +7,27 @@ import { BeatLoader } from "react-spinners";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { ProductCard } from "../components/products/ProductCard";
-import { ssrFindProducts } from "../lib/page";
+import { useSsrCompatible } from "../hooks/useSsrCompatible";
+import { GetOneCategoryQuery } from "../lib/graphql";
+import { ssrFindProducts, ssrGetOneCategory } from "../lib/page";
 
+interface SlugPageProps {
+  category: GetOneCategoryQuery["getOneCategory"];
+}
 const getFullPath = (slug: string[]) => {
   const [first, ...rest] = slug;
   const fullUrl = `/${first}/${rest.join("/")}`;
   return fullUrl;
 };
-const SlugPage: NextPage = (props) => {
-  const { data, fetchMore } = ssrFindProducts.usePage();
+const SlugPage: NextPage<SlugPageProps> = (props) => {
+  const { data: productData, fetchMore } = ssrFindProducts.usePage();
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const fullPath = getFullPath(router.query.slug as string[]);
 
   // TODO: do something else when no data
-  if (!data || data.products.totalCount === 0) {
+  if (!productData || productData.products.totalCount === 0) {
     return (
       <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 text-center">
         <h2 className="text-center">No Products.</h2>
@@ -33,7 +40,7 @@ const SlugPage: NextPage = (props) => {
       await fetchMore({
         variables: {
           input: {
-            offset: data.products.items.length,
+            offset: productData.products.items.length,
             limit: 50,
             categoryPath: fullPath,
           },
@@ -44,55 +51,82 @@ const SlugPage: NextPage = (props) => {
       setIsLoading(false);
     }
   };
-  const { hasMore, items, totalCount } = data.products;
+  const { category } = props;
+
+  const CategoryDescriptionJsx = () => (
+    <p className="text-[11px] pt-3 md:text-sm md:pr-8 ">
+      {category.description}
+    </p>
+  );
+
+  const { hasMore, items, totalCount } = productData.products;
   return (
-    <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 relative">
+    <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
       <MyContainer className=" text-staytard-dark">
-        {/* grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-y-4">
+        <h1 className="text-3xl font-semibold">{category.name}</h1>
+        <div className="overflow-x-auto overflow-y-hidden">
+          <ul className="py-4 flex items-start flex-shrink-0   space-x-3 text-sm">
+            {category.children?.map((child, idx) => {
+              return (
+                <li
+                  key={idx}
+                  className="p-3 border flex-shrink-0  font-medium border-black border-opacity-20"
+                >
+                  {child.name}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        {/* product grid */}
+        {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
+          {currentWindowWidth >= 768 && <CategoryDescriptionJsx />}
           {/* product cards */}
-          {data?.products.items.map((item, idx) => {
+          {productData?.products.items.map((item, idx) => {
             return <ProductCard key={idx} product={item} />;
           })}
         </div>
-      </MyContainer>
-      {/* load more group */}
-      <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
-        {isLoading && (
-          <div className="absolute inset-0">
-            <BeatLoader
-              color="#faba"
-              css="display:flex; justify-content:center;"
-            />
+        {/* load more group */}
+        <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
+          {/* loading spinner */}
+          {isLoading && (
+            <div className="absolute inset-0">
+              <BeatLoader
+                color="#faba"
+                css="display:flex; justify-content:center;"
+              />
+            </div>
+          )}
+          <div className="px-2 space-y-1 text-center">
+            <p className="text-[#6b6b6b]">
+              You have seen {items.length} of {totalCount} products
+            </p>
+            <progress
+              max={totalCount}
+              value={items.length}
+              className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
+              style={{
+                color: "#222",
+              }}
+            ></progress>
           </div>
-        )}
-        <div className="px-2 space-y-1 text-center">
-          <p className="text-[#6b6b6b]">
-            You have seen {items.length} of {totalCount} products
-          </p>
-          <progress
-            max={totalCount}
-            value={items.length}
-            className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
-            style={{
-              color: "#222",
-            }}
-          ></progress>
-        </div>
 
-        {/* load more button */}
-        {hasMore && (
-          <button
-            className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
-            onClick={async () => {
-              await onFetchMore();
-            }}
-          >
-            <span>Show more</span>
-            <ChevronDownIcon className="w-6" />
-          </button>
-        )}
-      </div>
+          {/* load more button */}
+          {hasMore && (
+            <button
+              className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
+              onClick={async () => {
+                await onFetchMore();
+              }}
+            >
+              <span>Show more</span>
+              <ChevronDownIcon className="w-6" />
+            </button>
+          )}
+        </div>
+      </MyContainer>
     </FadeInContainer>
   );
 };
@@ -110,14 +144,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       },
     });
+    const { props: propsTwo } = await ssrGetOneCategory.getServerPage({
+      variables: {
+        path: fullUrl,
+      },
+    });
     return {
       props: {
         initialApolloState: props.apolloState,
+        category: propsTwo.data.getOneCategory,
       },
     };
   } catch (err) {
     return {
-      props: {},
+      props: {}, // TODO: return NotFound page
     };
   }
 };

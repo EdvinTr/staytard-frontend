@@ -11,8 +11,8 @@ const largeImageSize = "380";
 const smallImageSize = "34";
 let renders = 0;
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  renders++;
-  console.log(renders);
+  /*   renders++;
+  console.log(renders); */
   const [firstImage] = product.images;
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const slicedImages = product.images.slice(0, 4);
@@ -59,7 +59,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <article
-      className={`p-3 ${
+      className={`md:p-3 ${
         isHovered && "shadow-lg transition-shadow duration-300 ease-in-out"
       }`}
       onMouseLeave={onMouseLeave}

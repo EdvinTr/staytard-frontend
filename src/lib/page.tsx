@@ -38,6 +38,34 @@ export const ssrGetCategories = {
       
       usePage: useGetCategories,
     }
+export async function getServerPageGetOneCategory
+    (options: Omit<Apollo.QueryOptions<Types.GetOneCategoryQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.GetOneCategoryQuery>({ ...options, query: Operations.GetOneCategoryDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useGetOneCategory = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.GetOneCategoryQuery, Types.GetOneCategoryQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.GetOneCategoryDocument, options);
+};
+export type PageGetOneCategoryComp = React.FC<{data?: Types.GetOneCategoryQuery, error?: Apollo.ApolloError}>;
+export const ssrGetOneCategory = {
+      getServerPage: getServerPageGetOneCategory,
+      
+      usePage: useGetOneCategory,
+    }
 export async function getServerPageGetProductBrands
     (options: Omit<Apollo.QueryOptions<Types.GetProductBrandsQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

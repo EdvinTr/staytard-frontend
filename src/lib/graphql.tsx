@@ -46,6 +46,8 @@ export type FindProductsInput = {
   categoryPath: Scalars['String'];
   limit: Scalars['Float'];
   offset: Scalars['Float'];
+  sortBy?: InputMaybe<Product_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
 };
 
 export type GetProductBrandsInput = {
@@ -86,6 +88,12 @@ export type MutationLoginArgs = {
 export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
 };
+
+export enum Product_Sort_By {
+  Id = 'ID',
+  Name = 'NAME',
+  UnitPrice = 'UNIT_PRICE'
+}
 
 /** The permissions of the user */
 export enum Permission {
@@ -168,7 +176,7 @@ export type Query = {
 
 
 export type QueryGetOneCategoryArgs = {
-  slug: Scalars['String'];
+  path: Scalars['String'];
 };
 
 
@@ -274,6 +282,13 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined }> };
+
+export type GetOneCategoryQueryVariables = Exact<{
+  path: Scalars['String'];
+}>;
+
+
+export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, description: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined } };
 
 export type GetProductBrandsQueryVariables = Exact<{
   input: GetProductBrandsInput;
@@ -525,6 +540,52 @@ export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategorie
 export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export function refetchGetCategoriesQuery(variables?: GetCategoriesQueryVariables) {
       return { query: GetCategoriesDocument, variables: variables }
+    }
+export const GetOneCategoryDocument = gql`
+    query GetOneCategory($path: String!) {
+  getOneCategory(path: $path) {
+    id
+    name
+    description
+    children {
+      id
+      name
+      path
+      slug
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOneCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetOneCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneCategoryQuery({
+ *   variables: {
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useGetOneCategoryQuery(baseOptions: Apollo.QueryHookOptions<GetOneCategoryQuery, GetOneCategoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(GetOneCategoryDocument, options);
+      }
+export function useGetOneCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneCategoryQuery, GetOneCategoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(GetOneCategoryDocument, options);
+        }
+export type GetOneCategoryQueryHookResult = ReturnType<typeof useGetOneCategoryQuery>;
+export type GetOneCategoryLazyQueryHookResult = ReturnType<typeof useGetOneCategoryLazyQuery>;
+export type GetOneCategoryQueryResult = Apollo.QueryResult<GetOneCategoryQuery, GetOneCategoryQueryVariables>;
+export function refetchGetOneCategoryQuery(variables: GetOneCategoryQueryVariables) {
+      return { query: GetOneCategoryDocument, variables: variables }
     }
 export const GetProductBrandsDocument = gql`
     query GetProductBrands($input: GetProductBrandsInput!) {
