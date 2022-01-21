@@ -170,6 +170,7 @@ export type Query = {
   categories: Array<ProductCategory>;
   getOneCategory: ProductCategory;
   me: User;
+  product: Product;
   productBrands: Array<ProductBrand>;
   products: QueryProductsOutput;
 };
@@ -177,6 +178,11 @@ export type Query = {
 
 export type QueryGetOneCategoryArgs = {
   path: Scalars['String'];
+};
+
+
+export type QueryProductArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -296,6 +302,13 @@ export type GetProductBrandsQueryVariables = Exact<{
 
 
 export type GetProductBrandsQuery = { __typename?: 'Query', productBrands: Array<{ __typename?: 'ProductBrand', id: number, name: string, path: string }> };
+
+export type FindOneProductQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type FindOneProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', description: string, id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
 
 export type FindProductsQueryVariables = Exact<{
   input: FindProductsInput;
@@ -626,6 +639,49 @@ export type GetProductBrandsLazyQueryHookResult = ReturnType<typeof useGetProduc
 export type GetProductBrandsQueryResult = Apollo.QueryResult<GetProductBrandsQuery, GetProductBrandsQueryVariables>;
 export function refetchGetProductBrandsQuery(variables: GetProductBrandsQueryVariables) {
       return { query: GetProductBrandsDocument, variables: variables }
+    }
+export const FindOneProductDocument = gql`
+    query FindOneProduct($id: Float!) {
+  product(id: $id) {
+    ...CoreProductFields
+    description
+    attributes {
+      ...CoreAttributeFields
+    }
+  }
+}
+    ${CoreProductFieldsFragmentDoc}
+${CoreAttributeFieldsFragmentDoc}`;
+
+/**
+ * __useFindOneProductQuery__
+ *
+ * To run a query within a React component, call `useFindOneProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOneProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOneProductQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindOneProductQuery(baseOptions: Apollo.QueryHookOptions<FindOneProductQuery, FindOneProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindOneProductQuery, FindOneProductQueryVariables>(FindOneProductDocument, options);
+      }
+export function useFindOneProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOneProductQuery, FindOneProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindOneProductQuery, FindOneProductQueryVariables>(FindOneProductDocument, options);
+        }
+export type FindOneProductQueryHookResult = ReturnType<typeof useFindOneProductQuery>;
+export type FindOneProductLazyQueryHookResult = ReturnType<typeof useFindOneProductLazyQuery>;
+export type FindOneProductQueryResult = Apollo.QueryResult<FindOneProductQuery, FindOneProductQueryVariables>;
+export function refetchFindOneProductQuery(variables: FindOneProductQueryVariables) {
+      return { query: FindOneProductDocument, variables: variables }
     }
 export const FindProductsDocument = gql`
     query FindProducts($input: FindProductsInput!) {

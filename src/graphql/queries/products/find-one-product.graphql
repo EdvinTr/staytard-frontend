@@ -1,0 +1,9 @@
+query FindOneProduct($id: Float!) {
+  product(id: $id) {
+    ...CoreProductFields
+    description
+    attributes {
+      ...CoreAttributeFields
+    }
+  }
+}

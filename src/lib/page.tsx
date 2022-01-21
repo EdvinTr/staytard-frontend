@@ -94,6 +94,34 @@ export const ssrGetProductBrands = {
       
       usePage: useGetProductBrands,
     }
+export async function getServerPageFindOneProduct
+    (options: Omit<Apollo.QueryOptions<Types.FindOneProductQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.FindOneProductQuery>({ ...options, query: Operations.FindOneProductDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useFindOneProduct = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.FindOneProductQuery, Types.FindOneProductQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.FindOneProductDocument, options);
+};
+export type PageFindOneProductComp = React.FC<{data?: Types.FindOneProductQuery, error?: Apollo.ApolloError}>;
+export const ssrFindOneProduct = {
+      getServerPage: getServerPageFindOneProduct,
+      
+      usePage: useFindOneProduct,
+    }
 export async function getServerPageFindProducts
     (options: Omit<Apollo.QueryOptions<Types.FindProductsQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

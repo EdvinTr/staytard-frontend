@@ -7,6 +7,8 @@ import NProgress from "nprogress";
 import { Fragment, useEffect, useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
 import { BeatLoader } from "react-spinners";
+// Import Swiper styles
+import "swiper/css";
 import { Footer } from "../components/footer/Footer";
 import { Navbar } from "../components/navbar/Navbar";
 import { APP_PAGE_ROUTE } from "../constants";

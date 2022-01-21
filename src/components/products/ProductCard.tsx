@@ -1,6 +1,7 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import { AnimatePresence, motion } from "framer-motion";
 import NextImage from "next/image";
+import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { FindProductsQuery } from "../../lib/graphql";
@@ -64,18 +65,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       }`}
       onMouseLeave={onMouseLeave}
     >
-      <NextImage
-        className=""
-        src={activeImage}
-        placeholder="blur"
-        priority
-        blurDataURL={activeImage}
-        objectFit="contain"
-        width={400}
-        onMouseEnter={onMouseEnter}
-        height={600}
-        alt={`${product.brand.name} - ${product.name}`}
-      />
+      <Link href={`/product/${product.id}`}>
+        <a>
+          <NextImage
+            className=""
+            src={activeImage}
+            placeholder="blur"
+            priority
+            blurDataURL={activeImage}
+            objectFit="contain"
+            width={400}
+            onMouseEnter={onMouseEnter}
+            height={600}
+            alt={`${product.brand.name} - ${product.name}`}
+          />
+        </a>
+      </Link>
       <div className="h-[4.5rem]">
         <AnimatePresence initial={false}>
           {isHovered ? (
