@@ -1,11 +1,15 @@
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/MyContainer";
+import { APP_PAGE_ROUTE } from "../../constants";
 import { FindOneProductQuery } from "../../lib/graphql";
 import { ssrFindOneProduct } from "../../lib/page";
 SwiperCore.use([Pagination]);
@@ -13,15 +17,38 @@ SwiperCore.use([Navigation]);
 interface ProductPageProps {
   product: FindOneProductQuery["product"];
 }
+interface SelectOption {
+  label: string;
+  value: string;
+}
+// TODO: add meta tags and OG tags
 const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
-  console.log();
+  const [selectedSize, setSelectedSize] = useState<null | string>("");
+  const router = useRouter();
+  const currentPath = router.pathname;
+  const queryColor = router.query.color;
+  if (!queryColor) {
+    router.push(
+      `/${APP_PAGE_ROUTE.PRODUCT}/${product.id}?color=${product.attributes[0].color.value}`
+    );
+  }
+  const addToCart = () => {
+    console.log(selectedSize);
 
-  // TODO: add meta tags and OG tags
+    /* localStorage.setItem(
+      "cart",
+      JSON.stringify([
+        ...JSON.parse(localStorage.getItem("cart") || "[]"),
+        product.id,
+      ])
+    ); */
+  };
+
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen pb-40 pt-20">
       <MyContainer className=" text-staytard-dark">
-        <div className="lg:flex lg:justify-center lg:space-x-20">
-          <div className="min-w-0 max-w-2xl">
+        <div className="lg:flex lg:space-x-20 ">
+          <div className="min-w-0 lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl">
             <Swiper
               navigation
               pagination={{ dynamicBullets: false, clickable: true }}
@@ -44,19 +71,38 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               ))}
             </Swiper>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 xl:min-w-[30rem] 2xl:min-w-[40rem]">
             {/* small images that do absolutely nothing :) */}
-            <div className="flex space-x-2">
-              {product.images.slice(0, 4).map(({ imageUrl }, idx) => {
+            <div className="flex space-x-2 pb-8">
+              {product.images.slice(0, 5).map(({ imageUrl }, idx) => {
+                const attributeColor = product.attributes[idx]?.color.value;
                 return (
                   <div key={idx}>
-                    <Image
-                      width={60}
-                      height={100}
-                      objectFit="contain"
-                      src={imageUrl.replace("{size}", "100")}
-                      alt={`${product.brand.name} - ${product.name}`}
-                    />
+                    <Link
+                      shallow
+                      href={`/product/${product.id}?color=${
+                        attributeColor || ""
+                      }`}
+                    >
+                      <a
+                        className={`${
+                          queryColor === attributeColor
+                            ? "outline outline-1"
+                            : ""
+                        }`}
+                      >
+                        <Image
+                          width={60}
+                          height={100}
+                          objectFit="contain"
+                          src={imageUrl.replace("{size}", "100")}
+                          alt={`${product.brand.name} - ${product.name}`}
+                        />
+                        <span className="block text-center text-xs">
+                          {attributeColor}
+                        </span>
+                      </a>
+                    </Link>
                   </div>
                 );
               })}
@@ -69,7 +115,33 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
                 </span>
                 <span className="lg:text-lg">{product.name}</span>
               </h1>
-              <h2 className="text-lg font-bold">{product.priceLabel}</h2>
+              <h2 className="text-lg font-bold pt-2">{product.priceLabel}</h2>
+            </div>
+            {/* size and color select */}
+            <div className="pt-8 flex justify-evenly space-x-4">
+              <select
+                name="size"
+                id="size-select"
+                className="w-1/2 xl:w-full"
+                onChange={(e) => setSelectedSize(e.target.value)}
+              >
+                {product.attributes.map((item, idx) => {
+                  return (
+                    item.color.value === queryColor && (
+                      <option key={idx} value={item.size.value}>
+                        {item.size.value}
+                      </option>
+                    )
+                  );
+                })}
+              </select>
+
+              <button
+                onClick={() => addToCart()}
+                className="uppercase w-1/2 xl:w-full text-13 py-4 bg-staytard-dark text-white font-semibold "
+              >
+                Add to cart
+              </button>
             </div>
           </div>
         </div>

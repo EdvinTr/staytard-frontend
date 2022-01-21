@@ -10,6 +10,7 @@ export enum APP_PAGE_ROUTE {
   MY_PROFILE = "/my-profile",
   MY_ORDERS = "/my-orders",
   MY_OFFERS = "my-offers",
+  PRODUCT = "/product",
 }
 
 export enum COOKIE_NAME {
