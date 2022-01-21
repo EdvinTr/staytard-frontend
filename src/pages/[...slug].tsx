@@ -37,6 +37,7 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
       </FadeInContainer>
     );
   }
+
   const onFetchMore = async () => {
     try {
       setIsLoading(true);
@@ -146,7 +147,10 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [first, ...rest] = ctx.query.slug as string[];
-  const fullUrl = `/${first}/${rest.join("/")}`;
+  let fullUrl = `/${first}`;
+  if (rest.length > 0) {
+    fullUrl = `/${first}/${rest.join("/")}`;
+  }
   try {
     const { props: productProps } = await ssrFindProducts.getServerPage({
       variables: {

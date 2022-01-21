@@ -53,14 +53,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         currentPath === APP_PAGE_ROUTE.REGISTER ? null : (
           <Navbar />
         )}
-        {isLoading ? (
+        {isLoading && (
           <BeatLoader
             color="#faba"
             css="display:flex; justify-content:center; padding: 4rem 0;"
           />
-        ) : (
-          <Component {...pageProps} />
         )}
+        <Component {...pageProps} />
         <Footer />
       </Fragment>
     </ApolloProvider>
