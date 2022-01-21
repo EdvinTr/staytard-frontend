@@ -6,6 +6,7 @@ import { Router, useRouter } from "next/router";
 import NProgress from "nprogress";
 import { Fragment, useEffect, useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { BeatLoader } from "react-spinners";
 import { Footer } from "../components/footer/Footer";
 import { Navbar } from "../components/navbar/Navbar";
 import { APP_PAGE_ROUTE } from "../constants";
@@ -52,13 +53,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         currentPath === APP_PAGE_ROUTE.REGISTER ? null : (
           <Navbar />
         )}
-        {/*  {isLoading && (
+        {isLoading && (
           <BeatLoader
             color="#faba"
-            css="display:flex; justify-content:center; padding: 4rem 0;"
+            css="display:flex; justify-content:center; padding: 4rem 0; min-height: 100vh;"
           />
-        )} */}
-        <Component {...pageProps} />
+        )}
+        {!isLoading && <Component {...pageProps} />}
         <Footer />
       </Fragment>
     </ApolloProvider>
