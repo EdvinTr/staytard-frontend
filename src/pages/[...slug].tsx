@@ -27,7 +27,8 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const fullPath = getFullPath(router.query.slug as string[]);
+  const pathVariables = router.query.slug as string[];
+  const fullPath = getFullPath(pathVariables);
 
   // TODO: do something else when no data
   if (!productData || productData.products.totalCount === 0) {
@@ -74,6 +75,19 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
         <meta name="description" content={category.description} />
       </NextHead>
       <MyContainer className=" text-staytard-dark">
+        {pathVariables.length > 1 && (
+          <div className="space-x-8 pb-4">
+            {pathVariables.map((item, idx) => {
+              return (
+                <Link href={`/${item}`} key={idx}>
+                  <a className="text-staytard-dark text-xs hover:underline">
+                    {item}
+                  </a>
+                </Link>
+              );
+            })}
+          </div>
+        )}
         {/* category */}
         <h1 className="text-3xl font-semibold">{category.name}</h1>
         <div className="overflow-x-auto overflow-y-hidden">

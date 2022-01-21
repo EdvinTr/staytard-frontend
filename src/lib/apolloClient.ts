@@ -44,7 +44,6 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
             products: {
               keyArgs: ["limit", "offset", "categoryPath"],
               merge(existing, incoming, { args }) {
-                return incoming;
                 if (!incoming) return existing;
                 if (!existing) return incoming; // existing will be empty the first time
                 return {
