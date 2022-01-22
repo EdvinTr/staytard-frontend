@@ -1,12 +1,15 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
+import NextHead from "next/head";
 import { useRouter } from "next/router";
+import { BeatLoader } from "react-spinners";
 import { SWRConfig } from "swr";
 import useSWRInfinite from "swr/infinite";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { ProductCard } from "../components/products/ProductCard";
+import { APP_NAME } from "../constants";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
 interface SlugPageProps {
@@ -30,15 +33,17 @@ const LIMIT = 50;
 // 7. Show breadcrumbs
 const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
   const router = useRouter();
-  const pathVariables = router.query.slug as string[];
-  const fullPath = getFullPath(pathVariables);
+  const currentPathParams = getFullPath(router.query.slug as string[]);
+  console.log(currentPathParams);
 
   const { data, size, setSize, error, isValidating, mutate } =
     useSWRInfinite<GetProductsResponse>(
       (index) =>
         `${
           process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-        }/products?limit=${LIMIT}&page=${index + 1}`,
+        }/products?limit=${LIMIT}&page=${
+          index + 1
+        }&categoryPath=${currentPathParams}`,
       fetcher
     );
   const isLoadingInitialData = !data && !error;
@@ -61,6 +66,14 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
   return (
     <SWRConfig value={{ fallback }}>
       <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
+        <NextHead>
+          <title>
+            {/* {category.name} */} | Large assortment for men - Buy online at{" "}
+            {APP_NAME}
+            .com
+          </title>
+          {/*    <meta name="description" content={category.description} /> */}
+        </NextHead>
         <MyContainer className=" text-staytard-dark">
           <div className="overflow-x-auto overflow-y-hidden"></div>
           {/* product grid */}
@@ -87,6 +100,14 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
               ></progress>
             </div>
 
+            {isLoadingMore && (
+              <div className="absolute inset-0">
+                <BeatLoader
+                  color="#faba"
+                  css="display:flex; justify-content:center;"
+                />
+              </div>
+            )}
             {/* load more button */}
             {nextPage && (
               <button
@@ -108,7 +129,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const [first, ...rest] = ctx.query.slug as string[];
+  const [first, ...rest] = ctx.query.slug as string[]; // url params
   let fullUrl = `/${first}`;
   if (rest.length > 0) {
     fullUrl = `/${first}/${rest.join("/")}`;
