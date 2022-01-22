@@ -25,23 +25,31 @@ const SlugPage: NextPage<SlugPageProps> = () => {
   const pathVariables = router.query.slug as string[];
   const fullPath = getFullPath(pathVariables);
 
-  const { data, size, setSize } = useSWRInfinite<GetProductsResponse>(
-    (index) =>
-      `${
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-      }/products?limit=${LIMIT}&page=${index + 1}&categoryPath=/jeans`,
-    fetcher
-  );
+  const { data, size, setSize, error, isValidating, mutate } =
+    useSWRInfinite<GetProductsResponse>(
+      (index) =>
+        `${
+          process.env.NEXT_PUBLIC_REST_API_ENDPOINT
+        }/products?limit=${LIMIT}&page=${index + 1}`,
+      fetcher
+    );
+  const isLoadingInitialData = !data && !error;
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && data && typeof data[size - 1] === "undefined");
+
+  console.log(isLoadingMore);
 
   const merged: GetProductsResponse[] = data ? [].concat(...(data as [])) : [];
 
-  const allItems = [];
+  const allProducts = [];
   for (const arr of merged) {
     for (const item of arr.products) {
-      allItems.push(item);
+      allProducts.push(item);
     }
   }
-  console.log(allItems);
+
+  const latestPagination = data && data[data?.length - 1].pagination;
 
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
@@ -50,28 +58,28 @@ const SlugPage: NextPage<SlugPageProps> = () => {
         {/* product grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
           {/* product cards */}
-          {allItems &&
-            allItems.length &&
-            allItems.map((item, idx) => {
+          {allProducts &&
+            allProducts.length &&
+            allProducts.map((item, idx) => {
               return <ProductCard key={idx} product={item} />;
             })}
         </div>
         {/* load more group */}
         <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
-          {/*        <div className="px-2 space-y-1 text-center">
+          <div className="px-2 space-y-1 text-center">
             <p className="text-[#6b6b6b]">
-              You have seen {productData?.products.items.length} of{" "}
-              {productData?.products.totalCount} products
+              You have seen {allProducts.length} of{" "}
+              {latestPagination?.totalItems} products
             </p>
             <progress
-              max={productData?.products.totalCount}
-              value={productData?.products.items.length}
+              max={latestPagination?.totalItems}
+              value={allProducts.length}
               className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
               style={{
                 color: "#222",
               }}
             ></progress>
-          </div> */}
+          </div>
 
           {/* load more button */}
           {
