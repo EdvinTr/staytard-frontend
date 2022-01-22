@@ -9,7 +9,6 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/MyContainer";
-import { APP_PAGE_ROUTE } from "../../constants";
 import { FindOneProductQuery } from "../../lib/graphql";
 import { ssrFindOneProduct } from "../../lib/page";
 SwiperCore.use([Pagination]);
@@ -27,11 +26,11 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   const router = useRouter();
   const currentPath = router.pathname;
   const queryColor = router.query.color;
-  if (!queryColor) {
+  /*  if (!queryColor) {
     router.push(
       `/${APP_PAGE_ROUTE.PRODUCT}/${product.id}?color=${product.attributes[0].color.value}`
     );
-  }
+  } */
   const addToCart = () => {
     console.log(selectedSize);
 
