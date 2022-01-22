@@ -20,6 +20,12 @@ const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 const LIMIT = 5;
 
+// TODO:
+// 1. Use query params from category
+// 2. Have all categories here in frontend
+// 3. Show loading spinner when fetching more
+// 4. Hide load more button when is at the end of pagination
+// 5.
 const SlugPage: NextPage<SlugPageProps> = () => {
   const router = useRouter();
   const pathVariables = router.query.slug as string[];
@@ -58,11 +64,9 @@ const SlugPage: NextPage<SlugPageProps> = () => {
         {/* product grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
           {/* product cards */}
-          {allProducts &&
-            allProducts.length &&
-            allProducts.map((item, idx) => {
-              return <ProductCard key={idx} product={item} />;
-            })}
+          {allProducts.map((item, idx) => {
+            return <ProductCard key={idx} product={item} />;
+          })}
         </div>
         {/* load more group */}
         <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
@@ -82,17 +86,15 @@ const SlugPage: NextPage<SlugPageProps> = () => {
           </div>
 
           {/* load more button */}
-          {
-            <button
-              className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
-              onClick={() => {
-                setSize(size + 1);
-              }}
-            >
-              <span>Show more</span>
-              <ChevronDownIcon className="w-6" />
-            </button>
-          }
+          <button
+            className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
+            onClick={() => {
+              setSize(size + 1); // controls index var in SWR
+            }}
+          >
+            <span>Show more</span>
+            <ChevronDownIcon className="w-6" />
+          </button>
         </div>
       </MyContainer>
     </FadeInContainer>
