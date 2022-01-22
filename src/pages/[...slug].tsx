@@ -29,7 +29,7 @@ const SlugPage: NextPage<SlugPageProps> = () => {
     (index) =>
       `${
         process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-      }/products?limit=${LIMIT}&offset=${index + 1}`,
+      }/products?limit=${LIMIT}&page=${index + 1}&categoryPath=/jeans`,
     fetcher
   );
 
@@ -37,7 +37,7 @@ const SlugPage: NextPage<SlugPageProps> = () => {
 
   const allItems = [];
   for (const arr of merged) {
-    for (const item of arr.items) {
+    for (const item of arr.products) {
       allItems.push(item);
     }
   }
