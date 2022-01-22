@@ -41,17 +41,6 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
                 return brands; // had to add this type policy for SSR to work
               },
             },
-            products: {
-              keyArgs: ["limit", "offset", "categoryPath"],
-              merge(existing, incoming, { args }) {
-                if (!incoming) return existing;
-                if (!existing) return incoming; // existing will be empty the first time
-                return {
-                  ...incoming,
-                  items: [...existing.items, ...incoming.items],
-                };
-              },
-            },
           },
         },
       },
