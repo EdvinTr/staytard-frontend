@@ -4,9 +4,9 @@ import NextImage from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
-import { FindProductsQuery } from "../../lib/graphql";
+import { ProductItem } from "../../typings/GetProductsResponse.interface";
 interface ProductCardProps {
-  product: FindProductsQuery["products"]["items"][0];
+  product: ProductItem;
 }
 const largeImageSize = "380";
 const smallImageSize = "34";
@@ -156,7 +156,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </span>
               </h2>
               <strong className="text-13 font-semibold flex">
-                {product.priceLabel}
+                {/* {product.priceLabel} */}
+                {product.unitPrice} EUR
               </strong>
             </motion.div>
           )}
