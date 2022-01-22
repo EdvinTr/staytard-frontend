@@ -30,22 +30,13 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
   const pathVariables = router.query.slug as string[];
   const fullPath = getFullPath(pathVariables);
 
-  // TODO: do something else when no data
-  if (!productData || productData.products.totalCount === 0) {
-    return (
-      <FadeInContainer className="text-stayhard-dark min-h-screen pb-40 text-center">
-        <h2 className="text-center">No Products.</h2>
-      </FadeInContainer>
-    );
-  }
-
   const onFetchMore = async () => {
     try {
       setIsLoading(true);
       await fetchMore({
         variables: {
           input: {
-            offset: productData.products.items.length,
+            offset: productData?.products.items.length,
             limit: 50,
             categoryPath: fullPath,
           },
@@ -64,7 +55,6 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
     </p>
   );
 
-  const { hasMore, items, totalCount } = productData.products;
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
       <NextHead>
@@ -129,11 +119,12 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
           )}
           <div className="px-2 space-y-1 text-center">
             <p className="text-[#6b6b6b]">
-              You have seen {items.length} of {totalCount} products
+              You have seen {productData?.products.items.length} of{" "}
+              {productData?.products.totalCount} products
             </p>
             <progress
-              max={totalCount}
-              value={items.length}
+              max={productData?.products.totalCount}
+              value={productData?.products.items.length}
               className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
               style={{
                 color: "#222",
@@ -142,7 +133,7 @@ const SlugPage: NextPage<SlugPageProps> = (props) => {
           </div>
 
           {/* load more button */}
-          {hasMore && (
+          {productData?.products.hasMore && (
             <button
               className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
               onClick={async () => {
