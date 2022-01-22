@@ -8,15 +8,16 @@ import { ProductItem } from "../../typings/GetProductsResponse.interface";
 interface ProductCardProps {
   product: ProductItem;
 }
-const largeImageSize = "380";
+const largeImageSize = "300";
 const smallImageSize = "34";
-let renders = 0;
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  /*   renders++;
-  console.log(renders); */
-  const [firstImage] = product.images;
+  const webpImages = product.images.map((image) => {
+    image.imageUrl = image.imageUrl + "&fmt=webp";
+    return image;
+  });
+  const [firstImage] = webpImages;
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
-  const slicedImages = product.images.slice(0, 4);
+  const slicedImages = webpImages.slice(0, 4);
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -24,9 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     slicedImages[0].imageUrl.replace("{size}", largeImageSize)
   );
   const smallImages =
-    product.images.length >= 1
-      ? [firstImage, ...product.images.slice(3, 5)]
-      : [];
+    webpImages.length >= 1 ? [firstImage, ...webpImages.slice(3, 5)] : [];
   const cacheImages = useCallback(async () => {
     if (currentWindowWidth < 768) return;
     const promises = slicedImages.map(({ imageUrl }) => {

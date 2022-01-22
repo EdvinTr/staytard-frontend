@@ -11,41 +11,44 @@ import { MyContainer } from "../components/MyContainer";
 import { ProductCard } from "../components/products/ProductCard";
 import { APP_NAME } from "../constants";
 import { GetOneCategoryQuery } from "../lib/graphql";
-import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
+import { ssrGetOneCategory } from "../lib/page";
+import {
+  GetProductsResponse,
+  ProductItem,
+} from "../typings/GetProductsResponse.interface";
 interface SlugPageProps {
   category: GetOneCategoryQuery["getOneCategory"];
 }
 const getFullPath = (slug: string[]) => {
   const [first, ...rest] = slug;
-  const fullUrl = `/${first}/${rest.join("/")}`;
-  return fullUrl;
+  let fullPath = `/${first}`;
+  if (rest.length > 0) {
+    fullPath = `/${first}/${rest.join("/")}`;
+  }
+  return fullPath;
 };
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 const MAX_LIMIT = 50;
 
 // TODO:
-// 1. Use query params from category
-// 2. Have all categories here in frontend
-// 3. Show loading spinner when fetching more
-// 4. Hide load more button when is at the end of pagination (e.g., nextPage === null)
-// 6. Show category description stuff
-// 7. Show breadcrumbs
+// 1. Have all categories here in frontend
+// 2. Show category description stuff
+// 3. Show breadcrumbs
 const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
+  const { data: categoryData } = ssrGetOneCategory.usePage();
   const router = useRouter();
   const currentPathParams = getFullPath(router.query.slug as string[]);
-  console.log(currentPathParams);
 
-  const { data, size, setSize, error, isValidating, mutate } =
-    useSWRInfinite<GetProductsResponse>(
-      (index) =>
-        `${
-          process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-        }/products?limit=${MAX_LIMIT}&page=${
-          index + 1
-        }&categoryPath=${currentPathParams}`,
-      fetcher
-    );
+  const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
+    (index) =>
+      `${
+        process.env.NEXT_PUBLIC_REST_API_ENDPOINT
+      }/products?limit=${MAX_LIMIT}&page=${
+        index + 1
+      }&categoryPath=${currentPathParams}`,
+    fetcher
+  );
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
@@ -53,11 +56,9 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
 
   const merged: GetProductsResponse[] = data ? [].concat(...(data as [])) : [];
 
-  const allProducts = [];
+  let allProducts: ProductItem[] = [];
   for (const arr of merged) {
-    for (const item of arr.products) {
-      allProducts.push(item);
-    }
+    allProducts = [...allProducts, ...arr.products];
   }
 
   const latestPagination = data && data[data?.length - 1].pagination;
@@ -68,11 +69,14 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
       <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
         <NextHead>
           <title>
-            {/* {category.name} */} | Large assortment for men - Buy online at{" "}
-            {APP_NAME}
+            {categoryData?.getOneCategory.name} | Large assortment for men - Buy
+            online at {APP_NAME}
             .com
           </title>
-          {/*    <meta name="description" content={category.description} /> */}
+          <meta
+            name="description"
+            content={categoryData?.getOneCategory.description}
+          />
         </NextHead>
         <MyContainer className=" text-staytard-dark">
           <div className="overflow-x-auto overflow-y-hidden"></div>
@@ -84,21 +88,23 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
             })}
           </div>
           <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
-            <div className="px-2 space-y-1 text-center">
-              {/* pagination progress */}
-              <p className="text-[#6b6b6b]">
-                You have seen {allProducts.length} of{" "}
-                {latestPagination?.totalItems} products
-              </p>
-              <progress
-                max={latestPagination?.totalItems}
-                value={allProducts.length}
-                className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
-                style={{
-                  color: "#222",
-                }}
-              ></progress>
-            </div>
+            {!isLoadingMore && (
+              <div className="px-2 space-y-1 text-center">
+                {/* pagination progress */}
+                <p className="text-[#6b6b6b]">
+                  You have seen {allProducts.length} of{" "}
+                  {latestPagination?.totalItems} products
+                </p>
+                <progress
+                  max={latestPagination?.totalItems}
+                  value={allProducts.length}
+                  className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
+                  style={{
+                    color: "#222",
+                  }}
+                ></progress>
+              </div>
+            )}
             {isLoadingMore && (
               <div className="absolute inset-0">
                 <BeatLoader
@@ -108,7 +114,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
               </div>
             )}
             {/* load more button */}
-            {nextPage && (
+            {nextPage && !isLoadingMore && (
               <button
                 disabled={isLoadingMore}
                 className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
@@ -128,22 +134,24 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const [first, ...rest] = ctx.query.slug as string[]; // url params
-  let categoryPathParams = `/${first}`;
-  if (rest.length > 0) {
-    categoryPathParams = `/${first}/${rest.join("/")}`;
-  }
+  const categoryPath = getFullPath(ctx.query.slug as string[]);
   try {
     const API_URL = `${
       process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-    }/products?limit=${MAX_LIMIT}&page=${1}&categoryPath=${categoryPathParams}`;
+    }/products?limit=${MAX_LIMIT}&page=${1}&categoryPath=${categoryPath}`;
     const data: GetProductsResponse = await fetcher(API_URL);
 
+    const { props: categoryProps } = await ssrGetOneCategory.getServerPage({
+      variables: {
+        path: categoryPath,
+      },
+    });
     if (data.pagination.totalItems === 0) {
       throw new Error();
     }
     return {
       props: {
+        initialApolloState: categoryProps.apolloState,
         fallback: {
           [API_URL]: data,
         },

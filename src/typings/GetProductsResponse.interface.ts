@@ -2,7 +2,7 @@
 
 export interface GetProductsResponse {
   pagination: Pagination;
-  products: Product[];
+  products: ProductItem[];
 }
 
 export interface Pagination {
@@ -14,17 +14,11 @@ export interface Pagination {
   currentPage: number;
 }
 
-export interface Product {
+export interface ProductItem {
   id: number;
   name: string;
-  description: string;
   unitPrice: number;
   isDiscontinued: boolean;
-  brandId: number;
-  categoryId: number;
-  createdAt: string;
-  updatedAt: string;
-  category: Category;
   brand: Brand;
   images: Image[];
   attributes: Attribute[];
@@ -33,53 +27,12 @@ export interface Product {
 export interface Attribute {
   sku: string;
   quantity: number;
-  size: Color;
-  color: Color;
-}
-
-export interface Color {
-  id: number;
-  value: string;
 }
 
 export interface Brand {
   id: number;
   name: string;
   path: string;
-}
-
-export interface Category {
-  id: number;
-  name: Name;
-  description: string;
-  path: Path;
-  slug: Slug;
-  updatedAt: string;
-  createdAt: string;
-}
-
-export enum Name {
-  CargoPants = "Cargo pants",
-  Chinos = "Chinos",
-  Pants = "Pants",
-  RainFunctionPants = "Rain & function pants",
-  SoftPants = "Soft pants",
-}
-
-export enum Path {
-  ClothesPants = "/clothes/pants",
-  ClothesPantsCargoPants = "/clothes/pants/cargo-pants",
-  ClothesPantsChinos = "/clothes/pants/chinos",
-  ClothesPantsRainAndFunctionPants = "/clothes/pants/rain-and-function-pants",
-  ClothesPantsSoftPants = "/clothes/pants/soft-pants",
-}
-
-export enum Slug {
-  Pants = "/pants",
-  PantsCargoPants = "/pants/cargo-pants",
-  PantsChinos = "/pants/chinos",
-  PantsRainAndFunctionPants = "/pants/rain-and-function-pants",
-  PantsSoftPants = "/pants/soft-pants",
 }
 
 export interface Image {
