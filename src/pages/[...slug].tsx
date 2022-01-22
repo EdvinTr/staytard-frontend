@@ -1,4 +1,5 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import NextHead from "next/head";
@@ -10,6 +11,7 @@ import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { ProductCard } from "../components/products/ProductCard";
 import { APP_NAME } from "../constants";
+import { useSsrCompatible } from "../hooks/useSsrCompatible";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrGetOneCategory } from "../lib/page";
 import {
@@ -33,12 +35,13 @@ const MAX_LIMIT = 50;
 
 // TODO:
 // 1. Have all categories here in frontend
-// 2. Show category description stuff
-// 3. Show breadcrumbs
-const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
-  const { data: categoryData } = ssrGetOneCategory.usePage();
+// 2. Show breadcrumbs
+// 3. Refactor into multiple components
+const SlugPage: NextPage<SlugPageProps> = ({ fallback, ...rest }: any) => {
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
   const currentPathParams = getFullPath(router.query.slug as string[]);
+  const { data: categoryData } = ssrGetOneCategory.usePage();
 
   const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
     (index) =>
@@ -53,17 +56,20 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
   const isLoadingMore =
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === "undefined");
-
   const merged: GetProductsResponse[] = data ? [].concat(...(data as [])) : [];
 
   let allProducts: ProductItem[] = [];
   for (const arr of merged) {
     allProducts = [...allProducts, ...arr.products];
   }
-
   const latestPagination = data && data[data?.length - 1].pagination;
   const nextPage = latestPagination?.nextPage;
 
+  const CategoryDescriptionJsx = () => (
+    <p className="text-[11px] pt-3 md:text-sm md:pr-8 pb-4 md:pb-0 ">
+      {categoryData?.getOneCategory.description.slice(0, 800)}
+    </p>
+  );
   return (
     <SWRConfig value={{ fallback }}>
       <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
@@ -81,7 +87,9 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
         <MyContainer className=" text-staytard-dark">
           <div className="overflow-x-auto overflow-y-hidden"></div>
           {/* product grid */}
+          {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
+            {currentWindowWidth >= 768 && <CategoryDescriptionJsx />}
             {/* product cards */}
             {allProducts.map((item, idx) => {
               return <ProductCard key={idx} product={item} />;

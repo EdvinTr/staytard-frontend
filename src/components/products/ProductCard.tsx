@@ -2,7 +2,7 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { AnimatePresence, motion } from "framer-motion";
 import NextImage from "next/image";
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { ProductItem } from "../../typings/GetProductsResponse.interface";
 interface ProductCardProps {
@@ -10,14 +10,21 @@ interface ProductCardProps {
 }
 const largeImageSize = "300";
 const smallImageSize = "34";
+let renders = 0;
+// TODO: COMPLETELY rewrite this logic, it is the an atrocity, thank you in advance :)
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const webpImages = product.images.map((image) => {
-    image.imageUrl = image.imageUrl + "&fmt=webp";
-    return image;
-  });
-  const [firstImage] = webpImages;
+  /*   renders++;
+  console.log(renders); */
+  let actualImages = product.images;
+  useEffect(() => {
+    actualImages = product.images.map((image) => {
+      image.imageUrl = image.imageUrl + "&fmt=webp";
+      return image;
+    });
+  }, []);
+  const [firstImage] = actualImages;
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
-  const slicedImages = webpImages.slice(0, 4);
+  const slicedImages = actualImages.slice(0, 4);
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -25,7 +32,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     slicedImages[0].imageUrl.replace("{size}", largeImageSize)
   );
   const smallImages =
-    webpImages.length >= 1 ? [firstImage, ...webpImages.slice(3, 5)] : [];
+    actualImages.length >= 1 ? [firstImage, ...actualImages.slice(3, 5)] : [];
   const cacheImages = useCallback(async () => {
     if (currentWindowWidth < 768) return;
     const promises = slicedImages.map(({ imageUrl }) => {

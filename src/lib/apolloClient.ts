@@ -38,7 +38,13 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
             productBrands: {
               keyArgs: false,
               read(brands) {
-                return brands; // had to add this type policy for SSR to work
+                return brands; // type policy for SSR to work
+              },
+            },
+            getOneCategory: {
+              keyArgs: false,
+              read(category) {
+                return category; // type policy for SSR to work
               },
             },
           },

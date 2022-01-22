@@ -294,7 +294,7 @@ export type GetOneCategoryQueryVariables = Exact<{
 }>;
 
 
-export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, description: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined } };
+export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, description: string } };
 
 export type GetProductBrandsQueryVariables = Exact<{
   input: GetProductBrandsInput;
@@ -553,12 +553,6 @@ export const GetOneCategoryDocument = gql`
     id
     name
     description
-    children {
-      id
-      name
-      path
-      slug
-    }
   }
 }
     `;
