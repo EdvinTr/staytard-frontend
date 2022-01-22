@@ -22,7 +22,7 @@ const getFullPath = (slug: string[]) => {
 };
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
-const LIMIT = 50;
+const MAX_LIMIT = 50;
 
 // TODO:
 // 1. Use query params from category
@@ -41,7 +41,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
       (index) =>
         `${
           process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-        }/products?limit=${LIMIT}&page=${
+        }/products?limit=${MAX_LIMIT}&page=${
           index + 1
         }&categoryPath=${currentPathParams}`,
       fetcher
@@ -83,9 +83,9 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
               return <ProductCard key={idx} product={item} />;
             })}
           </div>
-          {/* load more group */}
           <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
             <div className="px-2 space-y-1 text-center">
+              {/* pagination progress */}
               <p className="text-[#6b6b6b]">
                 You have seen {allProducts.length} of{" "}
                 {latestPagination?.totalItems} products
@@ -99,7 +99,6 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
                 }}
               ></progress>
             </div>
-
             {isLoadingMore && (
               <div className="absolute inset-0">
                 <BeatLoader
@@ -130,19 +129,23 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback }: any) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [first, ...rest] = ctx.query.slug as string[]; // url params
-  let fullUrl = `/${first}`;
+  let categoryPathParams = `/${first}`;
   if (rest.length > 0) {
-    fullUrl = `/${first}/${rest.join("/")}`;
+    categoryPathParams = `/${first}/${rest.join("/")}`;
   }
   try {
-    const API_BASE = `${
+    const API_URL = `${
       process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-    }/products?limit=${LIMIT}&page=${1}`;
-    const data: GetProductsResponse = await fetcher(API_BASE);
+    }/products?limit=${MAX_LIMIT}&page=${1}&categoryPath=${categoryPathParams}`;
+    const data: GetProductsResponse = await fetcher(API_URL);
+
+    if (data.pagination.totalItems === 0) {
+      throw new Error();
+    }
     return {
       props: {
         fallback: {
-          [API_BASE]: data,
+          [API_URL]: data,
         },
       },
     };
