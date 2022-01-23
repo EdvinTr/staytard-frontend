@@ -1,11 +1,12 @@
+import { ArrowLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { capitalize } from "lodash";
 import { GetServerSideProps, NextPage } from "next";
 import NextHead from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import Breadcrumbs from "nextjs-breadcrumbs";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SWRConfig } from "swr";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
@@ -14,7 +15,6 @@ import { APP_NAME } from "../constants";
 import { useSsrCompatible } from "../hooks/useSsrCompatible";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrGetOneCategory } from "../lib/page";
-// import {accessoriesCategories} from "../components/navbar/categories.data"
 import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
 import { getPathFromParams } from "../utils/getPathFromParams";
 interface SlugPageProps {
@@ -58,6 +58,10 @@ const dummyCategories: {
     slug: "/shirts",
   },
 };
+interface Breadcrumb {
+  breadcrumb: string;
+  href: string;
+}
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
@@ -72,14 +76,27 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
       childrenKeys.push(key);
     }
   }
-  const [firstParam, secondParam] = slug;
   const category = dummyCategories[currentPathParams];
-  console.log(category);
+
+  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
+  useEffect(() => {
+    if (!router) {
+      return;
+    }
+    const linkPath = router.asPath.split("/");
+    linkPath.shift();
+    const pathArray = linkPath.map((path, idx) => {
+      return {
+        breadcrumb: path,
+        href: "/" + linkPath.slice(0, idx + 1).join("/"),
+      };
+    });
+    setBreadcrumbs(pathArray);
+  }, [router]);
 
   // get actual category with the first key
   // get children with the rest of the keys
   // ! --------------------- playground end -----------------
-
   return (
     <SWRConfig value={{ fallback }}>
       <FadeInContainer className="text-staytard-dark min-h-screen pt-6 relative">
@@ -96,15 +113,38 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
             {/* breadcrumbs */}
             <div className="text-xs">
               {slug.length > 1 && (
-                <Breadcrumbs
-                  omitRootLabel
-                  activeItemClassName="opacity-50"
-                  listClassName="flex space-x-6"
-                  transformLabel={(title) => capitalize(title)}
-                />
+                <ul className="flex">
+                  {breadcrumbs.map(({ breadcrumb, href }, idx, arr) => {
+                    const lastItem = arr.length - 1 === idx;
+                    return (
+                      <li key={idx} className="flex items-center">
+                        <Link href={href}>
+                          <a className="hover:underline">
+                            {capitalize(breadcrumb)}
+                          </a>
+                        </Link>
+                        {!lastItem && <ChevronRightIcon className="w-4 mx-1" />}
+                      </li>
+                    );
+                  })}
+                </ul>
               )}
             </div>
-            <h1 className="text-3xl font-semibold pt-8">{category?.name}</h1>
+            {slug.length > 1 ? (
+              <div className="pt-8">
+                <Link href={`/something`}>
+                  <a>
+                    <h1 className="text-3xl font-semibold flex">
+                      <ArrowLeftIcon className="w-6 text-staytard-dark" />
+
+                      <span className="pl-4">{category?.name}</span>
+                    </h1>
+                  </a>
+                </Link>
+              </div>
+            ) : (
+              <h1 className="text-3xl font-semibold pt-8">{category?.name}</h1>
+            )}
           </div>
           <div className="overflow-x-auto overflow-y-hidden"></div>
           <ProductCardList />
