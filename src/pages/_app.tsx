@@ -6,7 +6,6 @@ import { Router, useRouter } from "next/router";
 import NProgress from "nprogress";
 import { Fragment, useEffect, useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
-// Import Swiper styles
 import "swiper/css";
 import { Footer } from "../components/footer/Footer";
 import { Navbar } from "../components/navbar/Navbar";

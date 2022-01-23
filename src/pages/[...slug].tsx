@@ -1,8 +1,10 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
+import { capitalize } from "lodash";
 import { GetServerSideProps, NextPage } from "next";
 import NextHead from "next/head";
 import { useRouter } from "next/router";
+import Breadcrumbs from "nextjs-breadcrumbs";
 import React from "react";
 import { SWRConfig } from "swr";
 import { FadeInContainer } from "../components/global/FadeInContainer";
@@ -23,8 +25,12 @@ interface SlugPageProps {
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 const MAX_LIMIT = 5;
 
-const dummyCategories: any = {
-  "/clothes": {},
+const dummyCategories: {
+  [key: string]: { name?: string; path?: string; slug?: string };
+} = {
+  "/clothes": {
+    name: "Clothes",
+  },
   "/clothes/jackets": {
     name: "Jackets",
   },
@@ -55,7 +61,8 @@ const dummyCategories: any = {
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
-  const currentPathParams = getPathFromParams(router.query.slug as string[]);
+  const slug = router.query.slug as string[];
+  const currentPathParams = getPathFromParams(slug);
 
   // ! ---------categories playground -------------
   const categoryPathRegex = new RegExp(currentPathParams);
@@ -65,7 +72,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
       childrenKeys.push(key);
     }
   }
-
+  const [firstParam, secondParam] = slug;
   const category = dummyCategories[currentPathParams];
   console.log(category);
 
@@ -75,16 +82,30 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
 
   return (
     <SWRConfig value={{ fallback }}>
-      <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
+      <FadeInContainer className="text-staytard-dark min-h-screen pt-6 relative">
         <NextHead>
           <title>
             {categoryData?.name} | Large assortment for men - Buy online at{" "}
             {APP_NAME}
             .com
           </title>
-          <meta name="description" content={categoryData?.description} />
+          <meta name="description" content={categoryData?.name} />
         </NextHead>
         <MyContainer className=" text-staytard-dark">
+          <div className="px-2">
+            {/* breadcrumbs */}
+            <div className="text-xs">
+              {slug.length > 1 && (
+                <Breadcrumbs
+                  omitRootLabel
+                  activeItemClassName="opacity-50"
+                  listClassName="flex space-x-6"
+                  transformLabel={(title) => capitalize(title)}
+                />
+              )}
+            </div>
+            <h1 className="text-3xl font-semibold pt-8">{category?.name}</h1>
+          </div>
           <div className="overflow-x-auto overflow-y-hidden"></div>
           <ProductCardList />
         </MyContainer>
