@@ -42,6 +42,16 @@ export type CreateProductInput = {
   unitPrice: Scalars['Float'];
 };
 
+export type CreateProductReviewInput = {
+  content: Scalars['String'];
+  email: Scalars['String'];
+  productId: Scalars['Float'];
+  rating: Scalars['Float'];
+  submittedByAlias: Scalars['String'];
+  title: Scalars['String'];
+  wouldRecommend: Scalars['Boolean'];
+};
+
 export type FindProductsInput = {
   categoryPath: Scalars['String'];
   limit: Scalars['Float'];
@@ -64,8 +74,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
   createProduct: Product;
+  createProductReview: ProductReview;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
+  publishReview: ProductReview;
   registerUser: UserWithTokensDto;
 };
 
@@ -80,8 +92,18 @@ export type MutationCreateProductArgs = {
 };
 
 
+export type MutationCreateProductReviewArgs = {
+  input: CreateProductReviewInput;
+};
+
+
 export type MutationLoginArgs = {
   input: LoginUserDto;
+};
+
+
+export type MutationPublishReviewArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -99,6 +121,7 @@ export enum Product_Sort_By {
 export enum Permission {
   CreateProduct = 'CREATE_PRODUCT',
   DeleteProduct = 'DELETE_PRODUCT',
+  PublishReview = 'PUBLISH_REVIEW',
   UpdateProduct = 'UPDATE_PRODUCT'
 }
 
@@ -115,6 +138,7 @@ export type Product = {
   isDiscontinued: Scalars['Boolean'];
   name: Scalars['String'];
   priceLabel: Scalars['String'];
+  reviews: Array<ProductReview>;
   unitPrice: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
@@ -157,6 +181,21 @@ export type ProductImage = {
   __typename?: 'ProductImage';
   id: Scalars['Float'];
   imageUrl: Scalars['String'];
+};
+
+export type ProductReview = {
+  __typename?: 'ProductReview';
+  content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  email: Scalars['String'];
+  id: Scalars['Float'];
+  isPublished: Scalars['Boolean'];
+  productId: Scalars['Float'];
+  rating: Scalars['Float'];
+  submittedByAlias: Scalars['String'];
+  title: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  wouldRecommend: Scalars['Boolean'];
 };
 
 export type ProductSize = {
@@ -294,7 +333,7 @@ export type GetOneCategoryQueryVariables = Exact<{
 }>;
 
 
-export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, description: string } };
+export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, path: string, description: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined } };
 
 export type GetProductBrandsQueryVariables = Exact<{
   input: GetProductBrandsInput;
@@ -552,7 +591,14 @@ export const GetOneCategoryDocument = gql`
   getOneCategory(path: $path) {
     id
     name
+    path
     description
+    children {
+      id
+      name
+      path
+      slug
+    }
   }
 }
     `;

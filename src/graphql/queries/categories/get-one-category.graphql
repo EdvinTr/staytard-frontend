@@ -2,6 +2,13 @@ query GetOneCategory($path: String!) {
   getOneCategory(path: $path) {
     id
     name
+    path
     description
+    children {
+      id
+      name
+      path
+      slug
+    }
   }
 }

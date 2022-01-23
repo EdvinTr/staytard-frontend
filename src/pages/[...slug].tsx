@@ -107,55 +107,77 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
           <meta name="description" content={categoryData?.name} />
         </NextHead>
         <MyContainer className=" text-staytard-dark">
-          <div className="px-2">
-            <div className="text-xs">
-              {breadcrumbs.length >= 2 ? (
-                <Fragment>
-                  {/* breadcrumbs */}
-                  <ul className="flex">
-                    {breadcrumbs.map(({ breadcrumb, href }, idx, arr) => {
-                      const isLastItemInArray = arr.length - 1 === idx;
-                      return (
-                        <li key={idx} className="flex items-center">
-                          {isLastItemInArray ? (
-                            <span className="opacity-70">
-                              {capitalize(breadcrumb)}
-                            </span>
-                          ) : (
-                            <Fragment>
-                              <Link href={href}>
-                                <a className="hover:underline">
-                                  {capitalize(breadcrumb)}
-                                </a>
-                              </Link>
-                              <ChevronRightIcon className="w-4 mx-1" />
-                            </Fragment>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <div className="pt-8">
-                    {/* navigate to previous breadcrumb link */}
-                    <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
-                      <a>
-                        <h1 className="text-3xl font-semibold flex">
-                          <ArrowLeftIcon className="w-6 text-staytard-dark" />
-                          <span className="pl-4">{categoryData?.name}</span>
-                        </h1>
-                      </a>
-                    </Link>
-                  </div>
-                </Fragment>
-              ) : (
-                <h1 className="text-3xl font-semibold pt-8">
-                  {category?.name}
-                </h1>
-              )}
+          <div className="px-3">
+            <div className="">
+              <div className="text-xs">
+                {breadcrumbs.length >= 2 ? (
+                  <Fragment>
+                    {/* breadcrumbs */}
+                    <ul className="flex">
+                      {breadcrumbs.map(({ breadcrumb, href }, idx, arr) => {
+                        const isLastItemInArray = arr.length - 1 === idx;
+                        return (
+                          <li key={idx} className="flex items-center">
+                            {isLastItemInArray ? (
+                              <span className="opacity-70">
+                                {capitalize(breadcrumb)}
+                              </span>
+                            ) : (
+                              <Fragment>
+                                <Link href={href}>
+                                  <a className="hover:underline">
+                                    {capitalize(breadcrumb)}
+                                  </a>
+                                </Link>
+                                <ChevronRightIcon className="w-4 mx-1" />
+                              </Fragment>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    <div className="pt-8">
+                      {/* navigate to previous breadcrumb link */}
+                      <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
+                        <a>
+                          <h1 className="text-3xl font-semibold flex">
+                            <ArrowLeftIcon className="w-6 text-staytard-dark" />
+                            <span className="pl-4">{categoryData?.name}</span>
+                          </h1>
+                        </a>
+                      </Link>
+                    </div>
+                  </Fragment>
+                ) : (
+                  <h1 className="text-3xl font-semibold">
+                    {categoryData?.name}
+                  </h1>
+                )}
+              </div>
             </div>
+            {categoryData && categoryData.children && (
+              <div className="overflow-x-auto overflow-y-hidden">
+                {/* sub category list */}
+                <ul className="py-4 flex items-start flex-shrink-0 space-x-3 text-sm">
+                  {categoryData.children.map((child, idx) => {
+                    return (
+                      <li
+                        key={idx}
+                        className="p-3 border flex-shrink-0  font-medium border-black border-opacity-20"
+                      >
+                        <Link href={child.path}>
+                          <a>{child.name}</a>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
           </div>
-          <div className="overflow-x-auto overflow-y-hidden"></div>
-          <ProductCardList />
+          <div className="mt-6">
+            <ProductCardList />
+          </div>
         </MyContainer>
       </FadeInContainer>
     </SWRConfig>
@@ -175,9 +197,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         path: categoryPath,
       },
     });
-    if (data.pagination.totalItems === 0) {
-      throw new Error();
-    }
     return {
       props: {
         categoryData: categoryProps.data.getOneCategory,

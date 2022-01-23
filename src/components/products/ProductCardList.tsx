@@ -50,6 +50,9 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
   const nextPage = latestPagination?.nextPage;
   return (
     <Fragment>
+      {!isLoadingMore && allProducts.length === 0 && (
+        <h2 className="text-xl min-h-[10rem]">No products.</h2>
+      )}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
         {/* product cards */}
         {allProducts.map((item, idx) => {
