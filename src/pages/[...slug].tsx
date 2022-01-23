@@ -52,7 +52,6 @@ const dummyCategories: any = {
     slug: "/shirts",
   },
 };
-// 3. Refactor into multiple components
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
@@ -68,6 +67,8 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   }
 
   const category = dummyCategories[currentPathParams];
+  console.log(category);
+
   // get actual category with the first key
   // get children with the rest of the keys
   // ! --------------------- playground end -----------------

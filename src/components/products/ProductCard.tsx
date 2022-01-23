@@ -26,7 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const [activeImage, setActiveImage] = useState(product.images[0]);
+  const [activeImage, setActiveImage] = useState<ProductImage | null>(null);
   const [largeWebpImages, setLargeWebpImages] = useState<ProductImage[]>([]);
   const [smallWebpImages, setSmallWebpImages] = useState<ProductImage[]>([]);
 
@@ -105,18 +105,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <Link href={`/product/${product.id}`}>
         <a>
-          <NextImage
-            src={activeImage.imageUrl}
-            placeholder="blur"
-            priority
-            blurDataURL={product.images[0].imageUrl}
-            objectFit="contain"
-            loading="eager"
-            width={400}
-            onMouseEnter={onMouseEnter}
-            height={600}
-            alt={`${product.brand.name} - ${product.name}`}
-          />
+          {activeImage && (
+            <NextImage
+              src={activeImage.imageUrl}
+              placeholder="blur"
+              priority
+              blurDataURL={product.images[0].imageUrl}
+              objectFit="contain"
+              loading="eager"
+              width={400}
+              onMouseEnter={onMouseEnter}
+              height={600}
+              alt={`${product.brand.name} - ${product.name}`}
+            />
+          )}
         </a>
       </Link>
       <div className="h-[4.5rem]">
