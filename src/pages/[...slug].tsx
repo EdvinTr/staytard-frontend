@@ -109,7 +109,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
         <MyContainer className=" text-staytard-dark">
           <div className="px-2">
             <div className="text-xs">
-              {breadcrumbs.length > 1 ? (
+              {breadcrumbs.length >= 2 ? (
                 <Fragment>
                   {/* breadcrumbs */}
                   <ul className="flex">
@@ -128,7 +128,6 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                                   {capitalize(breadcrumb)}
                                 </a>
                               </Link>
-
                               <ChevronRightIcon className="w-4 mx-1" />
                             </Fragment>
                           )}
@@ -136,8 +135,8 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                       );
                     })}
                   </ul>
-                  {/* navigate to previous breadcrumb link */}
                   <div className="pt-8">
+                    {/* navigate to previous breadcrumb link */}
                     <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
                       <a>
                         <h1 className="text-3xl font-semibold flex">
