@@ -20,7 +20,7 @@ export interface ProductItem {
   unitPrice: number;
   isDiscontinued: boolean;
   brand: Brand;
-  images: Image[];
+  images: ProductImage[];
   attributes: Attribute[];
 }
 
@@ -42,7 +42,7 @@ export interface Brand {
   path: string;
 }
 
-export interface Image {
+export interface ProductImage {
   id: number;
   imageUrl: string;
 }

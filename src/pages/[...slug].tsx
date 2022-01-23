@@ -1,25 +1,22 @@
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import NextHead from "next/head";
 import { useRouter } from "next/router";
-import { BeatLoader } from "react-spinners";
+import React from "react";
 import { SWRConfig } from "swr";
-import useSWRInfinite from "swr/infinite";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
-import { ProductCard } from "../components/products/ProductCard";
+import { ProductCardList } from "../components/products/ProductCardList";
 import { APP_NAME } from "../constants";
 import { useSsrCompatible } from "../hooks/useSsrCompatible";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrGetOneCategory } from "../lib/page";
-import {
-  GetProductsResponse,
-  ProductItem,
-} from "../typings/GetProductsResponse.interface";
+// import {accessoriesCategories} from "../components/navbar/categories.data"
+import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
 interface SlugPageProps {
-  category: GetOneCategoryQuery["getOneCategory"];
+  categoryData: GetOneCategoryQuery["getOneCategory"];
+  fallback: any;
 }
 const getFullPath = (slug: string[]) => {
   const [first, ...rest] = slug;
@@ -31,110 +28,71 @@ const getFullPath = (slug: string[]) => {
 };
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
-const MAX_LIMIT = 50;
+const MAX_LIMIT = 5;
 
-// TODO:
-// 1. Have all categories here in frontend
-// 2. Show breadcrumbs
+const dummyCategories: any = {
+  "/clothes": {},
+  "/clothes/jackets": {
+    name: "Jackets",
+  },
+  "/clothes/jackets/bomber-baseball-jackets": {
+    name: "Bomber & baseball jackets",
+    path: "/clothes/jackets/bomber-baseball-jackets",
+  },
+  "/clothes/jackets/jeans-jackets": {
+    name: "Jeans jackets",
+    path: "/clothes/jackets/jeans-jackets",
+  },
+  "/clothes/jackets/overshirt": {
+    name: "Overshirt",
+    slug: "/jackets/overshirt",
+    path: "/clothes/jackets/overshirt",
+  },
+  "/clothes/jackets/parka": {
+    name: "Parka",
+    slug: "/jackets/parka",
+    path: "/clothes/jackets/parka",
+  },
+  "/clothes/shirts": {
+    name: "Shirts",
+    path: "/clothes/shirts",
+    slug: "/shirts",
+  },
+};
 // 3. Refactor into multiple components
-const SlugPage: NextPage<SlugPageProps> = ({ fallback, ...rest }: any) => {
+const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
   const currentPathParams = getFullPath(router.query.slug as string[]);
-  const { data: categoryData } = ssrGetOneCategory.usePage();
 
-  const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
-    (index) =>
-      `${
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-      }/products?limit=${MAX_LIMIT}&page=${
-        index + 1
-      }&categoryPath=${currentPathParams}`,
-    fetcher
-  );
-  const isLoadingInitialData = !data && !error;
-  const isLoadingMore =
-    isLoadingInitialData ||
-    (size > 0 && data && typeof data[size - 1] === "undefined");
-  const merged: GetProductsResponse[] = data ? [].concat(...(data as [])) : [];
-
-  let allProducts: ProductItem[] = [];
-  for (const arr of merged) {
-    allProducts = [...allProducts, ...arr.products];
+  // ! ---------categories playground -------------
+  const categoryPathRegex = new RegExp(currentPathParams);
+  const childrenKeys = [];
+  for (const [key, value] of Object.entries(dummyCategories)) {
+    if (categoryPathRegex.test(key) && key !== currentPathParams) {
+      childrenKeys.push(key);
+    }
   }
-  const latestPagination = data && data[data?.length - 1].pagination;
-  const nextPage = latestPagination?.nextPage;
 
-  const CategoryDescriptionJsx = () => (
-    <p className="text-[11px] pt-3 md:text-sm md:pr-8 pb-4 md:pb-0 ">
-      {categoryData?.getOneCategory.description.slice(0, 800)}
-    </p>
-  );
+  const category = dummyCategories[currentPathParams];
+  // get actual category with the first key
+  // get children with the rest of the keys
+  // ! --------------------- playground end -----------------
+
   return (
     <SWRConfig value={{ fallback }}>
       <FadeInContainer className="text-staytard-dark min-h-screen py-16 relative">
         <NextHead>
           <title>
-            {categoryData?.getOneCategory.name} | Large assortment for men - Buy
-            online at {APP_NAME}
+            {categoryData?.name} | Large assortment for men - Buy online at{" "}
+            {APP_NAME}
             .com
           </title>
-          <meta
-            name="description"
-            content={categoryData?.getOneCategory.description}
-          />
+          <meta name="description" content={categoryData?.description} />
         </NextHead>
         <MyContainer className=" text-staytard-dark">
           <div className="overflow-x-auto overflow-y-hidden"></div>
-          {/* product grid */}
-          {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
-            {currentWindowWidth >= 768 && <CategoryDescriptionJsx />}
-            {/* product cards */}
-            {allProducts.map((item, idx) => {
-              return <ProductCard key={idx} product={item} />;
-            })}
-          </div>
-          <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
-            {!isLoadingMore && (
-              <div className="px-2 space-y-1 text-center">
-                {/* pagination progress */}
-                <p className="text-[#6b6b6b]">
-                  You have seen {allProducts.length} of{" "}
-                  {latestPagination?.totalItems} products
-                </p>
-                <progress
-                  max={latestPagination?.totalItems}
-                  value={allProducts.length}
-                  className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
-                  style={{
-                    color: "#222",
-                  }}
-                ></progress>
-              </div>
-            )}
-            {isLoadingMore && (
-              <div className="absolute inset-0">
-                <BeatLoader
-                  color="#faba"
-                  css="display:flex; justify-content:center;"
-                />
-              </div>
-            )}
-            {/* load more button */}
-            {nextPage && !isLoadingMore && (
-              <button
-                disabled={isLoadingMore}
-                className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
-                onClick={() => {
-                  setSize(size + 1); // controls index var in SWR
-                }}
-              >
-                <span>Show more</span>
-                <ChevronDownIcon className="w-6" />
-              </button>
-            )}
-          </div>
+          <ProductCardList />
         </MyContainer>
       </FadeInContainer>
     </SWRConfig>
@@ -144,6 +102,8 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, ...rest }: any) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const categoryPath = getFullPath(ctx.query.slug as string[]);
   try {
+    console.log(" I SSR");
+
     const API_URL = `${
       process.env.NEXT_PUBLIC_REST_API_ENDPOINT
     }/products?limit=${MAX_LIMIT}&page=${1}&categoryPath=${categoryPath}`;
@@ -159,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
     return {
       props: {
-        initialApolloState: categoryProps.apolloState,
+        categoryData: categoryProps.data.getOneCategory,
         fallback: {
           [API_URL]: data,
         },

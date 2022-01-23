@@ -3,9 +3,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { propertyOf, sortBy } from "lodash";
 import NextImage from "next/image";
 import Link from "next/link";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
-import { ProductItem } from "../../typings/GetProductsResponse.interface";
+import {
+  ProductImage,
+  ProductItem,
+} from "../../typings/GetProductsResponse.interface";
 interface ProductCardProps {
   product: ProductItem;
 }
@@ -21,29 +24,33 @@ const largeImageSize = "300";
 const smallImageSize = "34";
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
-  const slicedImages = product.images.slice(0, 4);
   const [isHovered, setIsHovered] = useState(false);
 
-  const [largeWebpImages] = useState(() => {
-    return slicedImages.map((image) => {
-      image.imageUrl = image.imageUrl.replace("{size}", largeImageSize);
-      image.imageUrl = image.imageUrl + "&fmt=webp";
-      return image;
-    });
-  });
-  const [smallWebpImages] = useState(() => {
-    return slicedImages.map((image) => {
-      image.imageUrl = image.imageUrl.replace("{size}", smallImageSize);
-      image.imageUrl = image.imageUrl + "&fmt=webp";
-      return image;
-    });
-  });
-  const [activeImage, setActiveImage] = useState(largeWebpImages[0]);
+  const [activeImage, setActiveImage] = useState(product.images[0]);
+  const [largeWebpImages, setLargeWebpImages] = useState<ProductImage[]>([]);
+  const [smallWebpImages, setSmallWebpImages] = useState<ProductImage[]>([]);
 
-  const smallImages =
-    smallWebpImages.length >= 1
-      ? [smallWebpImages[0], ...smallWebpImages.slice(3, 5)] // get some small images, but not first/second (a strange solution :)
-      : [];
+  useEffect(() => {
+    const image = product.images[0];
+    image.imageUrl = image.imageUrl.replace("{size}", largeImageSize);
+    setActiveImage(image);
+
+    setSmallWebpImages(() => {
+      return product.images.slice(0, 4).map((image) => {
+        image.imageUrl = image.imageUrl.replace("{size}", smallImageSize);
+        image.imageUrl = image.imageUrl + "&fmt=webp";
+        return image;
+      });
+    });
+
+    setLargeWebpImages(() => {
+      return product.images.slice(0, 4).map((image) => {
+        image.imageUrl = image.imageUrl.replace("{size}", largeImageSize);
+        image.imageUrl = image.imageUrl + "&fmt=webp";
+        return image;
+      });
+    });
+  }, [product.images]);
 
   const cacheImages = useCallback(async () => {
     if (currentWindowWidth < 768) {
@@ -65,8 +72,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       return;
     }
     setIsHovered(true);
-    if (largeWebpImages.length > 1) {
-      setActiveImage(largeWebpImages[1]);
+    if (product.images.length > 1) {
+      setActiveImage(product.images[1]);
     }
     cacheImages();
   };
@@ -75,7 +82,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     if (currentWindowWidth < 768) {
       return;
     }
-    setActiveImage(largeWebpImages[0]);
+    setActiveImage(product.images[0]);
     setIsHovered(false);
   };
 
@@ -99,12 +106,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <Link href={`/product/${product.id}`}>
         <a>
           <NextImage
-            className="hover:scale-105 duration-300 ease-in-out"
             src={activeImage.imageUrl}
             placeholder="blur"
             priority
-            blurDataURL={activeImage.imageUrl}
+            blurDataURL={product.images[0].imageUrl}
             objectFit="contain"
+            loading="eager"
             width={400}
             onMouseEnter={onMouseEnter}
             height={600}
@@ -129,17 +136,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               }}
             >
               <div className="flex items-center space-x-2 ">
-                {smallImages.map((image, idx) => {
-                  /*  const smallImageUrl = image.imageUrl.replace(
+                {smallWebpImages.map((image, idx) => {
+                  const smallImageUrl = image.imageUrl.replace(
                     "{size}",
                     smallImageSize
-                  ); */
+                  );
                   return (
                     <div key={idx} className="">
                       <NextImage
-                        src={image.imageUrl}
+                        src={smallImageUrl}
                         placeholder="blur"
-                        blurDataURL={image.imageUrl}
+                        blurDataURL={smallImageUrl}
                         key={idx}
                         width={34}
                         height={51}
