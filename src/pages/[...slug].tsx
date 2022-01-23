@@ -6,7 +6,7 @@ import { GetServerSideProps, NextPage } from "next";
 import NextHead from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { SWRConfig } from "swr";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
@@ -77,6 +77,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
     }
   }
   const category = dummyCategories[currentPathParams];
+  // ! --------------------- playground end -----------------
 
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   useEffect(() => {
@@ -94,12 +95,9 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
     setBreadcrumbs(pathArray);
   }, [router]);
 
-  // get actual category with the first key
-  // get children with the rest of the keys
-  // ! --------------------- playground end -----------------
   return (
     <SWRConfig value={{ fallback }}>
-      <FadeInContainer className="text-staytard-dark min-h-screen pt-6 relative">
+      <FadeInContainer className="text-staytard-dark min-h-screen pt-6 pb-40 relative">
         <NextHead>
           <title>
             {categoryData?.name} | Large assortment for men - Buy online at{" "}
@@ -110,41 +108,52 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
         </NextHead>
         <MyContainer className=" text-staytard-dark">
           <div className="px-2">
-            {/* breadcrumbs */}
             <div className="text-xs">
-              {slug.length > 1 && (
-                <ul className="flex">
-                  {breadcrumbs.map(({ breadcrumb, href }, idx, arr) => {
-                    const lastItem = arr.length - 1 === idx;
-                    return (
-                      <li key={idx} className="flex items-center">
-                        <Link href={href}>
-                          <a className="hover:underline">
-                            {capitalize(breadcrumb)}
-                          </a>
-                        </Link>
-                        {!lastItem && <ChevronRightIcon className="w-4 mx-1" />}
-                      </li>
-                    );
-                  })}
-                </ul>
+              {breadcrumbs.length > 1 ? (
+                <Fragment>
+                  {/* breadcrumbs */}
+                  <ul className="flex">
+                    {breadcrumbs.map(({ breadcrumb, href }, idx, arr) => {
+                      const isLastItemInArray = arr.length - 1 === idx;
+                      return (
+                        <li key={idx} className="flex items-center">
+                          {isLastItemInArray ? (
+                            <span className="opacity-70">
+                              {capitalize(breadcrumb)}
+                            </span>
+                          ) : (
+                            <Fragment>
+                              <Link href={href}>
+                                <a className="hover:underline">
+                                  {capitalize(breadcrumb)}
+                                </a>
+                              </Link>
+
+                              <ChevronRightIcon className="w-4 mx-1" />
+                            </Fragment>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  {/* navigate to previous breadcrumb link */}
+                  <div className="pt-8">
+                    <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
+                      <a>
+                        <h1 className="text-3xl font-semibold flex">
+                          <ArrowLeftIcon className="w-6 text-staytard-dark" />
+                          <span className="pl-4">{categoryData?.name}</span>
+                        </h1>
+                      </a>
+                    </Link>
+                  </div>
+                </Fragment>
+              ) : (
+                <h1 className="text-3xl font-semibold pt-8">
+                  {category?.name}
+                </h1>
               )}
             </div>
-            {slug.length > 1 ? (
-              <div className="pt-8">
-                <Link href={`/something`}>
-                  <a>
-                    <h1 className="text-3xl font-semibold flex">
-                      <ArrowLeftIcon className="w-6 text-staytard-dark" />
-
-                      <span className="pl-4">{category?.name}</span>
-                    </h1>
-                  </a>
-                </Link>
-              </div>
-            ) : (
-              <h1 className="text-3xl font-semibold pt-8">{category?.name}</h1>
-            )}
           </div>
           <div className="overflow-x-auto overflow-y-hidden"></div>
           <ProductCardList />
