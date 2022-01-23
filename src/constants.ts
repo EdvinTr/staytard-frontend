@@ -18,4 +18,6 @@ export enum COOKIE_NAME {
   REFRESH_TOKEN = "refresh_token",
 }
 
+export const MAX_PRODUCT_LIMIT = 50;
+
 export const APP_NAME = "Staytard";

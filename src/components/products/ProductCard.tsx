@@ -11,6 +11,7 @@ import {
 } from "../../typings/GetProductsResponse.interface";
 interface ProductCardProps {
   product: ProductItem;
+  isLoading: boolean;
 }
 const sizeOptions = {
   XS: 1,
@@ -22,7 +23,10 @@ const sizeOptions = {
 };
 const largeImageSize = "300";
 const smallImageSize = "34";
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  isLoading,
+}) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -52,7 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     });
   }, [product.images]);
 
-  const cacheImages = useCallback(async () => {
+  const cacheLargeImages = useCallback(async () => {
     if (currentWindowWidth < 768) {
       return;
     }
@@ -75,7 +79,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     if (product.images.length > 1) {
       setActiveImage(product.images[1]);
     }
-    cacheImages();
+    cacheLargeImages();
   };
 
   const onMouseLeave = () => {
@@ -98,7 +102,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <article
-      className={`md:p-3  ${
+      className={`md:p-3 ${isLoading && "opacity-70"}  ${
         isHovered && "shadow-lg transition-shadow duration-300 ease-in-out"
       }`}
       onMouseLeave={onMouseLeave}
@@ -112,7 +116,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               priority
               blurDataURL={product.images[0].imageUrl}
               objectFit="contain"
-              loading="eager"
               width={400}
               onMouseEnter={onMouseEnter}
               height={600}

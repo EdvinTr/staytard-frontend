@@ -11,7 +11,7 @@ import { SWRConfig } from "swr";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { ProductCardList } from "../components/products/ProductCardList";
-import { APP_NAME } from "../constants";
+import { APP_NAME, MAX_PRODUCT_LIMIT } from "../constants";
 import { useSsrCompatible } from "../hooks/useSsrCompatible";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrGetOneCategory } from "../lib/page";
@@ -23,62 +23,14 @@ interface SlugPageProps {
 }
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
-const MAX_LIMIT = 5;
-
-const dummyCategories: {
-  [key: string]: { name?: string; path?: string; slug?: string };
-} = {
-  "/clothes": {
-    name: "Clothes",
-  },
-  "/clothes/jackets": {
-    name: "Jackets",
-  },
-  "/clothes/jackets/bomber-baseball-jackets": {
-    name: "Bomber & baseball jackets",
-    path: "/clothes/jackets/bomber-baseball-jackets",
-  },
-  "/clothes/jackets/jeans-jackets": {
-    name: "Jeans jackets",
-    path: "/clothes/jackets/jeans-jackets",
-  },
-  "/clothes/jackets/overshirt": {
-    name: "Overshirt",
-    slug: "/jackets/overshirt",
-    path: "/clothes/jackets/overshirt",
-  },
-  "/clothes/jackets/parka": {
-    name: "Parka",
-    slug: "/jackets/parka",
-    path: "/clothes/jackets/parka",
-  },
-  "/clothes/shirts": {
-    name: "Shirts",
-    path: "/clothes/shirts",
-    slug: "/shirts",
-  },
-};
 interface Breadcrumb {
   breadcrumb: string;
   href: string;
 }
+// TODO: add category description
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
-  const slug = router.query.slug as string[];
-  const currentPathParams = getPathFromParams(slug);
-
-  // ! ---------categories playground -------------
-  const categoryPathRegex = new RegExp(currentPathParams);
-  const childrenKeys = [];
-  for (const [key, value] of Object.entries(dummyCategories)) {
-    if (categoryPathRegex.test(key) && key !== currentPathParams) {
-      childrenKeys.push(key);
-    }
-  }
-  const category = dummyCategories[currentPathParams];
-  // ! --------------------- playground end -----------------
-
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   useEffect(() => {
     if (!router) {
@@ -101,8 +53,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
         <NextHead>
           <title>
             {categoryData?.name} | Large assortment for men - Buy online at{" "}
-            {APP_NAME}
-            .com
+            {APP_NAME}.com
           </title>
           <meta name="description" content={categoryData?.name} />
         </NextHead>
@@ -189,7 +140,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const API_URL = `${
       process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-    }/products?limit=${MAX_LIMIT}&page=${1}&categoryPath=${categoryPath}`;
+    }/products?limit=${MAX_PRODUCT_LIMIT}&page=${1}&categoryPath=${categoryPath}`;
     const data: GetProductsResponse = await fetcher(API_URL);
 
     const { props: categoryProps } = await ssrGetOneCategory.getServerPage({

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { BeatLoader } from "react-spinners";
 import useSWRInfinite from "swr/infinite";
+import { MAX_PRODUCT_LIMIT } from "../../constants";
 import {
   GetProductsResponse,
   ProductItem,
@@ -11,9 +12,6 @@ import {
 import { getPathFromParams } from "../../utils/getPathFromParams";
 import { ProductCard } from "./ProductCard";
 interface ProductCardListProps {}
-
-const MAX_LIMIT = 50;
-
 const getKey = (
   pageIndex: number,
   previousPageData: any,
@@ -21,7 +19,6 @@ const getKey = (
   pageSize: number
 ) => {
   //if (previousPageData && !previousPageData.length) return null; // reached the end
-
   return `${
     process.env.NEXT_PUBLIC_REST_API_ENDPOINT
   }/products?limit=${pageSize}&page=${pageIndex + 1}&categoryPath=${path}`;
@@ -33,7 +30,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
   const currentPathParams = getPathFromParams(router.query.slug as string[]);
 
   const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
-    (...args) => getKey(...args, currentPathParams, MAX_LIMIT),
+    (...args) => getKey(...args, currentPathParams, MAX_PRODUCT_LIMIT),
     fetcher
   );
   const isLoadingInitialData = !data && !error;
@@ -56,7 +53,9 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
         {/* product cards */}
         {allProducts.map((item, idx) => {
-          return <ProductCard key={idx} product={item} />;
+          return (
+            <ProductCard key={idx} product={item} isLoading={!!isLoadingMore} />
+          );
         })}
       </div>
       <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
