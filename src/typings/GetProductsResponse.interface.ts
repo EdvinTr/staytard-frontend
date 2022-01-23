@@ -6,7 +6,7 @@ export interface GetProductsResponse {
 }
 
 export interface Pagination {
-  limit: number;
+  limit: string;
   totalItems: number;
   totalPages: number;
   nextPage: number;
@@ -27,6 +27,13 @@ export interface ProductItem {
 export interface Attribute {
   sku: string;
   quantity: number;
+  color: Color;
+  size: Color;
+}
+
+export interface Color {
+  id: number;
+  value: string;
 }
 
 export interface Brand {

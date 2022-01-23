@@ -1,41 +1,55 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import { AnimatePresence, motion } from "framer-motion";
+import { propertyOf, sortBy } from "lodash";
 import NextImage from "next/image";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { ProductItem } from "../../typings/GetProductsResponse.interface";
 interface ProductCardProps {
   product: ProductItem;
 }
+const sizeOptions = {
+  XS: 1,
+  S: 2,
+  M: 3,
+  L: 4,
+  XL: 5,
+  XXL: 6,
+};
 const largeImageSize = "300";
 const smallImageSize = "34";
-let renders = 0;
-// TODO: COMPLETELY rewrite this logic, it is the an atrocity, thank you in advance :)
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  /*   renders++;
-  console.log(renders); */
-  let actualImages = product.images;
-  useEffect(() => {
-    actualImages = product.images.map((image) => {
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
+  const slicedImages = product.images.slice(0, 4);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const [largeWebpImages] = useState(() => {
+    return slicedImages.map((image) => {
+      image.imageUrl = image.imageUrl.replace("{size}", largeImageSize);
       image.imageUrl = image.imageUrl + "&fmt=webp";
       return image;
     });
-  }, []);
-  const [firstImage] = actualImages;
-  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
-  const slicedImages = actualImages.slice(0, 4);
+  });
+  const [smallWebpImages] = useState(() => {
+    return slicedImages.map((image) => {
+      image.imageUrl = image.imageUrl.replace("{size}", smallImageSize);
+      image.imageUrl = image.imageUrl + "&fmt=webp";
+      return image;
+    });
+  });
+  const [activeImage, setActiveImage] = useState(largeWebpImages[0]);
 
-  const [isHovered, setIsHovered] = useState(false);
-
-  const [activeImage, setActiveImage] = useState(
-    slicedImages[0].imageUrl.replace("{size}", largeImageSize)
-  );
   const smallImages =
-    actualImages.length >= 1 ? [firstImage, ...actualImages.slice(3, 5)] : [];
+    smallWebpImages.length >= 1
+      ? [smallWebpImages[0], ...smallWebpImages.slice(3, 5)] // get some small images, but not first/second (a strange solution :)
+      : [];
+
   const cacheImages = useCallback(async () => {
-    if (currentWindowWidth < 768) return;
-    const promises = slicedImages.map(({ imageUrl }) => {
+    if (currentWindowWidth < 768) {
+      return;
+    }
+    const promises = largeWebpImages.map(({ imageUrl }) => {
       return new Promise(function (resolve, reject) {
         const img = new Image();
         img.src = imageUrl.replace("{size}", largeImageSize);
@@ -44,29 +58,40 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       });
     });
     await Promise.all(promises);
-  }, [currentWindowWidth]);
+  }, [currentWindowWidth, largeWebpImages]);
 
-  // TODO: small images should not include currently viewed image
-  const onMouseEnter = useCallback(async () => {
-    if (currentWindowWidth < 768) return;
-    setIsHovered(true);
-    if (slicedImages.length > 1) {
-      setActiveImage(
-        slicedImages[1].imageUrl.replace("{size}", largeImageSize)
-      );
+  const onMouseEnter = () => {
+    if (currentWindowWidth < 768 || isHovered) {
+      return;
     }
-    await cacheImages(); // TODO: should cancel if mouse leaves
-  }, [setIsHovered, currentWindowWidth]);
+    setIsHovered(true);
+    if (largeWebpImages.length > 1) {
+      setActiveImage(largeWebpImages[1]);
+    }
+    cacheImages();
+  };
 
-  const onMouseLeave = useCallback(() => {
-    if (currentWindowWidth < 768) return;
-    setActiveImage(slicedImages[0].imageUrl.replace("{size}", largeImageSize));
+  const onMouseLeave = () => {
+    if (currentWindowWidth < 768) {
+      return;
+    }
+    setActiveImage(largeWebpImages[0]);
     setIsHovered(false);
-  }, [setIsHovered, currentWindowWidth]);
+  };
+
+  const availableSizes: string[] = useMemo(() => {
+    const sizeArray = product.attributes.reduce((acc: string[], val) => {
+      if (acc.includes(val.size.value)) {
+        return acc;
+      }
+      return [...acc, val.size.value];
+    }, []);
+    return sortBy(sizeArray, propertyOf(sizeOptions));
+  }, [product.attributes]);
 
   return (
     <article
-      className={`md:p-3 ${
+      className={`md:p-3  ${
         isHovered && "shadow-lg transition-shadow duration-300 ease-in-out"
       }`}
       onMouseLeave={onMouseLeave}
@@ -74,11 +99,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <Link href={`/product/${product.id}`}>
         <a>
           <NextImage
-            className=""
-            src={activeImage}
+            className="hover:scale-105 duration-300 ease-in-out"
+            src={activeImage.imageUrl}
             placeholder="blur"
             priority
-            blurDataURL={activeImage}
+            blurDataURL={activeImage.imageUrl}
             objectFit="contain"
             width={400}
             onMouseEnter={onMouseEnter}
@@ -105,16 +130,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             >
               <div className="flex items-center space-x-2 ">
                 {smallImages.map((image, idx) => {
-                  const smallImageUrl = image.imageUrl.replace(
+                  /*  const smallImageUrl = image.imageUrl.replace(
                     "{size}",
                     smallImageSize
-                  );
+                  ); */
                   return (
                     <div key={idx} className="">
                       <NextImage
-                        src={smallImageUrl}
+                        src={image.imageUrl}
                         placeholder="blur"
-                        blurDataURL={smallImageUrl}
+                        blurDataURL={image.imageUrl}
                         key={idx}
                         width={34}
                         height={51}
@@ -122,20 +147,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         objectFit="contain"
                         quality={65}
                         onMouseEnter={() => {
-                          setActiveImage(
-                            image.imageUrl.replace("{size}", largeImageSize)
-                          );
+                          setActiveImage(image);
                         }}
                       />
                     </div>
                   );
                 })}
               </div>
-              <ul className="flex space-x-4 text-xs">
-                <li>S</li>
-                <li>M</li>
-                <li>L</li>
-                <li>XL</li>
+              <ul className="flex space-x-2 text-xs">
+                {availableSizes.map((size, idx) => {
+                  return <li key={idx}>{size}</li>;
+                })}
               </ul>
             </motion.div>
           ) : (
@@ -165,6 +187,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 {/* {product.priceLabel} */}
                 {product.unitPrice} EUR
               </strong>
+              {currentWindowWidth < 768 && (
+                <div className="text-[8px] uppercase pt-1">
+                  + {product.attributes.length} colors
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
