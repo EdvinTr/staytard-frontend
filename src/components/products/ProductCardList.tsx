@@ -8,16 +8,10 @@ import {
   GetProductsResponse,
   ProductItem,
 } from "../../typings/GetProductsResponse.interface";
+import { getPathFromParams } from "../../utils/getPathFromParams";
 import { ProductCard } from "./ProductCard";
 interface ProductCardListProps {}
-const getFullPath = (slug: string[]) => {
-  const [first, ...rest] = slug;
-  let fullPath = `/${first}`;
-  if (rest.length > 0) {
-    fullPath = `/${first}/${rest.join("/")}`;
-  }
-  return fullPath;
-};
+
 const MAX_LIMIT = 50;
 
 const getKey = (
@@ -36,7 +30,7 @@ const getKey = (
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
   const router = useRouter();
-  const currentPathParams = getFullPath(router.query.slug as string[]);
+  const currentPathParams = getPathFromParams(router.query.slug as string[]);
 
   const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
     (...args) => getKey(...args, currentPathParams, MAX_LIMIT),

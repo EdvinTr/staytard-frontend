@@ -14,20 +14,13 @@ import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrGetOneCategory } from "../lib/page";
 // import {accessoriesCategories} from "../components/navbar/categories.data"
 import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
+import { getPathFromParams } from "../utils/getPathFromParams";
 interface SlugPageProps {
   categoryData: GetOneCategoryQuery["getOneCategory"];
   fallback: any;
 }
-const getFullPath = (slug: string[]) => {
-  const [first, ...rest] = slug;
-  let fullPath = `/${first}`;
-  if (rest.length > 0) {
-    fullPath = `/${first}/${rest.join("/")}`;
-  }
-  return fullPath;
-};
-const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
+const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 const MAX_LIMIT = 5;
 
 const dummyCategories: any = {
@@ -63,7 +56,7 @@ const dummyCategories: any = {
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
-  const currentPathParams = getFullPath(router.query.slug as string[]);
+  const currentPathParams = getPathFromParams(router.query.slug as string[]);
 
   // ! ---------categories playground -------------
   const categoryPathRegex = new RegExp(currentPathParams);
@@ -100,10 +93,8 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const categoryPath = getFullPath(ctx.query.slug as string[]);
+  const categoryPath = getPathFromParams(ctx.query.slug as string[]);
   try {
-    console.log(" I SSR");
-
     const API_URL = `${
       process.env.NEXT_PUBLIC_REST_API_ENDPOINT
     }/products?limit=${MAX_LIMIT}&page=${1}&categoryPath=${categoryPath}`;
