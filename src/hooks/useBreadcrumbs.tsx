@@ -15,7 +15,7 @@ export const useBreadcrumbs = (router: NextRouter) => {
     linkPath.shift();
     const pathArray = linkPath.map((path, idx) => {
       return {
-        breadcrumb: path,
+        breadcrumb: path.split("?")[0],
         href: "/" + linkPath.slice(0, idx + 1).join("/"),
       };
     });

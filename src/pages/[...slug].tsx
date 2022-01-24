@@ -9,7 +9,10 @@ import { SWRConfig } from "swr";
 import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
-import { ProductCardList } from "../components/products/ProductCardList";
+import {
+  getSortString,
+  ProductCardList,
+} from "../components/products/ProductCardList";
 import { APP_NAME, MAX_PRODUCT_LIMIT } from "../constants";
 import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 import { GetOneCategoryQuery } from "../lib/graphql";
@@ -23,8 +26,6 @@ interface SlugPageProps {
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
-// TODO:
-// 1. add category description
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
   const router = useRouter();
   const breadcrumbs = useBreadcrumbs(router);
@@ -100,11 +101,13 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const categoryPath = getPathFromParams(ctx.query.slug as string[]);
+  const { slug, sortBy, sortDirection } = ctx.query;
+  const categoryPath = getPathFromParams(slug as string[]);
+  const sortString = getSortString(sortBy as string, sortDirection as string);
   try {
     const API_URL = `${
       process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-    }/products?limit=${MAX_PRODUCT_LIMIT}&page=${1}&categoryPath=${categoryPath}`;
+    }/products?limit=${MAX_PRODUCT_LIMIT}&page=${1}&categoryPath=${categoryPath}${sortString}`;
     const data: GetProductsResponse = await fetcher(API_URL);
 
     const { props: categoryProps } = await ssrGetOneCategory.getServerPage({

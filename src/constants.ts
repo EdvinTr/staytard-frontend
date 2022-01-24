@@ -18,6 +18,11 @@ export enum COOKIE_NAME {
   REFRESH_TOKEN = "refresh_token",
 }
 
+export enum QUERY_PARAM_KEY {
+  SORT_BY = "sortBy",
+  SORT_DIRECTION = "sortDirection",
+}
+
 export const MAX_PRODUCT_LIMIT = 50;
 
 export const APP_NAME = "Staytard";

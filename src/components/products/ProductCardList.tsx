@@ -6,28 +6,48 @@ import React from "react";
 import { BeatLoader } from "react-spinners";
 import useSWRInfinite from "swr/infinite";
 import { MAX_PRODUCT_LIMIT } from "../../constants";
+import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import {
   GetProductsResponse,
   ProductItem,
 } from "../../typings/GetProductsResponse.interface";
 import { getPathFromParams } from "../../utils/getPathFromParams";
 import { ProductCard } from "./ProductCard";
-import { SortProductsPopover } from "./SortProductsPopover";
+import {
+  PRODUCT_SORT_BY,
+  SortProductsPopover,
+  SORT_DIRECTION,
+} from "./SortProductsPopover";
 
 interface ProductCardListProps {
   categoryDescription: string;
 }
 
+export interface ProductFetchParams {
+  categoryPath: string;
+  sortBy?: string;
+  sortDirection?: string;
+}
+
+export const getSortString = (sortBy?: string, sortDirection?: string) => {
+  if (!sortBy || !sortDirection) {
+    return "";
+  }
+  return `&sortBy=${sortBy}&sortDirection=${sortDirection}`;
+};
+
 const getKey = (
   pageIndex: number,
   previousPageData: any,
-  path: string,
+  { categoryPath, sortBy, sortDirection }: ProductFetchParams,
   pageSize: number
 ) => {
-  //if (previousPageData && !previousPageData.length) return null; // reached the end
-  return `${
-    process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-  }/products?limit=${pageSize}&page=${pageIndex + 1}&categoryPath=${path}`;
+  const sortString = getSortString(sortBy, sortDirection);
+  const url = `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products`;
+
+  return `${url}?limit=${pageSize}&page=${
+    pageIndex + 1
+  }&categoryPath=${categoryPath}${sortString}`;
 };
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
@@ -35,14 +55,24 @@ const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 export const ProductCardList: React.FC<ProductCardListProps> = ({
   categoryDescription,
 }) => {
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
   const currentPathParams = getPathFromParams(router.query.slug as string[]);
+  const { sortBy, sortDirection } = router.query;
 
   const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
-    (...args) => getKey(...args, currentPathParams, MAX_PRODUCT_LIMIT),
+    (...args) =>
+      getKey(
+        ...args,
+        {
+          categoryPath: currentPathParams,
+          sortBy: (sortBy as PRODUCT_SORT_BY) || "",
+          sortDirection: (sortDirection as SORT_DIRECTION) || "",
+        },
+        MAX_PRODUCT_LIMIT
+      ),
     fetcher
   );
-  const currentWindowWidth = useWindowWidth();
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
@@ -56,8 +86,6 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   const latestPagination = data && data[data.length - 1].pagination;
   const nextPage = latestPagination?.nextPage;
 
-  const onSortSelect = () => {};
-
   return (
     <div>
       {!isLoadingMore && allProducts.length === 0 && (
@@ -67,20 +95,21 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
       {/* sort */}
       <div className="text-sm flex justify-end my-4">
         {!isLoadingMore && (
-          <SortProductsPopover
-            totalItems={latestPagination?.totalItems || 0}
-            onSelect={onSortSelect}
-          />
+          <SortProductsPopover totalItems={latestPagination?.totalItems || 0} />
         )}
       </div>
-      <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
-        {categoryDescription.slice(0, 800)}
-      </p>
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
-        {/* product cards */}
+      {currentWindowWidth < 768 && categoryDescription.length > 0 && (
         <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
           {categoryDescription.slice(0, 800)}
         </p>
+      )}
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
+        {/* product cards */}
+        {currentWindowWidth >= 768 && categoryDescription.length > 0 && (
+          <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
+            {categoryDescription.slice(0, 800)}
+          </p>
+        )}
         {allProducts.map((item, idx) => {
           return (
             <ProductCard key={idx} product={item} isLoading={!!isLoadingMore} />

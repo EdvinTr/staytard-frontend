@@ -1,16 +1,62 @@
 import { Popover, Transition } from "@headlessui/react";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/solid";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 
-type ProductSortBy = "unitPrice";
+export enum PRODUCT_SORT_BY {
+  UNIT_PRICE = "unitPrice",
+}
+export enum SORT_DIRECTION {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 interface SortProductsPopoverProps {
   totalItems: number;
-  onSelect: (sortBy: ProductSortBy, direction: "ASC" | "DESC") => void;
 }
+
+const sortItems = {
+  unitPriceDESC: {
+    name: "Highest price",
+    alias: PRODUCT_SORT_BY.UNIT_PRICE + SORT_DIRECTION.DESC,
+    query: {
+      sortBy: PRODUCT_SORT_BY.UNIT_PRICE,
+      sortDirection: SORT_DIRECTION.DESC,
+    },
+  },
+  unitPriceASC: {
+    name: "Lowest price",
+    alias: PRODUCT_SORT_BY.UNIT_PRICE + SORT_DIRECTION.ASC,
+    query: {
+      sortBy: PRODUCT_SORT_BY.UNIT_PRICE,
+      sortDirection: SORT_DIRECTION.ASC,
+    },
+  },
+};
 
 export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
   totalItems,
 }) => {
+  const router = useRouter();
+  const { query } = router;
+  const { sortBy, sortDirection } = query;
+
+  const currentSortValue = Object.values(PRODUCT_SORT_BY).find(
+    (v) => v === sortBy
+  );
+  const currentSortDirection = Object.values(SORT_DIRECTION).find(
+    (v) => v === sortDirection
+  );
+  const calculateIsActiveLink = (alias: string) => {
+    if (!currentSortDirection || !currentSortValue) {
+      return null;
+    }
+    return alias === currentSortValue + currentSortDirection;
+  };
   return (
     <div className={`md:px-4 `}>
       <Popover className="relative ">
@@ -19,7 +65,7 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
             <Popover.Button className=" ">
               <p className="flex relative">
                 {totalItems} hits. Sort on
-                <span className="font-bold pl-1"> popularity</span>
+                <span className="font-bold pl-1"> {currentSortValue}</span>
                 {open ? (
                   <ChevronUpIcon className="w-6" />
                 ) : (
@@ -39,17 +85,33 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
               <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-3 transform -translate-x-1/3 left-6 md:left-2  ">
                 <div className="overflow-hidden shadow-lg ">
                   <div className="relative grid gap-8 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
-                    <PopoverItemContainer
-                      onClick={() => console.log("populariry")}
-                    >
-                      Popularity
-                    </PopoverItemContainer>
-                    <PopoverItemContainer>
-                      Highest Discount
-                    </PopoverItemContainer>
-                    <PopoverItemContainer>Lowest Discount</PopoverItemContainer>
-                    <PopoverItemContainer>Highest price</PopoverItemContainer>
-                    <PopoverItemContainer>Lowest price</PopoverItemContainer>
+                    {Object.values(sortItems).map((sortItem, idx) => {
+                      const isActiveLink = calculateIsActiveLink(
+                        sortItem.alias
+                      );
+                      return (
+                        <PopoverItemContainer key={idx}>
+                          <Link
+                            href={{
+                              pathname: router.pathname,
+                              query: {
+                                ...router.query,
+                                ...sortItem.query,
+                              },
+                            }}
+                          >
+                            {isActiveLink ? (
+                              <a className="relative font-bold flex">
+                                <CheckIcon className="w-4 mt-[1.5px] absolute -left-5" />
+                                {sortItem.name}
+                              </a>
+                            ) : (
+                              <a>{sortItem.name}</a>
+                            )}
+                          </Link>
+                        </PopoverItemContainer>
+                      );
+                    })}
                   </div>
                 </div>
               </Popover.Panel>
