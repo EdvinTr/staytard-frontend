@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
+import React from "react";
 import { BeatLoader } from "react-spinners";
 import useSWRInfinite from "swr/infinite";
 import { MAX_PRODUCT_LIMIT } from "../../constants";
@@ -56,14 +56,10 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   const latestPagination = data && data[data.length - 1].pagination;
   const nextPage = latestPagination?.nextPage;
 
-  const CategoryDescriptionJsx = () => (
-    <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
-      {categoryDescription.slice(0, 800)}
-    </p>
-  );
+  const onSortSelect = () => {};
 
   return (
-    <Fragment>
+    <div>
       {!isLoadingMore && allProducts.length === 0 && (
         <h2 className="text-xl min-h-[10rem]">No products.</h2>
       )}
@@ -71,13 +67,20 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
       {/* sort */}
       <div className="text-sm flex justify-end my-4">
         {!isLoadingMore && (
-          <SortProductsPopover totalItems={latestPagination?.totalItems || 0} />
+          <SortProductsPopover
+            totalItems={latestPagination?.totalItems || 0}
+            onSelect={onSortSelect}
+          />
         )}
       </div>
-      {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
+      <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
+        {categoryDescription.slice(0, 800)}
+      </p>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
         {/* product cards */}
-        {currentWindowWidth >= 768 && <CategoryDescriptionJsx />}
+        <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
+          {categoryDescription.slice(0, 800)}
+        </p>
         {allProducts.map((item, idx) => {
           return (
             <ProductCard key={idx} product={item} isLoading={!!isLoadingMore} />
@@ -124,6 +127,6 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
           </button>
         )}
       </div>
-    </Fragment>
+    </div>
   );
 };

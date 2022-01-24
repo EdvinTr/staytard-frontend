@@ -1,8 +1,11 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 import React, { Fragment } from "react";
+
+type ProductSortBy = "unitPrice";
 interface SortProductsPopoverProps {
   totalItems: number;
+  onSelect: (sortBy: ProductSortBy, direction: "ASC" | "DESC") => void;
 }
 
 export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
@@ -15,10 +18,8 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
           <>
             <Popover.Button className=" ">
               <p className="flex relative">
-                <div className="">
-                  {totalItems} hits. Sort on
-                  <span className="font-bold "> popularity</span>
-                </div>
+                {totalItems} hits. Sort on
+                <span className="font-bold pl-1"> popularity</span>
                 {open ? (
                   <ChevronUpIcon className="w-6" />
                 ) : (
@@ -38,7 +39,11 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
               <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-3 transform -translate-x-1/3 left-6 md:left-2  ">
                 <div className="overflow-hidden shadow-lg ">
                   <div className="relative grid gap-8 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
-                    <PopoverItemContainer>Popularity</PopoverItemContainer>
+                    <PopoverItemContainer
+                      onClick={() => console.log("populariry")}
+                    >
+                      Popularity
+                    </PopoverItemContainer>
                     <PopoverItemContainer>
                       Highest Discount
                     </PopoverItemContainer>
