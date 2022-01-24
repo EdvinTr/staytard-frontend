@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 
 export enum PRODUCT_SORT_BY {
   UNIT_PRICE = "unitPrice",
@@ -15,11 +15,8 @@ export enum SORT_DIRECTION {
   ASC = "ASC",
   DESC = "DESC",
 }
-interface SortProductsPopoverProps {
-  totalItems: number;
-}
 
-const sortItems = {
+const sortOptionsMap = {
   unitPriceDESC: {
     name: "Highest price",
     alias: PRODUCT_SORT_BY.UNIT_PRICE + SORT_DIRECTION.DESC,
@@ -37,6 +34,9 @@ const sortItems = {
     },
   },
 };
+interface SortProductsPopoverProps {
+  totalItems: number;
+}
 
 export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
   totalItems,
@@ -57,6 +57,16 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
     }
     return alias === currentSortValue + currentSortDirection;
   };
+
+  /**
+   * Alias is the sorting key and the sorting direction combined. Mainly used to determine index in the sort options map.
+   *  */
+  const currentSortAlias = useMemo(() => {
+    if (!currentSortDirection || !currentSortValue) {
+      return null;
+    }
+    return currentSortValue + currentSortDirection;
+  }, [currentSortDirection, currentSortValue]);
   return (
     <div className={`md:px-4 `}>
       <Popover className="relative ">
@@ -65,7 +75,13 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
             <Popover.Button className=" ">
               <p className="flex relative">
                 {totalItems} hits. Sort on
-                <span className="font-bold pl-1"> {currentSortValue}</span>
+                <span className="font-bold pl-1">
+                  {
+                    Object.values(sortOptionsMap).find((v, i) => {
+                      return v.alias === currentSortAlias;
+                    })?.name
+                  }
+                </span>
                 {open ? (
                   <ChevronUpIcon className="w-6" />
                 ) : (
@@ -85,7 +101,7 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
               <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-3 transform -translate-x-1/3 left-6 md:left-2  ">
                 <div className="overflow-hidden shadow-lg ">
                   <div className="relative grid gap-8 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
-                    {Object.values(sortItems).map((sortItem, idx) => {
+                    {Object.values(sortOptionsMap).map((sortItem, idx) => {
                       const isActiveLink = calculateIsActiveLink(
                         sortItem.alias
                       );

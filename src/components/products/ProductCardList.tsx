@@ -86,12 +86,12 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   const latestPagination = data && data[data.length - 1].pagination;
   const nextPage = latestPagination?.nextPage;
 
+  if (!isLoadingMore && allProducts.length === 0) {
+    return <h2 className="text-xl min-h-[10rem]">No products.</h2>;
+  }
+  // TODO: got some refactoring to do here, my boi.
   return (
     <div>
-      {!isLoadingMore && allProducts.length === 0 && (
-        <h2 className="text-xl min-h-[10rem]">No products.</h2>
-      )}
-
       {/* sort */}
       <div className="text-sm flex justify-end my-4">
         {!isLoadingMore && (
