@@ -1,18 +1,17 @@
-import { ArrowLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import { useWindowWidth } from "@react-hook/window-size";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
 import axios from "axios";
-import { capitalize } from "lodash";
 import { GetServerSideProps, NextPage } from "next";
 import NextHead from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import { SWRConfig } from "swr";
+import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { ProductCardList } from "../components/products/ProductCardList";
 import { APP_NAME, MAX_PRODUCT_LIMIT } from "../constants";
-import { useSsrCompatible } from "../hooks/useSsrCompatible";
+import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 import { GetOneCategoryQuery } from "../lib/graphql";
 import { ssrGetOneCategory } from "../lib/page";
 import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
@@ -23,29 +22,12 @@ interface SlugPageProps {
 }
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
-interface Breadcrumb {
-  breadcrumb: string;
-  href: string;
-}
-// TODO: add category description
+
+// TODO:
+// 1. add category description
 const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
-  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const router = useRouter();
-  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
-  useEffect(() => {
-    if (!router) {
-      return;
-    }
-    const linkPath = router.asPath.split("/");
-    linkPath.shift();
-    const pathArray = linkPath.map((path, idx) => {
-      return {
-        breadcrumb: path,
-        href: "/" + linkPath.slice(0, idx + 1).join("/"),
-      };
-    });
-    setBreadcrumbs(pathArray);
-  }, [router]);
+  const breadcrumbs = useBreadcrumbs(router);
 
   return (
     <SWRConfig value={{ fallback }}>
@@ -64,29 +46,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                 {breadcrumbs.length >= 2 ? (
                   <Fragment>
                     {/* breadcrumbs */}
-                    <ul className="flex">
-                      {breadcrumbs.map(({ breadcrumb, href }, idx, arr) => {
-                        const isLastItemInArray = arr.length - 1 === idx;
-                        return (
-                          <li key={idx} className="flex items-center">
-                            {isLastItemInArray ? (
-                              <span className="opacity-70">
-                                {capitalize(breadcrumb)}
-                              </span>
-                            ) : (
-                              <Fragment>
-                                <Link href={href}>
-                                  <a className="hover:underline">
-                                    {capitalize(breadcrumb)}
-                                  </a>
-                                </Link>
-                                <ChevronRightIcon className="w-4 mx-1" />
-                              </Fragment>
-                            )}
-                          </li>
-                        );
-                      })}
-                    </ul>
+                    <Breadcrumbs />
                     <div className="pt-8">
                       {/* navigate to previous breadcrumb link */}
                       <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
@@ -106,6 +66,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                 )}
               </div>
             </div>
+            {/* sub categories */}
             {categoryData && categoryData.children && (
               <div className="overflow-x-auto overflow-y-hidden">
                 {/* sub category list */}
@@ -127,7 +88,9 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
             )}
           </div>
           <div className="mt-6">
-            <ProductCardList />
+            <ProductCardList
+              categoryDescription={categoryData?.description || ""}
+            />
           </div>
         </MyContainer>
       </FadeInContainer>

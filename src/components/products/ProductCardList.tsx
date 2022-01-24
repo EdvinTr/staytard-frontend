@@ -1,4 +1,5 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
@@ -11,7 +12,11 @@ import {
 } from "../../typings/GetProductsResponse.interface";
 import { getPathFromParams } from "../../utils/getPathFromParams";
 import { ProductCard } from "./ProductCard";
-interface ProductCardListProps {}
+
+interface ProductCardListProps {
+  categoryDescription: string;
+}
+
 const getKey = (
   pageIndex: number,
   previousPageData: any,
@@ -25,7 +30,10 @@ const getKey = (
 };
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
-export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
+
+export const ProductCardList: React.FC<ProductCardListProps> = ({
+  categoryDescription,
+}) => {
   const router = useRouter();
   const currentPathParams = getPathFromParams(router.query.slug as string[]);
 
@@ -33,6 +41,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
     (...args) => getKey(...args, currentPathParams, MAX_PRODUCT_LIMIT),
     fetcher
   );
+  const currentWindowWidth = useWindowWidth();
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
@@ -45,13 +54,22 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({}) => {
   }
   const latestPagination = data && data[data.length - 1].pagination;
   const nextPage = latestPagination?.nextPage;
+
+  const CategoryDescriptionJsx = () => (
+    <p className="text-[11px] pt-3 md:text-sm md:pr-8 ">
+      {categoryDescription.slice(0, 800)}
+    </p>
+  );
+
   return (
     <Fragment>
       {!isLoadingMore && allProducts.length === 0 && (
         <h2 className="text-xl min-h-[10rem]">No products.</h2>
       )}
+      {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
         {/* product cards */}
+        {currentWindowWidth >= 768 && <CategoryDescriptionJsx />}
         {allProducts.map((item, idx) => {
           return (
             <ProductCard key={idx} product={item} isLoading={!!isLoadingMore} />
