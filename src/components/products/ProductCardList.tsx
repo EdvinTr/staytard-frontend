@@ -56,7 +56,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   const nextPage = latestPagination?.nextPage;
 
   const CategoryDescriptionJsx = () => (
-    <p className="text-[11px] pt-3 md:text-sm md:pr-8 ">
+    <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
       {categoryDescription.slice(0, 800)}
     </p>
   );
@@ -66,6 +66,11 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
       {!isLoadingMore && allProducts.length === 0 && (
         <h2 className="text-xl min-h-[10rem]">No products.</h2>
       )}
+
+      {/* sort */}
+      <div className="text-sm flex justify-end">
+        <div>{latestPagination?.totalItems} hits. Sort on</div>
+      </div>
       {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
         {/* product cards */}

@@ -40,7 +40,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
           <meta name="description" content={categoryData?.name} />
         </NextHead>
         <MyContainer className=" text-staytard-dark">
-          <div className="px-3">
+          <div className="px-3 md:px-0">
             <div className="">
               <div className="text-xs">
                 {breadcrumbs.length >= 2 ? (
@@ -87,6 +87,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
               </div>
             )}
           </div>
+          <div className="my-4 w-[99.2%] h-[1px] bg-black bg-opacity-10"></div>
           <div className="mt-6">
             <ProductCardList
               categoryDescription={categoryData?.description || ""}
