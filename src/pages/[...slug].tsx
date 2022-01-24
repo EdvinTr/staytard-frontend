@@ -51,7 +51,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                       {/* navigate to previous breadcrumb link */}
                       <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
                         <a>
-                          <h1 className="text-3xl font-semibold flex">
+                          <h1 className="text-2xl md:text-3xl font-semibold flex">
                             <ArrowLeftIcon className="w-6 text-staytard-dark" />
                             <span className="pl-4">{categoryData?.name}</span>
                           </h1>
@@ -60,7 +60,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                     </div>
                   </Fragment>
                 ) : (
-                  <h1 className="text-3xl font-semibold">
+                  <h1 className="text-2xl md:text-3xl font-semibold">
                     {categoryData?.name}
                   </h1>
                 )}
@@ -70,7 +70,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
             {categoryData && categoryData.children && (
               <div className="overflow-x-auto overflow-y-hidden">
                 {/* sub category list */}
-                <ul className="py-4 flex items-start flex-shrink-0 space-x-3 text-sm">
+                <ul className="py-4 flex items-start flex-shrink-0 space-x-2 text-sm">
                   {categoryData.children.map((child, idx) => {
                     return (
                       <li

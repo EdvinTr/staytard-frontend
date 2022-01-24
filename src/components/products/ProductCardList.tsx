@@ -12,6 +12,7 @@ import {
 } from "../../typings/GetProductsResponse.interface";
 import { getPathFromParams } from "../../utils/getPathFromParams";
 import { ProductCard } from "./ProductCard";
+import { SortProductsPopover } from "./SortProductsPopover";
 
 interface ProductCardListProps {
   categoryDescription: string;
@@ -68,8 +69,10 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
       )}
 
       {/* sort */}
-      <div className="text-sm flex justify-end">
-        <div>{latestPagination?.totalItems} hits. Sort on</div>
+      <div className="text-sm flex justify-end my-4">
+        {!isLoadingMore && (
+          <SortProductsPopover totalItems={latestPagination?.totalItems || 0} />
+        )}
       </div>
       {currentWindowWidth < 768 && <CategoryDescriptionJsx />}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
