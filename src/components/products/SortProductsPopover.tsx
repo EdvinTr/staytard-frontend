@@ -42,8 +42,7 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
   totalItems,
 }) => {
   const router = useRouter();
-  const { query } = router;
-  const { sortBy, sortDirection } = query;
+  const { sortBy, sortDirection } = router.query;
 
   const currentSortValue = Object.values(PRODUCT_SORT_BY).find(
     (v) => v === sortBy
@@ -51,15 +50,9 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
   const currentSortDirection = Object.values(SORT_DIRECTION).find(
     (v) => v === sortDirection
   );
-  const calculateIsActiveLink = (alias: string) => {
-    if (!currentSortDirection || !currentSortValue) {
-      return null;
-    }
-    return alias === currentSortValue + currentSortDirection;
-  };
 
   /**
-   * Alias is the sorting key and the sorting direction combined. Mainly used to determine index in the sort options map.
+   * Alias is the sorting key and the sorting direction combined. Used to determine index in the sort options map.
    *  */
   const currentSortAlias = useMemo(() => {
     if (!currentSortDirection || !currentSortValue) {
@@ -67,6 +60,14 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
     }
     return currentSortValue + currentSortDirection;
   }, [currentSortDirection, currentSortValue]);
+
+  const calculateIsActiveLink = (alias: string) => {
+    if (!currentSortDirection || !currentSortValue) {
+      return null;
+    }
+    return alias === currentSortValue + currentSortDirection;
+  };
+
   return (
     <div className={`md:px-4 `}>
       <Popover className="relative ">

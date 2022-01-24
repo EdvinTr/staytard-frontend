@@ -89,7 +89,6 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   if (!isLoadingMore && allProducts.length === 0) {
     return <h2 className="text-xl min-h-[10rem]">No products.</h2>;
   }
-  // TODO: got some refactoring to do here, my boi.
   return (
     <div>
       {/* sort */}
@@ -98,18 +97,20 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
           <SortProductsPopover totalItems={latestPagination?.totalItems || 0} />
         )}
       </div>
+      {/* category description on small device */}
       {currentWindowWidth < 768 && categoryDescription.length > 0 && (
         <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
           {categoryDescription.slice(0, 800)}
         </p>
       )}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
-        {/* product cards */}
+        {/* category description on medium device and above */}
         {currentWindowWidth >= 768 && categoryDescription.length > 0 && (
           <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
             {categoryDescription.slice(0, 800)}
           </p>
         )}
+        {/* product cards */}
         {allProducts.map((item, idx) => {
           return (
             <ProductCard key={idx} product={item} isLoading={!!isLoadingMore} />
@@ -148,7 +149,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
             disabled={isLoadingMore}
             className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
             onClick={() => {
-              setSize(size + 1); // controls index var in SWR
+              setSize(size + 1); // controls pageIndex variable in SWR
             }}
           >
             <span>Show more</span>
