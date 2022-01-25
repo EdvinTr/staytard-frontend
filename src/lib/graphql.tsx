@@ -17,6 +17,12 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AssetUrl = {
+  __typename?: 'AssetUrl';
+  descriptive: Scalars['String'];
+  standard: Scalars['String'];
+};
+
 export type AttributeValueType = {
   value: Scalars['String'];
 };
@@ -25,6 +31,13 @@ export enum Brand_Sort_By {
   Id = 'ID',
   Name = 'NAME'
 }
+
+export type CreateCustomerOrderInput = {
+  city: Scalars['String'];
+  deliveryAddress: Scalars['String'];
+  orderItems: Array<OrderItemInput>;
+  postalCode: Scalars['String'];
+};
 
 export type CreateProductAttributeInput = {
   color: AttributeValueType;
@@ -52,6 +65,21 @@ export type CreateProductReviewInput = {
   wouldRecommend: Scalars['Boolean'];
 };
 
+export type CustomerOrder = {
+  __typename?: 'CustomerOrder';
+  city: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  deliveryAddress: Scalars['String'];
+  grandTotal: Scalars['Float'];
+  id: Scalars['Float'];
+  orderStatusId: Scalars['Float'];
+  postalCode: Scalars['String'];
+  shippingCost: Scalars['Float'];
+  totalAmount: Scalars['Float'];
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+};
+
 export type FindProductsInput = {
   categoryPath: Scalars['String'];
   limit: Scalars['Float'];
@@ -65,6 +93,13 @@ export type GetProductBrandsInput = {
   sortDirection?: InputMaybe<Sort_Direction>;
 };
 
+export type KlarnaSessionResponse = {
+  __typename?: 'KlarnaSessionResponse';
+  client_token: Scalars['String'];
+  payment_method_categories: Array<PaymentMethodCategory>;
+  session_id: Scalars['String'];
+};
+
 export type LoginUserDto = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -73,8 +108,10 @@ export type LoginUserDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
+  createCustomerOrder: CustomerOrder;
   createProduct: Product;
   createProductReview: ProductReview;
+  initializeKlarnaSession: KlarnaSessionResponse;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
   publishReview: ProductReview;
@@ -84,6 +121,11 @@ export type Mutation = {
 
 export type MutationAuthenticateWithGoogleArgs = {
   googleAuthToken: Scalars['String'];
+};
+
+
+export type MutationCreateCustomerOrderArgs = {
+  input: CreateCustomerOrderInput;
 };
 
 
@@ -111,11 +153,23 @@ export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
 };
 
+export type OrderItemInput = {
+  productId: Scalars['Float'];
+  quantity: Scalars['Float'];
+};
+
 export enum Product_Sort_By {
   Id = 'ID',
   Name = 'NAME',
   UnitPrice = 'UNIT_PRICE'
 }
+
+export type PaymentMethodCategory = {
+  __typename?: 'PaymentMethodCategory';
+  asset_urls: AssetUrl;
+  identifier: Scalars['String'];
+  name: Scalars['String'];
+};
 
 /** The permissions of the user */
 export enum Permission {
@@ -297,6 +351,11 @@ export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number
 
 export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
 
+export type InitializeKlarnaSessionsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InitializeKlarnaSessionsMutation = { __typename?: 'Mutation', initializeKlarnaSession: { __typename?: 'KlarnaSessionResponse', session_id: string, client_token: string, payment_method_categories: Array<{ __typename?: 'PaymentMethodCategory', identifier: string, name: string, asset_urls: { __typename?: 'AssetUrl', descriptive: string, standard: string } }> } };
+
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
 }>;
@@ -348,13 +407,6 @@ export type FindOneProductQueryVariables = Exact<{
 
 
 export type FindOneProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', description: string, id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
-
-export type FindProductsQueryVariables = Exact<{
-  input: FindProductsInput;
-}>;
-
-
-export type FindProductsQuery = { __typename?: 'Query', products: { __typename?: 'QueryProductsOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -418,6 +470,47 @@ export const CoreUserFieldsFragmentDoc = gql`
   isEmailConfirmed
 }
     `;
+export const InitializeKlarnaSessionsDocument = gql`
+    mutation InitializeKlarnaSessions {
+  initializeKlarnaSession {
+    session_id
+    client_token
+    payment_method_categories {
+      identifier
+      name
+      asset_urls {
+        descriptive
+        standard
+      }
+    }
+  }
+}
+    `;
+export type InitializeKlarnaSessionsMutationFn = Apollo.MutationFunction<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>;
+
+/**
+ * __useInitializeKlarnaSessionsMutation__
+ *
+ * To run a mutation, you first call `useInitializeKlarnaSessionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitializeKlarnaSessionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initializeKlarnaSessionsMutation, { data, loading, error }] = useInitializeKlarnaSessionsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInitializeKlarnaSessionsMutation(baseOptions?: Apollo.MutationHookOptions<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>(InitializeKlarnaSessionsDocument, options);
+      }
+export type InitializeKlarnaSessionsMutationHookResult = ReturnType<typeof useInitializeKlarnaSessionsMutation>;
+export type InitializeKlarnaSessionsMutationResult = Apollo.MutationResult<InitializeKlarnaSessionsMutation>;
+export type InitializeKlarnaSessionsMutationOptions = Apollo.BaseMutationOptions<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>;
 export const AuthenticateWithGoogleDocument = gql`
     mutation AuthenticateWithGoogle($googleAuthToken: String!) {
   authenticateWithGoogle(googleAuthToken: $googleAuthToken) {
@@ -722,52 +815,6 @@ export type FindOneProductLazyQueryHookResult = ReturnType<typeof useFindOneProd
 export type FindOneProductQueryResult = Apollo.QueryResult<FindOneProductQuery, FindOneProductQueryVariables>;
 export function refetchFindOneProductQuery(variables: FindOneProductQueryVariables) {
       return { query: FindOneProductDocument, variables: variables }
-    }
-export const FindProductsDocument = gql`
-    query FindProducts($input: FindProductsInput!) {
-  products(input: $input) {
-    totalCount
-    hasMore
-    items {
-      ...CoreProductFields
-      attributes {
-        ...CoreAttributeFields
-      }
-    }
-  }
-}
-    ${CoreProductFieldsFragmentDoc}
-${CoreAttributeFieldsFragmentDoc}`;
-
-/**
- * __useFindProductsQuery__
- *
- * To run a query within a React component, call `useFindProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindProductsQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFindProductsQuery(baseOptions: Apollo.QueryHookOptions<FindProductsQuery, FindProductsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindProductsQuery, FindProductsQueryVariables>(FindProductsDocument, options);
-      }
-export function useFindProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindProductsQuery, FindProductsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindProductsQuery, FindProductsQueryVariables>(FindProductsDocument, options);
-        }
-export type FindProductsQueryHookResult = ReturnType<typeof useFindProductsQuery>;
-export type FindProductsLazyQueryHookResult = ReturnType<typeof useFindProductsLazyQuery>;
-export type FindProductsQueryResult = Apollo.QueryResult<FindProductsQuery, FindProductsQueryVariables>;
-export function refetchFindProductsQuery(variables: FindProductsQueryVariables) {
-      return { query: FindProductsDocument, variables: variables }
     }
 export const MeDocument = gql`
     query Me {

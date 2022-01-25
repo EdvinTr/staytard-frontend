@@ -1,0 +1,14 @@
+mutation InitializeKlarnaSessions {
+  initializeKlarnaSession {
+    session_id
+    client_token
+    payment_method_categories {
+      identifier
+      name
+      asset_urls {
+        descriptive
+        standard
+      }
+    }
+  }
+}
