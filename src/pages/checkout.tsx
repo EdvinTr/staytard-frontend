@@ -6,7 +6,7 @@ import { KlarnaPayment } from "../components/KlarnaPayment";
 import { MyContainer } from "../components/MyContainer";
 import {
   InitKlarnaSessionInput,
-  useAuthorizeKlarnaMutation,
+  useCreateOrderWithKlarnaMutation,
   useInitializeKlarnaSessionMutation,
   useMeQuery,
 } from "../lib/graphql";
@@ -23,8 +23,7 @@ const CheckoutPage: NextPage = () => {
     useInitializeKlarnaSessionMutation();
   const { data: meData } = useMeQuery();
 
-  const [authorizeWithKlarna, { data: authorizeWithKlarnaData }] =
-    useAuthorizeKlarnaMutation();
+  const [createOrderWithKlarna] = useCreateOrderWithKlarnaMutation();
 
   // TODO: checkout page should consist of several components where user gets to enter his details and stuff and in the end you show payment options.
   // for now, just hard code things to make sure it is working correctly.
@@ -73,7 +72,7 @@ const CheckoutPage: NextPage = () => {
     data: KlarnaAuthorizationResponse
   ) => {
     try {
-      const response = await authorizeWithKlarna({
+      const response = await createOrderWithKlarna({
         variables: {
           input: {
             ...cartData,
@@ -86,7 +85,7 @@ const CheckoutPage: NextPage = () => {
       }
       // TODO: check it got approved, if so, go ahead and send request to backend to create order. (can use the order_id as the order_number column)
 
-      const redirectURL = response.data.authorizeKlarnaToken.redirect_url;
+      const redirectURL = response.data.createOrderWithKlarna.redirect_url;
       router.push(redirectURL);
     } catch (err) {
       console.log(err);

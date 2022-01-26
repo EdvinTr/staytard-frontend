@@ -1,8 +1,11 @@
-mutation AuthorizeKlarna(
+mutation CreateOrderWithKlarna(
   $input: InitKlarnaSessionInput!
   $authorizationToken: String!
 ) {
-  authorizeKlarnaToken(input: $input, authorizationToken: $authorizationToken) {
+  createOrderWithKlarna(
+    input: $input
+    authorizationToken: $authorizationToken
+  ) {
     order_id
     redirect_url
     fraud_status
