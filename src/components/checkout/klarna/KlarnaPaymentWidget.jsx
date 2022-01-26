@@ -1,16 +1,11 @@
 import { useEffect } from "react";
-import { BaseButton } from "./BaseButton";
+import { BaseButton } from "../../BaseButton";
 
-export const KlarnaPayment = ({ klarnaData, cartData, onAuthorization }) => {
-  /*  const klarnaAsyncCallback = () => {
-   try{
-    Klarna.Payments.init({
-      client_token: clientToken,
-    });
-   } catch(err) {
-       console.log(err);
-   }
-  }; */
+export const KlarnaPaymentWidget = ({
+  klarnaData,
+  cartData,
+  onAuthorization,
+}) => {
   const { client_token, payment_method_categories, session_id } = klarnaData;
   useEffect(() => {
     window.klarnaAsyncCallback = function () {
@@ -34,7 +29,7 @@ export const KlarnaPayment = ({ klarnaData, cartData, onAuthorization }) => {
     window.klarnaAsyncCallback();
   }, []);
 
-  const klarnaAuthorize = () => {
+  const onKlarnaContinueClick = () => {
     Klarna.Payments.authorize(
       {
         payment_method_category: "pay_now",
@@ -46,7 +41,6 @@ export const KlarnaPayment = ({ klarnaData, cartData, onAuthorization }) => {
         onAuthorization(res);
       }
     );
-    // TODO: should send this to backend yes :))
   };
 
   return (
@@ -70,9 +64,13 @@ export const KlarnaPayment = ({ klarnaData, cartData, onAuthorization }) => {
           id="klarna_container"
           style={{ width: "500px", margin: "auto" }}
         ></div>
+        <div
+          id="klarna_container"
+          style={{ width: "500px", margin: "auto" }}
+        ></div>
         <div className="w-[500px] mx-auto pb-8 pt-2">
           <BaseButton
-            onClick={() => klarnaAuthorize()}
+            onClick={() => onKlarnaContinueClick()}
             className="authorize uppercase w-full"
           >
             Continue
