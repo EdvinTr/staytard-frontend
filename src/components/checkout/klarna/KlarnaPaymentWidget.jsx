@@ -1,14 +1,17 @@
+import Image from "next/image";
 import { useEffect } from "react";
 import { BaseButton } from "../../BaseButton";
 
 export const KlarnaPaymentWidget = ({
-  klarnaData,
+  klarnaSessionData,
   cartData,
   onAuthorization,
+  error,
 }) => {
-  const { client_token, payment_method_categories, session_id } = klarnaData;
+  const { client_token, payment_method_categories, session_id } =
+    klarnaSessionData;
   useEffect(() => {
-    window.klarnaAsyncCallback = function () {
+    const initKlarnaPayment = () => {
       Klarna.Payments.init({
         client_token: client_token,
       });
@@ -21,15 +24,16 @@ export const KlarnaPaymentWidget = ({
         },
 
         function (res) {
+          // TODO: can remove this whenever
           console.log("Load function called");
           console.debug(res);
         }
       );
     };
-    window.klarnaAsyncCallback();
-  }, []);
+    initKlarnaPayment();
+  }, [client_token]);
 
-  const onKlarnaContinueClick = () => {
+  const onKlarnaContinueClick = async () => {
     Klarna.Payments.authorize(
       {
         payment_method_category: "pay_now",
@@ -37,8 +41,8 @@ export const KlarnaPaymentWidget = ({
       {
         ...cartData,
       },
-      function (res) {
-        onAuthorization(res);
+      async function (res) {
+        await onAuthorization(res);
       }
     );
   };
@@ -54,9 +58,12 @@ export const KlarnaPaymentWidget = ({
             margin: "auto",
           }}
         >
-          <img
+          <Image
             src="https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg"
-            style={{ width: "200px", margin: "auto" }}
+            className="m-auto "
+            width={200}
+            alt="Klarna logo"
+            height={200}
           />
         </div>
 
@@ -64,11 +71,13 @@ export const KlarnaPaymentWidget = ({
           id="klarna_container"
           style={{ width: "500px", margin: "auto" }}
         ></div>
-        <div
-          id="klarna_container"
-          style={{ width: "500px", margin: "auto" }}
-        ></div>
+
         <div className="w-[500px] mx-auto pb-8 pt-2">
+          {error && (
+            <p className="text-red-500 text-sm pt-4">
+              Something went wrong while creating the order. Please try again.
+            </p>
+          )}
           <BaseButton
             onClick={() => onKlarnaContinueClick()}
             className="authorize uppercase w-full"

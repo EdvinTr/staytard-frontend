@@ -27,19 +27,6 @@ export type AttributeValueType = {
   value: Scalars['String'];
 };
 
-export type AuthorizeKlarnaResponse = {
-  __typename?: 'AuthorizeKlarnaResponse';
-  authorized_payment_method: AuthorizedPaymentMethod;
-  fraud_status: Scalars['String'];
-  order_id: Scalars['String'];
-  redirect_url: Scalars['String'];
-};
-
-export type AuthorizedPaymentMethod = {
-  __typename?: 'AuthorizedPaymentMethod';
-  type: Scalars['String'];
-};
-
 export enum Brand_Sort_By {
   Id = 'ID',
   Name = 'NAME'
@@ -56,13 +43,6 @@ export type BillingAddressInput = {
   region?: InputMaybe<Scalars['String']>;
   street_address: Scalars['String'];
   title?: InputMaybe<Scalars['String']>;
-};
-
-export type CreateCustomerOrderInput = {
-  city: Scalars['String'];
-  deliveryAddress: Scalars['String'];
-  orderItems: Array<OrderItemInput>;
-  postalCode: Scalars['String'];
 };
 
 export type CreateProductAttributeInput = {
@@ -98,7 +78,9 @@ export type CustomerOrder = {
   deliveryAddress: Scalars['String'];
   grandTotal: Scalars['Float'];
   id: Scalars['Float'];
+  orderNumber: Scalars['String'];
   orderStatusId: Scalars['Float'];
+  paymentType: Scalars['String'];
   postalCode: Scalars['String'];
   shippingCost: Scalars['Float'];
   totalAmount: Scalars['Float'];
@@ -144,8 +126,7 @@ export type LoginUserDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
-  createCustomerOrder: CustomerOrder;
-  createOrderWithKlarna: AuthorizeKlarnaResponse;
+  createOrderWithKlarna: CustomerOrder;
   createProduct: Product;
   createProductReview: ProductReview;
   initializeKlarnaSession: KlarnaSessionResponse;
@@ -158,11 +139,6 @@ export type Mutation = {
 
 export type MutationAuthenticateWithGoogleArgs = {
   googleAuthToken: Scalars['String'];
-};
-
-
-export type MutationCreateCustomerOrderArgs = {
-  input: CreateCustomerOrderInput;
 };
 
 
@@ -201,14 +177,10 @@ export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
 };
 
-export type OrderItemInput = {
-  productId: Scalars['Float'];
-  quantity: Scalars['Float'];
-};
-
 export type OrderLineInput = {
   image_url: Scalars['String'];
   name: Scalars['String'];
+  productId: Scalars['Float'];
   product_url: Scalars['String'];
   quantity: Scalars['Float'];
   tax_rate: Scalars['Float'];
@@ -321,6 +293,7 @@ export type ProductSize = {
 export type Query = {
   __typename?: 'Query';
   categories: Array<ProductCategory>;
+  customerOrders: Array<CustomerOrder>;
   getOneCategory: ProductCategory;
   me: User;
   product: Product;
@@ -417,7 +390,7 @@ export type CreateOrderWithKlarnaMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrderWithKlarnaMutation = { __typename?: 'Mutation', createOrderWithKlarna: { __typename?: 'AuthorizeKlarnaResponse', order_id: string, redirect_url: string, fraud_status: string, authorized_payment_method: { __typename?: 'AuthorizedPaymentMethod', type: string } } };
+export type CreateOrderWithKlarnaMutation = { __typename?: 'Mutation', createOrderWithKlarna: { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, shippingCost: number, userId: string, paymentType: string, orderStatusId: number } };
 
 export type InitializeKlarnaSessionMutationVariables = Exact<{
   input: InitKlarnaSessionInput;
@@ -544,12 +517,15 @@ export const CoreUserFieldsFragmentDoc = gql`
 export const CreateOrderWithKlarnaDocument = gql`
     mutation CreateOrderWithKlarna($input: InitKlarnaSessionInput!, $authorizationToken: String!) {
   createOrderWithKlarna(input: $input, authorizationToken: $authorizationToken) {
-    order_id
-    redirect_url
-    fraud_status
-    authorized_payment_method {
-      type
-    }
+    id
+    orderNumber
+    deliveryAddress
+    city
+    postalCode
+    shippingCost
+    userId
+    paymentType
+    orderStatusId
   }
 }
     `;

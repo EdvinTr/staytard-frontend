@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -22,10 +22,21 @@ interface SelectOption {
 }
 // TODO: add meta tags and OG tags
 const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
-  const [selectedSize, setSelectedSize] = useState<null | string>("");
+  const [selectedSize, setSelectedSize] = useState<null | string>(null);
   const router = useRouter();
   const currentPath = router.pathname;
   const queryColor = router.query.color;
+
+  useEffect(() => {
+    if (queryColor) {
+      const attr = product.attributes.find(
+        (attr) => attr.color.value === queryColor
+      );
+      setSelectedSize(attr?.size.value || null);
+    } else {
+      setSelectedSize(product.attributes[0].size.value);
+    }
+  }, [queryColor, product.attributes]);
   /*  if (!queryColor) {
     router.push(
       `/${APP_PAGE_ROUTE.PRODUCT}/${product.id}?color=${product.attributes[0].color.value}`
@@ -34,7 +45,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   const addToCart = () => {
     console.log(selectedSize);
 
-    /* localStorage.setItem(
+    /*  localStorage.setItem(
       "cart",
       JSON.stringify([
         ...JSON.parse(localStorage.getItem("cart") || "[]"),
@@ -52,8 +63,6 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               navigation
               pagination={{ dynamicBullets: false, clickable: true }}
               slidesPerView={1.4}
-              onSlideChange={() => console.log("slide change")}
-              onSwiper={(swiper) => console.log(swiper)}
             >
               {product.images.map(({ imageUrl }, idx) => (
                 <SwiperSlide key={idx}>

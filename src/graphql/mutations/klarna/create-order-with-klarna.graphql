@@ -6,11 +6,14 @@ mutation CreateOrderWithKlarna(
     input: $input
     authorizationToken: $authorizationToken
   ) {
-    order_id
-    redirect_url
-    fraud_status
-    authorized_payment_method {
-      type
-    }
+    id
+    orderNumber
+    deliveryAddress
+    city
+    postalCode
+    shippingCost
+    userId
+    paymentType
+    orderStatusId
   }
 }

@@ -11,6 +11,7 @@ export enum APP_PAGE_ROUTE {
   MY_ORDERS = "/my-orders",
   MY_OFFERS = "my-offers",
   PRODUCT = "/product",
+  CONFIRMATION = "/confirmation",
 }
 
 export enum COOKIE_NAME {
@@ -21,6 +22,10 @@ export enum COOKIE_NAME {
 export enum QUERY_PARAM_KEY {
   SORT_BY = "sortBy",
   SORT_DIRECTION = "sortDirection",
+}
+
+export enum LOCAL_STORAGE_KEY {
+  CART = "cart",
 }
 
 export const MAX_PRODUCT_LIMIT = 50;

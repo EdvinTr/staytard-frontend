@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect } from "react";
+import { APP_PAGE_ROUTE } from "../../../constants";
 import {
   InitKlarnaSessionInput,
   useCreateOrderWithKlarnaMutation,
@@ -24,7 +25,8 @@ export const KlarnaPaymentControls = () => {
   const [initializeKlarna, { data: klarnaSessionData, loading }] =
     useInitializeKlarnaSessionMutation();
 
-  const [createOrderWithKlarna] = useCreateOrderWithKlarnaMutation();
+  const [createOrderWithKlarna, { error: createOrderError }] =
+    useCreateOrderWithKlarnaMutation();
 
   // TODO: should grab stuff from cart
   const cartData: InitKlarnaSessionInput = {
@@ -41,6 +43,7 @@ export const KlarnaPaymentControls = () => {
         total_discount_amount: 0,
         total_tax_amount: 0,
         unit_price: 100,
+        productId: 25555,
       },
     ],
     purchase_country: "SE",
@@ -83,19 +86,22 @@ export const KlarnaPaymentControls = () => {
       if (!response || !response.data) {
         throw new Error();
       }
-      const redirectURL = response.data.createOrderWithKlarna.redirect_url;
+      const orderNumber = response.data.createOrderWithKlarna.orderNumber;
+      const redirectURL = `${APP_PAGE_ROUTE.CONFIRMATION}/${orderNumber}`;
       router.push(redirectURL);
     } catch (err) {
       console.log(err);
+      // TODO: show some error to the user or something
     }
   };
   return (
     <Fragment>
       {klarnaSessionData && (
         <KlarnaPaymentWidget
-          klarnaData={klarnaSessionData.initializeKlarnaSession}
+          klarnaSessionData={klarnaSessionData.initializeKlarnaSession}
           cartData={cartData}
           onAuthorization={handleKlarnaAuthorization}
+          error={createOrderError}
         />
       )}
     </Fragment>
