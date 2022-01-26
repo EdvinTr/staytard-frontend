@@ -1,5 +1,5 @@
-mutation InitializeKlarnaSessions {
-  initializeKlarnaSession {
+mutation InitializeKlarnaSession($input: InitKlarnaSessionInput!) {
+  initializeKlarnaSession(input: $input) {
     session_id
     client_token
     payment_method_categories {

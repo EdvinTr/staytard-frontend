@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { BaseButton } from "./BaseButton";
 
-export const KlarnaPayment = ({ clientToken }) => {
+export const KlarnaPayment = ({ klarnaData, cartData, onAuthorization }) => {
   /*  const klarnaAsyncCallback = () => {
    try{
     Klarna.Payments.init({
@@ -11,19 +11,20 @@ export const KlarnaPayment = ({ clientToken }) => {
        console.log(err);
    }
   }; */
-
+  const { client_token, payment_method_categories, session_id } = klarnaData;
   useEffect(() => {
     window.klarnaAsyncCallback = function () {
       Klarna.Payments.init({
-        client_token: clientToken,
+        client_token: client_token,
       });
       console.log("Payments initialized");
 
       Klarna.Payments.load(
         {
           container: "#klarna_container",
-          payment_method_category: "pay_over_time",
+          payment_method_category: "pay_now",
         },
+
         function (res) {
           console.log("Load function called");
           console.debug(res);
@@ -36,56 +37,16 @@ export const KlarnaPayment = ({ clientToken }) => {
   const klarnaAuthorize = () => {
     Klarna.Payments.authorize(
       {
-        payment_method_category: "pay_over_time",
+        payment_method_category: "pay_now",
       },
       {
-        purchase_country: "US",
-        purchase_currency: "USD",
-        locale: "en-US",
-        order_amount: 20000,
-        order_tax_amount: 0,
-        order_lines: [
-          {
-            name: "black T-Shirt",
-            quantity: 2,
-            unit_price: 5000,
-            tax_rate: 0,
-            total_amount: 10000,
-            total_discount_amount: 0,
-            total_tax_amount: 0,
-            product_url: "https://www.estore.com/products/f2a8d7e34",
-            image_url: "https://www.estore.com/product_image.png",
-          },
-          {
-            name: "red trousers",
-            quantity: 1,
-            unit_price: 10000,
-            tax_rate: 0,
-            total_amount: 10000,
-            total_discount_amount: 0,
-            total_tax_amount: 0,
-            product_url: "https://www.estore.com/products/f2a8d7e34",
-            image_url: "https://www.estore.com/product_image.png",
-          },
-        ],
-        billing_address: {
-          given_name: "Jane",
-          family_name: "Doe",
-          email: "jane@doe.com",
-          title: "Ms",
-          street_address: "512 City Park Ave",
-          postal_code: "43215",
-          city: "Columbus",
-          region: "oh",
-          phone: "6142607295",
-          country: "US",
-        },
+        ...cartData,
       },
       function (res) {
-        console.log("Response from the authorize call:");
-        console.log(res);
+        onAuthorization(res);
       }
     );
+    // TODO: should send this to backend yes :))
   };
 
   return (

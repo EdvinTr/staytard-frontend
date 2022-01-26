@@ -3,6 +3,7 @@ fragment CoreUserFields on User {
   firstName
   lastName
   email
+  mobilePhoneNumber
   isRegisteredWithGoogle
   isEmailConfirmed
 }

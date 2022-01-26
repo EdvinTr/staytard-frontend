@@ -1,0 +1,13 @@
+mutation AuthorizeKlarna(
+  $input: InitKlarnaSessionInput!
+  $authorizationToken: String!
+) {
+  authorizeKlarnaToken(input: $input, authorizationToken: $authorizationToken) {
+    order_id
+    redirect_url
+    fraud_status
+    authorized_payment_method {
+      type
+    }
+  }
+}

@@ -27,10 +27,36 @@ export type AttributeValueType = {
   value: Scalars['String'];
 };
 
+export type AuthorizeKlarnaResponse = {
+  __typename?: 'AuthorizeKlarnaResponse';
+  authorized_payment_method: AuthorizedPaymentMethod;
+  fraud_status: Scalars['String'];
+  order_id: Scalars['String'];
+  redirect_url: Scalars['String'];
+};
+
+export type AuthorizedPaymentMethod = {
+  __typename?: 'AuthorizedPaymentMethod';
+  type: Scalars['String'];
+};
+
 export enum Brand_Sort_By {
   Id = 'ID',
   Name = 'NAME'
 }
+
+export type BillingAddressInput = {
+  city: Scalars['String'];
+  country?: InputMaybe<Scalars['String']>;
+  email: Scalars['String'];
+  family_name: Scalars['String'];
+  given_name: Scalars['String'];
+  phone: Scalars['String'];
+  postal_code: Scalars['String'];
+  region?: InputMaybe<Scalars['String']>;
+  street_address: Scalars['String'];
+  title?: InputMaybe<Scalars['String']>;
+};
 
 export type CreateCustomerOrderInput = {
   city: Scalars['String'];
@@ -93,6 +119,16 @@ export type GetProductBrandsInput = {
   sortDirection?: InputMaybe<Sort_Direction>;
 };
 
+export type InitKlarnaSessionInput = {
+  billing_address: BillingAddressInput;
+  locale: Scalars['String'];
+  order_amount: Scalars['Float'];
+  order_lines: Array<OrderLineInput>;
+  order_tax_amount: Scalars['Float'];
+  purchase_country: Scalars['String'];
+  purchase_currency: Scalars['String'];
+};
+
 export type KlarnaSessionResponse = {
   __typename?: 'KlarnaSessionResponse';
   client_token: Scalars['String'];
@@ -108,6 +144,7 @@ export type LoginUserDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
+  authorizeKlarnaToken: AuthorizeKlarnaResponse;
   createCustomerOrder: CustomerOrder;
   createProduct: Product;
   createProductReview: ProductReview;
@@ -124,6 +161,12 @@ export type MutationAuthenticateWithGoogleArgs = {
 };
 
 
+export type MutationAuthorizeKlarnaTokenArgs = {
+  authorizationToken: Scalars['String'];
+  input: InitKlarnaSessionInput;
+};
+
+
 export type MutationCreateCustomerOrderArgs = {
   input: CreateCustomerOrderInput;
 };
@@ -136,6 +179,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateProductReviewArgs = {
   input: CreateProductReviewInput;
+};
+
+
+export type MutationInitializeKlarnaSessionArgs = {
+  input: InitKlarnaSessionInput;
 };
 
 
@@ -156,6 +204,18 @@ export type MutationRegisterUserArgs = {
 export type OrderItemInput = {
   productId: Scalars['Float'];
   quantity: Scalars['Float'];
+};
+
+export type OrderLineInput = {
+  image_url: Scalars['String'];
+  name: Scalars['String'];
+  product_url: Scalars['String'];
+  quantity: Scalars['Float'];
+  tax_rate: Scalars['Float'];
+  total_amount: Scalars['Float'];
+  total_discount_amount: Scalars['Float'];
+  total_tax_amount: Scalars['Float'];
+  unit_price: Scalars['Float'];
 };
 
 export enum Product_Sort_By {
@@ -321,7 +381,7 @@ export type User = {
   isEmailConfirmed: Scalars['Boolean'];
   isRegisteredWithGoogle: Scalars['Boolean'];
   lastName: Scalars['String'];
-  mobilePhoneNumber: Scalars['String'];
+  mobilePhoneNumber?: Maybe<Scalars['String']>;
   permissions: Array<Permission>;
   updatedAt: Scalars['DateTime'];
 };
@@ -349,12 +409,22 @@ export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, na
 
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
-export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
+export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
 
-export type InitializeKlarnaSessionsMutationVariables = Exact<{ [key: string]: never; }>;
+export type AuthorizeKlarnaMutationVariables = Exact<{
+  input: InitKlarnaSessionInput;
+  authorizationToken: Scalars['String'];
+}>;
 
 
-export type InitializeKlarnaSessionsMutation = { __typename?: 'Mutation', initializeKlarnaSession: { __typename?: 'KlarnaSessionResponse', session_id: string, client_token: string, payment_method_categories: Array<{ __typename?: 'PaymentMethodCategory', identifier: string, name: string, asset_urls: { __typename?: 'AssetUrl', descriptive: string, standard: string } }> } };
+export type AuthorizeKlarnaMutation = { __typename?: 'Mutation', authorizeKlarnaToken: { __typename?: 'AuthorizeKlarnaResponse', order_id: string, redirect_url: string, fraud_status: string, authorized_payment_method: { __typename?: 'AuthorizedPaymentMethod', type: string } } };
+
+export type InitializeKlarnaSessionMutationVariables = Exact<{
+  input: InitKlarnaSessionInput;
+}>;
+
+
+export type InitializeKlarnaSessionMutation = { __typename?: 'Mutation', initializeKlarnaSession: { __typename?: 'KlarnaSessionResponse', session_id: string, client_token: string, payment_method_categories: Array<{ __typename?: 'PaymentMethodCategory', identifier: string, name: string, asset_urls: { __typename?: 'AssetUrl', descriptive: string, standard: string } }> } };
 
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
@@ -411,7 +481,7 @@ export type FindOneProductQuery = { __typename?: 'Query', product: { __typename?
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
 
 export const CoreCategoryFieldsFragmentDoc = gql`
     fragment CoreCategoryFields on ProductCategory {
@@ -466,13 +536,53 @@ export const CoreUserFieldsFragmentDoc = gql`
   firstName
   lastName
   email
+  mobilePhoneNumber
   isRegisteredWithGoogle
   isEmailConfirmed
 }
     `;
-export const InitializeKlarnaSessionsDocument = gql`
-    mutation InitializeKlarnaSessions {
-  initializeKlarnaSession {
+export const AuthorizeKlarnaDocument = gql`
+    mutation AuthorizeKlarna($input: InitKlarnaSessionInput!, $authorizationToken: String!) {
+  authorizeKlarnaToken(input: $input, authorizationToken: $authorizationToken) {
+    order_id
+    redirect_url
+    fraud_status
+    authorized_payment_method {
+      type
+    }
+  }
+}
+    `;
+export type AuthorizeKlarnaMutationFn = Apollo.MutationFunction<AuthorizeKlarnaMutation, AuthorizeKlarnaMutationVariables>;
+
+/**
+ * __useAuthorizeKlarnaMutation__
+ *
+ * To run a mutation, you first call `useAuthorizeKlarnaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAuthorizeKlarnaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [authorizeKlarnaMutation, { data, loading, error }] = useAuthorizeKlarnaMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      authorizationToken: // value for 'authorizationToken'
+ *   },
+ * });
+ */
+export function useAuthorizeKlarnaMutation(baseOptions?: Apollo.MutationHookOptions<AuthorizeKlarnaMutation, AuthorizeKlarnaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AuthorizeKlarnaMutation, AuthorizeKlarnaMutationVariables>(AuthorizeKlarnaDocument, options);
+      }
+export type AuthorizeKlarnaMutationHookResult = ReturnType<typeof useAuthorizeKlarnaMutation>;
+export type AuthorizeKlarnaMutationResult = Apollo.MutationResult<AuthorizeKlarnaMutation>;
+export type AuthorizeKlarnaMutationOptions = Apollo.BaseMutationOptions<AuthorizeKlarnaMutation, AuthorizeKlarnaMutationVariables>;
+export const InitializeKlarnaSessionDocument = gql`
+    mutation InitializeKlarnaSession($input: InitKlarnaSessionInput!) {
+  initializeKlarnaSession(input: $input) {
     session_id
     client_token
     payment_method_categories {
@@ -486,31 +596,32 @@ export const InitializeKlarnaSessionsDocument = gql`
   }
 }
     `;
-export type InitializeKlarnaSessionsMutationFn = Apollo.MutationFunction<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>;
+export type InitializeKlarnaSessionMutationFn = Apollo.MutationFunction<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>;
 
 /**
- * __useInitializeKlarnaSessionsMutation__
+ * __useInitializeKlarnaSessionMutation__
  *
- * To run a mutation, you first call `useInitializeKlarnaSessionsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInitializeKlarnaSessionsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useInitializeKlarnaSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitializeKlarnaSessionMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [initializeKlarnaSessionsMutation, { data, loading, error }] = useInitializeKlarnaSessionsMutation({
+ * const [initializeKlarnaSessionMutation, { data, loading, error }] = useInitializeKlarnaSessionMutation({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useInitializeKlarnaSessionsMutation(baseOptions?: Apollo.MutationHookOptions<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>) {
+export function useInitializeKlarnaSessionMutation(baseOptions?: Apollo.MutationHookOptions<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>(InitializeKlarnaSessionsDocument, options);
+        return Apollo.useMutation<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>(InitializeKlarnaSessionDocument, options);
       }
-export type InitializeKlarnaSessionsMutationHookResult = ReturnType<typeof useInitializeKlarnaSessionsMutation>;
-export type InitializeKlarnaSessionsMutationResult = Apollo.MutationResult<InitializeKlarnaSessionsMutation>;
-export type InitializeKlarnaSessionsMutationOptions = Apollo.BaseMutationOptions<InitializeKlarnaSessionsMutation, InitializeKlarnaSessionsMutationVariables>;
+export type InitializeKlarnaSessionMutationHookResult = ReturnType<typeof useInitializeKlarnaSessionMutation>;
+export type InitializeKlarnaSessionMutationResult = Apollo.MutationResult<InitializeKlarnaSessionMutation>;
+export type InitializeKlarnaSessionMutationOptions = Apollo.BaseMutationOptions<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>;
 export const AuthenticateWithGoogleDocument = gql`
     mutation AuthenticateWithGoogle($googleAuthToken: String!) {
   authenticateWithGoogle(googleAuthToken: $googleAuthToken) {

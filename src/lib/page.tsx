@@ -11,6 +11,7 @@ import { getApolloClient } from './apolloClient';
 
 
 
+
 export async function getServerPageGetCategories
     (options: Omit<Apollo.QueryOptions<Types.GetCategoriesQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
