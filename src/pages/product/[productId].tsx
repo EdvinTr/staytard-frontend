@@ -9,6 +9,8 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/MyContainer";
+import { LOCAL_STORAGE_KEY } from "../../constants";
+import { useStorage } from "../../hooks/useStorage";
 import { FindOneProductQuery } from "../../lib/graphql";
 import { ssrFindOneProduct } from "../../lib/page";
 SwiperCore.use([Pagination]);
@@ -20,12 +22,29 @@ interface SelectOption {
   label: string;
   value: string;
 }
+
+type Cart = {
+  products: [
+    {
+      productId: number;
+      quantity: number;
+      unitPrice: number;
+      attributes: {
+        color: string;
+        size: string;
+      };
+    }
+  ];
+  totalPrice: number;
+};
 // TODO: add meta tags and OG tags
 const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState<null | string>(null);
   const router = useRouter();
   const currentPath = router.pathname;
   const queryColor = router.query.color;
+
+  const { getItem, setItem } = useStorage();
 
   useEffect(() => {
     if (queryColor) {
@@ -43,15 +62,21 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
     );
   } */
   const addToCart = () => {
-    console.log(selectedSize);
+    const currentCart = getItem(LOCAL_STORAGE_KEY.CART, "local") || [];
+    //  setItem(LOCAL_STORAGE_KEY.CART, ["hello"],"local" )
+    console.log(currentCart);
 
-    /*  localStorage.setItem(
-      "cart",
-      JSON.stringify([
-        ...JSON.parse(localStorage.getItem("cart") || "[]"),
-        product.id,
-      ])
-    ); */
+    /* setItem(LOCAL_STORAGE_KEY.CART, [...currentCart, {
+      {
+        id: product.id,
+        unitPrice: product.unitPrice,
+        quantity: 1,
+        attributes: {
+          color: queryColor,
+          size: selectedSize,
+        },
+      },
+    }],Cart ) */
   };
 
   return (

@@ -1,41 +1,36 @@
-import { useCallback, useEffect, useState } from "react";
+type StorageType = "session" | "local";
+type UseStorageReturnValue = {
+  getItem: (key: string, type?: StorageType) => string;
+  setItem: (key: string, value: string, type?: StorageType) => boolean;
+  removeItem: (key: string, type?: StorageType) => void;
+};
 
-export function useLocalStorage<T>(key: string, defaultValue: T) {
-  return useStorage<T>(key, defaultValue, window.localStorage);
-}
+export const useStorage = (): UseStorageReturnValue => {
+  const storageType = (type?: StorageType): "localStorage" | "sessionStorage" =>
+    `${type ?? "session"}Storage`;
 
-export function useSessionStorage<T>(key: string, defaultValue: T) {
-  return useStorage<T>(key, defaultValue, window.sessionStorage);
-}
+  const isBrowser: boolean = ((): boolean => typeof window !== "undefined")();
 
-function useStorage<T>(
-  key: string,
-  defaultValue: T,
-  storageObject: Storage
-): [T, any, any] {
-  const [value, setValue] = useState(() => {
-    const jsonValue = storageObject.getItem(key);
-    if (jsonValue != null) {
-      return JSON.parse(jsonValue); // return value if exists in storage
+  const getItem = (key: string, type?: StorageType): string => {
+    return isBrowser ? window[storageType(type)][key] : "";
+  };
+
+  const setItem = (key: string, value: string, type?: StorageType): boolean => {
+    if (isBrowser) {
+      window[storageType(type)].setItem(key, value);
+      return true;
     }
 
-    if (typeof defaultValue === "function") {
-      return defaultValue();
-    } else {
-      return defaultValue;
-    }
-  });
+    return false;
+  };
 
-  useEffect(() => {
-    if (value === undefined) {
-      return storageObject.removeItem(key);
-    }
-    storageObject.setItem(key, JSON.stringify(value)); // if value is not undefined set it in storage
-  }, [key, value, storageObject]);
+  const removeItem = (key: string, type?: StorageType): void => {
+    window[storageType(type)].removeItem(key);
+  };
 
-  const remove = useCallback(() => {
-    setValue(undefined);
-  }, []);
-
-  return [value, setValue, remove];
-}
+  return {
+    getItem,
+    setItem,
+    removeItem,
+  };
+};
