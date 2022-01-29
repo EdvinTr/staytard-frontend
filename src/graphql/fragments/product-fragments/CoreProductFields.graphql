@@ -1,8 +1,9 @@
 fragment CoreProductFields on Product {
   id
   name
-  unitPrice
-  priceLabel
+  originalPrice
+  currentPrice
+  currentPriceLabel
   isDiscontinued
   brand {
     id

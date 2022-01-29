@@ -82,6 +82,7 @@ export type CustomerOrder = {
   orderStatusId: Scalars['Float'];
   paymentType: Scalars['String'];
   postalCode: Scalars['String'];
+  purchaseCurrency: Scalars['String'];
   shippingCost: Scalars['Float'];
   totalAmount: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
@@ -218,14 +219,15 @@ export type Product = {
   brandId: Scalars['Float'];
   categoryId: Scalars['Float'];
   createdAt: Scalars['DateTime'];
+  currentPrice: Scalars['Float'];
+  currentPriceLabel: Scalars['String'];
   description: Scalars['String'];
   id: Scalars['Float'];
   images: Array<ProductImage>;
   isDiscontinued: Scalars['Boolean'];
   name: Scalars['String'];
-  priceLabel: Scalars['String'];
+  originalPrice: Scalars['Float'];
   reviews: Array<ProductReview>;
-  unitPrice: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -378,7 +380,7 @@ export type CoreCategoryFieldsFragment = { __typename?: 'ProductCategory', id: n
 
 export type CoreAttributeFieldsFragment = { __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } };
 
-export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> };
+export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> };
 
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
@@ -449,7 +451,7 @@ export type FindOneProductQueryVariables = Exact<{
 }>;
 
 
-export type FindOneProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', description: string, id: number, name: string, unitPrice: number, priceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
+export type FindOneProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', description: string, id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -482,8 +484,9 @@ export const CoreProductFieldsFragmentDoc = gql`
     fragment CoreProductFields on Product {
   id
   name
-  unitPrice
-  priceLabel
+  originalPrice
+  currentPrice
+  currentPriceLabel
   isDiscontinued
   brand {
     id

@@ -197,7 +197,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               </h2>
               <strong className="text-13 font-semibold flex">
                 {/* {product.priceLabel} */}
-                {product.unitPrice} EUR
+                {product.currentPrice} EUR
               </strong>
               {currentWindowWidth < 768 && (
                 <div className="text-[8px] uppercase pt-1">

@@ -6,7 +6,7 @@ export interface GetProductsResponse {
 }
 
 export interface Pagination {
-  limit: string;
+  limit: number;
   totalItems: number;
   totalPages: number;
   nextPage: number;
@@ -17,7 +17,8 @@ export interface Pagination {
 export interface ProductItem {
   id: number;
   name: string;
-  unitPrice: number;
+  originalPrice: number;
+  currentPrice: number;
   isDiscontinued: boolean;
   brand: Brand;
   images: ProductImage[];
@@ -33,7 +34,23 @@ export interface Attribute {
 
 export interface Color {
   id: number;
-  value: string;
+  value: Value;
+}
+
+export enum Value {
+  Black = "Black",
+  Blue = "Blue",
+  Brown = "Brown",
+  Gray = "Gray",
+  L = "L",
+  M = "M",
+  Navy = "Navy",
+  Red = "Red",
+  S = "S",
+  White = "White",
+  Xl = "XL",
+  Xs = "XS",
+  Xxl = "XXL",
 }
 
 export interface Brand {

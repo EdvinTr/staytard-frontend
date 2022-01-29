@@ -43,7 +43,7 @@ export const KlarnaPaymentControls = () => {
         total_discount_amount: 0,
         total_tax_amount: 0,
         unit_price: 100,
-        productId: 25555,
+        productId: 1,
       },
     ],
     purchase_country: "SE",

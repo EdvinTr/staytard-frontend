@@ -2,15 +2,14 @@ import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/MyContainer";
-import { LOCAL_STORAGE_KEY } from "../../constants";
-import { useStorage } from "../../hooks/useStorage";
+import CartContext from "../../contexts/CartContext";
 import { FindOneProductQuery } from "../../lib/graphql";
 import { ssrFindOneProduct } from "../../lib/page";
 SwiperCore.use([Pagination]);
@@ -44,7 +43,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   const currentPath = router.pathname;
   const queryColor = router.query.color;
 
-  const { getItem, setItem } = useStorage();
+  const { addToCart: addToContextCart } = useContext(CartContext);
 
   useEffect(() => {
     if (queryColor) {
@@ -61,22 +60,12 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
       `/${APP_PAGE_ROUTE.PRODUCT}/${product.id}?color=${product.attributes[0].color.value}`
     );
   } */
-  const addToCart = () => {
-    const currentCart = getItem(LOCAL_STORAGE_KEY.CART, "local") || [];
-    //  setItem(LOCAL_STORAGE_KEY.CART, ["hello"],"local" )
-    console.log(currentCart);
 
-    /* setItem(LOCAL_STORAGE_KEY.CART, [...currentCart, {
-      {
-        id: product.id,
-        unitPrice: product.unitPrice,
-        quantity: 1,
-        attributes: {
-          color: queryColor,
-          size: selectedSize,
-        },
-      },
-    }],Cart ) */
+  const addToCart = () => {
+    addToContextCart({
+      productId: product.id,
+      quantity: 1,
+    });
   };
 
   return (
@@ -148,7 +137,9 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
                 </span>
                 <span className="lg:text-lg">{product.name}</span>
               </h1>
-              <h2 className="text-lg font-bold pt-2">{product.priceLabel}</h2>
+              <h2 className="text-lg font-bold pt-2">
+                {product.currentPriceLabel}
+              </h2>
             </div>
             {/* size and color select */}
             <div className="pt-8 flex justify-evenly space-x-4">
