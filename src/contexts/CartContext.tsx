@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { LOCAL_STORAGE_KEY } from "../constants";
 
 interface CartItem {
-  productId: number;
+  sku: string;
   quantity: number;
 }
 
@@ -35,12 +35,16 @@ export const CartProvider = ({ children }: any) => {
       setCart(JSON.parse(localCart));
     }
   }, []);
-  // TODO:
-  // FIXME: do things
   const addToCart = (item: CartItem) => {
-    console.log(item);
-    const newCart = [...cart, item];
+    const cartItem = cart.find((cartItem) => cartItem.sku === item.sku);
+    const newCart = [...cart];
+    if (cartItem) {
+      cartItem.quantity += item.quantity;
+    } else {
+      newCart.push(item);
+    }
     localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(newCart));
+    setCart(newCart);
   };
 
   return (

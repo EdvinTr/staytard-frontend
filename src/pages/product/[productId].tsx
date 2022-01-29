@@ -22,20 +22,6 @@ interface SelectOption {
   value: string;
 }
 
-type Cart = {
-  products: [
-    {
-      productId: number;
-      quantity: number;
-      unitPrice: number;
-      attributes: {
-        color: string;
-        size: string;
-      };
-    }
-  ];
-  totalPrice: number;
-};
 // TODO: add meta tags and OG tags
 const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState<null | string>(null);
@@ -62,8 +48,17 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   } */
 
   const addToCart = () => {
+    const sku = product.attributes.find((attr) => {
+      return (
+        attr.color.value === queryColor && attr.size.value === selectedSize
+      );
+    })?.sku;
+    if (!sku) {
+      return; // TODO: show error of some sort
+    }
+
     addToContextCart({
-      productId: product.id,
+      sku,
       quantity: 1,
     });
   };
