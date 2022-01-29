@@ -88,7 +88,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               ))}
             </Swiper>
           </div>
-          <div className="min-w-0 xl:min-w-[30rem] 2xl:min-w-[40rem]">
+          <div className="min-w-0 xl:min-w-[30rem] 2xl:min-w-[40rem] w-full ">
             {/* small images that do absolutely nothing :) */}
             <div className="flex space-x-2 pb-8">
               {product.images.slice(0, 5).map(({ imageUrl }, idx) => {

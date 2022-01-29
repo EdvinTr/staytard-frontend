@@ -1,9 +1,10 @@
 import { SearchIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
+import CartContext from "../../contexts/CartContext";
 import {
   GetCategoriesQuery,
   useGetCategoriesQuery,
@@ -28,7 +29,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
-  const { data: userData, loading, error } = useMeQuery();
+  const { data: userData } = useMeQuery();
+
+  const { totalItems: totalCartItems } = useContext(CartContext);
 
   return (
     <div className="text-sm ">
@@ -69,7 +72,16 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               ) : (
                 <MyPagesPopover className="hidden lg:block" />
               )}
-              <MyCartIcon className="w-6" />
+              <Link href={APP_PAGE_ROUTE.CHECKOUT}>
+                <a className="relative">
+                  <MyCartIcon className="w-6" />
+                  {totalCartItems > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-staytard-yellow justify-center items-center inline-flex w-6 h-6 rounded-full text-xs ">
+                      {totalCartItems}
+                    </span>
+                  )}
+                </a>
+              </Link>
             </div>
           </div>
         </MyContainer>
@@ -89,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 <Link key={category.id} href={category.path}>
                   <a
                     className="underline"
-                    onClick={() => setIsHoverMenuOpen(false)} // TODO: refactor with useCallback on all user interactions that mutate state
+                    onClick={() => setIsHoverMenuOpen(false)}
                     onMouseEnter={() => {
                       if (category.children) {
                         setHoverMenuItems(category.children);
