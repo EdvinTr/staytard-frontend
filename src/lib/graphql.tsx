@@ -89,6 +89,12 @@ export type CustomerOrder = {
   userId: Scalars['String'];
 };
 
+export type FindProductsBySkusInput = {
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+  skus: Array<Scalars['String']>;
+};
+
 export type FindProductsInput = {
   categoryPath: Scalars['String'];
   limit: Scalars['Float'];
@@ -192,9 +198,9 @@ export type OrderLineInput = {
 };
 
 export enum Product_Sort_By {
+  CurrentPrice = 'CURRENT_PRICE',
   Id = 'ID',
-  Name = 'NAME',
-  UnitPrice = 'UNIT_PRICE'
+  Name = 'NAME'
 }
 
 export type PaymentMethodCategory = {
@@ -301,6 +307,7 @@ export type Query = {
   product: Product;
   productBrands: Array<ProductBrand>;
   products: QueryProductsOutput;
+  productsBySku: QueryProductsOutput;
 };
 
 
@@ -321,6 +328,11 @@ export type QueryProductBrandsArgs = {
 
 export type QueryProductsArgs = {
   input: FindProductsInput;
+};
+
+
+export type QueryProductsBySkuArgs = {
+  input: FindProductsBySkusInput;
 };
 
 export type QueryProductsOutput = {
@@ -452,6 +464,13 @@ export type FindOneProductQueryVariables = Exact<{
 
 
 export type FindOneProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', description: string, id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
+
+export type FindProductsBySkusQueryVariables = Exact<{
+  input: FindProductsBySkusInput;
+}>;
+
+
+export type FindProductsBySkusQuery = { __typename?: 'Query', productsBySku: { __typename?: 'QueryProductsOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -905,6 +924,52 @@ export type FindOneProductLazyQueryHookResult = ReturnType<typeof useFindOneProd
 export type FindOneProductQueryResult = Apollo.QueryResult<FindOneProductQuery, FindOneProductQueryVariables>;
 export function refetchFindOneProductQuery(variables: FindOneProductQueryVariables) {
       return { query: FindOneProductDocument, variables: variables }
+    }
+export const FindProductsBySkusDocument = gql`
+    query FindProductsBySkus($input: FindProductsBySkusInput!) {
+  productsBySku(input: $input) {
+    totalCount
+    hasMore
+    items {
+      ...CoreProductFields
+      attributes {
+        ...CoreAttributeFields
+      }
+    }
+  }
+}
+    ${CoreProductFieldsFragmentDoc}
+${CoreAttributeFieldsFragmentDoc}`;
+
+/**
+ * __useFindProductsBySkusQuery__
+ *
+ * To run a query within a React component, call `useFindProductsBySkusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductsBySkusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindProductsBySkusQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindProductsBySkusQuery(baseOptions: Apollo.QueryHookOptions<FindProductsBySkusQuery, FindProductsBySkusQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindProductsBySkusQuery, FindProductsBySkusQueryVariables>(FindProductsBySkusDocument, options);
+      }
+export function useFindProductsBySkusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindProductsBySkusQuery, FindProductsBySkusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindProductsBySkusQuery, FindProductsBySkusQueryVariables>(FindProductsBySkusDocument, options);
+        }
+export type FindProductsBySkusQueryHookResult = ReturnType<typeof useFindProductsBySkusQuery>;
+export type FindProductsBySkusLazyQueryHookResult = ReturnType<typeof useFindProductsBySkusLazyQuery>;
+export type FindProductsBySkusQueryResult = Apollo.QueryResult<FindProductsBySkusQuery, FindProductsBySkusQueryVariables>;
+export function refetchFindProductsBySkusQuery(variables: FindProductsBySkusQueryVariables) {
+      return { query: FindProductsBySkusDocument, variables: variables }
     }
 export const MeDocument = gql`
     query Me {

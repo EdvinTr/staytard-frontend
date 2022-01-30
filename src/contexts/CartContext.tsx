@@ -1,25 +1,21 @@
 import { createContext, useEffect, useState } from "react";
 import { LOCAL_STORAGE_KEY } from "../constants";
 
-interface CartItem {
+export interface CartItem {
   sku: string;
   quantity: number;
 }
 
 interface CartContextInterface {
-  cart: CartItem[];
   addToCart: (item: CartItem) => void;
   totalItems: number;
-}
-
-interface CartInterface {
-  cart: CartItem[];
+  getCart: () => CartItem[];
 }
 
 const CartContext = createContext<CartContextInterface>({
-  cart: [],
   totalItems: 0,
   addToCart: (productId) => {},
+  getCart: () => [],
 });
 
 export const CartProvider = ({ children }: any) => {
@@ -27,14 +23,14 @@ export const CartProvider = ({ children }: any) => {
 
   useEffect(() => {
     console.log("CartContext UseEffect run");
-
     const localCart = localStorage.getItem(LOCAL_STORAGE_KEY.CART);
-    if (!localCart) {
-      localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(cart));
-    } else {
+    if (localCart) {
       setCart(JSON.parse(localCart));
+    } else {
+      localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(cart));
     }
   }, []);
+
   const addToCart = (item: CartItem) => {
     const cartItem = cart.find((cartItem) => cartItem.sku === item.sku);
     const newCart = [...cart];
@@ -47,18 +43,19 @@ export const CartProvider = ({ children }: any) => {
     setCart(newCart);
   };
 
-  const getTotalItems = () => {
-    return cart.reduce((acc, item) => {
+  const getCart = (): CartItem[] => cart;
+
+  const getTotalItems = () =>
+    cart.reduce((acc, item) => {
       return acc + item.quantity;
     }, 0);
-  };
 
   return (
     <CartContext.Provider
       value={{
         totalItems: getTotalItems(),
-        cart: [],
         addToCart,
+        getCart,
       }}
     >
       {children}

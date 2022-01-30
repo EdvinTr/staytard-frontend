@@ -1,0 +1,12 @@
+query FindProductsBySkus($input: FindProductsBySkusInput!) {
+  productsBySku(input: $input) {
+    totalCount
+    hasMore
+    items {
+      ...CoreProductFields
+      attributes {
+        ...CoreAttributeFields
+      }
+    }
+  }
+}

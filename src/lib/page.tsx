@@ -124,6 +124,34 @@ export const ssrFindOneProduct = {
       
       usePage: useFindOneProduct,
     }
+export async function getServerPageFindProductsBySkus
+    (options: Omit<Apollo.QueryOptions<Types.FindProductsBySkusQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.FindProductsBySkusQuery>({ ...options, query: Operations.FindProductsBySkusDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useFindProductsBySkus = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.FindProductsBySkusQuery, Types.FindProductsBySkusQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.FindProductsBySkusDocument, options);
+};
+export type PageFindProductsBySkusComp = React.FC<{data?: Types.FindProductsBySkusQuery, error?: Apollo.ApolloError}>;
+export const ssrFindProductsBySkus = {
+      getServerPage: getServerPageFindProductsBySkus,
+      
+      usePage: useFindProductsBySkus,
+    }
 export async function getServerPageMe
     (options: Omit<Apollo.QueryOptions<Types.MeQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

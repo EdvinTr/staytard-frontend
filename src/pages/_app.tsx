@@ -9,7 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "swiper/css";
 import { Footer } from "../components/footer/Footer";
 import { Navbar } from "../components/navbar/Navbar";
-import { APP_PAGE_ROUTE } from "../constants";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { CartProvider } from "../contexts/CartContext";
 import { useApollo } from "../lib/apolloClient";
 import "../styles/globals.css";
@@ -41,10 +41,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <CartProvider>
+    <CartProvider>
+      <ApolloProvider client={apolloClient}>
         <Head>
-          <title>{`Staytard.com | Fashion & Designer clothes for men online`}</title>
+          <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
           <meta
             name="description"
             content="Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands."
@@ -64,8 +64,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <Footer />
         </Fragment>
-      </CartProvider>
-    </ApolloProvider>
+      </ApolloProvider>
+    </CartProvider>
   );
 }
 
