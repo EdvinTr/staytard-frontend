@@ -9,25 +9,24 @@ export interface CartItem {
 interface CartContextInterface {
   addToCart: (item: CartItem) => void;
   totalItems: number;
-  getCart: () => CartItem[];
+  cart: CartItem[];
 }
 
 const CartContext = createContext<CartContextInterface>({
   totalItems: 0,
   addToCart: (productId) => {},
-  getCart: () => [],
+  cart: [],
 });
 
 export const CartProvider = ({ children }: any) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    console.log("CartContext UseEffect run");
-    const localCart = localStorage.getItem(LOCAL_STORAGE_KEY.CART);
-    if (localCart) {
-      setCart(JSON.parse(localCart));
+    const localStorageCart = localStorage.getItem(LOCAL_STORAGE_KEY.CART);
+    if (localStorageCart) {
+      setCart(JSON.parse(localStorageCart)); // set state with localStorage cart
     } else {
-      localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(cart));
+      localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(cart)); // set localStorage cart to empty array
     }
   }, []);
 
@@ -35,9 +34,9 @@ export const CartProvider = ({ children }: any) => {
     const cartItem = cart.find((cartItem) => cartItem.sku === item.sku);
     const newCart = [...cart];
     if (cartItem) {
-      cartItem.quantity += item.quantity;
+      cartItem.quantity += item.quantity; // increase quantity if item already exists
     } else {
-      newCart.push(item);
+      newCart.push(item); // add new item to cart
     }
     localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(newCart));
     setCart(newCart);
@@ -45,7 +44,7 @@ export const CartProvider = ({ children }: any) => {
 
   const getCart = (): CartItem[] => cart;
 
-  const getTotalItems = () =>
+  const getTotalCartItems = () =>
     cart.reduce((acc, item) => {
       return acc + item.quantity;
     }, 0);
@@ -53,9 +52,9 @@ export const CartProvider = ({ children }: any) => {
   return (
     <CartContext.Provider
       value={{
-        totalItems: getTotalItems(),
+        totalItems: getTotalCartItems(),
         addToCart,
-        getCart,
+        cart: getCart(), // assigning as a function to make Next play nicely with localStorage
       }}
     >
       {children}

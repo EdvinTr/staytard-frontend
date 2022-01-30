@@ -9,14 +9,12 @@ const CheckoutPage: NextPage = () => {
 
   return (
     <FadeInContainer className="text-staytard-dark bg-[#f3f3f3] min-h-screen">
-      <MyContainer className="pt-8 text-center">
-        <h1 className="text-xl md:text-2xl uppercase font-light tracking-widest">
+      <MyContainer className="">
+        <h1 className="py-8 text-center text-xl md:text-2xl uppercase font-light tracking-widest">
           Your shopping cart
         </h1>
         {/* cart item */}
-        <div className="bg-white">
-          <CartItemList />
-        </div>
+        <CartItemList />
         {/*  {meData?.me ? (
           <KlarnaPaymentControls />
         ) : (
