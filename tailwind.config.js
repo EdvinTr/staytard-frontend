@@ -12,6 +12,7 @@ module.exports = {
         "staytard-yellow": "#ffeb00",
         "staytard-pink": "#EA4262",
         "staytard-dark": "#222222",
+        "staytard-red": "#ce1e1a",
       },
     },
   },

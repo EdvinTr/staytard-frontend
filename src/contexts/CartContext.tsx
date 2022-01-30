@@ -8,6 +8,7 @@ export interface CartItem {
 
 interface CartContextInterface {
   addToCart: (item: CartItem) => void;
+  removeFromCart: (sku: string) => void;
   totalItems: number;
   cart: CartItem[];
 }
@@ -15,6 +16,7 @@ interface CartContextInterface {
 const CartContext = createContext<CartContextInterface>({
   totalItems: 0,
   addToCart: (productId) => {},
+  removeFromCart: (sku) => {},
   cart: [],
 });
 
@@ -49,12 +51,23 @@ export const CartProvider = ({ children }: any) => {
       return acc + item.quantity;
     }, 0);
 
+  const removeFromCart = (sku: string) => {
+    const newCart = [...cart];
+    const cartItem = newCart.find((cartItem) => cartItem.sku === sku);
+    if (!cartItem) {
+      return;
+    }
+    cartItem.quantity -= 1;
+    setCart(newCart);
+  };
+
   return (
     <CartContext.Provider
       value={{
         totalItems: getTotalCartItems(),
         addToCart,
-        cart: getCart(), // assigning as a function to make Next play nicely with localStorage
+        removeFromCart,
+        cart: getCart(), // assigning as a function to make Next.js play nicely with localStorage
       }}
     >
       {children}
