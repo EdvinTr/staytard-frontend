@@ -15,6 +15,14 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
       input: { limit: 50, offset: 0, skus: cart.map((item) => item.sku) },
     },
   });
+
+  const getQuantityFromCartBySku = (sku: string): number => {
+    const cartItem = cart.find((item) => item.sku === sku);
+    if (!cartItem) {
+      return 0;
+    }
+    return cartItem.quantity;
+  };
   return (
     <div className="bg-white p-2">
       <div className="space-y-8">
@@ -40,14 +48,28 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
                 {/* prices */}
                 <div className="font-bold">
                   {cartItem.currentPrice === cartItem.originalPrice ? (
-                    <div>{cartItem.currentPrice} EUR</div>
+                    <div>
+                      {cartItem.currentPrice *
+                        getQuantityFromCartBySku(
+                          cartItem.attributes[0].sku
+                        )}{" "}
+                      EUR
+                    </div> /* product has no discount */
                   ) : (
                     <div className="flex flex-col text-right">
                       <del className="text-gray-600 text-[10px]">
-                        {cartItem.originalPrice} EUR
+                        {cartItem.originalPrice *
+                          getQuantityFromCartBySku(
+                            cartItem.attributes[0].sku
+                          )}{" "}
+                        EUR
                       </del>
                       <div className="text-staytard-red">
-                        {cartItem.currentPrice} EUR
+                        {cartItem.currentPrice *
+                          getQuantityFromCartBySku(
+                            cartItem.attributes[0].sku
+                          )}{" "}
+                        EUR
                       </div>
                     </div>
                   )}
