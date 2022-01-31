@@ -27,7 +27,7 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
 
   // TODO: attributes probably should not be array? or cba tbh ?
   return (
-    <div className="bg-white p-2">
+    <div className="bg-white p-2 max-w-4xl mx-auto">
       <div className="space-y-8">
         {cartProducts?.productsBySku.items.map((cartItem, idx) => (
           <div key={idx} className="text-13 flex space-x-4">

@@ -56,7 +56,6 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
     if (!sku) {
       return; // TODO: show error of some sort
     }
-
     addToContextCart({
       sku,
       quantity: 1,

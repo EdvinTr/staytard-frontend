@@ -53,7 +53,7 @@ const LoginPage: NextPage = () => {
           <title>{`${APP_NAME} - Log in`}</title>
         </Head>
         <FadeInContainer>
-          <div className="pt-16 text-center">
+          <div className="pt-10 text-center">
             {/* page titles */}
             <div className="space-y-6">
               <h1 className="text-2xl">Log in to {APP_NAME}.com</h1>

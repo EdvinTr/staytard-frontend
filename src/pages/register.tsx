@@ -16,7 +16,7 @@ const RegisterPage: NextPage = () => {
       <FadeInContainer className="min-h-screen">
         <FormContainer className="text-center">
           <div>
-            <div className="space-y-6 pt-16">
+            <div className="space-y-6 pt-10">
               <h1 className="text-2xl">Register</h1>
               <h2 className="text-13">
                 Fill in the information below to register an account with{" "}

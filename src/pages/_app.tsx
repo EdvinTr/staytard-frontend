@@ -52,7 +52,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <Fragment>
           {currentPath === APP_PAGE_ROUTE.LOGIN ||
-          currentPath === APP_PAGE_ROUTE.REGISTER ? null : (
+          currentPath === APP_PAGE_ROUTE.REGISTER ||
+          currentPath === APP_PAGE_ROUTE.CHECKOUT ? null : (
             <Navbar />
           )}
           {/*    {isLoading && (
