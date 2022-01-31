@@ -16,13 +16,16 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
     },
   });
 
+  // TODO: place this in cart context
   const getQuantityFromCartBySku = (sku: string): number => {
     const cartItem = cart.find((item) => item.sku === sku);
     if (!cartItem) {
-      return 0;
+      return 0; // TODO: if item is not in cart, return 1 or 0?
     }
     return cartItem.quantity;
   };
+
+  // TODO: attributes probably should not be array? or cba tbh ?
   return (
     <div className="bg-white p-2">
       <div className="space-y-8">
