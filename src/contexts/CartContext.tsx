@@ -32,7 +32,7 @@ export const CartProvider = ({ children }: any) => {
     }
   }, []);
 
-  const addToCart = (item: CartItem) => {
+  const addToCart = (item: CartItem): void => {
     const cartItem = cart.find((cartItem) => cartItem.sku === item.sku);
     const newCart = [...cart];
     if (cartItem) {
@@ -40,26 +40,40 @@ export const CartProvider = ({ children }: any) => {
     } else {
       newCart.push(item); // add new item to cart
     }
-    localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(newCart));
+    setCartInLocalStorage(newCart);
     setCart(newCart);
   };
 
-  const getCart = (): CartItem[] => cart;
+  const getCart = () => cart;
 
-  const getTotalCartItems = () =>
+  const getTotalCartItems = (): number =>
     cart.reduce((acc, item) => {
       return acc + item.quantity;
     }, 0);
 
-  const removeFromCart = (sku: string) => {
-    const newCart = [...cart];
-    const cartItem = newCart.find((cartItem) => cartItem.sku === sku);
+  const removeFromCart = (sku: string): void => {
+    const cartItem = cart.find((cartItem) => cartItem.sku === sku);
     if (!cartItem) {
       return;
     }
-    cartItem.quantity -= 1;
-    setCart(newCart);
+    if (cartItem.quantity === 1) {
+      const newCart = cart.filter((cartItem) => cartItem.sku !== sku); // remove item from cart all together
+      setCartInLocalStorage(newCart);
+      setCart(newCart);
+    } else {
+      decrementQuantity(cartItem);
+    }
   };
+
+  const decrementQuantity = (cartItem: CartItem): void => {
+    const newCart = [...cart];
+    cartItem.quantity -= 1; // decrease quantity
+    setCart(newCart);
+    setCartInLocalStorage(newCart);
+  };
+
+  const setCartInLocalStorage = (cart: CartItem[]): void =>
+    localStorage.setItem(LOCAL_STORAGE_KEY.CART, JSON.stringify(cart));
 
   return (
     <CartContext.Provider

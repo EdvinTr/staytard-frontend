@@ -57,8 +57,8 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
 
               {/* attributes */}
               <dl className="flex text-xs font-bold mt-2">
-                {cartItem.attributes.map((attribute) => (
-                  <Fragment>
+                {cartItem.attributes.map((attribute, idx) => (
+                  <Fragment key={idx}>
                     {/* use <dt> for describing the detail */}
                     <dd className="mr-2">{attribute.size.value}</dd>
                     <dd>{attribute.color.value}</dd>
