@@ -33,6 +33,9 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
     }),
     cache: new InMemoryCache({
       typePolicies: {
+        Product: {
+          keyFields: ["id", "attributes", ["sku"]],
+        },
         Query: {
           fields: {
             productBrands: {
@@ -47,6 +50,7 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
                 return category; // type policy for SSR to work
               },
             },
+
             /*   products: {
               keyArgs: ["limit", "offset", "categoryPath"],
               merge(existing, incoming) {

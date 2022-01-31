@@ -15,12 +15,11 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
       input: { limit: 50, offset: 0, skus: cart.map((item) => item.sku) },
     },
   });
-
   return (
     <div className="bg-white p-2">
       <div className="space-y-8">
-        {cartProducts?.productsBySku.items.map((cartItem) => (
-          <div key={cartItem.id} className="text-13 flex space-x-4">
+        {cartProducts?.productsBySku.items.map((cartItem, idx) => (
+          <div key={idx} className="text-13 flex space-x-4">
             <Image
               src={cartItem.images[0].imageUrl.replace("{size}", "100")}
               width={100}
@@ -56,12 +55,15 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
               </div>
 
               {/* attributes */}
-              <dl className="flex text-xs font-bold mt-2">
+              <dl className="flex items-center text-xs  mt-2">
                 {cartItem.attributes.map((attribute, idx) => (
                   <Fragment key={idx}>
                     {/* use <dt> for describing the detail */}
-                    <dd className="mr-2">{attribute.size.value}</dd>
-                    <dd>{attribute.color.value}</dd>
+                    <dt className="mr-1">Size</dt>
+                    <dd className="mr-2 font-bold">{attribute.size.value}</dd>
+                    <dt className="mr-1 ">.</dt>
+                    <dt className="mr-1">Color</dt>
+                    <dd className="font-bold">{attribute.color.value}</dd>
                   </Fragment>
                 ))}
               </dl>
