@@ -67,46 +67,65 @@ export const CartItemRow = ({ product }: CartItemRowProps) => {
         </div>
 
         {/* attributes */}
-        <dl className="hidden lg:flex space-x-1 mt-6 text-xs">
+        <dl className="hidden md:flex space-x-1 mt-6 text-xs">
           <dt>Art.nr.</dt>
           <dd className="mr-1 font-bold">{product.attributes[0].sku}</dd>
         </dl>
         <dl className="flex items-center text-xs mt-1">
           {product.attributes.map((attribute, idx) => (
             <Fragment key={idx}>
-              <dt className="mr-1 hidden lg:block">Size</dt>
+              <dt className="mr-1 hidden md:block">Size</dt>
               <dd className="mr-1 font-bold">{attribute.size.value}</dd>
-              <dt className="mr-1 lg:hidden text-gray-300">|</dt>
-              <dt className="mr-1 hidden lg:block">-</dt>
-              <dt className="mr-1 hidden lg:block">Color</dt>
+              <dt className="mr-1 md:hidden text-gray-300">|</dt>
+              <dt className="mr-1 hidden md:block">-</dt>
+              <dt className="mr-1 hidden md:block">Color</dt>
               <dd className="font-bold">{attribute.color.value}</dd>
             </Fragment>
           ))}
         </dl>
         <div className="flex items-center space-x-4 mt-4">
           {/* delete from cart button */}
-          <button
-            aria-label="decrement quantity"
+          <CartActionButton
+            ariaLabel="decrement quantity"
             onClick={() => removeFromCart(product.attributes[0].sku)}
-            className="border-2 p-1 inline-block hover:border-black transition-colors duration-150 ease-in-out"
           >
             <MinusIcon className="w-4" />
-          </button>
+          </CartActionButton>
           <div className="font-bold">
             {cart.find((i) => i.sku === product.attributes[0].sku)?.quantity}
           </div>
           {/* increment quantity button */}
-          <button
-            aria-label="increment quantity"
+
+          <CartActionButton
+            ariaLabel="increment quantity"
             onClick={() =>
               addToCart({ quantity: 1, sku: product.attributes[0].sku })
             }
-            className="border-2 p-1 inline-block hover:border-black transition-colors duration-150 ease-in-out"
           >
             <PlusIcon className="w-4" />
-          </button>
+          </CartActionButton>
         </div>
       </div>
     </div>
+  );
+};
+
+const CartActionButton = ({
+  onClick,
+  ariaLabel,
+  children,
+}: {
+  onClick: () => void;
+  ariaLabel: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <button
+      aria-label={ariaLabel}
+      onClick={onClick}
+      className="border-2 p-1 inline-block hover:border-black transition-colors duration-150 ease-in-out"
+    >
+      {children}
+    </button>
   );
 };

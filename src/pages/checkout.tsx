@@ -14,7 +14,7 @@ const CheckoutPage: NextPage = () => {
     <Fragment>
       <AppHeader />
 
-      <FadeInContainer className="text-staytard-dark bg-[#f3f3f3] min-h-screen">
+      <FadeInContainer className="text-staytard-dark bg-staytard-light-gray min-h-screen">
         <MyContainer className="">
           <h1 className="py-8 text-center text-xl md:text-2xl uppercase font-light tracking-widest">
             Your shopping cart
@@ -24,6 +24,29 @@ const CheckoutPage: NextPage = () => {
           <SectionWrapper>
             <StepBadge step="1" />
             <CartItemList />
+            <div className="md:bg-staytard-light-gray mt-8 md:px-8 md:py-4">
+              <div className="flex justify-between font-bold">
+                <div className="uppercase text-13">Your products</div>
+                <div>617 EUR</div>
+              </div>
+              <div className="w-full flex py-4 md:py-2 text-13 space-x-3">
+                <button className="w-full tracking-wider border-staytard-dark border-2 border-opacity-20 py-3 hover:border-black">
+                  Discount code
+                </button>
+                <button className="w-full tracking-wider border-staytard-dark border-2 border-opacity-20 py-3 hover:border-black">
+                  Gift card
+                </button>
+              </div>
+            </div>
+          </SectionWrapper>
+          <h2 className="py-8 text-center text-xl md:text-2xl uppercase font-light tracking-widest">
+            Complete Purchase
+          </h2>
+          <SectionWrapper>
+            <StepBadge step="2" />
+            <div className="uppercase text-sm font-bold tracking-wider">
+              Your Information
+            </div>
           </SectionWrapper>
           {/*  {meData?.me ? (
           <KlarnaPaymentControls />
