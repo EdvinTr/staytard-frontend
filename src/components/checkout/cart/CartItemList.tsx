@@ -67,6 +67,7 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
               </dl>
               <div className="flex items-center space-x-4 mt-4">
                 <button
+                  aria-label="decrement quantity"
                   onClick={() => removeFromCart(cartItem.attributes[0].sku)}
                   className="border-2 p-1 inline-block hover:border-black transition-colors duration-150 ease-in-out"
                 >
@@ -79,6 +80,7 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
                   }
                 </div>
                 <button
+                  aria-label="increment quantity"
                   onClick={() =>
                     addToCart({ quantity: 1, sku: cartItem.attributes[0].sku })
                   }
