@@ -1,7 +1,6 @@
 import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { APP_PAGE_ROUTE } from "../../constants";
 import { useRegisterUserMutation } from "../../lib/graphql";
 import { Localized } from "../../Localized";
 import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
@@ -18,7 +17,9 @@ import {
   passwordValidationRegex,
 } from "./utils/validation";
 
-interface RegisterFormProps {}
+interface RegisterFormProps {
+  onSuccess: () => void;
+}
 
 const {
   firstNameFieldErrorMessage,
@@ -33,7 +34,7 @@ const {
   passwordInputErrorMessage,
 } = Localized.page.register;
 
-export const RegisterForm = ({}: RegisterFormProps) => {
+export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
   const [emailInput, setEmailInput] = useState<InputState>({
     value: "",
     isFocused: false,
@@ -92,7 +93,6 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       return; // prevent spam
     }
     try {
-      await apolloClient.resetStore();
       const { data } = await registerUser({
         variables: {
           input: {
@@ -110,9 +110,11 @@ export const RegisterForm = ({}: RegisterFormProps) => {
       if (!data || !data.registerUser) {
         throw new Error();
       }
-      router.push(APP_PAGE_ROUTE.INDEX);
-    } catch {
+      await apolloClient.resetStore();
+      onSuccess();
+    } catch (err) {
       // TODO: show error when backend is offline
+      console.log("REGISTER ERROR:", err);
     }
   };
 

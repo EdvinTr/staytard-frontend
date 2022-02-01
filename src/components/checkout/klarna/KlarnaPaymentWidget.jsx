@@ -48,7 +48,7 @@ export const KlarnaPaymentWidget = ({
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto mt-20 min-h-[50rem]">
+    <div className="p-4 max-w-2xl mx-auto min-h-[50rem]">
       <div className=" border border-black border-opacity-20">
         {/* klarna stuff */}
         <div
