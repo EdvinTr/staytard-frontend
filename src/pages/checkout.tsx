@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useCallback, useContext } from "react";
 import { AppHeader } from "../components/AppHeader";
 import { CartItemList } from "../components/checkout/cart/CartItemList";
 import { StepBadge } from "../components/checkout/cart/StepBadge";
@@ -22,11 +22,12 @@ const CheckoutPage: NextPage = () => {
   const [selectedPaymentProvider, setSelectedPaymentProvider] =
     React.useState<null | PAYMENT_PROVIDER>(null);
 
-  const handlePaymentSelectionChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSelectedPaymentProvider(e.target.value as PAYMENT_PROVIDER);
-  };
+  const handlePaymentSelectionChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSelectedPaymentProvider(e.target.value as PAYMENT_PROVIDER);
+    },
+    []
+  );
   return (
     <Fragment>
       <AppHeader />
@@ -127,7 +128,6 @@ const CheckoutPage: NextPage = () => {
                   </label>
                 </div>
               </div>
-
               {selectedPaymentProvider === PAYMENT_PROVIDER.KLARNA && (
                 <KlarnaPaymentControls />
               )}
