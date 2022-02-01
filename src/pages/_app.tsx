@@ -41,9 +41,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <CartProvider>
-      <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={apolloClient}>
+      <CartProvider>
         <Head>
+          <meta charSet="utf-8" />
           <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
           <meta
             name="description"
@@ -65,8 +66,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <Footer />
         </Fragment>
-      </ApolloProvider>
-    </CartProvider>
+      </CartProvider>
+    </ApolloProvider>
   );
 }
 

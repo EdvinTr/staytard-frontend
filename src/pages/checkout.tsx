@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Head from "next/head";
 import React, { Fragment, useContext } from "react";
 import { AppHeader } from "../components/AppHeader";
 import { CartItemList } from "../components/checkout/cart/CartItemList";
@@ -8,6 +9,7 @@ import { PaymentOptionsGroup } from "../components/checkout/payment-options/Paym
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { RegisterForm } from "../components/register-form/RegisterForm";
+import { APP_NAME } from "../constants";
 import CartContext from "../contexts/CartContext";
 import { useMeQuery } from "../lib/graphql";
 
@@ -15,17 +17,18 @@ const CheckoutPage: NextPage = () => {
   const { data: meData } = useMeQuery();
   const { totalCartPrice } = useContext(CartContext);
 
+  // TODO: show other stuff when there is no items in cart
   return (
     <Fragment>
       <AppHeader />
-
+      <Head>
+        <title>{APP_NAME}.com</title>
+      </Head>
       <FadeInContainer className="text-staytard-dark bg-staytard-light-gray min-h-screen">
         <MyContainer className="">
           <h1 className="py-8 text-center text-xl md:text-2xl uppercase font-light tracking-widest">
             Your shopping cart
           </h1>
-          {/* cart item */}
-
           <SectionWrapper>
             <StepBadge step="1" />
             <CartItemList />
@@ -76,7 +79,7 @@ const CheckoutPage: NextPage = () => {
               <div className="uppercase text-sm font-bold tracking-wider">
                 Pay
               </div>
-              <PaymentOptionsGroup />
+              {meData?.me && meData.me.address && <PaymentOptionsGroup />}
             </SectionWrapper>
           </div>
         </MyContainer>
