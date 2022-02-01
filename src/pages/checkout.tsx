@@ -1,33 +1,20 @@
 import { NextPage } from "next";
-import React, { Fragment, useCallback, useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import { AppHeader } from "../components/AppHeader";
 import { CartItemList } from "../components/checkout/cart/CartItemList";
 import { StepBadge } from "../components/checkout/cart/StepBadge";
 import { CustomerInformation } from "../components/checkout/customer-information/CustomerInformation";
-import { KlarnaPaymentControls } from "../components/checkout/klarna/KlarnaPaymentControls";
+import { PaymentOptionsGroup } from "../components/checkout/payment-options/PaymentOptionsGroup";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
 import { RegisterForm } from "../components/register-form/RegisterForm";
 import CartContext from "../contexts/CartContext";
 import { useMeQuery } from "../lib/graphql";
 
-enum PAYMENT_PROVIDER {
-  KLARNA = "klarna",
-  PAYPAL = "paypal",
-}
 const CheckoutPage: NextPage = () => {
   const { data: meData } = useMeQuery();
   const { totalCartPrice } = useContext(CartContext);
 
-  const [selectedPaymentProvider, setSelectedPaymentProvider] =
-    React.useState<null | PAYMENT_PROVIDER>(null);
-
-  const handlePaymentSelectionChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSelectedPaymentProvider(e.target.value as PAYMENT_PROVIDER);
-    },
-    []
-  );
   return (
     <Fragment>
       <AppHeader />
@@ -68,7 +55,7 @@ const CheckoutPage: NextPage = () => {
                 Your Information
               </div>
               {meData?.me && meData.me.address ? (
-                /* TODO: if user doesn't have an address, it should display component that lets the user update his address */
+                /* TODO: if user doesn't have an address (e.g. he registered with Google), it should display component that lets the user update his address */
                 <CustomerInformation customerData={meData.me} />
               ) : (
                 <RegisterForm
@@ -89,48 +76,7 @@ const CheckoutPage: NextPage = () => {
               <div className="uppercase text-sm font-bold tracking-wider">
                 Pay
               </div>
-              {/* radio buttons */}
-              <div className="flex flex-col text-sm mt-4 space-y-2">
-                <div>
-                  <input
-                    checked={
-                      selectedPaymentProvider === PAYMENT_PROVIDER.PAYPAL
-                    }
-                    type="radio"
-                    id="paypal"
-                    name="paypal"
-                    value="paypal"
-                    onChange={(e) => handlePaymentSelectionChange(e)}
-                  />
-                  <label
-                    htmlFor="paypal"
-                    className="font-semibold tracking-wide ml-4"
-                  >
-                    PayPal
-                  </label>
-                </div>
-                <div>
-                  <input
-                    checked={
-                      selectedPaymentProvider === PAYMENT_PROVIDER.KLARNA
-                    }
-                    type="radio"
-                    id="klarna"
-                    name="klarna"
-                    value="klarna"
-                    onChange={(e) => handlePaymentSelectionChange(e)}
-                  />
-                  <label
-                    htmlFor="klarna"
-                    className="font-semibold tracking-wide ml-4"
-                  >
-                    Klarna
-                  </label>
-                </div>
-              </div>
-              {selectedPaymentProvider === PAYMENT_PROVIDER.KLARNA && (
-                <KlarnaPaymentControls />
-              )}
+              <PaymentOptionsGroup />
             </SectionWrapper>
           </div>
         </MyContainer>
