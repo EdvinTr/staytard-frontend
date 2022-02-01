@@ -4,6 +4,7 @@ import { LOCAL_STORAGE_KEY } from "../constants";
 export interface CartItem {
   sku: string;
   quantity: number;
+  price: number;
 }
 
 interface CartContextInterface {
@@ -11,13 +12,15 @@ interface CartContextInterface {
   removeFromCart: (sku: string) => void;
   totalItems: number;
   cart: CartItem[];
+  totalCartPrice: number;
 }
 
 const CartContext = createContext<CartContextInterface>({
   totalItems: 0,
-  addToCart: (productId) => {},
-  removeFromCart: (sku) => {},
+  addToCart: () => {},
+  removeFromCart: () => {},
   cart: [],
+  totalCartPrice: 0,
 });
 
 export const CartProvider = ({ children }: any) => {
@@ -51,6 +54,12 @@ export const CartProvider = ({ children }: any) => {
       return acc + item.quantity;
     }, 0);
 
+  const getTotalCartPrice = (): number => {
+    return cart.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+  };
+
   const removeFromCart = (sku: string): void => {
     const cartItem = cart.find((cartItem) => cartItem.sku === sku);
     if (!cartItem) {
@@ -81,6 +90,7 @@ export const CartProvider = ({ children }: any) => {
         totalItems: getTotalCartItems(),
         addToCart,
         removeFromCart,
+        totalCartPrice: getTotalCartPrice(),
         cart: getCart(), // assigning as a function to make Next.js play nicely with localStorage
       }}
     >

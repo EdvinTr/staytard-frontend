@@ -59,6 +59,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
     addToContextCart({
       sku,
       quantity: 1,
+      price: product.currentPrice,
     });
   };
 

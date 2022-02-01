@@ -1,15 +1,16 @@
 import { NextPage } from "next";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { AppHeader } from "../components/AppHeader";
 import { CartItemList } from "../components/checkout/cart/CartItemList";
 import { StepBadge } from "../components/checkout/cart/StepBadge";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/MyContainer";
+import CartContext from "../contexts/CartContext";
 import { useMeQuery } from "../lib/graphql";
 
 const CheckoutPage: NextPage = () => {
   const { data: meData } = useMeQuery();
-
+  const { totalCartPrice } = useContext(CartContext);
   return (
     <Fragment>
       <AppHeader />
@@ -27,7 +28,7 @@ const CheckoutPage: NextPage = () => {
             <div className="md:bg-staytard-light-gray mt-8 md:px-8 md:py-4">
               <div className="flex justify-between font-bold">
                 <div className="uppercase text-13">Your products</div>
-                <div>617 EUR</div>
+                <div>{totalCartPrice} EUR</div>
               </div>
               <div className="w-full flex py-4 md:py-2 text-13 space-x-3">
                 <button className="w-full tracking-wider border-staytard-dark border-2 border-opacity-20 py-3 hover:border-black">

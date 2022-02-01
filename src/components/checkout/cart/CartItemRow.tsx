@@ -99,7 +99,11 @@ export const CartItemRow = ({ product }: CartItemRowProps) => {
           <CartActionButton
             ariaLabel="increment quantity"
             onClick={() =>
-              addToCart({ quantity: 1, sku: product.attributes[0].sku })
+              addToCart({
+                quantity: 1,
+                sku: product.attributes[0].sku,
+                price: product.currentPrice,
+              })
             }
           >
             <PlusIcon className="w-4" />
