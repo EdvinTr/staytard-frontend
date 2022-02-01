@@ -7,6 +7,7 @@ enum PAYMENT_PROVIDER {
   KLARNA = "klarna",
   PAYPAL = "paypal",
 }
+
 export const PaymentOptionsGroup: React.FC<PaymentOptionsGroupProps> = ({}) => {
   const [selectedPaymentProvider, setSelectedPaymentProvider] =
     React.useState<null | PAYMENT_PROVIDER>(null);
@@ -17,6 +18,7 @@ export const PaymentOptionsGroup: React.FC<PaymentOptionsGroupProps> = ({}) => {
     },
     []
   );
+
   return (
     <Fragment>
       {/* radio buttons */}

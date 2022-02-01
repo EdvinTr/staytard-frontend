@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useMemo } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
+import CartContext from "../../../contexts/CartContext";
 import {
   InitKlarnaSessionInput,
   useCreateOrderWithKlarnaMutation,
+  useFindProductsBySkusQuery,
   useInitializeKlarnaSessionMutation,
   useMeQuery,
 } from "../../../lib/graphql";
@@ -17,48 +19,58 @@ interface KlarnaAuthorizationResponse {
   finalize_required: boolean;
   show_form: boolean;
 }
-
+type KlarnaOrderLine = InitKlarnaSessionInput["order_lines"][0];
 export const KlarnaPaymentControls = () => {
   const router = useRouter();
   const { data: meData } = useMeQuery();
 
-  const [initializeKlarna, { data: klarnaSessionData, loading }] =
-    useInitializeKlarnaSessionMutation();
+  const { cart, addToCart, removeFromCart, totalCartPrice } =
+    useContext(CartContext);
 
-  const [createOrderWithKlarna, { error: createOrderError }] =
-    useCreateOrderWithKlarnaMutation();
+  const { data: cartProducts } = useFindProductsBySkusQuery({
+    variables: {
+      input: { limit: 50, offset: 0, skus: cart.map((item) => item.sku) },
+    },
+  });
+  const orderLines = useMemo((): KlarnaOrderLine[] => {
+    if (!cartProducts) {
+      return [];
+    }
+    return cartProducts?.productsBySku.items.map((prod) => {
+      const quantity =
+        cart.find((item) => item.sku === prod.attributes[0].sku)?.quantity || 0;
+      return {
+        image_url: prod.images[0].imageUrl.replace("{size}", "500"),
+        name: prod.name,
+        quantity: quantity,
+        total_tax_amount: 0,
+        tax_rate: 0,
+        total_discount_amount: 0,
+        total_amount: prod.currentPrice * quantity,
+        product_url: `${APP_PAGE_ROUTE.PRODUCT}/${prod.id}`, // TODO: should be pathname of the current Application URL
+        unit_price: prod.currentPrice,
+        productId: prod.id,
+        sku: prod.attributes[0].sku,
+      };
+    });
+  }, [cartProducts, cart]);
 
-  // TODO: should grab stuff from cart
   const cartData: InitKlarnaSessionInput = {
     locale: "sv-SE",
-    order_amount: 100,
-    order_lines: [
-      {
-        image_url: "someurl",
-        name: "product1",
-        quantity: 1,
-        tax_rate: 0,
-        total_amount: 100,
-        product_url: "produrl",
-        total_discount_amount: 0,
-        total_tax_amount: 0,
-        unit_price: 100,
-        productId: 1,
-      },
-    ],
+    order_amount: totalCartPrice,
+    order_lines: [...orderLines],
     purchase_country: "SE",
     purchase_currency: "SEK",
     order_tax_amount: 0,
     billing_address: {
-      given_name: meData?.me.firstName || "",
-      family_name: meData?.me.lastName || "",
-
-      email: meData?.me.email || "",
-      phone: meData?.me.mobilePhoneNumber || "",
-      postal_code: meData?.me?.address?.postalCode || "75645",
-      city: meData?.me.address?.city || "Uppsala",
+      given_name: meData!.me.firstName,
+      family_name: meData!.me.lastName,
+      email: meData!.me.email,
+      phone: meData!.me.mobilePhoneNumber,
+      postal_code: meData!.me!.address!.postalCode,
+      city: meData!.me!.address!.city,
       country: "SE",
-      street_address: meData?.me?.address?.street || "Tuvängsvägen 15",
+      street_address: meData!.me!.address!.street,
     },
   };
   useEffect(() => {
@@ -70,6 +82,12 @@ export const KlarnaPaymentControls = () => {
       },
     });
   }, []);
+
+  const [initializeKlarna, { data: klarnaSessionData, loading }] =
+    useInitializeKlarnaSessionMutation();
+
+  const [createOrderWithKlarna, { error: createOrderError }] =
+    useCreateOrderWithKlarnaMutation();
 
   const handleKlarnaAuthorization = async (
     data: KlarnaAuthorizationResponse

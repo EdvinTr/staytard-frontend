@@ -35,10 +35,10 @@ export enum Brand_Sort_By {
 export type BillingAddressInput = {
   city: Scalars['String'];
   country?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
-  family_name: Scalars['String'];
-  given_name: Scalars['String'];
-  phone: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
+  family_name?: InputMaybe<Scalars['String']>;
+  given_name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
   postal_code: Scalars['String'];
   region?: InputMaybe<Scalars['String']>;
   street_address: Scalars['String'];
@@ -190,6 +190,7 @@ export type OrderLineInput = {
   productId: Scalars['Float'];
   product_url: Scalars['String'];
   quantity: Scalars['Float'];
+  sku: Scalars['String'];
   tax_rate: Scalars['Float'];
   total_amount: Scalars['Float'];
   total_discount_amount: Scalars['Float'];
