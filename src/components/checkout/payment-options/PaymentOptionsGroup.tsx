@@ -50,6 +50,7 @@ export const PaymentOptionsGroup: React.FC<PaymentOptionsGroupProps> = ({}) => {
           </label>
         </div>
       </div>
+      {/* TODO: should only be visible as well when there is user data and the user has an address */}
       {selectedPaymentProvider === PAYMENT_PROVIDER.KLARNA && (
         <KlarnaPaymentControls />
       )}

@@ -22,7 +22,7 @@ interface KlarnaAuthorizationResponse {
 type KlarnaOrderLine = InitKlarnaSessionInput["order_lines"][0];
 export const KlarnaPaymentControls = () => {
   const router = useRouter();
-  const { data: meData } = useMeQuery();
+  const { data: meData } = useMeQuery(); // TODO: handle this better
 
   const { cart, addToCart, removeFromCart, totalCartPrice } =
     useContext(CartContext);
@@ -57,7 +57,7 @@ export const KlarnaPaymentControls = () => {
 
   const cartData: InitKlarnaSessionInput = {
     locale: "sv-SE",
-    order_amount: totalCartPrice,
+    order_amount: totalCartPrice, // TODO: should probably recalculate this to SEK (e.g. multiply by 10 or something :D)
     order_lines: [...orderLines],
     purchase_country: "SE",
     purchase_currency: "SEK",
