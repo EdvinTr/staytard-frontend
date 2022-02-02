@@ -66,10 +66,9 @@ const CheckoutPage: NextPage = () => {
                 />
               )}
               {meData?.me && <CustomerInformation customerData={meData.me} />}
-              {/*  {meData?.me && !meData.me.address && (
+              {meData?.me && !meData.me.address && (
                 <UpdateUserAddressInputGroup />
-              )} */}
-              <UpdateUserAddressInputGroup />
+              )}
             </SectionWrapper>
             <SectionWrapper>
               {/* shipping method */}
