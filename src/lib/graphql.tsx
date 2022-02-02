@@ -141,6 +141,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   publishReview: ProductReview;
   registerUser: UserWithTokensDto;
+  updateUserAddress: User;
 };
 
 
@@ -182,6 +183,11 @@ export type MutationPublishReviewArgs = {
 
 export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
+};
+
+
+export type MutationUpdateUserAddressArgs = {
+  input: UpdateUserAddressInput;
 };
 
 export type OrderLineInput = {
@@ -359,6 +365,12 @@ export enum Sort_Direction {
   Desc = 'DESC'
 }
 
+export type UpdateUserAddressInput = {
+  city: Scalars['String'];
+  postalCode: Scalars['String'];
+  street: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   address?: Maybe<UserAddress>;
@@ -439,6 +451,13 @@ export type RegisterUserMutationVariables = Exact<{
 
 
 export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'UserWithTokensDto', accessToken: string, refreshToken: string, user: { __typename?: 'User', id: string } } };
+
+export type UpdateUserAddressMutationVariables = Exact<{
+  input: UpdateUserAddressInput;
+}>;
+
+
+export type UpdateUserAddressMutation = { __typename?: 'Mutation', updateUserAddress: { __typename?: 'User', address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -756,6 +775,41 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const UpdateUserAddressDocument = gql`
+    mutation UpdateUserAddress($input: UpdateUserAddressInput!) {
+  updateUserAddress(input: $input) {
+    address {
+      ...CoreAddressFields
+    }
+  }
+}
+    ${CoreAddressFieldsFragmentDoc}`;
+export type UpdateUserAddressMutationFn = Apollo.MutationFunction<UpdateUserAddressMutation, UpdateUserAddressMutationVariables>;
+
+/**
+ * __useUpdateUserAddressMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserAddressMutation, { data, loading, error }] = useUpdateUserAddressMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserAddressMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserAddressMutation, UpdateUserAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserAddressMutation, UpdateUserAddressMutationVariables>(UpdateUserAddressDocument, options);
+      }
+export type UpdateUserAddressMutationHookResult = ReturnType<typeof useUpdateUserAddressMutation>;
+export type UpdateUserAddressMutationResult = Apollo.MutationResult<UpdateUserAddressMutation>;
+export type UpdateUserAddressMutationOptions = Apollo.BaseMutationOptions<UpdateUserAddressMutation, UpdateUserAddressMutationVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
   categories {

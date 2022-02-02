@@ -1,6 +1,5 @@
 import { useApolloClient } from "@apollo/client";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useRegisterUserMutation } from "../../lib/graphql";
 import { Localized } from "../../Localized";
 import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
@@ -8,7 +7,6 @@ import { isEmailAddress } from "../../utils/validation/isEmailAddress";
 import { BaseButton } from "../global/BaseButton";
 import { BaseInput } from "../global/BaseInput";
 import { InputFieldErrorText } from "../global/InputFieldErrorText";
-import { LoadingSpinner } from "../global/LoadingSpinner";
 import { InputState } from "./types";
 import {
   containsLettersRegex,
@@ -61,6 +59,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     isFocused: false,
     error: null,
   });
+
   const [zipCodeInput, setZipCodeInput] = useState<InputState>({
     value: "",
     isFocused: false,
@@ -79,7 +78,6 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
   });
   const apolloClient = useApolloClient();
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const router = useRouter();
   const [
     registerUser,
     { loading: isRegisterUserLoading, error: registerUserError },
@@ -363,171 +361,16 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           )}
         </div>
       </div>
-      {/* address input */}
-      <BaseInput
-        type="text"
-        data-cy="address-input"
-        placeholder="Address"
-        className={`${!addressInput.error && "mb-3"} `}
-        required
-        label="Address"
-        errorMessage={addressInput.error}
-        hasError={!!addressInput.error}
-        value={addressInput.value || ""}
-        isFocused={addressInput.isFocused}
-        onFocus={() => setAddressInput({ ...addressInput, isFocused: true })}
-        onChange={(e) =>
-          setAddressInput({
-            ...addressInput,
-            value: e.target.value,
-          })
-        }
-        onBlur={(e) => {
-          const value = e.target.value.trim();
-          if (value.length === 0) {
-            return setAddressInput({
-              ...addressInput,
-              isFocused: false,
-              error: addressFieldErrorMessage,
-            });
-          }
-
-          if (!isAddressRegex.test(value)) {
-            return setAddressInput({
-              ...addressInput,
-              isFocused: false,
-              error: addressValidationErrorMessage,
-            });
-          }
-          // no error
-          return setAddressInput({
-            ...addressInput,
-            isFocused: false,
-            error: null,
-          });
-        }}
-      />
-      {addressInput.error && (
-        <InputFieldErrorText
-          data-cy="address-error-message"
-          isInputFocused={addressInput.isFocused}
-        >
-          {addressInput.error}
-        </InputFieldErrorText>
-      )}
+      <AddressInputField onChange={(state) => setAddressInput(state)} />
       <div>
         <div className="grid grid-cols-2 gap-x-3 ">
-          {/* zip code input */}
           <div>
-            <BaseInput
-              type="text"
-              data-cy="zip-code-input"
-              placeholder="ZIP code"
-              required
-              label="ZIP code"
-              errorMessage={zipCodeInput.error}
-              hasError={!!zipCodeInput.error}
-              value={zipCodeInput.value || ""}
-              isFocused={zipCodeInput.isFocused}
-              onFocus={() =>
-                setZipCodeInput({ ...zipCodeInput, isFocused: true })
-              }
-              onChange={(e) =>
-                setZipCodeInput({
-                  ...zipCodeInput,
-                  value: e.target.value.trim(),
-                })
-              }
-              onBlur={(e) => {
-                const value = e.target.value.trim();
-                if (value.length === 0) {
-                  return setZipCodeInput({
-                    ...zipCodeInput,
-                    isFocused: false,
-                    error: zipCodeValidationErrorMessage,
-                  });
-                }
-
-                if (!isZipCodeRegex.test(value)) {
-                  return setZipCodeInput({
-                    ...zipCodeInput,
-                    isFocused: false,
-                    error: zipCodeValidationErrorMessage,
-                  });
-                }
-                // no error
-                return setZipCodeInput({
-                  ...zipCodeInput,
-                  isFocused: false,
-                  error: null,
-                });
-              }}
-            />
-            {zipCodeInput.error && (
-              <InputFieldErrorText
-                data-cy="zip-code-error-message"
-                isInputFocused={zipCodeInput.isFocused}
-              >
-                {zipCodeInput.error}
-              </InputFieldErrorText>
-            )}
+            <ZipCodeInputField onChange={(state) => setZipCodeInput(state)} />
           </div>
-          {/* city input */}
           <div>
-            <BaseInput
-              type="text"
-              placeholder="City"
-              data-cy="city-input"
-              className={`${!cityInput.error && "mb-3"} `}
-              required
-              label="City"
-              errorMessage={cityInput.error}
-              hasError={!!cityInput.error}
-              value={cityInput.value || ""}
-              isFocused={cityInput.isFocused}
-              onFocus={() => setCityInput({ ...cityInput, isFocused: true })}
-              onChange={(e) =>
-                setCityInput({
-                  ...cityInput,
-                  value: e.target.value.trim(),
-                })
-              }
-              onBlur={(e) => {
-                const value = e.target.value.trim();
-                if (value.length === 0) {
-                  return setCityInput({
-                    ...cityInput,
-                    isFocused: false,
-                    error: cityInputValidationErrorMessage,
-                  });
-                }
-                // check it contains only letters
-                if (!containsLettersRegex.test(value)) {
-                  return setCityInput({
-                    ...cityInput,
-                    isFocused: false,
-                    error: cityInputValidationErrorMessage,
-                  });
-                }
-                // no error
-                return setCityInput({
-                  ...cityInput,
-                  isFocused: false,
-                  error: null,
-                });
-              }}
-            />
-            {cityInput.error && (
-              <InputFieldErrorText
-                data-cy="city-error-message"
-                isInputFocused={cityInput.isFocused}
-              >
-                {cityInput.error}
-              </InputFieldErrorText>
-            )}
+            <CityInputField onChange={(state) => setCityInput(state)} />
           </div>
         </div>
-
         {/* phone number input */}
         <BaseInput
           type="tel"
@@ -589,20 +432,234 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           </div>
         </div>
       )}
-      {/*  TODO: basebutton should have isLoading prop automatically */}
       <BaseButton
         data-cy="submit-button"
         type="submit"
-        className={`hover:bg-black hover:text-white ${
-          isRegisterUserLoading ? "" : "hover:bg-black hover:text-white "
-        } `}
+        loading={isRegisterUserLoading}
       >
-        {isRegisterUserLoading ? (
-          <LoadingSpinner data-cy="login-button-spinner" />
-        ) : (
-          "Continue"
-        )}
+        Continue
       </BaseButton>
     </form>
+  );
+};
+
+interface InputFieldProps {
+  onChange: (state: InputState) => void;
+}
+
+export const ZipCodeInputField = ({ onChange }: InputFieldProps) => {
+  const [zipCodeInput, setZipCodeInput] = useState<InputState>({
+    value: "",
+    isFocused: false,
+    error: null,
+  });
+  const savedOnChange = useCallback(() => {
+    onChange({
+      error: zipCodeInput.error,
+      value: zipCodeInput.value,
+      isFocused: zipCodeInput.isFocused,
+    });
+  }, [zipCodeInput.error, zipCodeInput.isFocused, zipCodeInput.value]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    savedOnChange();
+  }, [savedOnChange]);
+  return (
+    <Fragment>
+      <BaseInput
+        type="text"
+        data-cy="zip-code-input"
+        placeholder="ZIP code"
+        required
+        label="ZIP code"
+        errorMessage={zipCodeInput.error}
+        hasError={!!zipCodeInput.error}
+        value={zipCodeInput.value || ""}
+        isFocused={zipCodeInput.isFocused}
+        onFocus={() => setZipCodeInput({ ...zipCodeInput, isFocused: true })}
+        onChange={(e) =>
+          setZipCodeInput({
+            ...zipCodeInput,
+            value: e.target.value.trim(),
+          })
+        }
+        onBlur={(e) => {
+          const value = e.target.value.trim();
+          if (value.length === 0) {
+            return setZipCodeInput({
+              ...zipCodeInput,
+              isFocused: false,
+              error: zipCodeValidationErrorMessage,
+            });
+          }
+
+          if (!isZipCodeRegex.test(value)) {
+            return setZipCodeInput({
+              ...zipCodeInput,
+              isFocused: false,
+              error: zipCodeValidationErrorMessage,
+            });
+          }
+          // no error
+          return setZipCodeInput({
+            ...zipCodeInput,
+            isFocused: false,
+            error: null,
+          });
+        }}
+      />
+      {zipCodeInput.error && (
+        <InputFieldErrorText
+          data-cy="zip-code-error-message"
+          isInputFocused={zipCodeInput.isFocused}
+        >
+          {zipCodeInput.error}
+        </InputFieldErrorText>
+      )}
+    </Fragment>
+  );
+};
+export const CityInputField = ({ onChange }: InputFieldProps) => {
+  const [cityInput, setCityInput] = useState<InputState>({
+    value: "",
+    isFocused: false,
+    error: null,
+  });
+  const savedOnChange = useCallback(() => {
+    onChange({
+      error: cityInput.error,
+      value: cityInput.value,
+      isFocused: cityInput.isFocused,
+    });
+  }, [cityInput.error, cityInput.isFocused, cityInput.value]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    savedOnChange();
+  }, [savedOnChange]);
+  return (
+    <Fragment>
+      <BaseInput
+        type="text"
+        placeholder="City"
+        data-cy="city-input"
+        className={`${!cityInput.error && "mb-3"} `}
+        required
+        label="City"
+        errorMessage={cityInput.error}
+        hasError={!!cityInput.error}
+        value={cityInput.value || ""}
+        isFocused={cityInput.isFocused}
+        onFocus={() => setCityInput({ ...cityInput, isFocused: true })}
+        onChange={(e) =>
+          setCityInput({
+            ...cityInput,
+            value: e.target.value.trim(),
+          })
+        }
+        onBlur={(e) => {
+          const value = e.target.value.trim();
+          if (value.length === 0) {
+            return setCityInput({
+              ...cityInput,
+              isFocused: false,
+              error: cityInputValidationErrorMessage,
+            });
+          }
+          // check it contains only letters
+          if (!containsLettersRegex.test(value)) {
+            return setCityInput({
+              ...cityInput,
+              isFocused: false,
+              error: cityInputValidationErrorMessage,
+            });
+          }
+          // no error
+          return setCityInput({
+            ...cityInput,
+            isFocused: false,
+            error: null,
+          });
+        }}
+      />
+      {cityInput.error && (
+        <InputFieldErrorText
+          data-cy="city-error-message"
+          isInputFocused={cityInput.isFocused}
+        >
+          {cityInput.error}
+        </InputFieldErrorText>
+      )}
+    </Fragment>
+  );
+};
+
+export const AddressInputField = ({ onChange }: InputFieldProps) => {
+  const [addressInput, setAddressInput] = useState<InputState>({
+    value: "",
+    isFocused: false,
+    error: null,
+  });
+  const savedOnChange = useCallback(() => {
+    onChange({
+      error: addressInput.error,
+      value: addressInput.value,
+      isFocused: addressInput.isFocused,
+    });
+  }, [addressInput.error, addressInput.isFocused, addressInput.value]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    savedOnChange();
+  }, [savedOnChange]);
+  return (
+    <Fragment>
+      <BaseInput
+        type="text"
+        data-cy="address-input"
+        placeholder="Address"
+        className={`${!addressInput.error && "mb-3"} `}
+        required
+        label="Address"
+        errorMessage={addressInput.error}
+        hasError={!!addressInput.error}
+        value={addressInput.value || ""}
+        isFocused={addressInput.isFocused}
+        onFocus={() => setAddressInput({ ...addressInput, isFocused: true })}
+        onChange={(e) =>
+          setAddressInput({
+            ...addressInput,
+            value: e.target.value,
+          })
+        }
+        onBlur={(e) => {
+          const value = e.target.value.trim();
+          if (value.length === 0) {
+            return setAddressInput({
+              ...addressInput,
+              isFocused: false,
+              error: addressFieldErrorMessage,
+            });
+          }
+          // test address against regex
+          if (!isAddressRegex.test(value)) {
+            return setAddressInput({
+              ...addressInput,
+              isFocused: false,
+              error: addressValidationErrorMessage,
+            });
+          }
+          // no error
+          return setAddressInput({
+            ...addressInput,
+            isFocused: false,
+            error: null,
+          });
+        }}
+      />
+      {addressInput.error && (
+        <InputFieldErrorText
+          data-cy="address-error-message"
+          isInputFocused={addressInput.isFocused}
+        >
+          {addressInput.error}
+        </InputFieldErrorText>
+      )}
+    </Fragment>
   );
 };
