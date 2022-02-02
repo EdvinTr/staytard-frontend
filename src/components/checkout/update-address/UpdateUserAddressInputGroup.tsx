@@ -42,7 +42,7 @@ export const UpdateUserAddressInputGroup = () => {
       return;
     }
     try {
-      await updateUserAddress({
+      const { data } = await updateUserAddress({
         variables: {
           input: {
             city: cityInput.value,
@@ -51,6 +51,9 @@ export const UpdateUserAddressInputGroup = () => {
           },
         },
       });
+      if (!data || !data.updateUserAddress) {
+        throw new Error();
+      }
       await client.refetchQueries({
         include: [MeDocument], // refetch current user data to get updated address
       });
