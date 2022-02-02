@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import React, { Fragment, useMemo } from "react";
 
 export enum PRODUCT_SORT_BY {
-  UNIT_PRICE = "unitPrice",
+  UNIT_PRICE = "currentPrice",
 }
 export enum SORT_DIRECTION {
   ASC = "ASC",
@@ -17,7 +17,7 @@ export enum SORT_DIRECTION {
 }
 
 const sortOptionsMap = {
-  unitPriceDESC: {
+  currentPriceDESC: {
     name: "Highest price",
     alias: PRODUCT_SORT_BY.UNIT_PRICE + SORT_DIRECTION.DESC,
     query: {
@@ -25,7 +25,7 @@ const sortOptionsMap = {
       sortDirection: SORT_DIRECTION.DESC,
     },
   },
-  unitPriceASC: {
+  currentPriceASC: {
     name: "Lowest price",
     alias: PRODUCT_SORT_BY.UNIT_PRICE + SORT_DIRECTION.ASC,
     query: {
