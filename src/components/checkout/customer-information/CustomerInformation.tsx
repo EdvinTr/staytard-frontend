@@ -31,13 +31,7 @@ export const CustomerInformation = ({
       <div className="text-13 text-[#808285] leading-6">
         {address && (
           <div>
-            <span>
-              {" "}
-              {obfuscateField(
-                address.street.split(" ")[0],
-                address.street.split(" ")[0].length - 2
-              ) + address.street.split(" ")[1]}{" "}
-            </span>
+            <span> {address.street}</span>
             <span> {`${obfuscateField(address.postalCode, 3)}`}</span>
             <span>
               {" "}

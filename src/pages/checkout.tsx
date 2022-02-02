@@ -1,42 +1,28 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import React, { FormEvent, Fragment, useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import { CartItemList } from "../components/checkout/cart/CartItemList";
 import { StepBadge } from "../components/checkout/cart/StepBadge";
 import { CustomerInformation } from "../components/checkout/customer-information/CustomerInformation";
 import { PaymentOptionsGroup } from "../components/checkout/payment-options/PaymentOptionsGroup";
+import { UpdateUserAddressInputGroup } from "../components/checkout/update-address/UpdateUserAddressInputGroup";
 import { AppHeader } from "../components/global/AppHeader";
-import { BaseButton } from "../components/global/BaseButton";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/global/MyContainer";
-import {
-  AddressInputField,
-  CityInputField,
-  RegisterForm,
-  ZipCodeInputField,
-} from "../components/register-form/RegisterForm";
+import { RegisterForm } from "../components/register-form/RegisterForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import CartContext from "../contexts/CartContext";
-import { useMeQuery, useUpdateUserAddressMutation } from "../lib/graphql";
+import { useMeQuery } from "../lib/graphql";
 
 const CheckoutPage: NextPage = () => {
   const { data: meData } = useMeQuery();
   const { totalCartPrice, totalItems } = useContext(CartContext);
-  const [updateUserAddress, { loading: updateUserAddressLoading }] =
-    useUpdateUserAddressMutation();
 
   if (totalItems === 0) {
     return <NoItemsInCartComponent />;
   }
 
-  const handleUpdateUserAddressSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (updateUserAddressLoading) {
-      return; // prevent spamming
-    }
-    console.log("submit");
-  };
   return (
     <Fragment>
       <AppHeader />
@@ -81,25 +67,7 @@ const CheckoutPage: NextPage = () => {
               )}
               {meData?.me && <CustomerInformation customerData={meData.me} />}
               {meData?.me && !meData.me.address && (
-                <form onSubmit={handleUpdateUserAddressSubmit} className="pt-6">
-                  <AddressInputField onChange={(state) => {}} />
-
-                  <div className="grid grid-cols-2 gap-x-3 ">
-                    <div>
-                      <ZipCodeInputField onChange={(state) => {}} />
-                    </div>
-                    <div>
-                      <CityInputField onChange={(state) => {}} />
-                    </div>
-                  </div>
-                  <BaseButton
-                    data-cy="submit-button"
-                    type="submit"
-                    loading={updateUserAddressLoading}
-                  >
-                    Continue
-                  </BaseButton>
-                </form>
+                <UpdateUserAddressInputGroup />
               )}
             </SectionWrapper>
             <SectionWrapper>
