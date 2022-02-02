@@ -4,13 +4,13 @@ import Link from "next/link";
 import React, { Fragment } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
 import { useLogoutMutation } from "../../../lib/graphql";
+import { LoadingSpinner } from "../../global/LoadingSpinner";
 import {
   LogoutIcon,
   MyOrdersIcon,
   MyPriceTagIcon,
   MyUserIcon,
 } from "../../icons/Icons";
-import { LoadingSpinner } from "../../LoadingSpinner";
 interface MyPagesPopoverProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface PopoverItem {

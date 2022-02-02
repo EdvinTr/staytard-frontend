@@ -3,8 +3,8 @@ import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
-import { useSsrCompatible } from "../hooks/useSsrCompatible";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
+import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import { MyContainer } from "./MyContainer";
 interface AppHeaderProps {}
 

@@ -12,8 +12,8 @@ import {
 } from "../../lib/graphql";
 import { Localized } from "../../Localized";
 import { FadeInContainer } from "../global/FadeInContainer";
+import { MyContainer } from "../global/MyContainer";
 import { MyCartIcon, MyUserIcon } from "../icons/Icons";
-import { MyContainer } from "../MyContainer";
 import { HoverMenu } from "./category-popover/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
 interface NavbarProps {}

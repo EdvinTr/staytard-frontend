@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
-import { MyContainer } from "../../components/MyContainer";
+import { MyContainer } from "../../components/global/MyContainer";
 import { Brand_Sort_By, Sort_Direction } from "../../lib/graphql";
 import { ssrGetProductBrands } from "../../lib/page";
 const brandImages = [

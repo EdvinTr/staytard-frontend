@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
-import { MyContainer } from "../../components/MyContainer";
+import { MyContainer } from "../../components/global/MyContainer";
 import CartContext from "../../contexts/CartContext";
 import { FindOneProductQuery } from "../../lib/graphql";
 import { ssrFindOneProduct } from "../../lib/page";

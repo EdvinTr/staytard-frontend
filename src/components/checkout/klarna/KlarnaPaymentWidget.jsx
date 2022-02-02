@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect } from "react";
-import { BaseButton } from "../../BaseButton";
+import { BaseButton } from "../../global/BaseButton";
 
 export const KlarnaPaymentWidget = ({
   klarnaSessionData,

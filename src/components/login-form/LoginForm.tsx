@@ -8,9 +8,9 @@ import React, { Fragment, useState } from "react";
 import { LoginUserDto } from "../../lib/graphql";
 import { Localized } from "../../Localized";
 import { isEmailAddress } from "../../utils/validation/isEmailAddress";
-import { BaseInput } from "../BaseInput";
-import { InputFieldErrorText } from "../InputFieldErrorText";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { BaseInput } from "../global/BaseInput";
+import { InputFieldErrorText } from "../global/InputFieldErrorText";
+import { LoadingSpinner } from "../global/LoadingSpinner";
 import { InputState } from "../register-form/types";
 
 interface LoginFormProps {

@@ -5,10 +5,10 @@ import { useRegisterUserMutation } from "../../lib/graphql";
 import { Localized } from "../../Localized";
 import { isCellPhoneNumber } from "../../utils/validation/isCellPhoneNumber";
 import { isEmailAddress } from "../../utils/validation/isEmailAddress";
-import { BaseButton } from "../BaseButton";
-import { BaseInput } from "../BaseInput";
-import { InputFieldErrorText } from "../InputFieldErrorText";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { BaseButton } from "../global/BaseButton";
+import { BaseInput } from "../global/BaseInput";
+import { InputFieldErrorText } from "../global/InputFieldErrorText";
+import { LoadingSpinner } from "../global/LoadingSpinner";
 import { InputState } from "./types";
 import {
   containsLettersRegex,

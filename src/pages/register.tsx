@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
-import { AppHeader } from "../components/AppHeader";
+import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { FormContainer } from "../components/register-form/FormContainer";
 import { RegisterForm } from "../components/register-form/RegisterForm";

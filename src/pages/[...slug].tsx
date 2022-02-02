@@ -8,7 +8,7 @@ import React, { Fragment } from "react";
 import { SWRConfig } from "swr";
 import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
-import { MyContainer } from "../components/MyContainer";
+import { MyContainer } from "../components/global/MyContainer";
 import {
   getSortString,
   ProductCardList,
