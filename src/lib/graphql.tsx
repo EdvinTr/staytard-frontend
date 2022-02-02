@@ -457,7 +457,7 @@ export type UpdateUserAddressMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserAddressMutation = { __typename?: 'Mutation', updateUserAddress: { __typename?: 'User', address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
+export type UpdateUserAddressMutation = { __typename?: 'Mutation', updateUserAddress: { __typename?: 'User', id: string } };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -778,12 +778,10 @@ export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUse
 export const UpdateUserAddressDocument = gql`
     mutation UpdateUserAddress($input: UpdateUserAddressInput!) {
   updateUserAddress(input: $input) {
-    address {
-      ...CoreAddressFields
-    }
+    id
   }
 }
-    ${CoreAddressFieldsFragmentDoc}`;
+    `;
 export type UpdateUserAddressMutationFn = Apollo.MutationFunction<UpdateUserAddressMutation, UpdateUserAddressMutationVariables>;
 
 /**

@@ -29,5 +29,10 @@ export class Localized {
         "Use at least 8 characters with both letters and numbers.",
       registrationFailedErrorMessage: "Registration failed, please try again.",
     },
+
+    checkout: {
+      updateUserAddressErrorMessage:
+        "Could not update your address. Please try again later.",
+    },
   };
 }

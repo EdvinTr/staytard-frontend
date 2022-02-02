@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import { MeDocument, useUpdateUserAddressMutation } from "../../../lib/graphql";
+import { Localized } from "../../../Localized";
 import { BaseButton } from "../../global/BaseButton";
 import {
   AddressInputField,
@@ -8,11 +9,9 @@ import {
 } from "../../register-form/RegisterForm";
 import { InputState } from "../../register-form/types";
 
-interface UpdateUserAddressInputGroupProps {}
+const { updateUserAddressErrorMessage } = Localized.page.checkout;
 
-export const UpdateUserAddressInputGroup: React.FC<
-  UpdateUserAddressInputGroupProps
-> = ({}) => {
+export const UpdateUserAddressInputGroup = () => {
   const [zipCodeInput, setZipCodeInput] = useState<InputState>({
     value: "",
     isFocused: false,
@@ -34,7 +33,10 @@ export const UpdateUserAddressInputGroup: React.FC<
   const [updateUserAddress, { loading: updateUserAddressLoading, client }] =
     useUpdateUserAddressMutation();
 
+  const [isShowErrorMessage, setIsShowErrorMessage] = useState(false);
+
   const handleUpdateUserAddressSubmit = async (e: FormEvent) => {
+    setIsShowErrorMessage(false);
     e.preventDefault();
     if (updateUserAddressLoading || hasFieldErrors()) {
       return;
@@ -50,9 +52,10 @@ export const UpdateUserAddressInputGroup: React.FC<
         },
       });
       await client.refetchQueries({
-        include: [MeDocument],
+        include: [MeDocument], // refetch current user data to get updated address
       });
     } catch (err) {
+      setIsShowErrorMessage(true);
       console.log("Update user address error:", err);
     }
   };
@@ -69,6 +72,11 @@ export const UpdateUserAddressInputGroup: React.FC<
           <CityInputField onChange={(state) => setCityInput(state)} />
         </div>
       </div>
+      {isShowErrorMessage && (
+        <span className="text-red-500 text-xs">
+          {updateUserAddressErrorMessage}
+        </span>
+      )}
       <BaseButton type="submit" loading={updateUserAddressLoading}>
         Continue
       </BaseButton>
