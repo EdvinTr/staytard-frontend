@@ -12,7 +12,6 @@ const navItems = [
 export const UserSettingsNavbar = () => {
   const router = useRouter();
   const currentRoutePath = router.pathname;
-  console.log(currentRoutePath);
 
   return (
     <nav className="bg-gray-100 py-2">
