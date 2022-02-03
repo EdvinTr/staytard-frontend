@@ -7,14 +7,23 @@ import { passwordValidationRegex } from "../register-form/utils/validation";
 
 interface ChangePasswordProps {}
 
-const { oldPasswordErrorMessage } = Localized.page.myProfile;
+const {
+  oldPasswordErrorMessage,
+  confirmPasswordErrorMessage,
+  newPasswordErrorMessage,
+} = Localized.page.myProfile;
 export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
-  const [passwordInput, setPasswordInput] = useState<InputState>({
+  const [newPasswordInput, setNewPasswordInput] = useState<InputState>({
     value: "",
     isFocused: false,
     error: null,
   });
   const [oldPasswordInput, setOldPasswordInput] = useState<InputState>({
+    value: "",
+    isFocused: false,
+    error: null,
+  });
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState<InputState>({
     value: "",
     isFocused: false,
     error: null,
@@ -69,112 +78,101 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
         </div>
         <div className="md:w-1/3">
           <BaseInput
-            data-cy="password-input"
+            data-cy="new-password-input"
             type={isPasswordShown ? "text" : "password"}
-            className={`${!passwordInput.error && "mb-3"} `}
-            placeholder="Password"
-            label="Password"
+            className={`${!newPasswordInput.error && "mb-3"} `}
+            placeholder="New password"
+            label="New password"
             required
-            errorMessage={passwordInput.error}
-            hasError={!!passwordInput.error}
-            value={passwordInput.value || ""}
-            isFocused={passwordInput.isFocused}
+            errorMessage={newPasswordInput.error}
+            hasError={!!newPasswordInput.error}
+            value={newPasswordInput.value || ""}
+            isFocused={newPasswordInput.isFocused}
             onFocus={() =>
-              setPasswordInput({ ...passwordInput, isFocused: true })
+              setNewPasswordInput({ ...newPasswordInput, isFocused: true })
             }
             onChange={(e) =>
-              setPasswordInput({
-                ...passwordInput,
+              setNewPasswordInput({
+                ...newPasswordInput,
                 value: e.target.value,
               })
             }
             onBlur={(e) => {
               const value = e.target.value.trim();
               if (value.length === 0) {
-                return setPasswordInput({
-                  ...passwordInput,
+                return setNewPasswordInput({
+                  ...newPasswordInput,
                   isFocused: false,
-                  error: "Some Erorr goes here", // passwordInputErrorMessage,
+                  error: newPasswordErrorMessage,
                 });
               }
               // validate against regex
               if (!passwordValidationRegex.test(value)) {
-                return setPasswordInput({
-                  ...passwordInput,
+                return setNewPasswordInput({
+                  ...newPasswordInput,
                   isFocused: false,
-                  error: "Some Erorr goes here", // passwordInputErrorMessage,
+                  error: newPasswordErrorMessage,
                 });
               }
               // no error
-              return setPasswordInput({
-                ...passwordInput,
+              return setNewPasswordInput({
+                ...newPasswordInput,
                 isFocused: false,
                 error: null,
               });
             }}
           />
-          {passwordInput.error && (
+          {newPasswordInput.error && (
             <InputFieldErrorText
-              data-cy="password-error-message"
-              isInputFocused={passwordInput.isFocused}
+              data-cy="new-password-error-message"
+              isInputFocused={newPasswordInput.isFocused}
             >
-              {passwordInput.error}
+              {newPasswordInput.error}
             </InputFieldErrorText>
           )}
         </div>
 
         <div className="md:w-1/3">
+          {/* confirm password input */}
           <BaseInput
-            data-cy="password-input"
+            data-cy="confirm-password-input"
             type={isPasswordShown ? "text" : "password"}
-            className={`${!passwordInput.error && "mb-3"} `}
-            placeholder="Password"
-            label="Password"
+            className={`${!confirmPasswordInput.error && "mb-3"} `}
+            placeholder="Confirm password"
+            label="Confirm password"
             required
-            errorMessage={passwordInput.error}
-            hasError={!!passwordInput.error}
-            value={passwordInput.value || ""}
-            isFocused={passwordInput.isFocused}
+            errorMessage={confirmPasswordInput.error}
+            hasError={!!confirmPasswordInput.error}
+            value={confirmPasswordInput.value || ""}
+            isFocused={confirmPasswordInput.isFocused}
             onFocus={() =>
-              setPasswordInput({ ...passwordInput, isFocused: true })
+              setConfirmPasswordInput({
+                ...confirmPasswordInput,
+                isFocused: true,
+              })
             }
             onChange={(e) =>
-              setPasswordInput({
-                ...passwordInput,
+              setConfirmPasswordInput({
+                ...confirmPasswordInput,
                 value: e.target.value,
               })
             }
             onBlur={(e) => {
-              const value = e.target.value.trim();
-              if (value.length === 0) {
-                return setPasswordInput({
-                  ...passwordInput,
-                  isFocused: false,
-                  error: "Some Erorr goes here", // passwordInputErrorMessage,
-                });
-              }
-              // validate against regex
-              if (!passwordValidationRegex.test(value)) {
-                return setPasswordInput({
-                  ...passwordInput,
-                  isFocused: false,
-                  error: "Some Erorr goes here", // passwordInputErrorMessage,
-                });
-              }
+              // TODO: compare against newPasswordInput.value
               // no error
-              return setPasswordInput({
-                ...passwordInput,
+              return setConfirmPasswordInput({
+                ...confirmPasswordInput,
                 isFocused: false,
                 error: null,
               });
             }}
           />
-          {passwordInput.error && (
+          {confirmPasswordInput.error && (
             <InputFieldErrorText
-              data-cy="password-error-message"
-              isInputFocused={passwordInput.isFocused}
+              data-cy="confirm-password-error-message"
+              isInputFocused={confirmPasswordInput.isFocused}
             >
-              {passwordInput.error}
+              {confirmPasswordInput.error}
             </InputFieldErrorText>
           )}
         </div>
