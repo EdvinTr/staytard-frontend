@@ -5,7 +5,7 @@ import { AppHeader } from "../components/global/AppHeader";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME } from "../constants";
 
-const MyProfile: NextPage = () => {
+const MyOffers: NextPage = () => {
   return (
     <div>
       <Head>
@@ -16,9 +16,10 @@ const MyProfile: NextPage = () => {
       {/* nav */}
       <div>
         <UserSettingsNavbar />
+        <div>My offers page</div>
       </div>
     </div>
   );
 };
 
-export default MyProfile;
+export default MyOffers;

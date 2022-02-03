@@ -53,7 +53,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       Router.events.off("routeChangeError", end);
     };
   }, []);
-
   return (
     <ApolloProvider client={apolloClient}>
       <CartProvider>

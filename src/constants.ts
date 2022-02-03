@@ -9,7 +9,7 @@ export enum APP_PAGE_ROUTE {
   REGISTER = "/register",
   MY_PROFILE = "/my-profile",
   MY_ORDERS = "/my-orders",
-  MY_OFFERS = "my-offers",
+  MY_OFFERS = "/my-offers",
   PRODUCT = "/product",
   CONFIRMATION = "/confirmation",
   CHECKOUT = "/checkout",
