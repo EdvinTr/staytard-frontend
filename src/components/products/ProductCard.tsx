@@ -195,10 +195,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   {product.name}
                 </span>
               </h2>
-              <strong className="text-13 font-semibold flex">
-                {/* {product.priceLabel} */}
-                {product.currentPrice} EUR
-              </strong>
+
+              {product.currentPrice === product.originalPrice ? (
+                <strong className="text-13 font-semibold flex">
+                  {product.currentPrice} EUR
+                </strong>
+              ) : (
+                <div className="flex items-center justify-between lg:justify-start space-x-2 lg:space-x-3">
+                  <div className="space-x-2">
+                    <strong className="text-13 text-staytard-red">
+                      {product.currentPrice} EUR
+                    </strong>
+                    <del className="text-gray-400  text-[10px]">
+                      {product.originalPrice} EUR
+                    </del>
+                  </div>
+                  {/* discount percentage calculation */}
+                  <div>
+                    <span className="text-xs text-staytard-red tracking-wide lg:text-[11px] font-semibold">
+                      {Math.ceil(
+                        ((product.currentPrice - product.originalPrice) /
+                          product.originalPrice) *
+                          100
+                      ).toFixed(0)}
+                      %
+                    </span>
+                  </div>
+                </div>
+              )}
               {currentWindowWidth < 768 && (
                 <div className="text-[8px] uppercase pt-1">
                   + {product.attributes.length} colors
