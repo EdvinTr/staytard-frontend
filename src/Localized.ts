@@ -34,5 +34,8 @@ export class Localized {
       updateUserAddressErrorMessage:
         "Could not update your address. Please try again later.",
     },
+    myProfile: {
+      oldPasswordErrorMessage: "Enter your old password.",
+    },
   };
 }
