@@ -1,56 +1,55 @@
 import React, { useState } from "react";
 
-interface TogglerViewProps {
+interface EditFormProps {
   label: string;
 }
 
-const togglerButtonClassNames =
+const basicButtonClassNames =
   "border-2 border-black hover:border-black border-opacity-25";
 
-export const TogglerView: React.FC<TogglerViewProps> = ({
-  label,
-  children,
-}) => {
-  const [isShow, setIsShow] = useState(false);
+export const EditForm: React.FC<EditFormProps> = ({ label, children }) => {
+  const [childrenVisible, setChildrenVisible] = useState(false);
   return (
-    <div
+    <form
       className={`max-w-3xl border mx-auto px-6 py-4 mt-8 shadow-sm ${
-        isShow ? "border-t-4 border-t-staytard-yellow" : ""
+        childrenVisible ? "border-t-4 border-t-staytard-yellow" : ""
       }`}
     >
       <div className="flex justify-between items-center border-b border-black py-4 border-opacity-10">
         <div className="font-bold text-sm uppercase pb-5">{label}</div>
-        {!isShow && (
+        {!childrenVisible && (
           <BaseEditButton
-            className={togglerButtonClassNames}
-            onClick={() => setIsShow(true)}
+            className={basicButtonClassNames}
+            onClick={() => setChildrenVisible(true)}
           >
             Update
           </BaseEditButton>
         )}
       </div>
-      {isShow && (
+      {childrenVisible && (
         <div className="mt-6">
           <div className="border-b border-black border-opacity-10">
             {children}
           </div>
           <div className="pt-4 space-x-2">
+            {/* save button */}
             <BaseEditButton
               className="bg-staytard-yellow border-none"
               onClick={() => console.log("save")}
             >
               Save
             </BaseEditButton>
+            {/* cancel button */}
             <BaseEditButton
-              onClick={() => setIsShow(false)}
-              className={togglerButtonClassNames}
+              onClick={() => setChildrenVisible(false)}
+              className={basicButtonClassNames}
             >
               Cancel
             </BaseEditButton>
           </div>
         </div>
       )}
-    </div>
+    </form>
   );
 };
 

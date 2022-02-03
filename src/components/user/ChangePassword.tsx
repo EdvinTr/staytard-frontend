@@ -29,6 +29,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
     error: null,
   });
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+
   return (
     <Fragment>
       <div className="md:flex md:space-x-4">
@@ -158,7 +159,14 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
               })
             }
             onBlur={(e) => {
-              // TODO: compare against newPasswordInput.value
+              const value = e.target.value;
+              if (value !== newPasswordInput.value) {
+                return setConfirmPasswordInput({
+                  ...confirmPasswordInput,
+                  isFocused: false,
+                  error: confirmPasswordErrorMessage,
+                });
+              }
               // no error
               return setConfirmPasswordInput({
                 ...confirmPasswordInput,

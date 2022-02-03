@@ -3,9 +3,28 @@ import Head from "next/head";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { ChangePassword } from "../components/user/ChangePassword";
-import { TogglerView } from "../components/user/TogglerView";
+import { EditForm } from "../components/user/EditForm";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME } from "../constants";
+
+const EditInfoContext = React.createContext({
+  // updatePassword: () => {}
+});
+
+const EditInfoProvider: React.FC = ({ children }) => {
+  // const [update] = useUpdateUserAddressMutation();
+  return (
+    <EditInfoContext.Provider
+      value={
+        {
+          // updatePassword: update
+        }
+      }
+    >
+      {children}
+    </EditInfoContext.Provider>
+  );
+};
 
 const MyProfile: NextPage = () => {
   return (
@@ -20,9 +39,9 @@ const MyProfile: NextPage = () => {
         <UserSettingsNavbar />
       </div>
       {/* change password */}
-      <TogglerView label="Password">
+      <EditForm label="Password">
         <ChangePassword />
-      </TogglerView>
+      </EditForm>
     </div>
   );
 };
