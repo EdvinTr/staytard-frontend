@@ -16,6 +16,20 @@ import "../styles/globals.css";
 
 NProgress.configure({ showSpinner: false, easing: "ease", speed: 500 });
 
+const pathsWithoutMainNavbar = [
+  APP_PAGE_ROUTE.LOGIN,
+  APP_PAGE_ROUTE.REGISTER,
+  APP_PAGE_ROUTE.CHECKOUT,
+  APP_PAGE_ROUTE.MY_PROFILE,
+  APP_PAGE_ROUTE.MY_ORDERS,
+  APP_PAGE_ROUTE.MY_OFFERS,
+];
+
+const pathsWithoutFooter = [
+  APP_PAGE_ROUTE.MY_PROFILE,
+  APP_PAGE_ROUTE.MY_ORDERS,
+  APP_PAGE_ROUTE.MY_OFFERS,
+];
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const router = useRouter();
@@ -52,9 +66,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           />
         </Head>
         <Fragment>
-          {currentPath === APP_PAGE_ROUTE.LOGIN ||
-          currentPath === APP_PAGE_ROUTE.REGISTER ||
-          currentPath === APP_PAGE_ROUTE.CHECKOUT ? null : (
+          {pathsWithoutMainNavbar.includes(
+            currentPath as APP_PAGE_ROUTE
+          ) ? null : (
             <Navbar />
           )}
           {/*    {isLoading && (
@@ -64,7 +78,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           />
         )} */}
           <Component {...pageProps} />
-          <Footer />
+          {pathsWithoutFooter.includes(currentPath as APP_PAGE_ROUTE) ? null : (
+            <Footer />
+          )}
         </Fragment>
       </CartProvider>
     </ApolloProvider>

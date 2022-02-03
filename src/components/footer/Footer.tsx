@@ -11,7 +11,7 @@ import {
   InstagramIcon,
   TikTokIcon,
   YouTubeIcon,
-} from "../icons/Icons";
+} from "../global/icons/Icons";
 import { footerItems } from "./footer-items.data";
 interface FooterProps {}
 

@@ -5,9 +5,7 @@ import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { useBreadcrumbs } from "../../hooks/useBreadcrumbs";
 
-interface BreadcrumbsProps {}
-
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({}) => {
+export const Breadcrumbs = () => {
   const router = useRouter();
   const breadcrumbs = useBreadcrumbs(router);
   return (
