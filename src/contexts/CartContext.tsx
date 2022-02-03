@@ -10,6 +10,7 @@ export interface CartItem {
 interface CartContextInterface {
   addToCart: (item: CartItem) => void;
   removeFromCart: (sku: string) => void;
+  resetCart: () => void;
   totalItems: number;
   cart: CartItem[];
   totalCartPrice: number;
@@ -21,6 +22,7 @@ const CartContext = createContext<CartContextInterface>({
   removeFromCart: () => {},
   cart: [],
   totalCartPrice: 0,
+  resetCart: () => {},
 });
 
 export const CartProvider = ({ children }: any) => {
@@ -48,6 +50,11 @@ export const CartProvider = ({ children }: any) => {
   };
 
   const getCart = () => cart;
+
+  const resetCart = () => {
+    setCartInLocalStorage([]);
+    setCart([]);
+  };
 
   const getTotalCartItems = (): number =>
     cart.reduce((acc, item) => {
@@ -92,6 +99,7 @@ export const CartProvider = ({ children }: any) => {
         removeFromCart,
         totalCartPrice: getTotalCartPrice(),
         cart: getCart(), // assigning as a function to make Next.js play nicely with localStorage
+        resetCart,
       }}
     >
       {children}

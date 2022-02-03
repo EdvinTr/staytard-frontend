@@ -24,8 +24,7 @@ export const KlarnaPaymentControls = () => {
   const router = useRouter();
   const { data: meData } = useMeQuery(); // TODO: handle this better
 
-  const { cart, addToCart, removeFromCart, totalCartPrice } =
-    useContext(CartContext);
+  const { cart, totalCartPrice, resetCart } = useContext(CartContext);
 
   const { data: cartProducts } = useFindProductsBySkusQuery({
     variables: {
@@ -106,7 +105,8 @@ export const KlarnaPaymentControls = () => {
       }
       const orderNumber = response.data.createOrderWithKlarna.orderNumber;
       const redirectURL = `${APP_PAGE_ROUTE.CONFIRMATION}/${orderNumber}`;
-      router.push(redirectURL);
+      await router.push(redirectURL);
+      resetCart();
     } catch (err) {
       console.log(err);
       // TODO: show some error to the user or something
