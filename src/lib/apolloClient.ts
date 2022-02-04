@@ -11,15 +11,16 @@ import { useMemo } from "react";
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function createApolloClient(headers: IncomingHttpHeaders | null = null) {
-  const enhancedFetch = (url: RequestInfo, init: RequestInit) => {
-    return fetch(url, {
+  const enhancedFetch = async (url: RequestInfo, init: RequestInit) => {
+    const response = await fetch(url, {
       ...init,
       headers: {
         ...init.headers,
         "Access-Control-Allow-Origin": "*",
         Cookie: headers?.cookie ?? "", // pass cookies
       },
-    }).then((response) => response);
+    });
+    return response;
   };
   return new ApolloClient({
     ssrMode: typeof window === "undefined",

@@ -280,7 +280,12 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
               id="show-password"
               className="rounded-full w-5 h-5 checked:bg-black checked:text-black checked:ring-staytard-yellow checked:ring-2 focus:outline-none focus:ring-0 "
             />
-            <label htmlFor="show-password">Show password</label>
+            <label
+              htmlFor="show-password"
+              className="cursor-pointer select-none  "
+            >
+              Show password
+            </label>
           </div>
         </Fragment>
       </EditForm>
