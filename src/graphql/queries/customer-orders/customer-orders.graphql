@@ -1,0 +1,20 @@
+query CustomerOrders($input: FindCustomerOrdersInput!) {
+  customerOrders(input: $input) {
+    totalCount
+    hasMore
+    items {
+      id
+      orderNumber
+      deliveryAddress
+      city
+      postalCode
+      totalAmount
+      shippingCost
+      grandTotal
+      purchaseCurrency
+      orderStatus {
+        status
+      }
+    }
+  }
+}

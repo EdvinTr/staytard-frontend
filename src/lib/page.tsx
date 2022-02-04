@@ -70,6 +70,34 @@ export const ssrGetOneCategory = {
       
       usePage: useGetOneCategory,
     }
+export async function getServerPageCustomerOrders
+    (options: Omit<Apollo.QueryOptions<Types.CustomerOrdersQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.CustomerOrdersQuery>({ ...options, query: Operations.CustomerOrdersDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useCustomerOrders = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.CustomerOrdersQuery, Types.CustomerOrdersQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.CustomerOrdersDocument, options);
+};
+export type PageCustomerOrdersComp = React.FC<{data?: Types.CustomerOrdersQuery, error?: Apollo.ApolloError}>;
+export const ssrCustomerOrders = {
+      getServerPage: getServerPageCustomerOrders,
+      
+      usePage: useCustomerOrders,
+    }
 export async function getServerPageGetProductBrands
     (options: Omit<Apollo.QueryOptions<Types.GetProductBrandsQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
