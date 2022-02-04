@@ -13,6 +13,7 @@ import { getApolloClient } from './apolloClient';
 
 
 
+
 export async function getServerPageGetCategories
     (options: Omit<Apollo.QueryOptions<Types.GetCategoriesQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
@@ -152,6 +153,34 @@ export const ssrFindProductsBySkus = {
       getServerPage: getServerPageFindProductsBySkus,
       
       usePage: useFindProductsBySkus,
+    }
+export async function getServerPageHasPassword
+    (options: Omit<Apollo.QueryOptions<Types.HasPasswordQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.HasPasswordQuery>({ ...options, query: Operations.HasPasswordDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useHasPassword = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.HasPasswordQuery, Types.HasPasswordQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.HasPasswordDocument, options);
+};
+export type PageHasPasswordComp = React.FC<{data?: Types.HasPasswordQuery, error?: Apollo.ApolloError}>;
+export const ssrHasPassword = {
+      getServerPage: getServerPageHasPassword,
+      
+      usePage: useHasPassword,
     }
 export async function getServerPageMe
     (options: Omit<Apollo.QueryOptions<Types.MeQueryVariables>, 'query'>, ctx?: any ){

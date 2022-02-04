@@ -385,6 +385,9 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
       )}
       <BaseButton
         data-cy="submit-button"
+        variant="solid"
+        className="mt-6"
+        size="lg"
         type="submit"
         loading={isRegisterUserLoading}
       >

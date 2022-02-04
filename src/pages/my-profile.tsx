@@ -1,30 +1,11 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { ChangePassword } from "../components/user/ChangePassword";
-import { EditForm } from "../components/user/EditForm";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
-import { APP_NAME } from "../constants";
-
-const EditInfoContext = React.createContext({
-  // updatePassword: () => {}
-});
-
-const EditInfoProvider: React.FC = ({ children }) => {
-  // const [update] = useUpdateUserAddressMutation();
-  return (
-    <EditInfoContext.Provider
-      value={
-        {
-          // updatePassword: update
-        }
-      }
-    >
-      {children}
-    </EditInfoContext.Provider>
-  );
-};
+import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
+import { ssrMe } from "../lib/page";
 
 const MyProfile: NextPage = () => {
   return (
@@ -38,12 +19,46 @@ const MyProfile: NextPage = () => {
       <div>
         <UserSettingsNavbar />
       </div>
-      {/* change password */}
-      <EditForm label="Password">
-        <ChangePassword />
-      </EditForm>
+      <ChangePassword />
     </div>
   );
+};
+
+// TODO: refactor into a routeGuard function
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
+  if (!accessToken) {
+    // save some CPU if no access token is present
+    return {
+      props: {},
+      redirect: {
+        destination: APP_PAGE_ROUTE.INDEX,
+      },
+    };
+  }
+  try {
+    // fetch user by passing the cookies in the request header
+    const { props } = await ssrMe.getServerPage({
+      context: { headers: ctx.req.headers },
+    });
+    if (!props.data || !props.data.me) {
+      throw new Error(); // redirect to index page
+    }
+    return {
+      props,
+    };
+  } catch (err) {
+    console.log(
+      "🚀 ~ file: my-profile.tsx ~ line 289 ~ constgetServerSideProps:GetServerSideProps= ~ err",
+      err
+    );
+    return {
+      props: {},
+      redirect: {
+        destination: APP_PAGE_ROUTE.INDEX,
+      },
+    };
+  }
 };
 
 export default MyProfile;
