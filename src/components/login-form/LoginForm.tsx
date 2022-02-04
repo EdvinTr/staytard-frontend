@@ -226,6 +226,7 @@ export const LoginForm = ({
       <BaseButton
         variant="solid"
         size="lg"
+        type="submit"
         loading={isSubmitting}
         className="mt-6"
       >
