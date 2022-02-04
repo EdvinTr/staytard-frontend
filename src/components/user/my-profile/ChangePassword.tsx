@@ -1,17 +1,17 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import React, { FormEvent, Fragment, useState } from "react";
 import { toast, ToastContainer } from "react-toast";
-import { useSsrCompatible } from "../../hooks/useSsrCompatible";
+import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
 import {
   HasPasswordDocument,
   useHasPasswordQuery,
   useUpdatePasswordMutation,
-} from "../../lib/graphql";
-import { Localized } from "../../Localized";
-import { BaseInput } from "../global/BaseInput";
-import { InputFieldErrorText } from "../global/InputFieldErrorText";
-import { InputState } from "../register-form/types";
-import { passwordValidationRegex } from "../register-form/utils/validation";
+} from "../../../lib/graphql";
+import { Localized } from "../../../Localized";
+import { BaseInput } from "../../global/BaseInput";
+import { InputFieldErrorText } from "../../global/InputFieldErrorText";
+import { InputState } from "../../register-form/types";
+import { passwordValidationRegex } from "../../register-form/utils/validation";
 import { EditForm } from "./EditForm";
 
 interface ChangePasswordProps {}

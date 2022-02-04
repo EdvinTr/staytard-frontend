@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
-import { ChangePassword } from "../components/user/ChangePassword";
+import { ChangePassword } from "../components/user/my-profile/ChangePassword";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME } from "../constants";
 import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";

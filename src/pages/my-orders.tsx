@@ -25,7 +25,10 @@ const MyOrders: NextPage = () => {
       </Head>
       <AppHeader />
       <UserSettingsNavbar />
-      <div>The users orders are presented here</div>
+      <h2 className="text-center text-2xl font-semibold uppercase mt-6">
+        My orders
+      </h2>
+      <div></div>
     </div>
   );
 };

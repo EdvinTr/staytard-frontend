@@ -1,5 +1,5 @@
 import React, { FormEvent, Fragment, useEffect, useState } from "react";
-import { BaseButton } from "../global/BaseButton";
+import { BaseButton } from "../../global/BaseButton";
 
 interface EditFormProps {
   label: string;
