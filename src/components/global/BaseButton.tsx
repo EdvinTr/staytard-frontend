@@ -46,7 +46,7 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
 
   return (
     <button {...props} className={allClassNames}>
-      {loading ? <LoadingSpinner /> : children}
+      {loading ? <LoadingSpinner size={25} /> : children}
     </button>
   );
 };

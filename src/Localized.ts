@@ -39,6 +39,7 @@ export class Localized {
       newPasswordErrorMessage:
         "Use at least 8 characters with both letters and numbers.",
       confirmPasswordErrorMessage: "Your passwords are different. Try again.",
+      updatePasswordSuccessMessage: "Your password has been updated.",
     },
   };
 }

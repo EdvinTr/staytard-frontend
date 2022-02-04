@@ -1,7 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import React from "react";
+import React, { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
+import { FadeInContainer } from "../components/global/FadeInContainer";
 import { ChangePassword } from "../components/user/ChangePassword";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
@@ -9,18 +10,16 @@ import { ssrMe } from "../lib/page";
 
 const MyProfile: NextPage = () => {
   return (
-    <div>
+    <Fragment>
       <Head>
         <title>{APP_NAME}.com</title>
-        <meta name="description" content="" />
       </Head>
       <AppHeader />
-      {/* nav */}
-      <div>
-        <UserSettingsNavbar />
-      </div>
-      <ChangePassword />
-    </div>
+      <UserSettingsNavbar />
+      <FadeInContainer duration={0.7}>
+        <ChangePassword />
+      </FadeInContainer>
+    </Fragment>
   );
 };
 
@@ -28,7 +27,7 @@ const MyProfile: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
   if (!accessToken) {
-    // save some CPU if no access token is present
+    // save some bandwidth if no access token is present
     return {
       props: {},
       redirect: {
@@ -48,10 +47,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props,
     };
   } catch (err) {
-    console.log(
-      "🚀 ~ file: my-profile.tsx ~ line 289 ~ constgetServerSideProps:GetServerSideProps= ~ err",
-      err
-    );
     return {
       props: {},
       redirect: {

@@ -1,6 +1,9 @@
 import { HTMLMotionProps, motion } from "framer-motion";
 import React from "react";
 interface FadeInContainerProps extends HTMLMotionProps<"div"> {
+  /**
+   * @param duration Default 0.7s
+   *  */
   duration?: number;
 }
 
