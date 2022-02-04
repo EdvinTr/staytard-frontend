@@ -11,14 +11,10 @@ const MyOrders: NextPage = () => {
     <div>
       <Head>
         <title>{APP_NAME}.com</title>
-        <meta name="description" content="" />
       </Head>
       <AppHeader />
-      {/* nav */}
-      <div>
-        <UserSettingsNavbar />
-        <div>The users orders are presented here</div>
-      </div>
+      <UserSettingsNavbar />
+      <div>The users orders are presented here</div>
     </div>
   );
 };

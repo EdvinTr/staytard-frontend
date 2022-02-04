@@ -3,6 +3,10 @@ import { ParsedUrlQuery } from "querystring";
 import { APP_PAGE_ROUTE, COOKIE_NAME } from "../../constants";
 import { ssrMe } from "../../lib/page";
 
+/**
+ * @description
+ * Route guard for checking if the user is allowed to visit a page depending on the validity of the user's cookies.
+ *  */
 export const isUserLoggedInRouteGuard = async (
   ctx: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
 ) => {
