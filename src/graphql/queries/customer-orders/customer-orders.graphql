@@ -12,6 +12,8 @@ query CustomerOrders($input: FindCustomerOrdersInput!) {
       shippingCost
       grandTotal
       purchaseCurrency
+      createdAt
+      paymentType
       orderStatus {
         status
       }

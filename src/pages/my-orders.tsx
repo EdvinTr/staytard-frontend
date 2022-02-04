@@ -2,22 +2,12 @@ import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
+import { CustomerOrderTable } from "../components/user/my-orders/CustomerOrderTable";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME } from "../constants";
-import { useCustomerOrdersQuery } from "../lib/graphql";
 import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";
 
 const MyOrders: NextPage = () => {
-  const { data } = useCustomerOrdersQuery({
-    variables: {
-      input: {
-        limit: 50,
-        offset: 0,
-      },
-    },
-  });
-  console.log(data);
-
   return (
     <div>
       <Head>
@@ -25,10 +15,13 @@ const MyOrders: NextPage = () => {
       </Head>
       <AppHeader />
       <UserSettingsNavbar />
-      <h2 className="text-center text-2xl font-semibold uppercase mt-6">
-        My orders
-      </h2>
-      <div></div>
+      <section>
+        <h2 className="text-center text-2xl font-semibold uppercase py-12">
+          My orders
+        </h2>
+        <CustomerOrderTable />
+      </section>
+      <div className="min-h-[50vh]"></div>
     </div>
   );
 };
