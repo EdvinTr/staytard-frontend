@@ -14,7 +14,7 @@ export const CustomerOrderTableRow = ({
   return (
     <motion.tr
       {...props}
-      className="max-w-5xl hover:bg-gray-100 transition-colors duration-200 border-t shadow-md border-b mx-auto  text-sm "
+      className="mx-auto max-w-5xl border-t border-b text-sm shadow-md transition-colors duration-200  hover:bg-gray-100 "
     >
       {/* order id */}
       <td className="py-12 px-4 font-semibold">{customerOrder.id}</td>
@@ -30,7 +30,7 @@ export const CustomerOrderTableRow = ({
       {/* status */}
       <td className={`font-semibold`}>
         <span
-          className={`p-2 rounded-md ${getOrderStatusClassNames(
+          className={`rounded-md p-2 ${getOrderStatusClassNames(
             customerOrder.orderStatus.status as ORDER_STATUS
           )}`}
         >
@@ -54,21 +54,29 @@ export enum ORDER_STATUS {
 const getOrderStatusClassNames = (orderStatus: ORDER_STATUS) => {
   switch (orderStatus) {
     case ORDER_STATUS.PENDING:
-      return "bg-yellow-100 ";
+      return "bg-yellow-100";
+
     case ORDER_STATUS.PROCESSING:
-      return "bg-yellow-100 ";
+      return "bg-yellow-100";
+
     case ORDER_STATUS.SHIPPED:
       return "bg-blue-100";
+
     case ORDER_STATUS.ON_HOLD:
       return "bg-blue-100";
+
     case ORDER_STATUS.COMPLETED:
       return "bg-green-100";
+
     case ORDER_STATUS.CANCELLED:
       return "bg-red-100";
+
     case ORDER_STATUS.FAILED:
       return "bg-red-100";
+
     case ORDER_STATUS.REFUNDED:
       return "bg-orange-100";
+
     default:
       return "";
   }

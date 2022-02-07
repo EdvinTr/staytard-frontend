@@ -26,23 +26,23 @@ export const CustomerOrderTable = () => {
     show: { opacity: 1 },
   };
   return (
-    <div className="max-w-5xl mx-auto overflow-auto px-4">
+    <div className="mx-auto max-w-5xl overflow-auto px-4">
       <table className="mx-auto w-full">
         <thead>
           <tr>
-            <th className="px-4 font-semibold text-gray-500 py-4 pr-20 text-sm  text-left">
+            <th className="px-4 py-4 pr-20 text-left text-sm font-semibold  text-gray-500">
               Order ID
             </th>
-            <th className="font-semibold text-gray-500 pr-20 text-sm  text-left">
+            <th className="pr-20 text-left text-sm font-semibold  text-gray-500">
               Address
             </th>
-            <th className="font-semibold text-gray-500 pr-20 text-sm  text-left">
+            <th className="pr-20 text-left text-sm font-semibold  text-gray-500">
               Date
             </th>
-            <th className="font-semibold text-gray-500 pr-20 text-sm  text-left">
+            <th className="pr-20 text-left text-sm font-semibold  text-gray-500">
               Cost
             </th>
-            <th className="font-semibold text-gray-500 pr-20 text-sm  text-left">
+            <th className="pr-20 text-left text-sm font-semibold  text-gray-500">
               Status
             </th>
           </tr>
@@ -59,6 +59,7 @@ export const CustomerOrderTable = () => {
               customerOrder={order}
             />
           ))}
+          {/* TODO: add load more button */}
         </motion.tbody>
       </table>
     </div>
