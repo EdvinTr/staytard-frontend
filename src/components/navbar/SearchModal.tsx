@@ -62,7 +62,7 @@ export const SearchModal = ({ onClose, show }: SearchModalProps) => {
           </button>
         </form>
         {/* search results */}
-        {data && data.searchProducts && (
+        {data && data.searchProducts.length > 0 && (
           <div className="mt-6 space-y-6">
             {data?.searchProducts.map((prod, idx) => {
               return (
