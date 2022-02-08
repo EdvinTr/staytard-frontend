@@ -19,29 +19,32 @@ export const SearchModal = ({ onClose, show }: SearchModalProps) => {
   };
   const isSkip = debouncedSearchTerm.length === 0 || searchTerm.length === 0;
   const { data, refetch } = useSearchProductsQuery({
-    variables: { input: { resultLimit: 10, searchTerm: "" } },
+    variables: { input: { resultLimit: 20, searchTerm: "" } },
     fetchPolicy: "no-cache",
     skip: isSkip,
   });
-  /* const [fetchProducts, { data }] = useSearchProductsLazyQuery({
-    fetchPolicy: "no-cache",
-  }); */
-  useEffect(() => {
+
+  const handleClose = () => {
     setSearchTerm("");
-  }, [show]);
+    onClose();
+  };
+
   useEffect(() => {
-    refetch({ input: { resultLimit: 10, searchTerm: debouncedSearchTerm } });
-    /* fetchProducts({
-      variables: { input: { resultLimit: 10, searchTerm: debouncedValue } },
-    }); */
+    refetch({ input: { resultLimit: 20, searchTerm: debouncedSearchTerm } });
   }, [debouncedSearchTerm, refetch]);
   return (
     <Modal onClose={onClose} show={show}>
-      <div className="px-12 py-4">
-        <div className="flex items-center justify-between border-b border-black border-opacity-20">
+      <div className="no-scrollbar max-h-[31rem] overflow-auto px-12 py-4">
+        <form
+          role="search"
+          onSubmit={(e) => e.preventDefault()}
+          className="flex items-center justify-between border-b border-black border-opacity-20"
+        >
           <div className="flex w-full items-center">
             <SearchIcon className="w-6" />
             <input
+              data-cy="search-input"
+              aria-label="Search for products"
               type="text"
               placeholder="Search"
               className="w-full border-none border-black focus:ring-0"
@@ -50,14 +53,18 @@ export const SearchModal = ({ onClose, show }: SearchModalProps) => {
               value={searchTerm}
             />
           </div>
-          <button aria-label="close" onClick={onClose}>
+          <button
+            aria-label="close"
+            onClick={handleClose}
+            data-cy="close-search-modal-button"
+          >
             <XIcon className="w-6" />
           </button>
-        </div>
-        {/* results */}
-        <div className="mt-6 space-y-6">
-          {searchTerm.length > 0 &&
-            data?.searchProducts.map((prod, idx) => {
+        </form>
+        {/* search results */}
+        {data && data.searchProducts && (
+          <div className="mt-6 space-y-6">
+            {data?.searchProducts.map((prod, idx) => {
               return (
                 <Link href={`${APP_PAGE_ROUTE.PRODUCT}/${prod.id}`} key={idx}>
                   <a
@@ -69,7 +76,8 @@ export const SearchModal = ({ onClose, show }: SearchModalProps) => {
                 </Link>
               );
             })}
-        </div>
+          </div>
+        )}
       </div>
     </Modal>
   );

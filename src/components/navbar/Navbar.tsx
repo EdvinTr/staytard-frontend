@@ -57,7 +57,7 @@ export const Navbar = () => {
             >
               {/* open search modal button */}
               <SearchIcon className="w-5 " />
-              <div className="hidden opacity-50 lg:block">Search</div>
+              <div className="hidden opacity-[0.55] lg:block">Search</div>
             </button>
 
             {/* app name */}
