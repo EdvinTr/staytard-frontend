@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 interface ModalProps {
   onClose: () => void;
@@ -14,6 +14,7 @@ export const Modal: React.FC<ModalProps> = ({ onClose, show, children }) => {
     },
     [onClose]
   );
+  const nodeRef = useRef(null);
 
   useEffect(() => {
     document.body.addEventListener("keydown", closeOnEscapeKeyDown);
@@ -22,8 +23,13 @@ export const Modal: React.FC<ModalProps> = ({ onClose, show, children }) => {
     };
   }, [closeOnEscapeKeyDown]);
   return (
-    <CSSTransition in={show} unmountOnExit timeout={{ enter: 0, exit: 300 }}>
-      <div className="modal z-30" onClick={onClose}>
+    <CSSTransition
+      nodeRef={nodeRef}
+      in={show}
+      unmountOnExit
+      timeout={{ enter: 0, exit: 300 }}
+    >
+      <div ref={nodeRef} className="modal z-30" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-body">{children}</div>
         </div>
