@@ -350,6 +350,7 @@ export type Query = {
   productBrands: Array<ProductBrand>;
   products: QueryProductsOutput;
   productsBySku: QueryProductsOutput;
+  searchProducts: Array<Product>;
 };
 
 
@@ -382,6 +383,11 @@ export type QueryProductsBySkuArgs = {
   input: FindProductsBySkusInput;
 };
 
+
+export type QuerySearchProductsArgs = {
+  input: SearchProductsInput;
+};
+
 export type QueryProductsOutput = {
   __typename?: 'QueryProductsOutput';
   hasMore: Scalars['Boolean'];
@@ -404,6 +410,11 @@ export enum Sort_Direction {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type SearchProductsInput = {
+  resultLimit: Scalars['Float'];
+  searchTerm: Scalars['String'];
+};
 
 export type UpdateUserAddressInput = {
   city: Scalars['String'];
@@ -550,6 +561,13 @@ export type FindProductsBySkusQueryVariables = Exact<{
 
 
 export type FindProductsBySkusQuery = { __typename?: 'Query', productsBySku: { __typename?: 'QueryProductsOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> }> } };
+
+export type SearchProductsQueryVariables = Exact<{
+  input: SearchProductsInput;
+}>;
+
+
+export type SearchProductsQuery = { __typename?: 'Query', searchProducts: Array<{ __typename?: 'Product', id: number, name: string }> };
 
 export type HasPasswordQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1173,6 +1191,45 @@ export type FindProductsBySkusLazyQueryHookResult = ReturnType<typeof useFindPro
 export type FindProductsBySkusQueryResult = Apollo.QueryResult<FindProductsBySkusQuery, FindProductsBySkusQueryVariables>;
 export function refetchFindProductsBySkusQuery(variables: FindProductsBySkusQueryVariables) {
       return { query: FindProductsBySkusDocument, variables: variables }
+    }
+export const SearchProductsDocument = gql`
+    query SearchProducts($input: SearchProductsInput!) {
+  searchProducts(input: $input) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useSearchProductsQuery__
+ *
+ * To run a query within a React component, call `useSearchProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchProductsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchProductsQuery(baseOptions: Apollo.QueryHookOptions<SearchProductsQuery, SearchProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchProductsQuery, SearchProductsQueryVariables>(SearchProductsDocument, options);
+      }
+export function useSearchProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchProductsQuery, SearchProductsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchProductsQuery, SearchProductsQueryVariables>(SearchProductsDocument, options);
+        }
+export type SearchProductsQueryHookResult = ReturnType<typeof useSearchProductsQuery>;
+export type SearchProductsLazyQueryHookResult = ReturnType<typeof useSearchProductsLazyQuery>;
+export type SearchProductsQueryResult = Apollo.QueryResult<SearchProductsQuery, SearchProductsQueryVariables>;
+export function refetchSearchProductsQuery(variables: SearchProductsQueryVariables) {
+      return { query: SearchProductsDocument, variables: variables }
     }
 export const HasPasswordDocument = gql`
     query HasPassword {

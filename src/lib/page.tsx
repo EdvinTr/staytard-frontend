@@ -182,6 +182,34 @@ export const ssrFindProductsBySkus = {
       
       usePage: useFindProductsBySkus,
     }
+export async function getServerPageSearchProducts
+    (options: Omit<Apollo.QueryOptions<Types.SearchProductsQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.SearchProductsQuery>({ ...options, query: Operations.SearchProductsDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useSearchProducts = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.SearchProductsQuery, Types.SearchProductsQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.SearchProductsDocument, options);
+};
+export type PageSearchProductsComp = React.FC<{data?: Types.SearchProductsQuery, error?: Apollo.ApolloError}>;
+export const ssrSearchProducts = {
+      getServerPage: getServerPageSearchProducts,
+      
+      usePage: useSearchProducts,
+    }
 export async function getServerPageHasPassword
     (options: Omit<Apollo.QueryOptions<Types.HasPasswordQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

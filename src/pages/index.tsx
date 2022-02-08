@@ -14,6 +14,7 @@ const IndexPage: NextPage = () => {
             height={400}
             alt="winter sale"
             /* //? objectFit contain here too? */
+            priority
             layout="responsive"
             src="/img/staytard-winter-sale-full-screen.png"
           />
@@ -23,6 +24,7 @@ const IndexPage: NextPage = () => {
             height={580}
             alt="winter sale"
             objectFit="contain"
+            priority
             layout="responsive"
             src="/img/staytard-winter-sale-mobile-size.png"
             className="max-h-[2rem]"

@@ -1,0 +1,6 @@
+query SearchProducts($input: SearchProductsInput!) {
+  searchProducts(input: $input) {
+    id
+    name
+  }
+}
