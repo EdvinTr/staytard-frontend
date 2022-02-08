@@ -16,11 +16,11 @@ import { MyCartIcon, MyUserIcon } from "../global/icons/Icons";
 import { MyContainer } from "../global/MyContainer";
 import { HoverMenu } from "./category-popover/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
-interface NavbarProps {}
+import { SearchModal } from "./SearchModal";
 
 const { deliveryTimeText, freeShippingText, rightOfReturnText } =
   Localized.page.index;
-export const Navbar: React.FC<NavbarProps> = ({}) => {
+export const Navbar = () => {
   const [hoverMenuItems, setHoverMenuItems] = useState<
     GetCategoriesQuery["categories"] | null
   >(null);
@@ -33,10 +33,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 
   const { totalItems: totalCartItems } = useContext(CartContext);
 
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="text-sm ">
       {router.pathname === APP_PAGE_ROUTE.INDEX && (
-        <div className="bg-staytard-dark text-[10px] py-1 tracking-wider  uppercase flex justify-center items-center space-x-8 text-white">
+        <div className="bg-staytard-dark flex items-center justify-center  space-x-8 py-1 text-[10px] uppercase tracking-wider text-white">
           <div>{freeShippingText}</div>
           <div>{deliveryTimeText}</div>
           <div>{rightOfReturnText}</div>
@@ -50,15 +51,19 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       >
         <MyContainer className="relative">
           <div className="flex justify-between">
-            <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex items-center space-x-2"
+            >
               {/* open search modal button */}
               <SearchIcon className="w-5 " />
-              <div className="opacity-50 hidden lg:block">Search</div>
-            </div>
+              <div className="hidden opacity-50 lg:block">Search</div>
+            </button>
+
             {/* app name */}
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
               <Link href={APP_PAGE_ROUTE.INDEX}>
-                <a className="text-4xl uppercase font-bold">{APP_NAME}</a>
+                <a className="text-4xl font-bold uppercase">{APP_NAME}</a>
               </Link>
             </div>
             <div className="flex items-center space-x-9">
@@ -76,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 <a className="relative">
                   <MyCartIcon className="w-6" />
                   {totalCartItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-staytard-yellow justify-center items-center inline-flex w-6 h-6 rounded-full text-xs ">
+                    <span className="bg-staytard-yellow absolute -top-2 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ">
                       {totalCartItems}
                     </span>
                   )}
@@ -128,6 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           />
         )}
       </div>
+      <SearchModal onClose={() => setShowModal(false)} show={showModal} />
     </div>
   );
 };
