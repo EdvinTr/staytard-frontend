@@ -50,7 +50,7 @@ export const ProductReviewsDisplay = ({
     <ReviewSectionContainer>
       <MyContainer className="space-y-7 text-left">
         <SectionHeading />
-        <p className="flex items-center space-x-4 text-2xl font-bold">
+        <p className="flex items-center space-x-4 pt-6 text-2xl font-bold">
           <span>{reviews.averageRating}</span>
           <span className="flex items-center">
             {[...Array(5)].map((_, idx) => {
@@ -64,6 +64,18 @@ export const ProductReviewsDisplay = ({
           </span>
           <span className="text-sm font-light">Average rating</span>
         </p>
+        {/* review card */}
+        {reviews.items.map((review, idx) => {
+          return (
+            <div key={idx} className="bg-white p-4 shadow-sm">
+              <h3 className="my-4 font-bold">{review.title}</h3>
+              <p className="text-13">{review.content}</p>
+              <p className="text-13 mt-2 font-light text-[#6b6b6b]">
+                {review.submittedByAlias} - {review.createdAt.split("T")[0]}
+              </p>
+            </div>
+          );
+        })}
       </MyContainer>
     </ReviewSectionContainer>
   );
