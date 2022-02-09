@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,9 +10,10 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
+import { APP_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import { FindOneProductQuery } from "../../lib/graphql";
-import { ssrFindOneProduct } from "../../lib/page";
+import { ssrFindOneProduct, ssrProductReviews } from "../../lib/page";
 SwiperCore.use([Pagination]);
 SwiperCore.use([Navigation]);
 interface ProductPageProps {
@@ -65,6 +67,36 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
 
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen pb-40 pt-20">
+      <Head>
+        <title>
+          {product.name} - {APP_NAME}
+        </title>
+        <meta name="description" content={product.description} />
+        <meta property="og:title" content={product.name} />
+        <meta property="og:type" content="product" />
+        <meta property="og:description" content={product.description} />
+        <meta
+          property="og:image"
+          content={
+            product.images[0].imageUrl.replace("{size}", "1200") + "&h=630"
+          }
+        />
+        <meta
+          property="product:price:amount"
+          content={product.currentPrice.toString()}
+        />
+        <meta property="product:price:currency" content="EUR" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={product.name} />
+        <meta name="twitter:description" content={product.description} />
+        <meta
+          name="twitter:image"
+          content={
+            product.images[0].imageUrl.replace("{size}", "1200") + "&h=630"
+          }
+        />
+      </Head>
       <MyContainer className=" text-staytard-dark">
         <div className="lg:flex lg:space-x-20 ">
           <div className="min-w-0 lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl">
@@ -88,7 +120,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               ))}
             </Swiper>
           </div>
-          <div className="min-w-0 xl:min-w-[30rem] 2xl:min-w-[40rem] w-full ">
+          <div className="w-full min-w-0 xl:min-w-[30rem] 2xl:min-w-[40rem] ">
             {/* small images that do absolutely nothing :) */}
             <div className="flex space-x-2 pb-8">
               {product.images.slice(0, 5).map(({ imageUrl }, idx) => {
@@ -127,17 +159,17 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
             <div>
               {/* product info */}
               <h1 className="flex flex-col ">
-                <span className="font-bold lg:text-lg uppercase">
+                <span className="font-bold uppercase lg:text-lg">
                   {product.brand.name}
                 </span>
                 <span className="lg:text-lg">{product.name}</span>
               </h1>
-              <h2 className="text-lg font-bold pt-2">
+              <h2 className="pt-2 text-lg font-bold">
                 {product.currentPriceLabel}
               </h2>
             </div>
             {/* size and color select */}
-            <div className="pt-8 flex justify-evenly space-x-4">
+            <div className="flex justify-evenly space-x-4 pt-8">
               <select
                 name="size"
                 id="size-select"
@@ -157,7 +189,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
 
               <button
                 onClick={() => addToCart()}
-                className="uppercase w-1/2 xl:w-full text-13 py-4 bg-staytard-dark text-white font-semibold "
+                className="text-13 bg-staytard-dark w-1/2 py-4 font-semibold uppercase text-white xl:w-full "
               >
                 Add to cart
               </button>
@@ -170,17 +202,28 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const productId = ctx.query.productId;
+  const productId = ctx.query.productId as string;
 
   try {
     const { props } = await ssrFindOneProduct.getServerPage({
       variables: {
-        id: +productId!,
+        id: +productId,
       },
     });
+    const { props: productReviewsProps } =
+      await ssrProductReviews.getServerPage({
+        variables: {
+          input: {
+            limit: 10,
+            offset: 0,
+            productId: +productId,
+          },
+        },
+      });
     return {
       props: {
         product: props.data.product,
+        reviews: productReviewsProps.data.productReviews,
       },
     };
   } catch (err) {

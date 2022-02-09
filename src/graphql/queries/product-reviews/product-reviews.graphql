@@ -1,0 +1,19 @@
+query ProductReviews($input: FindProductReviewsInput!) {
+  productReviews(input: $input) {
+    totalCount
+    hasMore
+    averageRating
+    items {
+      id
+      title
+      rating
+      wouldRecommend
+      content
+      isPublished
+      submittedByAlias
+      createdAt
+      publishedAt
+      updatedAt
+    }
+  }
+}

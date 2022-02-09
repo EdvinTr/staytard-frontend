@@ -126,6 +126,34 @@ export const ssrGetProductBrands = {
       
       usePage: useGetProductBrands,
     }
+export async function getServerPageProductReviews
+    (options: Omit<Apollo.QueryOptions<Types.ProductReviewsQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.ProductReviewsQuery>({ ...options, query: Operations.ProductReviewsDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useProductReviews = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.ProductReviewsQuery, Types.ProductReviewsQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.ProductReviewsDocument, options);
+};
+export type PageProductReviewsComp = React.FC<{data?: Types.ProductReviewsQuery, error?: Apollo.ApolloError}>;
+export const ssrProductReviews = {
+      getServerPage: getServerPageProductReviews,
+      
+      usePage: useProductReviews,
+    }
 export async function getServerPageFindOneProduct
     (options: Omit<Apollo.QueryOptions<Types.FindOneProductQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
