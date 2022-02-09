@@ -1,18 +1,22 @@
 import {
+  ChevronDownIcon,
   ChevronRightIcon,
   StarIcon as OutlineStarIcon,
 } from "@heroicons/react/outline";
 import SolidStarIcon from "@heroicons/react/solid/StarIcon";
 import React from "react";
-import { ProductReviewsQuery } from "../lib/graphql";
+import { ssrProductReviews } from "../lib/page";
 import { MyContainer } from "./global/MyContainer";
-interface ProductReviewsDisplayProps {
-  reviews: ProductReviewsQuery["productReviews"];
-}
+interface ProductReviewsDisplayProps {}
 
-export const ProductReviewsDisplay = ({
-  reviews,
-}: ProductReviewsDisplayProps) => {
+export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
+  const { data, fetchMore } = ssrProductReviews.usePage();
+  const reviews = data?.productReviews;
+  if (!reviews) {
+    return (
+      <div>Something went wrong</div> // TODO: show error of some sort
+    );
+  }
   const SectionHeading = ({ hasReviews }: { hasReviews: boolean }) => {
     return (
       <div
@@ -59,7 +63,7 @@ export const ProductReviewsDisplay = ({
       <MyContainer className="space-y-7 text-left">
         <SectionHeading hasReviews />
         <p className="flex items-center space-x-4 pt-6 text-2xl font-bold">
-          <span>{reviews.averageRating}</span>
+          <span>{reviews.averageRating.toFixed(1)}</span>
           <span className="flex items-center">
             {[...Array(5)].map((_, idx) => {
               return (
@@ -122,6 +126,23 @@ export const ProductReviewsDisplay = ({
               ></progress>
             </div>
           </div>
+          <button
+            className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
+            onClick={() => {
+              fetchMore({
+                variables: {
+                  input: {
+                    limit: 5,
+                    offset: 5,
+                    productId: 10421,
+                  },
+                },
+              });
+            }}
+          >
+            <span>Show more</span>
+            <ChevronDownIcon className="w-6" />
+          </button>
         </div>
       </MyContainer>
     </ReviewSectionContainer>

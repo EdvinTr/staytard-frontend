@@ -51,6 +51,21 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
                 return category; // type policy for SSR to work
               },
             },
+            productReviews: {
+              keyArgs: false,
+              merge(existing, incoming) {
+                if (!incoming) {
+                  return existing;
+                }
+                if (!existing) {
+                  return incoming;
+                }
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
 
             /*   products: {
               keyArgs: ["limit", "offset", "categoryPath"],

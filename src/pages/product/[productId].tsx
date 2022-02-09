@@ -199,7 +199,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
           </div>
         </div>
       </MyContainer>
-      <ProductReviewsDisplay reviews={reviews} />
+      <ProductReviewsDisplay />
     </FadeInContainer>
   );
 };
@@ -217,7 +217,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       await ssrProductReviews.getServerPage({
         variables: {
           input: {
-            limit: 10,
+            limit: 5,
             offset: 0,
             productId: +productId,
           },
@@ -227,6 +227,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {
         product: props.data.product,
         reviews: productReviewsProps.data.productReviews,
+        initialApolloState: productReviewsProps.apolloState,
       },
     };
   } catch (err) {
