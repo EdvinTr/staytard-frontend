@@ -105,6 +105,23 @@ export const ProductReviewsDisplay = ({
               </div>
             );
           })}
+          <div className="relative mx-auto max-w-xs space-y-4 pt-8">
+            <div className="space-y-1 px-2 text-center">
+              {/* pagination progress */}
+              <p className="text-[#6b6b6b]">
+                You have seen {reviews.items.length} of {reviews.totalCount}{" "}
+                reviews
+              </p>
+              <progress
+                max={reviews.totalCount}
+                value={reviews.items.length}
+                className="block h-[0.125rem] w-full appearance-none bg-gray-50"
+                style={{
+                  color: "#222",
+                }}
+              ></progress>
+            </div>
+          </div>
         </div>
       </MyContainer>
     </ReviewSectionContainer>
