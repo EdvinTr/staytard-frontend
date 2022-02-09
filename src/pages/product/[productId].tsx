@@ -10,14 +10,16 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
+import { ProductReviewsDisplay } from "../../components/ProductReviewsDisplay";
 import { APP_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
-import { FindOneProductQuery } from "../../lib/graphql";
+import { FindOneProductQuery, ProductReviewsQuery } from "../../lib/graphql";
 import { ssrFindOneProduct, ssrProductReviews } from "../../lib/page";
 SwiperCore.use([Pagination]);
 SwiperCore.use([Navigation]);
 interface ProductPageProps {
   product: FindOneProductQuery["product"];
+  reviews: ProductReviewsQuery["productReviews"];
 }
 interface SelectOption {
   label: string;
@@ -25,7 +27,7 @@ interface SelectOption {
 }
 
 // TODO: add meta tags and OG tags
-const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
+const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
   const [selectedSize, setSelectedSize] = useState<null | string>(null);
   const router = useRouter();
   const currentPath = router.pathname;
@@ -197,6 +199,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
           </div>
         </div>
       </MyContainer>
+      <ProductReviewsDisplay reviews={reviews} />
     </FadeInContainer>
   );
 };
@@ -230,6 +233,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     console.log("FindOneProduct SSR error:", err);
     return {
       props: {},
+      notFound: true,
     };
   }
 };
