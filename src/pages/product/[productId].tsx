@@ -30,6 +30,7 @@ interface SelectOption {
 const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
   const [selectedSize, setSelectedSize] = useState<null | string>(null);
   const router = useRouter();
+  const productId = router.query.productId as string;
   const currentPath = router.pathname;
   const queryColor = router.query.color;
 
@@ -199,7 +200,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
           </div>
         </div>
       </MyContainer>
-      <ProductReviewsDisplay />
+      <ProductReviewsDisplay productId={+productId} />
     </FadeInContainer>
   );
 };

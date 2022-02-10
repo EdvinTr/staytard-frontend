@@ -4,14 +4,19 @@ import {
   StarIcon as OutlineStarIcon,
 } from "@heroicons/react/outline";
 import SolidStarIcon from "@heroicons/react/solid/StarIcon";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { BeatLoader } from "react-spinners";
+import { ProductReviewsQuery } from "../lib/graphql";
 import { ssrProductReviews } from "../lib/page";
 import { MyContainer } from "./global/MyContainer";
 import { PaginationProgressTracker } from "./global/PaginationProgressTracker";
-interface ProductReviewsDisplayProps {}
+interface ProductReviewsDisplayProps {
+  productId: number;
+}
 
-export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
+export const ProductReviewsDisplay = ({
+  productId,
+}: ProductReviewsDisplayProps) => {
   const { data, fetchMore } = ssrProductReviews.usePage();
   const reviews = data?.productReviews;
   const [offset, setOffset] = useState(0);
@@ -80,42 +85,15 @@ export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
           </span>
           <span className="text-sm font-light">Average rating</span>
         </p>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
           {/* review cards */}
-          {reviews.items.map((review, idx) => {
-            const numberOfSolidStars = [...Array(review.rating)];
-            const numberOfEmptyStars = [...Array(5 - review.rating)];
+          {reviews.items.map((review) => {
             return (
-              <div
-                key={idx}
-                className={`bg-white p-4 shadow-sm ${
-                  isLoadingMore ? "opacity-60" : ""
-                }`}
-              >
-                {numberOfSolidStars.map((_, idx) => {
-                  return (
-                    <SolidStarIcon
-                      key={idx}
-                      className="text-staytard-dark inline-block w-4"
-                    />
-                  );
-                })}
-                {numberOfEmptyStars.map((_, idx) => {
-                  return (
-                    <OutlineStarIcon
-                      key={idx}
-                      className="text-staytard-dark inline-block w-4"
-                      stroke="0"
-                      fill="#d8d8d8"
-                    />
-                  );
-                })}
-                <h3 className="mt-4 font-bold">{review.title}</h3>
-                <p className="text-13 mt-3 mb-2">{review.content}</p>
-                <p className="text-13 font-light text-[#6b6b6b]">
-                  {review.submittedByAlias} - {review.createdAt.split("T")[0]}
-                </p>
-              </div>
+              <ProductReviewCard
+                key={review.id}
+                isLoadingMore={isLoadingMore}
+                review={review}
+              />
             );
           })}
         </div>
@@ -146,7 +124,7 @@ export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
                     input: {
                       limit: 5,
                       offset: offset + 5,
-                      productId: 10421,
+                      productId,
                     },
                   },
                 });
@@ -161,6 +139,56 @@ export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
         </div>
       </MyContainer>
     </ReviewSectionContainer>
+  );
+};
+type Review = ProductReviewsQuery["productReviews"]["items"][0];
+interface ProductReviewCardProps {
+  review: Review;
+  isLoadingMore: boolean;
+}
+const ProductReviewCard = ({
+  review,
+  isLoadingMore,
+}: ProductReviewCardProps) => {
+  const numberOfSolidStars = [...Array(review.rating)];
+  const numberOfEmptyStars = [...Array(5 - review.rating)];
+  const RatingStars = () => {
+    return (
+      <Fragment>
+        {numberOfSolidStars.map((_, idx) => {
+          return (
+            <SolidStarIcon
+              key={idx}
+              className="text-staytard-dark inline-block w-4"
+            />
+          );
+        })}
+        {numberOfEmptyStars.map((_, idx) => {
+          return (
+            <OutlineStarIcon
+              key={idx}
+              className="text-staytard-dark inline-block w-4"
+              stroke="0"
+              fill="#d8d8d8"
+            />
+          );
+        })}
+      </Fragment>
+    );
+  };
+  return (
+    <div
+      className={`relative bg-white p-4 shadow-md ${
+        isLoadingMore ? "opacity-60" : ""
+      }`}
+    >
+      <RatingStars />
+      <h3 className="mt-4 font-bold">{review.title}</h3>
+      <p className="text-13 mt-3 pb-6">{review.content}</p>
+      <p className="text-13 absolute bottom-[10px] font-light text-[#6b6b6b]">
+        {review.submittedByAlias} - {review.createdAt.split("T")[0]}
+      </p>
+    </div>
   );
 };
 
