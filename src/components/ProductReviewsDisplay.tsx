@@ -8,9 +8,9 @@ import React, { Fragment, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { ProductReviewsQuery } from "../lib/graphql";
 import { ssrProductReviews } from "../lib/page";
-import { Modal } from "./global/Modal";
 import { MyContainer } from "./global/MyContainer";
 import { PaginationProgressTracker } from "./global/PaginationProgressTracker";
+import { ProductReviewModal } from "./ProductReviewModal";
 interface ProductReviewsDisplayProps {
   productId: number;
 }
@@ -52,9 +52,11 @@ export const ProductReviewsDisplay = ({
     );
   };
   const reviewModal = (
-    <Modal onClose={() => setIsReviewModalOpen(false)} show={isReviewModalOpen}>
-      <div>I am modal</div>
-    </Modal>
+    <ProductReviewModal
+      show={isReviewModalOpen}
+      onClose={() => setIsReviewModalOpen(false)}
+      productId={productId}
+    />
   );
   if (reviews.totalCount === 0) {
     return (

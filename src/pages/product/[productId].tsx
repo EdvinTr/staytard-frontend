@@ -102,7 +102,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
       </Head>
       <MyContainer className=" text-staytard-dark">
         <div className="lg:flex">
-          <div className="min-w-0 lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl">
+          <div className="min-w-0 lg:w-1/2 xl:w-6/12">
             <Swiper
               navigation
               pagination={{ dynamicBullets: false, clickable: true }}
@@ -123,7 +123,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
               ))}
             </Swiper>
           </div>
-          <div className="w-full min-w-0 lg:pl-16 xl:min-w-[30rem] 2xl:min-w-[40rem] ">
+          <div className="w-full min-w-0 lg:w-1/2 lg:pl-16 xl:w-5/12">
             {/* small images that do absolutely nothing :) */}
             <div className="flex space-x-2 pb-8">
               {product.images.slice(0, 5).map(({ imageUrl }, idx) => {
@@ -200,7 +200,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
           </div>
         </div>
         {/* product description */}
-        <div className="bg-staytard-light-gray mt-12 space-y-4 p-4 lg:w-1/2 lg:p-8">
+        <div className="bg-staytard-light-gray mt-12 space-y-4 p-4 lg:w-1/2 lg:p-8 xl:w-6/12">
           <h4 className="text-sm font-semibold">Product description:</h4>
           <p className="text-13 font-light">{product.description}</p>
         </div>
