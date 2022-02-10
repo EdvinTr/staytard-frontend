@@ -8,6 +8,7 @@ import React, { Fragment, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { ProductReviewsQuery } from "../lib/graphql";
 import { ssrProductReviews } from "../lib/page";
+import { Modal } from "./global/Modal";
 import { MyContainer } from "./global/MyContainer";
 import { PaginationProgressTracker } from "./global/PaginationProgressTracker";
 interface ProductReviewsDisplayProps {
@@ -21,6 +22,7 @@ export const ProductReviewsDisplay = ({
   const reviews = data?.productReviews;
   const [offset, setOffset] = useState(0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   if (!reviews) {
     return (
       <div>Could not load reviews for some reason</div> // TODO: show error of some sort
@@ -38,6 +40,7 @@ export const ProductReviewsDisplay = ({
           <div className="bg-staytard-dark pointer-events-none hidden h-[1px] w-32 lg:block"></div>
         </div>
         <button
+          onClick={() => setIsReviewModalOpen(true)}
           className={`${
             hasReviews ? "flex items-center" : "hidden lg:flex lg:items-center"
           } font-semibold transition-all duration-200 hover:opacity-60`}
@@ -48,9 +51,15 @@ export const ProductReviewsDisplay = ({
       </div>
     );
   };
+  const reviewModal = (
+    <Modal onClose={() => setIsReviewModalOpen(false)} show={isReviewModalOpen}>
+      <div>I am modal</div>
+    </Modal>
+  );
   if (reviews.totalCount === 0) {
     return (
       <ReviewSectionContainer>
+        {reviewModal}
         <MyContainer className="space-y-7">
           <SectionHeading hasReviews={false} />
           <OutlineStarIcon className="mx-auto w-20" fill="#d8d8d8" stroke="0" />
@@ -60,7 +69,10 @@ export const ProductReviewsDisplay = ({
             </strong>
             <span className=" text-sm">Let us know what you think</span>
           </p>
-          <button className="bg-staytard-dark p-5 text-xs uppercase tracking-wider text-white">
+          <button
+            onClick={() => setIsReviewModalOpen(true)}
+            className="bg-staytard-dark p-5 text-xs uppercase tracking-wider text-white"
+          >
             Write a review
           </button>
         </MyContainer>
@@ -69,6 +81,7 @@ export const ProductReviewsDisplay = ({
   }
   return (
     <ReviewSectionContainer>
+      {reviewModal}
       <MyContainer className="space-y-7 text-left">
         <SectionHeading hasReviews />
         <p className="flex items-center space-x-4 pt-6 text-2xl font-bold">
