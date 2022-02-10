@@ -150,9 +150,9 @@ const ProductReviewCard = ({
   review,
   isLoadingMore,
 }: ProductReviewCardProps) => {
-  const numberOfSolidStars = [...Array(review.rating)];
-  const numberOfEmptyStars = [...Array(5 - review.rating)];
   const RatingStars = () => {
+    const numberOfSolidStars = [...Array(review.rating)];
+    const numberOfEmptyStars = [...Array(5 - review.rating)];
     return (
       <Fragment>
         {numberOfSolidStars.map((_, idx) => {
