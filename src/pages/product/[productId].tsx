@@ -101,7 +101,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
         />
       </Head>
       <MyContainer className=" text-staytard-dark">
-        <div className="lg:flex lg:space-x-20 ">
+        <div className="lg:flex">
           <div className="min-w-0 lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl">
             <Swiper
               navigation
@@ -114,8 +114,8 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
                     width={1800}
                     height={2400}
                     priority
-                    objectFit="contain"
-                    className="h-full w-full"
+                    objectFit="cover"
+                    className=""
                     src={imageUrl.replace("{size}", "600")}
                     alt={`${product.brand.name} - ${product.name}`}
                   />
@@ -123,7 +123,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
               ))}
             </Swiper>
           </div>
-          <div className="w-full min-w-0 xl:min-w-[30rem] 2xl:min-w-[40rem] ">
+          <div className="w-full min-w-0 lg:pl-16 xl:min-w-[30rem] 2xl:min-w-[40rem] ">
             {/* small images that do absolutely nothing :) */}
             <div className="flex space-x-2 pb-8">
               {product.images.slice(0, 5).map(({ imageUrl }, idx) => {
@@ -198,6 +198,11 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
               </button>
             </div>
           </div>
+        </div>
+        {/* product description */}
+        <div className="bg-staytard-light-gray mt-12 space-y-4 p-4 lg:w-1/2 lg:p-8">
+          <h4 className="text-sm font-semibold">Product description:</h4>
+          <p className="text-13 font-light">{product.description}</p>
         </div>
       </MyContainer>
       <ProductReviewsDisplay productId={+productId} />
