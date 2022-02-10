@@ -4,17 +4,21 @@ import {
   StarIcon as OutlineStarIcon,
 } from "@heroicons/react/outline";
 import SolidStarIcon from "@heroicons/react/solid/StarIcon";
-import React from "react";
+import React, { useState } from "react";
+import { BeatLoader } from "react-spinners";
 import { ssrProductReviews } from "../lib/page";
 import { MyContainer } from "./global/MyContainer";
+import { PaginationProgressTracker } from "./global/PaginationProgressTracker";
 interface ProductReviewsDisplayProps {}
 
 export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
   const { data, fetchMore } = ssrProductReviews.usePage();
   const reviews = data?.productReviews;
+  const [offset, setOffset] = useState(0);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   if (!reviews) {
     return (
-      <div>Something went wrong</div> // TODO: show error of some sort
+      <div>Could not load reviews for some reason</div> // TODO: show error of some sort
     );
   }
   const SectionHeading = ({ hasReviews }: { hasReviews: boolean }) => {
@@ -82,7 +86,12 @@ export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
             const numberOfSolidStars = [...Array(review.rating)];
             const numberOfEmptyStars = [...Array(5 - review.rating)];
             return (
-              <div key={idx} className="bg-white p-4 shadow-sm">
+              <div
+                key={idx}
+                className={`bg-white p-4 shadow-sm ${
+                  isLoadingMore ? "opacity-60" : ""
+                }`}
+              >
                 {numberOfSolidStars.map((_, idx) => {
                   return (
                     <SolidStarIcon
@@ -109,40 +118,46 @@ export const ProductReviewsDisplay = ({}: ProductReviewsDisplayProps) => {
               </div>
             );
           })}
-          <div className="relative mx-auto max-w-xs space-y-4 pt-8">
-            <div className="space-y-1 px-2 text-center">
-              {/* pagination progress */}
-              <p className="text-[#6b6b6b]">
-                You have seen {reviews.items.length} of {reviews.totalCount}{" "}
-                reviews
-              </p>
-              <progress
-                max={reviews.totalCount}
-                value={reviews.items.length}
-                className="block h-[0.125rem] w-full appearance-none bg-gray-50"
-                style={{
-                  color: "#222",
-                }}
-              ></progress>
+        </div>
+        <div className="relative mx-auto max-w-xs space-y-4 pt-8">
+          <PaginationProgressTracker
+            currentCount={reviews.items.length}
+            totalCount={reviews.totalCount}
+            text={`You have seen ${reviews.items.length} of ${reviews.totalCount} reviews`}
+          />
+          {isLoadingMore && (
+            <div className="absolute inset-0">
+              <BeatLoader
+                color="#faba"
+                css="display:flex; justify-content:center;"
+              />
             </div>
-          </div>
-          <button
-            className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
-            onClick={() => {
-              fetchMore({
-                variables: {
-                  input: {
-                    limit: 5,
-                    offset: 5,
-                    productId: 10421,
+          )}
+          {reviews.hasMore && (
+            <button
+              className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
+              onClick={async () => {
+                if (isLoadingMore) {
+                  return; // prevent spam
+                }
+                setIsLoadingMore(true);
+                await fetchMore({
+                  variables: {
+                    input: {
+                      limit: 5,
+                      offset: offset + 5,
+                      productId: 10421,
+                    },
                   },
-                },
-              });
-            }}
-          >
-            <span>Show more</span>
-            <ChevronDownIcon className="w-6" />
-          </button>
+                });
+                setOffset(offset + 5);
+                setIsLoadingMore(false);
+              }}
+            >
+              <span>Show more</span>
+              <ChevronDownIcon className="w-6" />
+            </button>
+          )}
         </div>
       </MyContainer>
     </ReviewSectionContainer>

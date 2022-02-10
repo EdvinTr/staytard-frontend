@@ -12,6 +12,7 @@ import {
   ProductItem,
 } from "../../typings/GetProductsResponse.interface";
 import { getPathFromParams } from "../../utils/getPathFromParams";
+import { PaginationProgressTracker } from "../global/PaginationProgressTracker";
 import { ProductCard } from "./ProductCard";
 import {
   PRODUCT_SORT_BY,
@@ -87,26 +88,26 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   const nextPage = latestPagination?.nextPage;
 
   if (!isLoadingMore && allProducts.length === 0) {
-    return <h2 className="text-xl min-h-[10rem]">No products.</h2>;
+    return <h2 className="min-h-[10rem] text-xl">No products.</h2>;
   }
   return (
     <div>
       {/* sort */}
-      <div className="text-sm flex justify-end my-4">
+      <div className="my-4 flex justify-end text-sm">
         {!isLoadingMore && (
           <SortProductsPopover totalItems={latestPagination?.totalItems || 0} />
         )}
       </div>
       {/* category description on small device */}
       {currentWindowWidth < 768 && categoryDescription.length > 0 && (
-        <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
+        <p className="py-3 text-[11px] md:pr-8 md:text-sm ">
           {categoryDescription.slice(0, 800)}
         </p>
       )}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-4 gap-x-4 md:gap-x-0">
+      <div className="grid grid-cols-2 gap-y-4 gap-x-4 md:grid-cols-3 md:gap-x-0 xl:grid-cols-4 2xl:grid-cols-5">
         {/* category description on medium device and above */}
         {currentWindowWidth >= 768 && categoryDescription.length > 0 && (
-          <p className="text-[11px] py-3 md:text-sm md:pr-8 ">
+          <p className="py-3 text-[11px] md:pr-8 md:text-sm ">
             {categoryDescription.slice(0, 800)}
           </p>
         )}
@@ -117,23 +118,13 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
           );
         })}
       </div>
-      <div className="pt-8 max-w-xs mx-auto space-y-4 relative">
-        {!isLoadingMore && (
-          <div className="px-2 space-y-1 text-center">
-            {/* pagination progress */}
-            <p className="text-[#6b6b6b]">
-              You have seen {allProducts.length} of{" "}
-              {latestPagination?.totalItems} products
-            </p>
-            <progress
-              max={latestPagination?.totalItems}
-              value={allProducts.length}
-              className="appearance-none bg-gray-50 w-full block h-[0.125rem]"
-              style={{
-                color: "#222",
-              }}
-            ></progress>
-          </div>
+      <div className="relative mx-auto max-w-xs space-y-4 pt-8">
+        {!isLoadingMore && latestPagination && (
+          <PaginationProgressTracker
+            currentCount={allProducts.length}
+            totalCount={latestPagination.totalItems}
+            text={`You have seen ${allProducts.length} of ${latestPagination?.totalItems} products`}
+          />
         )}
         {isLoadingMore && (
           <div className="absolute inset-0">
@@ -147,7 +138,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
         {nextPage && !isLoadingMore && (
           <button
             disabled={isLoadingMore}
-            className="text-white w-full bg-staytard-dark p-4 flex justify-center items-center"
+            className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
             onClick={() => {
               setSize(size + 1); // controls pageIndex variable in SWR
             }}
