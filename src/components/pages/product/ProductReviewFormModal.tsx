@@ -1,8 +1,10 @@
 import { StarIcon as OutlineStarIcon } from "@heroicons/react/outline";
 import SolidStarIcon from "@heroicons/react/solid/StarIcon";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import { Persist } from "formik-persist";
 import React, { useState } from "react";
 import Rating from "react-rating";
+import { LOCAL_STORAGE_KEY } from "../../../constants";
 import { useCreateProductReviewMutation } from "../../../lib/graphql";
 import { isEmailAddress } from "../../../utils/validation/isEmailAddress";
 import { BaseButton } from "../../global/BaseButton";
@@ -118,6 +120,7 @@ export const ProductReviewFormModal = ({
         >
           {({ isSubmitting, values, touched, errors }) => (
             <Form className="space-y-6 text-left ">
+              <Persist name={LOCAL_STORAGE_KEY.PRODUCT_REVIEW_FORM} />
               <div>
                 {/* rating select */}
                 <Rating

@@ -5,9 +5,10 @@ import {
 } from "@heroicons/react/outline";
 import SolidStarIcon from "@heroicons/react/solid/StarIcon";
 import { useWindowWidth } from "@react-hook/window-size";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { toast, ToastContainer } from "react-toast";
+import { LOCAL_STORAGE_KEY } from "../../../constants";
 import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
 import { ProductReviewsQuery } from "../../../lib/graphql";
 import { ssrProductReviews } from "../../../lib/page";
@@ -23,6 +24,11 @@ const { createProductReviewSuccessMessage } = Localized.page.product;
 export const ProductReviewsDisplay = ({
   productId,
 }: ProductReviewsDisplayProps) => {
+  useEffect(() => {
+    if (typeof localStorage !== undefined) {
+      localStorage.removeItem(LOCAL_STORAGE_KEY.PRODUCT_REVIEW_FORM); // clear the form when component first mounts
+    }
+  }, []);
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const showSuccessToast = (): void =>
     toast.success(createProductReviewSuccessMessage, {

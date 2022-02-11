@@ -20,6 +20,7 @@
     "@tailwindcss/line-clamp": "^0.3.1",
     "axios": "^0.25.0",
     "formik": "^2.2.9",
+    "formik-persist": "^1.1.0",
     "framer-motion": "^5.5.6",
     "graphql": "^15.8.0",
     "graphql-codegen-apollo-next-ssr": "^1.7.1",
