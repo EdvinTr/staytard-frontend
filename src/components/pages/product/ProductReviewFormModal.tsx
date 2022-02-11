@@ -43,6 +43,9 @@ export const ProductReviewFormModal = ({
       setRatingSelectError("Please select a rating");
       return;
     }
+    if (isLoading) {
+      return; // prevent spamming
+    }
     setRatingSelectError(null);
     try {
       setIsLoading(true);
@@ -62,8 +65,7 @@ export const ProductReviewFormModal = ({
         setRating(0);
         onClose();
       }
-    } catch (e) {
-      console.log(e);
+    } catch {
     } finally {
       setIsLoading(false);
     }
@@ -87,6 +89,9 @@ export const ProductReviewFormModal = ({
             if (!values.nickname) {
               errors.nickname = "Required";
             }
+            if (values.nickname.length > 50) {
+              errors.nickname = "Nickname must be 50 characters or less";
+            }
             if (!isEmailAddress(values.email)) {
               errors.email = "Invalid email address";
             }
@@ -102,7 +107,6 @@ export const ProductReviewFormModal = ({
             if (values.content.length > 1000) {
               errors.content = "Content must be 1000 characters or less";
             }
-
             return errors;
           }}
           onSubmit={async (
