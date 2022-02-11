@@ -37,16 +37,17 @@ export const ProductReviewModal = ({
   const [ratingSelectError, setRatingSelectError] = useState<string | null>(
     null
   );
-  const [createReview, { loading, data, error }] =
-    useCreateProductReviewMutation();
-  const onSubmit = async (values: FormValues) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [createReview] = useCreateProductReviewMutation();
+  const onSubmit = async (values: FormValues, resetForm: (_?: any) => void) => {
     if (rating === 0) {
       setRatingSelectError("Please select a rating");
       return;
     }
     setRatingSelectError(null);
     try {
-      await createReview({
+      setIsLoading(true);
+      const { data } = await createReview({
         variables: {
           input: {
             ...values,
@@ -55,8 +56,16 @@ export const ProductReviewModal = ({
           },
         },
       });
+      if (data && data.createProductReview) {
+        resetForm();
+        setRatingSelectError(null);
+        setRating(0);
+        onClose();
+      }
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,11 +109,7 @@ export const ProductReviewModal = ({
             values: FormValues,
             { setSubmitting, resetForm }: FormikHelpers<FormValues>
           ) => {
-            await onSubmit(values);
-            if (data && !error) {
-              resetForm();
-              setRatingSelectError(null);
-            }
+            await onSubmit(values, resetForm);
           }}
         >
           {({ isSubmitting, values, touched, errors }) => (
@@ -165,6 +170,7 @@ export const ProductReviewModal = ({
                   value={values.nickname}
                   placeholder="Nickname"
                   aria-label="Nickname"
+                  autoComplete="off"
                 />
                 <ErrorMessage name="nickname">
                   {(msg) => (
@@ -184,6 +190,7 @@ export const ProductReviewModal = ({
                   value={values.title}
                   placeholder="Title"
                   aria-label="Title"
+                  autoComplete="off"
                 />
                 <ErrorMessage name="title">
                   {(msg) => (
@@ -205,6 +212,7 @@ export const ProductReviewModal = ({
                   currentValue={values.content}
                   placeholder="Content"
                   aria-label="Content"
+                  autoComplete="off"
                 />
                 <ErrorMessage name="content">
                   {(msg) => (
@@ -220,7 +228,7 @@ export const ProductReviewModal = ({
                 <Field name="wouldRecommend" as={MyCheckbox} />
               </div>
 
-              <BaseButton loading={loading} type="submit">
+              <BaseButton loading={isLoading} type="submit">
                 Submit
               </BaseButton>
             </Form>

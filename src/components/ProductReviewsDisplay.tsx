@@ -137,8 +137,8 @@ export const ProductReviewsDisplay = ({
                 await fetchMore({
                   variables: {
                     input: {
-                      limit: 5,
-                      offset: offset + 5,
+                      limit: 6,
+                      offset: offset + 6,
                       productId,
                     },
                   },

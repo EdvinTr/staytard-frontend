@@ -223,7 +223,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       await ssrProductReviews.getServerPage({
         variables: {
           input: {
-            limit: 5,
+            limit: 6,
             offset: 0,
             productId: +productId,
           },
