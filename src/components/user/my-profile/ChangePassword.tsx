@@ -10,6 +10,7 @@ import {
 import { Localized } from "../../../Localized";
 import { BaseInput } from "../../global/BaseInput";
 import { InputFieldErrorText } from "../../global/InputFieldErrorText";
+import { MyCheckbox } from "../../global/MyCheckbox";
 import { InputState } from "../../register-form/types";
 import { passwordValidationRegex } from "../../register-form/utils/validation";
 import { EditForm } from "./EditForm";
@@ -272,13 +273,11 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
               )}
             </div>
           </div>
-          <div className="space-x-2 py-4 text-13 tracking-wide">
+          <div className="text-13 space-x-2 py-4 tracking-wide">
             {/* show password toggle */}
-            <input
+            <MyCheckbox
               onChange={(e) => setIsPasswordShown(e.target.checked)}
-              type="checkbox"
               id="show-password"
-              className="rounded-full w-5 h-5 checked:bg-black checked:text-black checked:ring-staytard-yellow checked:ring-2 focus:outline-none focus:ring-0 "
             />
             <label
               htmlFor="show-password"
