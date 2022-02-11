@@ -1,5 +1,8 @@
+import { StarIcon as OutlineStarIcon } from "@heroicons/react/outline";
+import SolidStarIcon from "@heroicons/react/solid/StarIcon";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import React, { useState } from "react";
+import Rating from "react-rating";
 import { useCreateProductReviewMutation } from "../lib/graphql";
 import { isEmailAddress } from "../utils/validation/isEmailAddress";
 import { BaseButton } from "./global/BaseButton";
@@ -23,7 +26,8 @@ interface Values {
   email: string;
   wouldRecommend: boolean;
 }
-
+const inputClassNames =
+  "border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0";
 export const ProductReviewModal = ({
   onClose,
   show,
@@ -47,39 +51,11 @@ export const ProductReviewModal = ({
       console.log(e);
     }
   };
-  const [activeField, setActiveField] = useState("");
 
   return (
     <Modal onClose={onClose} show={show}>
       <div className="p-8">
         <h1 className="pb-6 text-left text-2xl font-bold ">My review</h1>
-        {/*    <form onSubmit={onSubmit} className="flex flex-col p-8">
-        <Rating
-          fullSymbol={
-            <SolidStarIcon className="text-staytard-dark inline-block w-8" />
-          }
-          emptySymbol={
-            <OutlineStarIcon
-              className="text-staytard-dark inline-block w-8"
-              stroke="0"
-              fill="#d8d8d8"
-            />
-          }
-          onChange={(value) => setRating(value)}
-          initialRating={rating}
-        />
-        <input type="email" {...register("email")} placeholder="Email" />
-        <input type="text" {...register("nickname")} placeholder="Nickname" />
-
-        <input type="text" {...register("title")} placeholder="Title" />
-
-        {errors?.title && <p>{errors.title.message}</p>}
-        <MyCheckbox {...register("wouldRecommend")} />
-
-        <textarea {...register("content")} placeholder="Content"></textarea>
-
-        <BaseButton type="submit">Submit Review</BaseButton>
-      </form> */}
         <Formik
           initialValues={{
             email: "",
@@ -97,6 +73,12 @@ export const ProductReviewModal = ({
             if (!isEmailAddress(values.email)) {
               errors.email = "Invalid email address";
             }
+            if (!values.title) {
+              errors.title = "Required";
+            }
+            if (values.title.length > 50) {
+              errors.title = "Title must be 50 characters or less";
+            }
             return errors;
           }}
           onSubmit={(
@@ -110,10 +92,28 @@ export const ProductReviewModal = ({
           }}
         >
           {({ isSubmitting, values, touched, errors }) => (
-            <Form className=" space-y-8 ">
+            <Form className="space-y-6 text-left ">
+              <div>
+                {/* rating select */}
+                <Rating
+                  fullSymbol={
+                    <SolidStarIcon className="text-staytard-dark inline-block w-8" />
+                  }
+                  emptySymbol={
+                    <OutlineStarIcon
+                      className="text-staytard-dark inline-block w-8"
+                      stroke="0"
+                      fill="#d8d8d8"
+                    />
+                  }
+                  onChange={(value) => setRating(value)}
+                  initialRating={rating}
+                />
+              </div>
               <div className="text-left">
+                {/* email input */}
                 <Field
-                  className="border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0"
+                  className={inputClassNames}
                   id="email"
                   name="email"
                   as={BaseInput}
@@ -129,10 +129,10 @@ export const ProductReviewModal = ({
                   )}
                 </ErrorMessage>
               </div>
-
               <div className="text-left">
+                {/* nickname input */}
                 <Field
-                  className="border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0"
+                  className={inputClassNames}
                   id="nickname"
                   name="nickname"
                   as={BaseInput}
@@ -148,6 +148,26 @@ export const ProductReviewModal = ({
                   )}
                 </ErrorMessage>
               </div>
+              <div className="text-left">
+                {/* title input */}
+                <Field
+                  className={inputClassNames}
+                  id="title"
+                  name="title"
+                  as={BaseInput}
+                  label="title"
+                  hasError={errors.title}
+                  value={values.title}
+                  isFocused={touched.title}
+                  placeholder="Title"
+                />
+                <ErrorMessage name="title">
+                  {(msg) => (
+                    <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                  )}
+                </ErrorMessage>
+              </div>
+              {/* would recommend select */}
               <div className="text-13 flex items-center space-x-2">
                 <label htmlFor="wouldRecommend">
                   Would you recommend to a good friend?
