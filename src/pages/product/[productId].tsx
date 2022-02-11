@@ -210,7 +210,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
           <p className="text-13 font-light">{product.description}</p>
         </div>
       </MyContainer>
-      <ProductReviewsDisplay productId={+productId} />
+      <ProductReviewsDisplay product={product} />
     </FadeInContainer>
   );
 };

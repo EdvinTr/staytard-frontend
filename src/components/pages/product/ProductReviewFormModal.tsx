@@ -17,6 +17,7 @@ interface ProductReviewFormModalProps {
   onClose: () => void;
   productId: number;
   onSuccess: () => void;
+  title: string;
 }
 interface FormValues {
   title: string;
@@ -32,6 +33,7 @@ export const ProductReviewFormModal = ({
   onClose,
   show,
   productId,
+  title,
   onSuccess,
 }: ProductReviewFormModalProps) => {
   const [rating, setRating] = useState<number>(0);
@@ -76,7 +78,7 @@ export const ProductReviewFormModal = ({
   return (
     <Modal onClose={onClose} show={show}>
       <div className="p-8">
-        <h1 className="pb-6 text-left text-2xl font-bold ">My review</h1>
+        <h1 className="pb-6 text-left text-2xl font-bold ">{title}</h1>
         <Formik
           initialValues={{
             email: "",

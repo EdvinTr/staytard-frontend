@@ -10,19 +10,19 @@ import { BeatLoader } from "react-spinners";
 import { toast, ToastContainer } from "react-toast";
 import { LOCAL_STORAGE_KEY } from "../../../constants";
 import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
-import { ProductReviewsQuery } from "../../../lib/graphql";
+import { FindOneProductQuery, ProductReviewsQuery } from "../../../lib/graphql";
 import { ssrProductReviews } from "../../../lib/page";
 import { Localized } from "../../../Localized";
 import { MyContainer } from "../../global/MyContainer";
 import { PaginationProgressTracker } from "../../global/PaginationProgressTracker";
 import { ProductReviewFormModal } from "./ProductReviewFormModal";
 interface ProductReviewsDisplayProps {
-  productId: number;
+  product: FindOneProductQuery["product"];
 }
 const { createProductReviewSuccessMessage } = Localized.page.product;
 
 export const ProductReviewsDisplay = ({
-  productId,
+  product: { id: productId, name },
 }: ProductReviewsDisplayProps) => {
   useEffect(() => {
     if (typeof localStorage !== undefined) {
@@ -77,6 +77,7 @@ export const ProductReviewsDisplay = ({
       onClose={() => setIsReviewModalOpen(false)}
       productId={productId}
       onSuccess={() => handleOnReviewCreateSuccess()}
+      title={`My review of ${name}`}
     />
   );
   if (reviews.totalCount === 0) {
