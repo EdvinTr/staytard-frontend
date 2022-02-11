@@ -18,7 +18,7 @@ interface ProductReviewModalProps {
 
 // TODO:
 // Build this: https://help.commerce.campaignmonitor.com/servlet/rtaImage?eid=ka83b000000PC9S&feoid=00N1J00000F1Qs5&refid=0EM1J000000lpRi
-interface Values {
+interface FormValues {
   title: string;
   content: string;
   nickname: string;
@@ -34,9 +34,17 @@ export const ProductReviewModal = ({
   productId,
 }: ProductReviewModalProps) => {
   const [rating, setRating] = useState<number>(0);
-
-  const [createReview, { loading }] = useCreateProductReviewMutation();
-  const onSubmit = async (values: Values) => {
+  const [ratingSelectError, setRatingSelectError] = useState<string | null>(
+    null
+  );
+  const [createReview, { loading, data, error }] =
+    useCreateProductReviewMutation();
+  const onSubmit = async (values: FormValues) => {
+    if (rating === 0) {
+      setRatingSelectError("Please select a rating");
+      return;
+    }
+    setRatingSelectError(null);
     try {
       await createReview({
         variables: {
@@ -66,7 +74,7 @@ export const ProductReviewModal = ({
             rating: 0,
           }}
           validate={(values) => {
-            const errors: Partial<Values> = {};
+            const errors: Partial<FormValues> = {};
             if (!values.nickname) {
               errors.nickname = "Required";
             }
@@ -85,16 +93,18 @@ export const ProductReviewModal = ({
             if (values.content.length > 1000) {
               errors.content = "Content must be 1000 characters or less";
             }
+
             return errors;
           }}
-          onSubmit={(
-            values: Values,
-            { setSubmitting }: FormikHelpers<Values>
+          onSubmit={async (
+            values: FormValues,
+            { setSubmitting, resetForm }: FormikHelpers<FormValues>
           ) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 500);
+            await onSubmit(values);
+            if (data && !error) {
+              resetForm();
+              setRatingSelectError(null);
+            }
           }}
         >
           {({ isSubmitting, values, touched, errors }) => (
@@ -112,9 +122,17 @@ export const ProductReviewModal = ({
                       fill="#d8d8d8"
                     />
                   }
-                  onChange={(value) => setRating(value)}
+                  onChange={(value) => {
+                    setRating(value);
+                    setRatingSelectError(null);
+                  }}
                   initialRating={rating}
                 />
+                {ratingSelectError && (
+                  <div className="pt-2 text-[11px] text-red-600">
+                    {ratingSelectError}
+                  </div>
+                )}
               </div>
               <div className="text-left">
                 {/* email input */}
@@ -202,7 +220,9 @@ export const ProductReviewModal = ({
                 <Field name="wouldRecommend" as={MyCheckbox} />
               </div>
 
-              <BaseButton type="submit">Submit</BaseButton>
+              <BaseButton loading={loading} type="submit">
+                Submit
+              </BaseButton>
             </Form>
           )}
         </Formik>
