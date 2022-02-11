@@ -1,6 +1,6 @@
 import React from "react";
 
-interface BaseInputProps extends React.ComponentPropsWithRef<"input"> {
+export interface BaseInputProps extends React.ComponentPropsWithRef<"input"> {
   label?: string;
   isFocused?: boolean;
   hasError?: boolean;
@@ -22,7 +22,7 @@ export const BaseInput = ({
       <input
         {...props}
         className={`
-        pr-12 w-full text-xs placeholder-opacity-60 placeholder:font-normal focus:text-sm font-bold  h-[50px] ring-0 focus:ring-0 focus:border-black focus:border-opacity-50 border-opacity-50 focus:placeholder-opacity-50 focus:placeholder-black
+        h-[50px] w-full border-opacity-50 pr-12 text-xs font-bold placeholder-opacity-60  ring-0 placeholder:font-normal focus:border-black focus:border-opacity-50 focus:text-sm focus:placeholder-black focus:placeholder-opacity-50 focus:ring-0
         ${props.className} 
         ${label && currentValueLength > 0 ? "pt-6" : ""} 
         ${

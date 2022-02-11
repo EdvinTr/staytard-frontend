@@ -79,6 +79,12 @@ export const ProductReviewModal = ({
             if (values.title.length > 50) {
               errors.title = "Title must be 50 characters or less";
             }
+            if (!values.content) {
+              errors.content = "Required";
+            }
+            if (values.content.length > 1000) {
+              errors.content = "Content must be 1000 characters or less";
+            }
             return errors;
           }}
           onSubmit={(
@@ -118,10 +124,10 @@ export const ProductReviewModal = ({
                   name="email"
                   as={BaseInput}
                   label="Email"
-                  hasError={errors.email}
+                  hasError={errors.email && touched.email}
                   value={values.email}
-                  isFocused={touched.email}
                   placeholder="Email"
+                  aria-label="Email"
                 />
                 <ErrorMessage name="email">
                   {(msg) => (
@@ -137,10 +143,10 @@ export const ProductReviewModal = ({
                   name="nickname"
                   as={BaseInput}
                   label="Nickname"
-                  hasError={errors.nickname}
+                  hasError={errors.nickname && touched.nickname}
                   value={values.nickname}
-                  isFocused={touched.nickname}
                   placeholder="Nickname"
+                  aria-label="Nickname"
                 />
                 <ErrorMessage name="nickname">
                   {(msg) => (
@@ -156,12 +162,33 @@ export const ProductReviewModal = ({
                   name="title"
                   as={BaseInput}
                   label="title"
-                  hasError={errors.title}
+                  hasError={errors.title && touched.title}
                   value={values.title}
-                  isFocused={touched.title}
                   placeholder="Title"
+                  aria-label="Title"
                 />
                 <ErrorMessage name="title">
+                  {(msg) => (
+                    <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                  )}
+                </ErrorMessage>
+              </div>
+
+              <div className="text-left">
+                {/* title input */}
+                <Field
+                  className={`${inputClassNames} text-13 w-full`}
+                  id="content"
+                  name="content"
+                  as={CustomTextArea}
+                  rows={5}
+                  label="Content"
+                  hasError={errors.content && touched.content}
+                  currentValue={values.content}
+                  placeholder="Content"
+                  aria-label="Content"
+                />
+                <ErrorMessage name="content">
                   {(msg) => (
                     <div className="pt-2 text-[11px] text-red-600">{msg}</div>
                   )}
@@ -181,5 +208,44 @@ export const ProductReviewModal = ({
         </Formik>
       </div>
     </Modal>
+  );
+};
+interface CustomTextAreaProps extends React.HTMLProps<HTMLTextAreaElement> {
+  hasError?: boolean;
+  currentValue: string;
+  label: string;
+}
+const CustomTextArea = ({
+  hasError,
+  currentValue,
+  label,
+  ...props
+}: CustomTextAreaProps) => {
+  const currentValueLength = currentValue?.toString().length ?? 0;
+
+  return (
+    <div className="relative">
+      <textarea
+        {...props}
+        className={`focus:border-opacity-100
+        ${props.className ? props.className : ""} border-opacity-50
+        ${label && currentValueLength > 0 ? "pt-6" : ""} 
+         ${
+           hasError
+             ? "border-red-600 border-opacity-100 placeholder-red-600 focus:border-red-600"
+             : "border-black border-opacity-10 focus:border-black"
+         } `}
+      ></textarea>
+      {currentValueLength > 0 && (
+        /* floating label */
+        <span
+          className={`absolute top-2 left-4 py-0 text-[10px] tracking-[1.6px] opacity-50
+          ${hasError && "text-red-600 opacity-100"}
+          `}
+        >
+          {label.toUpperCase()}
+        </span>
+      )}
+    </div>
   );
 };
