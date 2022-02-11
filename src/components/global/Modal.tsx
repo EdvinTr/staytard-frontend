@@ -4,7 +4,7 @@ interface ModalProps {
   onClose: () => void;
   show: boolean;
 }
-
+// TODO: should use teleport, is a bit hacky to implement in NextJS
 export const Modal: React.FC<ModalProps> = ({ onClose, show, children }) => {
   const closeOnEscapeKeyDown = useCallback(
     (e: KeyboardEvent) => {

@@ -64,9 +64,9 @@ export type CreateProductInput = {
 export type CreateProductReviewInput = {
   content: Scalars['String'];
   email: Scalars['String'];
+  nickname: Scalars['String'];
   productId: Scalars['Float'];
   rating: Scalars['Float'];
-  submittedByAlias: Scalars['String'];
   title: Scalars['String'];
   wouldRecommend: Scalars['Boolean'];
 };
@@ -329,10 +329,10 @@ export type ProductReview = {
   createdAt: Scalars['DateTime'];
   id: Scalars['Float'];
   isPublished: Scalars['Boolean'];
+  nickname: Scalars['String'];
   productId: Scalars['Float'];
   publishedAt?: Maybe<Scalars['DateTime']>;
   rating: Scalars['Float'];
-  submittedByAlias: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   wouldRecommend: Scalars['Boolean'];
@@ -482,6 +482,8 @@ export type CoreAttributeFieldsFragment = { __typename?: 'ProductAttribute', sku
 
 export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> };
 
+export type CoreProductReviewFieldsFragment = { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any };
+
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
 export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
@@ -500,6 +502,13 @@ export type InitializeKlarnaSessionMutationVariables = Exact<{
 
 
 export type InitializeKlarnaSessionMutation = { __typename?: 'Mutation', initializeKlarnaSession: { __typename?: 'KlarnaSessionResponse', session_id: string, client_token: string, payment_method_categories: Array<{ __typename?: 'PaymentMethodCategory', identifier: string, name: string, asset_urls: { __typename?: 'AssetUrl', descriptive: string, standard: string } }> } };
+
+export type CreateProductReviewMutationVariables = Exact<{
+  input: CreateProductReviewInput;
+}>;
+
+
+export type CreateProductReviewMutation = { __typename?: 'Mutation', createProductReview: { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any } };
 
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
@@ -572,7 +581,7 @@ export type ProductReviewsQueryVariables = Exact<{
 }>;
 
 
-export type ProductReviewsQuery = { __typename?: 'Query', productReviews: { __typename?: 'QueryProductReviewsOutput', totalCount: number, hasMore: boolean, averageRating: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, submittedByAlias: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any }> } };
+export type ProductReviewsQuery = { __typename?: 'Query', productReviews: { __typename?: 'QueryProductReviewsOutput', totalCount: number, hasMore: boolean, averageRating: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any }> } };
 
 export type FindOneProductQueryVariables = Exact<{
   id: Scalars['Float'];
@@ -643,6 +652,20 @@ export const CoreProductFieldsFragmentDoc = gql`
     id
     imageUrl
   }
+}
+    `;
+export const CoreProductReviewFieldsFragmentDoc = gql`
+    fragment CoreProductReviewFields on ProductReview {
+  id
+  title
+  rating
+  wouldRecommend
+  content
+  isPublished
+  nickname
+  createdAt
+  publishedAt
+  updatedAt
 }
     `;
 export const CoreAddressFieldsFragmentDoc = gql`
@@ -748,6 +771,39 @@ export function useInitializeKlarnaSessionMutation(baseOptions?: Apollo.Mutation
 export type InitializeKlarnaSessionMutationHookResult = ReturnType<typeof useInitializeKlarnaSessionMutation>;
 export type InitializeKlarnaSessionMutationResult = Apollo.MutationResult<InitializeKlarnaSessionMutation>;
 export type InitializeKlarnaSessionMutationOptions = Apollo.BaseMutationOptions<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>;
+export const CreateProductReviewDocument = gql`
+    mutation CreateProductReview($input: CreateProductReviewInput!) {
+  createProductReview(input: $input) {
+    ...CoreProductReviewFields
+  }
+}
+    ${CoreProductReviewFieldsFragmentDoc}`;
+export type CreateProductReviewMutationFn = Apollo.MutationFunction<CreateProductReviewMutation, CreateProductReviewMutationVariables>;
+
+/**
+ * __useCreateProductReviewMutation__
+ *
+ * To run a mutation, you first call `useCreateProductReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProductReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProductReviewMutation, { data, loading, error }] = useCreateProductReviewMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProductReviewMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductReviewMutation, CreateProductReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProductReviewMutation, CreateProductReviewMutationVariables>(CreateProductReviewDocument, options);
+      }
+export type CreateProductReviewMutationHookResult = ReturnType<typeof useCreateProductReviewMutation>;
+export type CreateProductReviewMutationResult = Apollo.MutationResult<CreateProductReviewMutation>;
+export type CreateProductReviewMutationOptions = Apollo.BaseMutationOptions<CreateProductReviewMutation, CreateProductReviewMutationVariables>;
 export const AuthenticateWithGoogleDocument = gql`
     mutation AuthenticateWithGoogle($googleAuthToken: String!) {
   authenticateWithGoogle(googleAuthToken: $googleAuthToken) {
@@ -1136,20 +1192,11 @@ export const ProductReviewsDocument = gql`
     hasMore
     averageRating
     items {
-      id
-      title
-      rating
-      wouldRecommend
-      content
-      isPublished
-      submittedByAlias
-      createdAt
-      publishedAt
-      updatedAt
+      ...CoreProductReviewFields
     }
   }
 }
-    `;
+    ${CoreProductReviewFieldsFragmentDoc}`;
 
 /**
  * __useProductReviewsQuery__

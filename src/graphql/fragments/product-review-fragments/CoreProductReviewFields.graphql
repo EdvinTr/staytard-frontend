@@ -1,0 +1,12 @@
+fragment CoreProductReviewFields on ProductReview {
+  id
+  title
+  rating
+  wouldRecommend
+  content
+  isPublished
+  nickname
+  createdAt
+  publishedAt
+  updatedAt
+}

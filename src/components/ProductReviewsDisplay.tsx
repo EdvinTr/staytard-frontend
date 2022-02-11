@@ -201,7 +201,7 @@ const ProductReviewCard = ({
       <h3 className="mt-4 font-bold">{review.title}</h3>
       <p className="text-13 mt-3 pb-6">{review.content}</p>
       <p className="text-13 absolute bottom-[10px] font-light text-[#6b6b6b]">
-        {review.submittedByAlias} - {review.createdAt.split("T")[0]}
+        {review.nickname} - {review.createdAt.split("T")[0]}
       </p>
     </div>
   );

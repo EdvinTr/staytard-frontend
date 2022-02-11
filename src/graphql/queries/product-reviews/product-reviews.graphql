@@ -4,16 +4,7 @@ query ProductReviews($input: FindProductReviewsInput!) {
     hasMore
     averageRating
     items {
-      id
-      title
-      rating
-      wouldRecommend
-      content
-      isPublished
-      submittedByAlias
-      createdAt
-      publishedAt
-      updatedAt
+      ...CoreProductReviewFields
     }
   }
 }
