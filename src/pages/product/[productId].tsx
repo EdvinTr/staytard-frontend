@@ -206,7 +206,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
         </div>
         {/* product description */}
         <div className="bg-staytard-light-gray mt-12 space-y-4 p-4 lg:w-1/2 lg:p-8 xl:w-6/12">
-          <h4 className="text-sm font-semibold">Product description:</h4>
+          <h3 className="text-sm font-semibold">Product description:</h3>
           <p className="text-13 font-light">{product.description}</p>
         </div>
       </MyContainer>
