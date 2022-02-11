@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import React, { useState } from "react";
 import { useCreateProductReviewMutation } from "../lib/graphql";
+import { isEmailAddress } from "../utils/validation/isEmailAddress";
 import { BaseButton } from "./global/BaseButton";
 import { BaseInput } from "./global/BaseInput";
 import { Modal } from "./global/Modal";
@@ -50,7 +51,9 @@ export const ProductReviewModal = ({
 
   return (
     <Modal onClose={onClose} show={show}>
-      {/*    <form onSubmit={onSubmit} className="flex flex-col p-8">
+      <div className="p-8">
+        <h1 className="pb-6 text-left text-2xl font-bold ">My review</h1>
+        {/*    <form onSubmit={onSubmit} className="flex flex-col p-8">
         <Rating
           fullSymbol={
             <SolidStarIcon className="text-staytard-dark inline-block w-8" />
@@ -77,74 +80,86 @@ export const ProductReviewModal = ({
 
         <BaseButton type="submit">Submit Review</BaseButton>
       </form> */}
-      <Formik
-        initialValues={{
-          email: "",
-          wouldRecommend: false,
-          title: "",
-          content: "",
-          nickname: "",
-          rating: 0,
-        }}
-        validate={(values) => {
-          const errors: Partial<Values> = {};
-          if (!values.nickname) {
-            errors.nickname = "Required";
-          }
-          return errors;
-        }}
-        onSubmit={(
-          values: Values,
-          { setSubmitting }: FormikHelpers<Values>
-        ) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 500);
-        }}
-      >
-        {({ isSubmitting, values, touched, errors }) => (
-          <Form className=" space-y-8 p-8">
-            <div>
-              <label htmlFor="email" className="block">
-                Email
-              </label>
-              <Field
-                id="email"
-                name="email"
-                placeholder="john@acme.com"
-                type="email"
-              />
-            </div>
+        <Formik
+          initialValues={{
+            email: "",
+            wouldRecommend: false,
+            title: "",
+            content: "",
+            nickname: "",
+            rating: 0,
+          }}
+          validate={(values) => {
+            const errors: Partial<Values> = {};
+            if (!values.nickname) {
+              errors.nickname = "Required";
+            }
+            if (!isEmailAddress(values.email)) {
+              errors.email = "Invalid email address";
+            }
+            return errors;
+          }}
+          onSubmit={(
+            values: Values,
+            { setSubmitting }: FormikHelpers<Values>
+          ) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 500);
+          }}
+        >
+          {({ isSubmitting, values, touched, errors }) => (
+            <Form className=" space-y-8 ">
+              <div className="text-left">
+                <Field
+                  className="border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0"
+                  id="email"
+                  name="email"
+                  as={BaseInput}
+                  label="Email"
+                  hasError={errors.email}
+                  value={values.email}
+                  isFocused={touched.email}
+                  placeholder="Email"
+                />
+                <ErrorMessage name="email">
+                  {(msg) => (
+                    <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                  )}
+                </ErrorMessage>
+              </div>
 
-            <div className="text-left">
-              <Field
-                className="border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0"
-                id="nickname"
-                name="nickname"
-                as={BaseInput}
-                label="Nickname"
-                hasError={errors.nickname}
-                value={values.nickname}
-                isFocused={touched.nickname}
-                placeholder="Nickname"
-              />
-              <ErrorMessage name="nickname">
-                {(msg) => (
-                  <div className="pt-2 text-[11px] text-red-600">{msg}</div>
-                )}
-              </ErrorMessage>
-            </div>
+              <div className="text-left">
+                <Field
+                  className="border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0"
+                  id="nickname"
+                  name="nickname"
+                  as={BaseInput}
+                  label="Nickname"
+                  hasError={errors.nickname}
+                  value={values.nickname}
+                  isFocused={touched.nickname}
+                  placeholder="Nickname"
+                />
+                <ErrorMessage name="nickname">
+                  {(msg) => (
+                    <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                  )}
+                </ErrorMessage>
+              </div>
+              <div className="text-13 flex items-center space-x-2">
+                <label htmlFor="wouldRecommend">
+                  Would you recommend to a good friend?
+                </label>
+                <Field name="wouldRecommend" as={MyCheckbox} />
+              </div>
 
-            <label htmlFor="wouldRecommend">
-              Would you recommend to a good friend?
-            </label>
-            <Field name="wouldRecommend" as={MyCheckbox} />
-
-            <BaseButton type="submit">Submit</BaseButton>
-          </Form>
-        )}
-      </Formik>
+              <BaseButton type="submit">Submit</BaseButton>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </Modal>
   );
 };
