@@ -158,7 +158,7 @@ export const ProductReviewsDisplay = ({
                     },
                   },
                 });
-                setOffset(offset + 5);
+                setOffset(offset + 6);
                 setIsLoadingMore(false);
               }}
             >

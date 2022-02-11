@@ -114,6 +114,8 @@ export type FindProductReviewsInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
   productId: Scalars['Float'];
+  sortBy?: InputMaybe<Product_Review_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
 };
 
 export type FindProductsBySkusInput = {
@@ -236,6 +238,11 @@ export type OrderLineInput = {
   total_tax_amount: Scalars['Float'];
   unit_price: Scalars['Float'];
 };
+
+export enum Product_Review_Sort_By {
+  CreatedAt = 'CREATED_AT',
+  Id = 'ID'
+}
 
 export enum Product_Sort_By {
   CurrentPrice = 'CURRENT_PRICE',

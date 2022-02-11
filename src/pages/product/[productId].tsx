@@ -13,7 +13,12 @@ import { MyContainer } from "../../components/global/MyContainer";
 import { ProductReviewsDisplay } from "../../components/pages/product/ProductReviewsDisplay";
 import { APP_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
-import { FindOneProductQuery, ProductReviewsQuery } from "../../lib/graphql";
+import {
+  FindOneProductQuery,
+  ProductReviewsQuery,
+  Product_Review_Sort_By,
+  Sort_Direction,
+} from "../../lib/graphql";
 import { ssrFindOneProduct, ssrProductReviews } from "../../lib/page";
 SwiperCore.use([Pagination]);
 SwiperCore.use([Navigation]);
@@ -226,6 +231,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             limit: 6,
             offset: 0,
             productId: +productId,
+            sortBy: Product_Review_Sort_By.CreatedAt,
+            sortDirection: Sort_Direction.Desc,
           },
         },
       });
