@@ -4,20 +4,31 @@ import {
   StarIcon as OutlineStarIcon,
 } from "@heroicons/react/outline";
 import SolidStarIcon from "@heroicons/react/solid/StarIcon";
+import { useWindowWidth } from "@react-hook/window-size";
 import React, { Fragment, useState } from "react";
 import { BeatLoader } from "react-spinners";
-import { ProductReviewsQuery } from "../lib/graphql";
-import { ssrProductReviews } from "../lib/page";
-import { MyContainer } from "./global/MyContainer";
-import { PaginationProgressTracker } from "./global/PaginationProgressTracker";
-import { ProductReviewModal } from "./ProductReviewModal";
+import { toast, ToastContainer } from "react-toast";
+import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
+import { ProductReviewsQuery } from "../../../lib/graphql";
+import { ssrProductReviews } from "../../../lib/page";
+import { Localized } from "../../../Localized";
+import { MyContainer } from "../../global/MyContainer";
+import { PaginationProgressTracker } from "../../global/PaginationProgressTracker";
+import { ProductReviewFormModal } from "./ProductReviewFormModal";
 interface ProductReviewsDisplayProps {
   productId: number;
 }
+const { createProductReviewSuccessMessage } = Localized.page.product;
 
 export const ProductReviewsDisplay = ({
   productId,
 }: ProductReviewsDisplayProps) => {
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
+  const showSuccessToast = (): void =>
+    toast.success(createProductReviewSuccessMessage, {
+      backgroundColor: "black",
+      color: "white",
+    });
   const { data, fetchMore } = ssrProductReviews.usePage();
   const reviews = data?.productReviews;
   const [offset, setOffset] = useState(0);
@@ -51,11 +62,15 @@ export const ProductReviewsDisplay = ({
       </div>
     );
   };
+  const handleOnReviewCreateSuccess = () => {
+    showSuccessToast();
+  };
   const reviewModal = (
-    <ProductReviewModal
+    <ProductReviewFormModal
       show={isReviewModalOpen}
       onClose={() => setIsReviewModalOpen(false)}
       productId={productId}
+      onSuccess={() => handleOnReviewCreateSuccess()}
     />
   );
   if (reviews.totalCount === 0) {
@@ -151,6 +166,13 @@ export const ProductReviewsDisplay = ({
               <ChevronDownIcon className="w-6" />
             </button>
           )}
+        </div>
+        <div className="z-50">
+          <ToastContainer
+            position={
+              currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"
+            }
+          />
         </div>
       </MyContainer>
     </ReviewSectionContainer>

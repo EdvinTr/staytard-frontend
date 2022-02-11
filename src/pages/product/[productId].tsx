@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
-import { ProductReviewsDisplay } from "../../components/ProductReviewsDisplay";
+import { ProductReviewsDisplay } from "../../components/pages/product/ProductReviewsDisplay";
 import { APP_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import { FindOneProductQuery, ProductReviewsQuery } from "../../lib/graphql";

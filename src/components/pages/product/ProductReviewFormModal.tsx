@@ -3,21 +3,19 @@ import SolidStarIcon from "@heroicons/react/solid/StarIcon";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import React, { useState } from "react";
 import Rating from "react-rating";
-import { useCreateProductReviewMutation } from "../lib/graphql";
-import { isEmailAddress } from "../utils/validation/isEmailAddress";
-import { BaseButton } from "./global/BaseButton";
-import { BaseInput } from "./global/BaseInput";
-import { Modal } from "./global/Modal";
-import { MyCheckbox } from "./global/MyCheckbox";
+import { useCreateProductReviewMutation } from "../../../lib/graphql";
+import { isEmailAddress } from "../../../utils/validation/isEmailAddress";
+import { BaseButton } from "../../global/BaseButton";
+import { BaseInput } from "../../global/BaseInput";
+import { Modal } from "../../global/Modal";
+import { MyCheckbox } from "../../global/MyCheckbox";
 
-interface ProductReviewModalProps {
+interface ProductReviewFormModalProps {
   show: boolean;
   onClose: () => void;
   productId: number;
+  onSuccess: () => void;
 }
-
-// TODO:
-// Build this: https://help.commerce.campaignmonitor.com/servlet/rtaImage?eid=ka83b000000PC9S&feoid=00N1J00000F1Qs5&refid=0EM1J000000lpRi
 interface FormValues {
   title: string;
   content: string;
@@ -28,11 +26,12 @@ interface FormValues {
 }
 const inputClassNames =
   "border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0";
-export const ProductReviewModal = ({
+export const ProductReviewFormModal = ({
   onClose,
   show,
   productId,
-}: ProductReviewModalProps) => {
+  onSuccess,
+}: ProductReviewFormModalProps) => {
   const [rating, setRating] = useState<number>(0);
   const [ratingSelectError, setRatingSelectError] = useState<string | null>(
     null
@@ -57,6 +56,7 @@ export const ProductReviewModal = ({
         },
       });
       if (data && data.createProductReview) {
+        onSuccess();
         resetForm();
         setRatingSelectError(null);
         setRating(0);
