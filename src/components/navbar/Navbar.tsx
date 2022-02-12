@@ -2,7 +2,7 @@ import { SearchIcon } from "@heroicons/react/outline";
 import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import CartContext from "../../contexts/CartContext";
@@ -71,17 +71,18 @@ export const Navbar = () => {
                 </Link>
               </div>
               <div className="flex items-center space-x-9">
-                {currentWindowWidth >= 1024 &&
-                  (userData ? (
-                    <Link href={APP_PAGE_ROUTE.LOGIN}>
-                      <a className="flex items-center space-x-3">
-                        <p className="font-medium">Sign In</p>
-                        <MyUserIcon className="w-6" />
-                      </a>
-                    </Link>
-                  ) : (
+                {userData ? (
+                  <Fragment>
                     <MyPagesPopover className="hidden lg:block" />
-                  ))}
+                  </Fragment>
+                ) : (
+                  <Link href={APP_PAGE_ROUTE.LOGIN}>
+                    <a className="flex items-center space-x-3">
+                      <p className="font-medium">Sign In</p>
+                      <MyUserIcon className="w-6" />
+                    </a>
+                  </Link>
+                )}
                 <Link href={APP_PAGE_ROUTE.CHECKOUT}>
                   <a className="relative">
                     <MyCartIcon className="w-6" />
@@ -95,53 +96,51 @@ export const Navbar = () => {
               </div>
             </div>
           </MyContainer>
-          {currentWindowWidth >= 1024 && (
-            <div>
-              {categoriesLoading && (
-                <div className="flex justify-center space-x-7 pt-8">
-                  <Skeleton inline width={60} />
-                  <Skeleton inline width={60} />
-                  <Skeleton inline width={60} />
-                  <Skeleton inline width={60} />
-                </div>
-              )}
-              {/* hover menu stuff */}
+          <div>
+            {categoriesLoading && (
+              <div className="flex justify-center space-x-7 pt-8">
+                <Skeleton inline width={60} />
+                <Skeleton inline width={60} />
+                <Skeleton inline width={60} />
+                <Skeleton inline width={60} />
+              </div>
+            )}
+            {/* hover menu stuff */}
 
-              {categoriesData && (
-                <FadeInContainer className="flex justify-center space-x-7 pt-8">
-                  {categoriesData?.categories.map((category) => {
-                    return (
-                      <Link key={category.id} href={category.path}>
-                        <a
-                          className="underline"
-                          onClick={() => setIsHoverMenuOpen(false)}
-                          onMouseEnter={() => {
-                            if (category.children) {
-                              setHoverMenuItems(category.children);
-                            }
-                            setHoverMenuTitle(category.name);
-                            setIsHoverMenuOpen(true);
-                          }}
-                          onMouseLeave={() => {
-                            setIsHoverMenuOpen(false);
-                          }}
-                        >
-                          {category.name}
-                        </a>
-                      </Link>
-                    );
-                  })}
-                </FadeInContainer>
-              )}
-              {hoverMenuItems && (
-                <HoverMenu
-                  items={hoverMenuItems}
-                  title={hoverMenuTitle}
-                  isButtonHovered={isHoverMenuOpen}
-                />
-              )}
-            </div>
-          )}
+            {categoriesData && (
+              <FadeInContainer className="flex justify-center space-x-7 pt-8">
+                {categoriesData?.categories.map((category) => {
+                  return (
+                    <Link key={category.id} href={category.path}>
+                      <a
+                        className="underline"
+                        onClick={() => setIsHoverMenuOpen(false)}
+                        onMouseEnter={() => {
+                          if (category.children) {
+                            setHoverMenuItems(category.children);
+                          }
+                          setHoverMenuTitle(category.name);
+                          setIsHoverMenuOpen(true);
+                        }}
+                        onMouseLeave={() => {
+                          setIsHoverMenuOpen(false);
+                        }}
+                      >
+                        {category.name}
+                      </a>
+                    </Link>
+                  );
+                })}
+              </FadeInContainer>
+            )}
+            {hoverMenuItems && (
+              <HoverMenu
+                items={hoverMenuItems}
+                title={hoverMenuTitle}
+                isButtonHovered={isHoverMenuOpen}
+              />
+            )}
+          </div>
         </div>
         <SearchModal onClose={() => setShowModal(false)} show={showModal} />
       </div>
