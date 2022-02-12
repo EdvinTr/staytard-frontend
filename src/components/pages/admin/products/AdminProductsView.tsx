@@ -1,8 +1,10 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import axios from "axios";
+import Image from "next/image";
 import React, { Fragment, useState } from "react";
 import useSWR from "swr";
 import { MAX_PRODUCT_LIMIT } from "../../../../constants";
+import { GetProductsResponse } from "../../../../typings/GetProductsResponse.interface";
 interface AdminProductsViewProps {}
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
@@ -10,11 +12,10 @@ const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
   const [pageIndex, setPageIndex] = useState(1);
   const [categoryPath, setCategoryPath] = useState("/");
-  const { data, error } = useSWR(
+  const { data, error } = useSWR<GetProductsResponse>(
     `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}`,
     fetcher
   );
-  console.log(data);
   return (
     <Fragment>
       <div className="bg-[#F8F8F9]">
@@ -28,7 +29,47 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
           </div>
         </ContainerWithPadding>
       </div>
-      <ContainerWithPadding></ContainerWithPadding>
+      <ContainerWithPadding>
+        <div className="">
+          {data &&
+            data.products.map((product) => {
+              const imageUrl = product.images[0].imageUrl.replace(
+                "{size}",
+                "90"
+              );
+              return (
+                <article
+                  key={product.id}
+                  className="flex items-center border-t border-gray-100 py-3"
+                >
+                  <Image
+                    width={30}
+                    height={50}
+                    src={imageUrl}
+                    blurDataURL={imageUrl}
+                    objectFit="contain"
+                    placeholder="blur"
+                    alt={`${product.brand.name} - ${product.name}`}
+                  />
+                  <div className="ml-4">
+                    <h2 className="text-sm font-medium">{product.name}</h2>
+                    <h3 className="text-xs text-gray-500">
+                      {product.attributes.length} Variants
+                    </h3>
+                  </div>
+                  <div>
+                    <h4>
+                      <span className="font-semibold">Current price:</span>
+                      <span className="text-gray-500">
+                        {product.currentPrice}
+                      </span>
+                    </h4>
+                  </div>
+                </article>
+              );
+            })}
+        </div>
+      </ContainerWithPadding>
     </Fragment>
   );
 };
