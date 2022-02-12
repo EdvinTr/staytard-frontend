@@ -37,7 +37,7 @@ export const getSortString = (sortBy?: string, sortDirection?: string) => {
   return `&sortBy=${sortBy}&sortDirection=${sortDirection}`;
 };
 
-const getKey = (
+export const getProductsKey = (
   pageIndex: number,
   previousPageData: any,
   { categoryPath, sortBy, sortDirection }: ProductFetchParams,
@@ -63,7 +63,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
 
   const { data, size, setSize, error } = useSWRInfinite<GetProductsResponse>(
     (...args) =>
-      getKey(
+      getProductsKey(
         ...args,
         {
           categoryPath: currentPathParams,

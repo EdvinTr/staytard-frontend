@@ -1,8 +1,20 @@
 import { PlusIcon } from "@heroicons/react/solid";
-import React, { Fragment } from "react";
+import axios from "axios";
+import React, { Fragment, useState } from "react";
+import useSWR from "swr";
+import { MAX_PRODUCT_LIMIT } from "../../../../constants";
 interface AdminProductsViewProps {}
 
+const fetcher = (url: string) => axios.get(url).then((r) => r.data);
+
 export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
+  const [pageIndex, setPageIndex] = useState(1);
+  const [categoryPath, setCategoryPath] = useState("/");
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}`,
+    fetcher
+  );
+  console.log(data);
   return (
     <Fragment>
       <div className="bg-[#F8F8F9]">
@@ -16,6 +28,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
           </div>
         </ContainerWithPadding>
       </div>
+      <ContainerWithPadding></ContainerWithPadding>
     </Fragment>
   );
 };
