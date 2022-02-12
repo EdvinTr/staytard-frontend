@@ -14,6 +14,8 @@ module.exports = {
         "staytard-dark": "#222222",
         "staytard-red": "#ce1e1a",
         "staytard-light-gray": "#f3f3f3",
+        "deep-blue": "#1C202E",
+        "deep-blue-darker": "#161A24",
       },
     },
   },
