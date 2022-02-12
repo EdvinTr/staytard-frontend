@@ -23,12 +23,14 @@ const pathsWithoutMainNavbar = [
   APP_PAGE_ROUTE.MY_PROFILE,
   APP_PAGE_ROUTE.MY_ORDERS,
   APP_PAGE_ROUTE.MY_OFFERS,
+  APP_PAGE_ROUTE.ADMIN,
 ];
 
 const pathsWithoutFooter = [
   APP_PAGE_ROUTE.MY_PROFILE,
   APP_PAGE_ROUTE.MY_ORDERS,
   APP_PAGE_ROUTE.MY_OFFERS,
+  APP_PAGE_ROUTE.ADMIN,
 ];
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);

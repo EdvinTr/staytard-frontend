@@ -13,6 +13,7 @@ export enum APP_PAGE_ROUTE {
   PRODUCT = "/product",
   CONFIRMATION = "/confirmation",
   CHECKOUT = "/checkout",
+  ADMIN = "/admin",
 }
 
 export enum COOKIE_NAME {
