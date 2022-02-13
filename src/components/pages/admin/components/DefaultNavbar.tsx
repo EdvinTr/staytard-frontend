@@ -34,9 +34,9 @@ export const DefaultNavbar = () => {
   return (
     <Fragment>
       <div className="relative min-w-[5rem] max-w-[5rem]">
-        <div className="bg-deep-blue fixed h-full min-h-screen min-w-[5rem] max-w-[5rem]">
+        <div className="bg-staytard-dark fixed h-full min-h-screen min-w-[5rem] max-w-[5rem]">
           <div className="flex flex-col items-center justify-center overflow-hidden">
-            <div className="bg-deep-blue-darker flex w-full justify-center py-4 text-center">
+            <div className="flex w-full justify-center bg-black py-4 text-center">
               <Link href={APP_PAGE_ROUTE.INDEX}>
                 <a aria-label={`Home page`}>
                   <HomeIcon className="hover:text-staytard-yellow w-8 text-gray-200  transition-all duration-150" />
@@ -50,7 +50,7 @@ export const DefaultNavbar = () => {
                   key={idx}
                   className={`${
                     currentQuery === item.query.show
-                      ? "border-staytard-yellow bg-deep-blue-darker border-l-2"
+                      ? "border-staytard-yellow border-l-2 bg-black"
                       : ""
                   }`}
                 >
@@ -66,7 +66,7 @@ export const DefaultNavbar = () => {
                         className={`hover:text-staytard-yellow w-8  transition-all duration-150 ${
                           currentQuery === item.query.show
                             ? "text-staytard-yellow"
-                            : "text-gray-600"
+                            : "text-stone-600"
                         }`}
                       />
                     </a>

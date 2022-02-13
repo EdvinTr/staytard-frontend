@@ -21,7 +21,7 @@ const AdminPage: NextPage = () => {
         <div className="hidden lg:block">
           <DefaultNavbar />
         </div>
-        <div className="bg-deep-blue h-16 lg:hidden">
+        <div className="bg-staytard-dark h-16 lg:hidden">
           <MobileNavbar />
         </div>
         <div className="w-full lg:pl-20">

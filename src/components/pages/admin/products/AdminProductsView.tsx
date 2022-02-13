@@ -1,7 +1,9 @@
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  PencilAltIcon,
   PlusIcon,
+  TrashIcon,
 } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
@@ -136,6 +138,18 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                         </p>
                       </SmallMinWidthContainer>
                     </div>
+                    <button
+                      aria-label="Edit product"
+                      className="rounded-md  bg-yellow-200 p-2"
+                    >
+                      <PencilAltIcon className="h-4" />
+                    </button>
+                    <button
+                      aria-label="Delete product"
+                      className="rounded-md  bg-red-100 p-2 text-red-600"
+                    >
+                      <TrashIcon className="h-4" />
+                    </button>
                   </article>
                 );
               })}

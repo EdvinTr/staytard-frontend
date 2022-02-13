@@ -35,7 +35,7 @@ const styles: { [key: string]: CSS.Properties } = {
     height: "100%",
   },
   bmMenu: {
-    background: "#373a47",
+    background: "#222222",
     fontSize: "1.15em",
     paddingTop: "2rem",
   },
@@ -55,7 +55,7 @@ const styles: { [key: string]: CSS.Properties } = {
 interface MobileNavbarProps {}
 
 const anchorElementClassNames =
-  "hover:text-staytard-yellow text-gray-600 transition-all duration-150 ease-in-out";
+  "hover:text-staytard-yellow text-stone-600 transition-all duration-150 ease-in-out";
 export const MobileNavbar = ({}: MobileNavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -68,8 +68,8 @@ export const MobileNavbar = ({}: MobileNavbarProps) => {
         onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
       >
-        <div className="w-full border-b border-gray-600">
-          <div className="border-staytard-yellow hover:bg-deep-blue-darker border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100">
+        <div className="w-full border-b border-stone-700">
+          <div className="border-staytard-yellow border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100 hover:bg-black">
             <Link
               shallow
               href={{
@@ -93,8 +93,8 @@ export const MobileNavbar = ({}: MobileNavbarProps) => {
                 key={idx}
                 className={`${
                   currentQuery === item.query.show
-                    ? "border-staytard-yellow bg-deep-blue-darker border-l-2 border-opacity-100"
-                    : "border-staytard-yellow hover:bg-deep-blue-darker border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100"
+                    ? "border-staytard-yellow border-l-2 border-opacity-100 bg-black"
+                    : "border-staytard-yellow border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100 hover:bg-black"
                 }`}
               >
                 <Link
@@ -136,7 +136,7 @@ const HeaderTitle = ({ router }: { router: NextRouter }) => {
           return (
             <Fragment key={idx}>
               <item.icon className="text-staytard-yellow w-6 transition-all duration-150" />
-              <div className="ml-2 text-xl font-semibold uppercase text-gray-200">
+              <div className="ml-2 text-xl font-semibold uppercase text-stone-200">
                 {item.query.show}
               </div>
             </Fragment>
@@ -148,7 +148,7 @@ const HeaderTitle = ({ router }: { router: NextRouter }) => {
 
 const NavLinkText: React.FC = ({ children }) => {
   return (
-    <div className="ml-3 text-center text-sm font-semibold uppercase text-gray-200">
+    <div className="ml-3 text-center text-sm font-semibold uppercase text-stone-200">
       {children}
     </div>
   );
