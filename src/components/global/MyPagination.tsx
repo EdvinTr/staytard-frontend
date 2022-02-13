@@ -19,8 +19,8 @@ export const MyPagination = ({
     <ReactPaginate
       containerClassName="flex items-center space-x-5"
       breakLabel="..."
-      activeLinkClassName="bg-staytard-dark text-staytard-yellow"
-      pageLinkClassName="border border-gray-300 rounded-md px-3 py-2 text-sm font-semibold text-gray-500"
+      activeLinkClassName="bg-staytard-dark text-staytard-yellow border-none"
+      pageLinkClassName="border border-gray-300 rounded-md px-3 py-2 text-sm font-semibold"
       previousLabel={<ArrowLeftIcon className="h-4" />}
       nextLabel={<ArrowRightIcon className="h-4" />}
       onPageChange={(page) => onPageChange(page.selected)}
