@@ -17,14 +17,14 @@ const AdminPage: NextPage = () => {
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <div className="lg:flex">
+      <div className="">
         <div className="hidden lg:block">
           <DefaultNavbar />
         </div>
         <div className="bg-deep-blue h-16 lg:hidden">
           <MobileNavbar />
         </div>
-        <div className="w-full">
+        <div className="w-full lg:pl-20">
           {router.query.show === ADMIN_SUB_PAGE_ROUTE.USERS && (
             <AdminUsersView />
           )}
