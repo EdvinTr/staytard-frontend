@@ -1,16 +1,9 @@
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  PencilAltIcon,
-  PlusIcon,
-  TrashIcon,
-} from "@heroicons/react/solid";
+import { PencilAltIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
 import { BeatLoader } from "react-spinners";
 import useSWR from "swr";
 import { ADMIN_PAGE_QUERY_KEY, MAX_PRODUCT_LIMIT } from "../../../../constants";
@@ -23,6 +16,7 @@ import {
 import { BaseButton } from "../../../global/BaseButton";
 import { Modal } from "../../../global/Modal";
 import { MyCheckbox } from "../../../global/MyCheckbox";
+import { MyPagination } from "../../../global/MyPagination";
 
 interface AdminProductsViewProps {}
 
@@ -225,27 +219,18 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
         )}
         {data && (
           <div className="flex justify-center pt-14">
-            <ReactPaginate
-              containerClassName="flex items-center space-x-5"
-              breakLabel="..."
-              activeLinkClassName="bg-staytard-dark text-staytard-yellow"
-              pageLinkClassName="border border-gray-300 rounded-md px-3 py-2 text-sm font-semibold text-gray-500"
-              previousLabel={<ArrowLeftIcon className="h-4" />}
-              nextLabel={<ArrowRightIcon className="h-4" />}
+            <MyPagination
+              currentPage={pageIndex - 1}
+              totalPages={data.pagination.totalPages}
               onPageChange={(page) => {
                 router.replace({
                   pathname: router.pathname,
                   query: {
                     ...router.query,
-                    page: page.selected + 1,
+                    page: page + 1,
                   },
                 });
               }}
-              pageRangeDisplayed={2}
-              pageCount={data?.pagination.totalPages}
-              nextAriaLabel="Next"
-              initialPage={pageIndex - 1}
-              previousAriaLabel="Previous"
             />
           </div>
         )}
