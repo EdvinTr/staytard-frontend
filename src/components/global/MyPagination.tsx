@@ -1,4 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
+import { useWindowWidth } from "@react-hook/window-size";
 import React from "react";
 import ReactPaginate from "react-paginate";
 
@@ -13,6 +14,7 @@ export const MyPagination = ({
   onPageChange,
   totalPages,
 }: MyPaginationProps) => {
+  const currentWindowWidth = useWindowWidth();
   return (
     <ReactPaginate
       containerClassName="flex items-center space-x-5"
@@ -23,6 +25,7 @@ export const MyPagination = ({
       nextLabel={<ArrowRightIcon className="h-4" />}
       onPageChange={(page) => onPageChange(page.selected)}
       pageRangeDisplayed={2}
+      marginPagesDisplayed={currentWindowWidth >= 768 ? 3 : 1}
       pageCount={totalPages}
       nextAriaLabel="Next"
       initialPage={currentPage}
