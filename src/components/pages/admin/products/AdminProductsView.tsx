@@ -133,7 +133,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                     <div className="min-w-[8rem] max-w-[10rem] xl:min-w-[10rem]">
                       <span className="font-medium">{product.brand.name}</span>
                     </div>
-                    <SmallMinWidthContainer>
+                    <SmallContainer>
                       <p>
                         <span className="font-medium">Current price:</span>
                         <span className="text-gray-500">
@@ -141,8 +141,8 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                           {product.currentPrice} EUR
                         </span>
                       </p>
-                    </SmallMinWidthContainer>
-                    <SmallMinWidthContainer>
+                    </SmallContainer>
+                    <SmallContainer>
                       <p>
                         <span className="font-medium">Original price:</span>
                         <span className="text-gray-500">
@@ -150,7 +150,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                           {product.originalPrice} EUR
                         </span>
                       </p>
-                    </SmallMinWidthContainer>
+                    </SmallContainer>
                     <div className="hidden xl:block">
                       <div className="min-w-[9rem] max-w-[9rem] xl:min-w-[13rem] xl:max-w-[13rem]">
                         <p>
@@ -240,22 +240,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
   );
 };
 
-const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-
-function Items() {
-  return (
-    <>
-      {items &&
-        items.map((item) => (
-          <div key={item}>
-            <h3>Item #{item}</h3>
-          </div>
-        ))}
-    </>
-  );
-}
-
-const SmallMinWidthContainer: React.FC = ({ children }) => {
+const SmallContainer: React.FC = ({ children }) => {
   return (
     <div className="min-w-[11rem] max-w-[11rem] xl:min-w-[13rem] xl:max-w-[13rem]">
       {children}
