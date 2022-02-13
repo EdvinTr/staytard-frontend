@@ -13,10 +13,9 @@ import {
   GetProductsResponse,
   ProductItem,
 } from "../../../../typings/GetProductsResponse.interface";
-import { BaseButton } from "../../../global/BaseButton";
-import { Modal } from "../../../global/Modal";
 import { MyCheckbox } from "../../../global/MyCheckbox";
 import { MyPagination } from "../../../global/MyPagination";
+import { DeleteItemModal } from "../components/DeleteItemModal";
 
 interface AdminProductsViewProps {}
 
@@ -185,35 +184,13 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                   </article>
                 );
               })}
-            <Modal
-              show={isDeleteProductModalOpen}
+            <DeleteItemModal
+              heading={`Are you sure you want to delete ${modalData?.name}?`}
+              loading={isDeleteProductLoading}
               onClose={() => setIsDeleteProductModalOpen(false)}
-            >
-              <div className="p-8">
-                <h1 className="pb-16 text-2xl font-semibold">
-                  Are you sure you want to delete {modalData?.name}?
-                </h1>
-                {deleteProductError && (
-                  <p className="pb-2 text-red-600">
-                    {deleteProductError.message}
-                  </p>
-                )}
-                <div className="space-x-4">
-                  <BaseButton
-                    onClick={() => handleDeleteProduct(modalData?.id)}
-                    loading={isDeleteProductLoading}
-                  >
-                    Confirm
-                  </BaseButton>
-                  <BaseButton
-                    variant="outline"
-                    onClick={() => setIsDeleteProductModalOpen(false)}
-                  >
-                    Cancel
-                  </BaseButton>
-                </div>
-              </div>
-            </Modal>
+              show={isDeleteProductModalOpen}
+              onDelete={() => handleDeleteProduct(modalData?.id)}
+            />
           </div>
         ) : (
           <div>I small</div>
