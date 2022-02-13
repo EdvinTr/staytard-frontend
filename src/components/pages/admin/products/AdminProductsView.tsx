@@ -101,7 +101,8 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                         {product.name}
                       </h2>
                       <h3 className="text-xs text-gray-500">
-                        {product.attributes.length} Variants
+                        {product.attributes.length}{" "}
+                        {product.attributes.length > 1 ? "Variants" : "Variant"}
                       </h3>
                     </div>
                     <div className="min-w-[8rem] max-w-[10rem] xl:min-w-[10rem]">
@@ -126,7 +127,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                       </p>
                     </SmallMinWidthContainer>
                     <div className="hidden xl:block">
-                      <SmallMinWidthContainer>
+                      <div className="min-w-[9rem] max-w-[9rem] xl:min-w-[13rem] xl:max-w-[13rem]">
                         <p>
                           <span
                             className={`${
@@ -136,20 +137,22 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                             {`-${discountPercentage.toFixed(0)}`}% discount
                           </span>
                         </p>
-                      </SmallMinWidthContainer>
+                      </div>
                     </div>
-                    <button
-                      aria-label="Edit product"
-                      className="rounded-md  bg-yellow-200 p-2"
-                    >
-                      <PencilAltIcon className="h-4" />
-                    </button>
-                    <button
-                      aria-label="Delete product"
-                      className="rounded-md  bg-red-100 p-2 text-red-600"
-                    >
-                      <TrashIcon className="h-4" />
-                    </button>
+                    <div className="space-x-3 xl:space-x-6">
+                      <button
+                        aria-label="Edit product"
+                        className="rounded-md  bg-yellow-200 p-2"
+                      >
+                        <PencilAltIcon className=" h-4 lg:h-5" />
+                      </button>
+                      <button
+                        aria-label="Delete product"
+                        className="rounded-md  bg-red-100 p-2 text-red-600"
+                      >
+                        <TrashIcon className="h-4 lg:h-5" />
+                      </button>
+                    </div>
                   </article>
                 );
               })}
@@ -204,7 +207,11 @@ function Items() {
 }
 
 const SmallMinWidthContainer: React.FC = ({ children }) => {
-  return <div className="min-w-[13rem] overflow-hidden">{children}</div>;
+  return (
+    <div className="min-w-[11rem] max-w-[11rem] xl:min-w-[13rem] xl:max-w-[13rem]">
+      {children}
+    </div>
+  );
 };
 
 const ContainerWithPadding: React.FC = ({ children }) => {
