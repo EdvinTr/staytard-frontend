@@ -23,28 +23,29 @@ interface AdminProductsViewProps {}
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
-  const router = useRouter();
-  const currentPageQuery = router.query[ADMIN_PAGE_QUERY_KEY.PAGE];
-  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
+  const [categoryPath, setCategoryPath] = useState("/");
+  const [modalData, setModalData] = useState<ProductItem | null>(null);
   const [pageIndex, setPageIndex] = useState(1);
+  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
+    useState(false);
+
+  const router = useRouter();
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const [
     deleteProduct,
     { loading: isDeleteProductLoading, error: deleteProductError },
   ] = useDeleteProductMutation();
-  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
-    useState(false);
-  useEffect(() => {
-    if (currentPageQuery) {
-      setPageIndex(parseInt(currentPageQuery as string));
-    }
-  }, [currentPageQuery]);
-  const [categoryPath, setCategoryPath] = useState("/");
   const { data, error, mutate } = useSWR<GetProductsResponse>(
     `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}`,
     fetcher
   );
 
-  const [modalData, setModalData] = useState<ProductItem | null>(null);
+  const currentPageQuery = router.query[ADMIN_PAGE_QUERY_KEY.PAGE];
+  useEffect(() => {
+    if (currentPageQuery) {
+      setPageIndex(parseInt(currentPageQuery as string));
+    }
+  }, [currentPageQuery]); // reruns when the page query changes
 
   const handleDeleteProduct = async (id?: number) => {
     if (!id) {
