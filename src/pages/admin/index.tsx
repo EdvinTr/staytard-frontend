@@ -8,7 +8,8 @@ import { AdminOrdersView } from "../../components/pages/admin/orders/AdminOrders
 import { AdminProductsView } from "../../components/pages/admin/products/AdminProductsView";
 import { AdminProductReviewsView } from "../../components/pages/admin/reviews/AdminProductReviewsView";
 import { AdminUsersView } from "../../components/pages/admin/users/AdminUsersView";
-import { ADMIN_SUB_PAGE_ROUTE, APP_NAME } from "../../constants";
+import { ADMIN_SUB_PAGE_ROUTE, APP_NAME, COOKIE_NAME } from "../../constants";
+import { ssrMe } from "../../lib/page";
 
 const AdminPage: NextPage = () => {
   const router = useRouter();
@@ -43,13 +44,30 @@ const AdminPage: NextPage = () => {
   );
 };
 
-// TODO: also check the query parameter ("show"), if it is not valid, return 404 page.
-// TODO: check user isAdmin or has some privileges for viewing certain routes.
-// Maybe have privileges such as: ADMIN_REVIEWS, ADMIN_USERS, ADMIN_PRODUCTS, ADMIN_ORDERS and then in SSR return props determining what routes are available for this admin
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return {
-    props: {},
-  };
+  try {
+    const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
+    if (!accessToken) {
+      // save some bandwidth if no access token is present
+      throw new Error();
+    }
+    // fetch user by passing the cookies in the request header
+    const user = await ssrMe.getServerPage({
+      context: { headers: ctx.req.headers },
+    });
+    // check if user is admin
+    if (!user || !user.props.data || !user.props.data.me.isAdmin) {
+      throw new Error();
+    }
+    return {
+      props: {}, // requesting user is admin
+    };
+  } catch (err) {
+    return {
+      props: {},
+      notFound: true,
+    };
+  }
 };
 
 export default AdminPage;

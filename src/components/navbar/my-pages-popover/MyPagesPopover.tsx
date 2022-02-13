@@ -1,9 +1,10 @@
 import { useApolloClient } from "@apollo/client";
 import { Popover, Transition } from "@headlessui/react";
+import { LockOpenIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { Fragment } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
-import { useLogoutMutation } from "../../../lib/graphql";
+import { MeQuery, useLogoutMutation } from "../../../lib/graphql";
 import {
   LogoutIcon,
   MyOrdersIcon,
@@ -11,7 +12,9 @@ import {
   MyUserIcon,
 } from "../../global/icons/Icons";
 import { LoadingSpinner } from "../../global/LoadingSpinner";
-interface MyPagesPopoverProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface MyPagesPopoverProps extends React.HTMLAttributes<HTMLDivElement> {
+  currentUser?: MeQuery["me"];
+}
 
 interface PopoverItem {
   name: string;
@@ -36,7 +39,10 @@ const popoverItems: PopoverItem[] = [
   },
 ];
 
-export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
+export const MyPagesPopover = ({
+  currentUser,
+  ...props
+}: MyPagesPopoverProps) => {
   const [logoutUser, { data, error, loading: isLogoutUserLoading }] =
     useLogoutMutation();
   const apollo = useApolloClient();
@@ -58,14 +64,14 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-4"
             >
-              <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-12 transform -translate-x-1/2 -left-14 sm:px-0 lg:max-w-3xl">
+              <Popover.Panel className="absolute -left-14 z-10 mt-12 w-80 max-w-sm -translate-x-1/2 transform px-2 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden shadow-lg ">
-                  <div className="relative grid gap-6 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
+                  <div className="relative grid gap-6 border-l-black border-r-black border-b-black border-opacity-5 bg-white px-4 py-8  ">
                     {popoverItems.map((item) => (
                       <Link href={item.href} key={item.name}>
                         <a>
                           <PopoverItemContainer>
-                            <p className="text-base text-staytard-dark">
+                            <p className="text-staytard-dark text-base">
                               {item.name}
                             </p>
                             <PopoverIconContainer>
@@ -75,6 +81,23 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                         </a>
                       </Link>
                     ))}
+                    {currentUser && currentUser.isAdmin && (
+                      <Link href={APP_PAGE_ROUTE.ADMIN}>
+                        <a>
+                          <PopoverItemContainer>
+                            <p className="text-staytard-dark text-base">
+                              Admin panel
+                            </p>
+                            <PopoverIconContainer>
+                              <LockOpenIcon
+                                aria-hidden="true"
+                                className="h-8 w-8 font-light text-black"
+                              />
+                            </PopoverIconContainer>
+                          </PopoverItemContainer>
+                        </a>
+                      </Link>
+                    )}
                     <button>
                       <PopoverItemContainer
                         onClick={async () => {
@@ -92,7 +115,7 @@ export const MyPagesPopover = ({ ...props }: MyPagesPopoverProps) => {
                           }
                         }}
                       >
-                        <span className="text-base text-staytard-dark">
+                        <span className="text-staytard-dark text-base">
                           Log out
                         </span>
                         <PopoverIconContainer>
@@ -122,7 +145,7 @@ const PopoverItemContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       {...props}
-      className="ml-0 flex items-center justify-between p-2 -m-3 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
+      className="-m-3 ml-0 flex items-center justify-between p-2 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
     >
       {children}
     </div>
@@ -136,7 +159,7 @@ const PopoverIconContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       {...props}
-      className="flex items-center justify-center w-10 h-10 text-white sm:h-12 sm:w-12"
+      className="flex h-10 w-10 items-center justify-center text-white sm:h-12 sm:w-12"
     >
       {children}
     </div>

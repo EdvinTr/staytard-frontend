@@ -9,40 +9,40 @@ const NotFoundPage: NextPage = () => {
   return (
     <FadeInContainer className=" text-white">
       <section className="relative h-[90vh] w-[90wh] ">
-        <div className="w-full absolute z-10 bg-black bg-opacity-20 h-full"></div>
+        <div className="absolute z-10 h-full w-full bg-black bg-opacity-20"></div>
         <Image
           src={"/img/not-found.webp"}
           className="h-full w-full "
           objectFit="cover"
           layout="fill"
-          alt=""
-          loading="lazy"
+          alt="Man in white jacket standing close to a stone wall."
+          priority
         />
-        <div className="flex justify-center items-center h-full">
-          <article className="text-center z-20 px-6">
-            <div className="max-w-[35rem] mx-auto space-y-4 lg:space-y-6">
-              <h1 className=" font-black text-6xl  lg:text-[100px] italic">
+        <div className="flex h-full items-center justify-center">
+          <article className="z-20 px-6 text-center">
+            <div className="mx-auto max-w-[35rem] space-y-4 lg:space-y-6">
+              <h1 className=" text-6xl font-black  italic lg:text-[100px]">
                 Oops!
               </h1>
-              <h2 className="text-2xl lg:text-4xl font-extrabold">
+              <h2 className="text-2xl font-extrabold lg:text-4xl">
                 Here it stopped...
               </h2>
-              <p className="text-xs leading-5 lg:text-[15px] max-w-md font-medium ">
+              <p className="max-w-md text-xs font-medium leading-5 lg:text-[15px] ">
                 We can not find the page you are looking for and it may be
                 because it no longer exists or has been moved. We apologize for
                 the inconvenience. In the menu above, you can try searching
                 again, or visit one of our popular departments.
               </p>
-              <div className="pt-4 space-y-2 lg:space-y-0 lg:flex lg:justify-center lg:space-x-4">
+              <div className="space-y-2 pt-4 lg:flex lg:justify-center lg:space-y-0 lg:space-x-4">
                 <button
                   onClick={() => router.back()}
-                  className="p-4 w-32  bg-white text-staytard-dark text-13 font-semibold"
+                  className="text-staytard-dark text-13  w-32 bg-white p-4 font-semibold"
                 >
                   Previous page
                 </button>
                 <div>
                   <Link href={APP_PAGE_ROUTE.INDEX}>
-                    <a className="p-4 inline-block w-32  bg-staytard-dark text-13 font-semibold">
+                    <a className="bg-staytard-dark text-13 inline-block  w-32 p-4 font-semibold">
                       Home page
                     </a>
                   </Link>
