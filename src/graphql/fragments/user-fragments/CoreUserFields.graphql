@@ -6,4 +6,5 @@ fragment CoreUserFields on User {
   mobilePhoneNumber
   isRegisteredWithGoogle
   isEmailConfirmed
+  isAdmin
 }

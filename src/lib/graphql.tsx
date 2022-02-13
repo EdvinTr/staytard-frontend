@@ -55,10 +55,11 @@ export type CreateProductInput = {
   attributes: Array<CreateProductAttributeInput>;
   brandId: Scalars['Float'];
   categoryId: Scalars['Float'];
+  currentPrice: Scalars['Float'];
   description: Scalars['String'];
   imageUrls: Array<Scalars['String']>;
   name: Scalars['String'];
-  unitPrice: Scalars['Float'];
+  originalPrice: Scalars['Float'];
 };
 
 export type CreateProductReviewInput = {
@@ -165,6 +166,7 @@ export type Mutation = {
   createOrderWithKlarna: CustomerOrder;
   createProduct: Product;
   createProductReview: ProductReview;
+  deleteProduct: Scalars['Boolean'];
   initializeKlarnaSession: KlarnaSessionResponse;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
@@ -193,6 +195,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateProductReviewArgs = {
   input: CreateProductReviewInput;
+};
+
+
+export type MutationDeleteProductArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -460,6 +467,7 @@ export type User = {
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
   isEmailConfirmed: Scalars['Boolean'];
   isRegisteredWithGoogle: Scalars['Boolean'];
   lastName: Scalars['String'];
@@ -493,7 +501,7 @@ export type CoreProductReviewFieldsFragment = { __typename?: 'ProductReview', id
 
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
-export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean };
+export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean };
 
 export type CreateOrderWithKlarnaMutationVariables = Exact<{
   input: InitKlarnaSessionInput;
@@ -516,6 +524,13 @@ export type CreateProductReviewMutationVariables = Exact<{
 
 
 export type CreateProductReviewMutation = { __typename?: 'Mutation', createProductReview: { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any } };
+
+export type DeleteProductMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteProductMutation = { __typename?: 'Mutation', deleteProduct: boolean };
 
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
@@ -619,7 +634,7 @@ export type HasPasswordQuery = { __typename?: 'Query', hasPassword: boolean };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
 
 export const CoreCategoryFieldsFragmentDoc = gql`
     fragment CoreCategoryFields on ProductCategory {
@@ -692,6 +707,7 @@ export const CoreUserFieldsFragmentDoc = gql`
   mobilePhoneNumber
   isRegisteredWithGoogle
   isEmailConfirmed
+  isAdmin
 }
     `;
 export const CreateOrderWithKlarnaDocument = gql`
@@ -811,6 +827,37 @@ export function useCreateProductReviewMutation(baseOptions?: Apollo.MutationHook
 export type CreateProductReviewMutationHookResult = ReturnType<typeof useCreateProductReviewMutation>;
 export type CreateProductReviewMutationResult = Apollo.MutationResult<CreateProductReviewMutation>;
 export type CreateProductReviewMutationOptions = Apollo.BaseMutationOptions<CreateProductReviewMutation, CreateProductReviewMutationVariables>;
+export const DeleteProductDocument = gql`
+    mutation DeleteProduct($id: Float!) {
+  deleteProduct(id: $id)
+}
+    `;
+export type DeleteProductMutationFn = Apollo.MutationFunction<DeleteProductMutation, DeleteProductMutationVariables>;
+
+/**
+ * __useDeleteProductMutation__
+ *
+ * To run a mutation, you first call `useDeleteProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProductMutation, { data, loading, error }] = useDeleteProductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteProductMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProductMutation, DeleteProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteProductMutation, DeleteProductMutationVariables>(DeleteProductDocument, options);
+      }
+export type DeleteProductMutationHookResult = ReturnType<typeof useDeleteProductMutation>;
+export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutation>;
+export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<DeleteProductMutation, DeleteProductMutationVariables>;
 export const AuthenticateWithGoogleDocument = gql`
     mutation AuthenticateWithGoogle($googleAuthToken: String!) {
   authenticateWithGoogle(googleAuthToken: $googleAuthToken) {

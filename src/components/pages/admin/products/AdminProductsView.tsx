@@ -15,7 +15,13 @@ import { BeatLoader } from "react-spinners";
 import useSWR from "swr";
 import { MAX_PRODUCT_LIMIT } from "../../../../constants";
 import { useSsrCompatible } from "../../../../hooks/useSsrCompatible";
-import { GetProductsResponse } from "../../../../typings/GetProductsResponse.interface";
+import { useDeleteProductMutation } from "../../../../lib/graphql";
+import {
+  GetProductsResponse,
+  ProductItem,
+} from "../../../../typings/GetProductsResponse.interface";
+import { BaseButton } from "../../../global/BaseButton";
+import { Modal } from "../../../global/Modal";
 import { MyCheckbox } from "../../../global/MyCheckbox";
 
 interface AdminProductsViewProps {}
@@ -30,17 +36,43 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
   const currentPageQuery = router.query[ADMIN_PAGE_QUERY_KEY.PAGE];
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const [pageIndex, setPageIndex] = useState(1);
-
+  const [
+    deleteProduct,
+    { loading: isDeleteProductLoading, error: deleteProductError },
+  ] = useDeleteProductMutation();
+  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
+    useState(false);
   useEffect(() => {
     if (currentPageQuery) {
       setPageIndex(parseInt(currentPageQuery as string));
     }
   }, [currentPageQuery]);
   const [categoryPath, setCategoryPath] = useState("/");
-  const { data, error } = useSWR<GetProductsResponse>(
+  const { data, error, mutate } = useSWR<GetProductsResponse>(
     `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}`,
     fetcher
   );
+
+  const [modalData, setModalData] = useState<ProductItem | null>(null);
+
+  const handleDeleteProduct = async (id?: number) => {
+    if (!id) {
+      return;
+    }
+    try {
+      await deleteProduct({
+        variables: {
+          id,
+        },
+        fetchPolicy: "network-only",
+      });
+      setIsDeleteProductModalOpen(false);
+      setModalData(null);
+      mutate(); // refetch product data
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="relative pb-20">
       <div className="bg-[#F8F8F9]">
@@ -85,6 +117,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                     className="flex items-center border-t border-gray-100 py-3 lg:text-xs xl:text-sm"
                   >
                     <MyCheckbox
+                      aria-label="Select product"
                       rounded="md"
                       className="mr-8"
                       onChange={() => console.log("checked", product.name)}
@@ -147,8 +180,12 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                         <PencilAltIcon className=" h-4 lg:h-5" />
                       </button>
                       <button
-                        aria-label="Delete product"
-                        className="rounded-md  bg-red-100 p-2 text-red-600"
+                        onClick={() => {
+                          setIsDeleteProductModalOpen(true);
+                          setModalData(product);
+                        }}
+                        aria-label="Open delete product modal"
+                        className="rounded-md  bg-red-100 p-2 text-red-600 transition-colors duration-150 ease-in-out hover:bg-red-600 hover:text-white"
                       >
                         <TrashIcon className="h-4 lg:h-5" />
                       </button>
@@ -156,6 +193,35 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                   </article>
                 );
               })}
+            <Modal
+              show={isDeleteProductModalOpen}
+              onClose={() => setIsDeleteProductModalOpen(false)}
+            >
+              <div className="p-8">
+                <h1 className="pb-16 text-2xl font-semibold">
+                  Are you sure you want to delete {modalData?.name}?
+                </h1>
+                {deleteProductError && (
+                  <p className="pb-2 text-red-600">
+                    {deleteProductError.message}
+                  </p>
+                )}
+                <div className="space-x-4">
+                  <BaseButton
+                    onClick={() => handleDeleteProduct(modalData?.id)}
+                    loading={isDeleteProductLoading}
+                  >
+                    Confirm
+                  </BaseButton>
+                  <BaseButton
+                    variant="outline"
+                    onClick={() => setIsDeleteProductModalOpen(false)}
+                  >
+                    Cancel
+                  </BaseButton>
+                </div>
+              </div>
+            </Modal>
           </div>
         ) : (
           <div>I small</div>
