@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { BeatLoader } from "react-spinners";
 import useSWR from "swr";
-import { MAX_PRODUCT_LIMIT } from "../../../../constants";
+import { ADMIN_PAGE_QUERY_KEY, MAX_PRODUCT_LIMIT } from "../../../../constants";
 import { useSsrCompatible } from "../../../../hooks/useSsrCompatible";
 import { useDeleteProductMutation } from "../../../../lib/graphql";
 import {
@@ -26,9 +26,6 @@ import { MyCheckbox } from "../../../global/MyCheckbox";
 
 interface AdminProductsViewProps {}
 
-export enum ADMIN_PAGE_QUERY_KEY {
-  PAGE = "page",
-}
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {

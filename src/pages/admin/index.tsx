@@ -1,18 +1,36 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { DefaultNavbar } from "../../components/pages/admin/components/DefaultNavbar";
 import { MobileNavbar } from "../../components/pages/admin/components/MobileNavbar";
 import { AdminOrdersView } from "../../components/pages/admin/orders/AdminOrdersView";
 import { AdminProductsView } from "../../components/pages/admin/products/AdminProductsView";
 import { AdminProductReviewsView } from "../../components/pages/admin/reviews/AdminProductReviewsView";
 import { AdminUsersView } from "../../components/pages/admin/users/AdminUsersView";
-import { ADMIN_SUB_PAGE_ROUTE, APP_NAME, COOKIE_NAME } from "../../constants";
+import {
+  ADMIN_PAGE_QUERY_KEY,
+  ADMIN_SUB_PAGE_ROUTE,
+  APP_NAME,
+  COOKIE_NAME,
+} from "../../constants";
 import { ssrMe } from "../../lib/page";
 
 const AdminPage: NextPage = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    const showQuery = router.query[ADMIN_PAGE_QUERY_KEY.SHOW];
+    if (!showQuery) {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          [ADMIN_PAGE_QUERY_KEY.SHOW]: ADMIN_SUB_PAGE_ROUTE.PRODUCTS,
+        },
+      });
+    }
+  }, []);
   return (
     <Fragment>
       <Head>

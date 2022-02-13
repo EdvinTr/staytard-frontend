@@ -23,6 +23,11 @@ export enum ADMIN_SUB_PAGE_ROUTE {
   USERS = "users",
 }
 
+export enum ADMIN_PAGE_QUERY_KEY {
+  PAGE = "page",
+  SHOW = "show",
+}
+
 export enum COOKIE_NAME {
   ACCESS_TOKEN = "access_token",
   REFRESH_TOKEN = "refresh_token",
