@@ -29,7 +29,7 @@ export const Modal: React.FC<ModalProps> = ({ onClose, show, children }) => {
       unmountOnExit
       timeout={{ enter: 0, exit: 300 }}
     >
-      <div ref={nodeRef} className="modal z-30" onClick={onClose}>
+      <div ref={nodeRef} className="modal z-50" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-body">{children}</div>
         </div>

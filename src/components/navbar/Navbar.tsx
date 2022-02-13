@@ -38,7 +38,7 @@ export const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="sticky top-0 z-50 bg-white">
+    <div className="sticky top-0 z-40 bg-white">
       <div className="text-sm">
         {router.pathname === APP_PAGE_ROUTE.INDEX && (
           <div className="bg-staytard-dark flex items-center justify-center  space-x-8 py-1 text-[10px] uppercase tracking-wider text-white">
