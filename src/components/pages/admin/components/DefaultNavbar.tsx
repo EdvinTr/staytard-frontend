@@ -38,7 +38,7 @@ export const DefaultNavbar = () => {
           <div className="flex flex-col items-center justify-center overflow-hidden">
             <div className="bg-deep-blue-darker flex w-full justify-center py-4 text-center">
               <Link href={APP_PAGE_ROUTE.INDEX}>
-                <a>
+                <a aria-label={`Home page`}>
                   <HomeIcon className="hover:text-staytard-yellow w-8 text-gray-200  transition-all duration-150" />
                 </a>
               </Link>
@@ -61,7 +61,7 @@ export const DefaultNavbar = () => {
                       query: { ...item.query },
                     }}
                   >
-                    <a>
+                    <a aria-label={`${item.query.show}`}>
                       <item.icon
                         className={`hover:text-staytard-yellow w-8  transition-all duration-150 ${
                           currentQuery === item.query.show

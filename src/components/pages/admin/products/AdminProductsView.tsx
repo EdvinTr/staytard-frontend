@@ -22,7 +22,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
         <ContainerWithPadding>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold lg:text-4xl">Products</h1>
-            <button className="bg-success  flex items-center rounded-md px-3 py-2 text-sm font-semibold uppercase text-white">
+            <button className="flex items-center rounded-md bg-green-700 px-3 py-2 text-sm font-semibold uppercase text-white">
               <PlusIcon className="mr-2 h-4" />
               Create Product
             </button>
@@ -40,7 +40,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
               return (
                 <article
                   key={product.id}
-                  className="flex items-center border-t border-gray-100 py-3"
+                  className="flex items-center border-t border-gray-100 py-3 text-sm"
                 >
                   <Image
                     width={30}
@@ -52,16 +52,16 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                     alt={`${product.brand.name} - ${product.name}`}
                   />
                   <div className="ml-4">
-                    <h2 className="text-sm font-medium">{product.name}</h2>
+                    <h2 className="font-medium">{product.name}</h2>
                     <h3 className="text-xs text-gray-500">
                       {product.attributes.length} Variants
                     </h3>
                   </div>
                   <div>
                     <h4>
-                      <span className="font-semibold">Current price:</span>
+                      <span className="font-medium">Current price:</span>
                       <span className="text-gray-500">
-                        {product.currentPrice}
+                        {product.currentPrice} EUR
                       </span>
                     </h4>
                   </div>
