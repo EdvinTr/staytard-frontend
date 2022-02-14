@@ -28,9 +28,8 @@ const initialValues: FormValues = {
   categoryId: 0,
   description: "",
   name: "",
-  currentPrice: 0,
+  price: 0,
   imageUrls: [],
-  originalPrice: 0,
 };
 
 const inputClassNames =
@@ -110,7 +109,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     <div className="w-full">
                       <label
                         htmlFor="brandId"
-                        className="text-xs text-stone-600"
+                        className="text-xs tracking-wider text-stone-600"
                       >
                         Brand
                       </label>
@@ -142,7 +141,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     <div className="w-full">
                       <label
                         htmlFor="categoryId"
-                        className="text-xs text-stone-600"
+                        className="text-xs tracking-wider text-stone-600"
                       >
                         Category
                       </label>
@@ -192,9 +191,28 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     )}
                   </ErrorMessage>
                 </div>
-
+                <div>
+                  <Field
+                    className={inputClassNames + " w-1/4"}
+                    id="price"
+                    type="number"
+                    name="price"
+                    as={BaseInput}
+                    label="price"
+                    min="1"
+                    hasError={errors.price && touched.price}
+                    value={values.price}
+                    placeholder="Price"
+                    aria-label="price"
+                  />
+                  <ErrorMessage name="price">
+                    {(msg) => (
+                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                    )}
+                  </ErrorMessage>
+                </div>
                 <BaseButton type="submit" className="mt-8">
-                  Submit
+                  Save
                 </BaseButton>
               </Form>
             );

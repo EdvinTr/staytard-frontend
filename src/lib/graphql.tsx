@@ -61,11 +61,10 @@ export type CreateProductInput = {
   attributes: Array<CreateProductAttributeInput>;
   brandId: Scalars['Float'];
   categoryId: Scalars['Float'];
-  currentPrice: Scalars['Float'];
   description: Scalars['String'];
   imageUrls: Array<Scalars['String']>;
   name: Scalars['String'];
-  originalPrice: Scalars['Float'];
+  price: Scalars['Float'];
 };
 
 export type CreateProductReviewInput = {
