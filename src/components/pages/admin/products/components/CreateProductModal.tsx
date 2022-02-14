@@ -48,8 +48,8 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
   const { data: categoriesData } = useBasicCategoriesQuery();
   return (
     <Modal show={show} onClose={onClose}>
-      <div className="p-8">
-        <h1 className="pb-16 text-2xl font-semibold">Create Product</h1>
+      <div className="p-5 md:p-8">
+        <h1 className="pb-6 text-2xl font-semibold">Create a new product</h1>
         <Formik
           initialValues={{
             ...initialValues,
@@ -89,26 +89,70 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
         >
           {({ errors, touched, values, setFieldValue }) => {
             return (
-              <Form>
+              <Form className="space-y-4">
                 {/* <Persist name={LOCAL_STORAGE_KEY.CREATE_PRODUCT_FORM} /> */}
-                <Field
-                  className={inputClassNames}
-                  id="name"
-                  name="name"
-                  autoComplete="off"
-                  as={BaseInput}
-                  label="Name"
-                  hasError={errors.name && touched.name}
-                  value={values.name}
-                  placeholder="Name"
-                  aria-label="Name"
-                />
-                <ErrorMessage name="name">
-                  {(msg) => (
-                    <div className="pt-2 text-[11px] text-red-600">{msg}</div>
-                  )}
-                </ErrorMessage>
-                <div className="flex justify-between space-x-6 py-6">
+                <div className="">
+                  {/* price input */}
+                  <Field
+                    className={inputClassNames + " w-1/4 "}
+                    id="price"
+                    type="number"
+                    name="price"
+                    as={BaseInput}
+                    label="price"
+                    min="1"
+                    hasError={errors.price && touched.price}
+                    value={values.price}
+                    placeholder="Price"
+                    aria-label="price"
+                  />
+                  <ErrorMessage name="price">
+                    {(msg) => (
+                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                    )}
+                  </ErrorMessage>
+                </div>
+                <div>
+                  <Field
+                    className={inputClassNames}
+                    id="name"
+                    name="name"
+                    autoComplete="off"
+                    as={BaseInput}
+                    label="Name"
+                    hasError={errors.name && touched.name}
+                    value={values.name}
+                    placeholder="Name"
+                    aria-label="Name"
+                  />
+                  <ErrorMessage name="name">
+                    {(msg) => (
+                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                    )}
+                  </ErrorMessage>
+                </div>
+                <div className="text-left">
+                  {/* description input */}
+                  <Field
+                    className={`${inputClassNames} text-13 w-full`}
+                    id="description"
+                    name="description"
+                    as={CustomTextArea}
+                    rows={5}
+                    label="Description"
+                    hasError={errors.description && touched.description}
+                    currentValue={values.description}
+                    placeholder="Description"
+                    aria-label="Description"
+                    autoComplete="off"
+                  />
+                  <ErrorMessage name="description">
+                    {(msg) => (
+                      <div className="pt-0 text-[11px] text-red-600">{msg}</div>
+                    )}
+                  </ErrorMessage>
+                </div>
+                <div className="flex justify-between space-x-6">
                   {brandData && (
                     <div className="w-full">
                       <label
@@ -174,28 +218,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     </div>
                   )}
                 </div>
-                <div className=" text-left">
-                  {/* description input */}
-                  <Field
-                    className={`${inputClassNames} text-13 w-full`}
-                    id="description"
-                    name="description"
-                    as={CustomTextArea}
-                    rows={5}
-                    label="Description"
-                    hasError={errors.description && touched.description}
-                    currentValue={values.description}
-                    placeholder="Description"
-                    aria-label="Description"
-                    autoComplete="off"
-                  />
-                  <ErrorMessage name="description">
-                    {(msg) => (
-                      <div className="pt-0 text-[11px] text-red-600">{msg}</div>
-                    )}
-                  </ErrorMessage>
-                </div>
-                <div className="mt-4">
+
+                <div className="pt-6">
+                  <h2 className="pb-4 text-xl font-semibold">Images</h2>
                   <FieldArray
                     name="imageUrls"
                     render={(arrayHelpers) => (
@@ -204,7 +229,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           values.imageUrls.map((url, index) => (
                             <div key={index}>
                               <div className="mr-8 flex w-full justify-between">
-                                <div className="w-9/12 xl:w-10/12">
+                                <div className="w-9/12 md:w-10/12">
                                   <Field
                                     name={`imageUrls.${index}`}
                                     as={BaseInput}
@@ -219,15 +244,16 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                   />
                                 </div>
                                 <div className="space-x-4 pt-2">
-                                  <button
+                                  <AddRemoveButton
+                                    variant="remove"
                                     aria-label="Remove image"
-                                    className="h-8 w-8 bg-red-600 text-white"
                                     type="button"
                                     onClick={() => arrayHelpers.remove(index)} // remove image from the list
                                   >
                                     -
-                                  </button>
-                                  <button
+                                  </AddRemoveButton>
+                                  <AddRemoveButton
+                                    variant="add"
                                     aria-label="Add image"
                                     className="h-8 w-8 bg-green-600 text-white"
                                     type="button"
@@ -236,19 +262,19 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                     }} // insert an empty string at a position
                                   >
                                     +
-                                  </button>
+                                  </AddRemoveButton>
                                 </div>
                               </div>
                             </div>
                           ))
                         ) : (
-                          <>
+                          <div className="flex items-center space-x-4">
                             <button
                               type="button"
                               className="bg-green-600 p-2 text-sm uppercase text-white"
                               onClick={() => arrayHelpers.push("")}
                             >
-                              Add Image
+                              Add Images
                             </button>
                             <ErrorMessage name="imageUrls">
                               {(msg) => (
@@ -257,11 +283,12 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                 </div>
                               )}
                             </ErrorMessage>
-                          </>
+                          </div>
                         )}
                       </div>
                     )}
                   />
+                  {/* currently added images */}
                   <div className="flex items-center space-x-4">
                     {values.imageUrls &&
                       values.imageUrls.map((url, index) => {
@@ -277,29 +304,98 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       })}
                   </div>
                 </div>
-                <div className="mt-4">
-                  <Field
-                    className={inputClassNames + " w-1/4 "}
-                    id="price"
-                    type="number"
-                    name="price"
-                    as={BaseInput}
-                    label="price"
-                    min="1"
-                    hasError={errors.price && touched.price}
-                    value={values.price}
-                    placeholder="Price"
-                    aria-label="price"
-                  />
-                  <ErrorMessage name="price">
-                    {(msg) => (
-                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+
+                <div className="pt-6">
+                  <h3 className="pb-4 text-xl font-semibold">Attributes</h3>
+                  {/* attributes */}
+                  <FieldArray
+                    name="attributes"
+                    render={(arrayHelpers) => (
+                      <div className="w-full space-y-7 md:space-y-4">
+                        {values.attributes.length > 0 ? (
+                          values.attributes.map((attribute, index) => (
+                            <div
+                              key={index}
+                              className="w-full md:flex md:items-center md:justify-between md:space-x-4"
+                            >
+                              <div className="md:w-5/12">
+                                <Field
+                                  name={`attributes[${index}].size.value`}
+                                  as={BaseInput}
+                                  type="text"
+                                  id={`attributes.${index}`}
+                                  autoComplete="off"
+                                  label="Size"
+                                  value={values.attributes[index].size.value}
+                                  placeholder="Size"
+                                  aria-label="Size"
+                                />
+                              </div>
+                              <div className="mt-2 md:mt-0 md:w-5/12 md:pr-6">
+                                <Field
+                                  name={`attributes.${index}.color.value`}
+                                  as={BaseInput}
+                                  type="text"
+                                  id={`attributes.${index}`}
+                                  autoComplete="off"
+                                  label="Color"
+                                  value={values.attributes[index].color.value}
+                                  placeholder="Color"
+                                  aria-label="Color"
+                                />
+                              </div>
+
+                              <div className="space-x-4 pt-2">
+                                <AddRemoveButton
+                                  variant="remove"
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </AddRemoveButton>
+                                <AddRemoveButton
+                                  variant="add"
+                                  type="button"
+                                  onClick={() =>
+                                    arrayHelpers.push({
+                                      size: { value: "" },
+                                      color: { value: "" },
+                                    })
+                                  }
+                                >
+                                  +
+                                </AddRemoveButton>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <button
+                            type="button"
+                            className="bg-green-600 p-2 text-sm uppercase text-white"
+                            onClick={() =>
+                              arrayHelpers.push({
+                                size: { value: "" },
+                                color: { value: "" },
+                              })
+                            }
+                          >
+                            Add Attributes
+                          </button>
+                        )}
+                      </div>
                     )}
-                  </ErrorMessage>
+                  />
                 </div>
-                <BaseButton type="submit" className="mt-8">
-                  Save
-                </BaseButton>
+                <div className="space-x-6 pt-8">
+                  <BaseButton type="submit">Save</BaseButton>
+                  <BaseButton
+                    type="button"
+                    variant="outline"
+                    onClick={() => onClose()}
+                  >
+                    Cancel
+                  </BaseButton>
+                </div>
               </Form>
             );
           }}
@@ -308,6 +404,29 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
     </Modal>
   );
 };
+interface AddRemoveButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant: "add" | "remove";
+}
+const AddRemoveButton: React.FC<AddRemoveButtonProps> = ({
+  variant,
+  children,
+  ...rest
+}) => {
+  if (variant === "remove") {
+    return (
+      <button {...rest} className="h-8 w-8 bg-red-600 text-white">
+        {children}
+      </button>
+    );
+  }
+  return (
+    <button {...rest} className="h-8 w-8 bg-green-600 text-white">
+      {children}
+    </button>
+  );
+};
+
 type ListBoxItem = {
   id: number;
   name: string;

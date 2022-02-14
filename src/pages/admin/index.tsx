@@ -36,7 +36,7 @@ const AdminPage: NextPage = () => {
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <div className="">
+      <div className="text-staytard-dark">
         <div className="hidden lg:block">
           <DefaultNavbar />
         </div>
