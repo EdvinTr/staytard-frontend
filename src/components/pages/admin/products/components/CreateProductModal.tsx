@@ -58,12 +58,18 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
             console.log("onSubmit:", values);
           }}
           validate={(values: FormValues) => {
-            const errors: Partial<FormValues> = {};
+            const errors: Partial<Record<keyof FormValues, string>> = {};
             if (!values.name) {
               errors.name = "Required";
             }
             if (values.name.length > 100) {
               errors.name = "Name must be less than 100 characters";
+            }
+            if (values.brandId <= 0) {
+              errors.brandId = "Selected a brand";
+            }
+            if (values.categoryId <= 0) {
+              errors.categoryId = "Selected a category";
             }
             return errors;
           }}
@@ -105,10 +111,18 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           id: item.id,
                           name: item.name,
                         }))}
+                        initialText={"Select a brand"}
                         onChange={(value: number) => {
                           setFieldValue("brandId", value);
                         }}
                       />
+                      <ErrorMessage name="brandId">
+                        {(msg) => (
+                          <div className="pt-2 text-[11px] text-red-600">
+                            {msg}
+                          </div>
+                        )}
+                      </ErrorMessage>
                     </div>
                   )}
                   {categoriesData && (
@@ -127,10 +141,18 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           id: item.id,
                           name: item.name,
                         }))}
+                        initialText={"Select a category"}
                         onChange={(value: number) => {
                           setFieldValue("categoryId", value);
                         }}
                       />
+                      <ErrorMessage name="categoryId">
+                        {(msg) => (
+                          <div className="pt-2 text-[11px] text-red-600">
+                            {msg}
+                          </div>
+                        )}
+                      </ErrorMessage>
                     </div>
                   )}
                 </div>
@@ -151,9 +173,17 @@ type ListBoxItem = {
 interface MyListBoxProps {
   items: ListBoxItem[];
   onChange: (id: number) => void;
+  initialText: string;
 }
-export default function MyListBox({ items, onChange }: MyListBoxProps) {
-  const [selected, setSelected] = useState(items[0]);
+export default function MyListBox({
+  items,
+  onChange,
+  initialText,
+}: MyListBoxProps) {
+  const [selected, setSelected] = useState<ListBoxItem>({
+    id: -999,
+    name: initialText,
+  });
 
   return (
     <div className="w-full">
