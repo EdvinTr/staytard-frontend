@@ -261,6 +261,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                     as={BaseInput}
                                     className=""
                                     type="url"
+                                    required
                                     id={`imageUrls.${index}`}
                                     autoComplete="off"
                                     label="Image URL"
@@ -352,6 +353,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                   id={`attributes.${index}.size`}
                                   autoComplete="off"
                                   label="Size"
+                                  required
                                   value={values.attributes[index].size.value}
                                   placeholder="Size"
                                   aria-label="Size"
@@ -365,6 +367,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                   id={`attributes.${index}.color`}
                                   autoComplete="off"
                                   label="Color"
+                                  required
                                   value={values.attributes[index].color.value}
                                   placeholder="Color"
                                   aria-label="Color"
@@ -378,6 +381,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                   id={`attributes.${index}.quantity`}
                                   autoComplete="off"
                                   label="Quantity"
+                                  min="1"
                                   value={values.attributes[index].quantity}
                                   placeholder="Quantity"
                                   aria-label="Quantity"
