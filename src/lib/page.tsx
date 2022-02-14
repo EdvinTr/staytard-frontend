@@ -16,6 +16,34 @@ import { getApolloClient } from './apolloClient';
 
 
 
+export async function getServerPageBasicCategories
+    (options: Omit<Apollo.QueryOptions<Types.BasicCategoriesQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.BasicCategoriesQuery>({ ...options, query: Operations.BasicCategoriesDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useBasicCategories = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.BasicCategoriesQuery, Types.BasicCategoriesQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.BasicCategoriesDocument, options);
+};
+export type PageBasicCategoriesComp = React.FC<{data?: Types.BasicCategoriesQuery, error?: Apollo.ApolloError}>;
+export const ssrBasicCategories = {
+      getServerPage: getServerPageBasicCategories,
+      
+      usePage: useBasicCategories,
+    }
 export async function getServerPageGetCategories
     (options: Omit<Apollo.QueryOptions<Types.GetCategoriesQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

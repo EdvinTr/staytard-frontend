@@ -1,0 +1,6 @@
+query BasicCategories {
+  basicCategories {
+    id
+    name
+  }
+}

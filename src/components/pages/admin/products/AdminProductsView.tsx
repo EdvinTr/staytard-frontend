@@ -1,4 +1,4 @@
-import { PencilAltIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
+import { PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import {
 import { MyCheckbox } from "../../../global/MyCheckbox";
 import { MyPagination } from "../../../global/MyPagination";
 import { ConfirmDeletionModal } from "../components/ConfirmDeletionModal";
+import { CreateProductModal } from "./components/CreateProductModal";
 
 interface AdminProductsViewProps {}
 
@@ -26,6 +27,8 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
   const [modalData, setModalData] = useState<ProductItem | null>(null);
   const [pageIndex, setPageIndex] = useState(1);
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
+    useState(false);
+  const [isCreateProductModalOpen, setIsCreateProductModalOpen] =
     useState(false);
 
   const router = useRouter();
@@ -72,10 +75,18 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
             <h1 className="hidden lg:block lg:text-4xl lg:font-semibold">
               Products
             </h1>
-            <button className="flex items-center rounded-md bg-green-700 px-3 py-2 text-sm font-semibold uppercase text-white">
+            <button
+              onClick={() => setIsCreateProductModalOpen(true)}
+              className="flex items-center rounded-md bg-green-700 px-3 py-2 text-sm font-semibold uppercase text-white"
+            >
               <PlusIcon className="mr-2 h-4" />
               Create Product
             </button>
+            <CreateProductModal
+              show={isCreateProductModalOpen}
+              onClose={() => setIsCreateProductModalOpen(false)}
+              loading={false}
+            />
           </div>
         </ContainerWithPadding>
       </div>
@@ -163,13 +174,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                         </p>
                       </div>
                     </div>
-                    <div className="space-x-3 xl:space-x-6">
-                      <button
-                        aria-label="Edit product"
-                        className="rounded-md  bg-yellow-200 p-2"
-                      >
-                        <PencilAltIcon className=" h-4 lg:h-5" />
-                      </button>
+                    <div>
                       <button
                         onClick={() => {
                           setIsDeleteProductModalOpen(true);

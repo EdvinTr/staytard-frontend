@@ -32,6 +32,12 @@ export enum Brand_Sort_By {
   Name = 'NAME'
 }
 
+export type BasicCategory = {
+  __typename?: 'BasicCategory';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+};
+
 export type BillingAddressInput = {
   city: Scalars['String'];
   country?: InputMaybe<Scalars['String']>;
@@ -360,6 +366,7 @@ export type ProductSize = {
 
 export type Query = {
   __typename?: 'Query';
+  basicCategories: Array<BasicCategory>;
   categories: Array<ProductCategory>;
   customerOrders: PaginatedCustomerOrdersOutput;
   getOneCategory: ProductCategory;
@@ -571,6 +578,11 @@ export type UpdateUserAddressMutationVariables = Exact<{
 
 
 export type UpdateUserAddressMutation = { __typename?: 'Mutation', updateUserAddress: { __typename?: 'User', id: string } };
+
+export type BasicCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BasicCategoriesQuery = { __typename?: 'Query', basicCategories: Array<{ __typename?: 'BasicCategory', id: number, name: string }> };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1057,6 +1069,44 @@ export function useUpdateUserAddressMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserAddressMutationHookResult = ReturnType<typeof useUpdateUserAddressMutation>;
 export type UpdateUserAddressMutationResult = Apollo.MutationResult<UpdateUserAddressMutation>;
 export type UpdateUserAddressMutationOptions = Apollo.BaseMutationOptions<UpdateUserAddressMutation, UpdateUserAddressMutationVariables>;
+export const BasicCategoriesDocument = gql`
+    query BasicCategories {
+  basicCategories {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useBasicCategoriesQuery__
+ *
+ * To run a query within a React component, call `useBasicCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBasicCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBasicCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBasicCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<BasicCategoriesQuery, BasicCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BasicCategoriesQuery, BasicCategoriesQueryVariables>(BasicCategoriesDocument, options);
+      }
+export function useBasicCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BasicCategoriesQuery, BasicCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BasicCategoriesQuery, BasicCategoriesQueryVariables>(BasicCategoriesDocument, options);
+        }
+export type BasicCategoriesQueryHookResult = ReturnType<typeof useBasicCategoriesQuery>;
+export type BasicCategoriesLazyQueryHookResult = ReturnType<typeof useBasicCategoriesLazyQuery>;
+export type BasicCategoriesQueryResult = Apollo.QueryResult<BasicCategoriesQuery, BasicCategoriesQueryVariables>;
+export function refetchBasicCategoriesQuery(variables?: BasicCategoriesQueryVariables) {
+      return { query: BasicCategoriesDocument, variables: variables }
+    }
 export const GetCategoriesDocument = gql`
     query GetCategories {
   categories {
