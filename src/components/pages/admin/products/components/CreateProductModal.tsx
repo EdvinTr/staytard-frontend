@@ -201,44 +201,43 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     render={(arrayHelpers) => (
                       <div className="space-y-4">
                         {values.imageUrls && values.imageUrls.length > 0 ? (
-                          values.imageUrls.map((friend, index) => (
-                            <div
-                              key={index}
-                              className="mr-8 flex w-full justify-between"
-                            >
-                              <div className="w-9/12 xl:w-10/12">
-                                <Field
-                                  name={`imageUrls.${index}`}
-                                  as={BaseInput}
-                                  className=""
-                                  type="url"
-                                  id={`imageUrls.${index}`}
-                                  autoComplete="off"
-                                  label="Image URL"
-                                  value={values.imageUrls[index]}
-                                  placeholder="Image URL"
-                                  aria-label="Image URL"
-                                />
-                              </div>
-                              <div className="space-x-4 pt-2">
-                                <button
-                                  aria-label="Remove image"
-                                  className="h-8 w-8 bg-red-600 text-white"
-                                  type="button"
-                                  onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                                >
-                                  -
-                                </button>
-                                <button
-                                  aria-label="Add image"
-                                  className="h-8 w-8 bg-green-600 text-white"
-                                  type="button"
-                                  onClick={() => {
-                                    arrayHelpers.insert(index, "");
-                                  }} // insert an empty string at a position
-                                >
-                                  +
-                                </button>
+                          values.imageUrls.map((url, index) => (
+                            <div key={index}>
+                              <div className="mr-8 flex w-full justify-between">
+                                <div className="w-9/12 xl:w-10/12">
+                                  <Field
+                                    name={`imageUrls.${index}`}
+                                    as={BaseInput}
+                                    className=""
+                                    type="url"
+                                    id={`imageUrls.${index}`}
+                                    autoComplete="off"
+                                    label="Image URL"
+                                    value={values.imageUrls[index]}
+                                    placeholder="Image URL"
+                                    aria-label="Image URL"
+                                  />
+                                </div>
+                                <div className="space-x-4 pt-2">
+                                  <button
+                                    aria-label="Remove image"
+                                    className="h-8 w-8 bg-red-600 text-white"
+                                    type="button"
+                                    onClick={() => arrayHelpers.remove(index)} // remove image from the list
+                                  >
+                                    -
+                                  </button>
+                                  <button
+                                    aria-label="Add image"
+                                    className="h-8 w-8 bg-green-600 text-white"
+                                    type="button"
+                                    onClick={() => {
+                                      arrayHelpers.insert(index, "");
+                                    }} // insert an empty string at a position
+                                  >
+                                    +
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           ))
@@ -263,6 +262,20 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       </div>
                     )}
                   />
+                  <div className="flex items-center space-x-4">
+                    {values.imageUrls &&
+                      values.imageUrls.map((url, index) => {
+                        return (
+                          url.length > 0 && (
+                            <img
+                              key={index}
+                              src={url}
+                              className="mt-4 h-16 w-12 object-cover"
+                            />
+                          )
+                        );
+                      })}
+                  </div>
                 </div>
                 <div className="mt-4">
                   <Field
