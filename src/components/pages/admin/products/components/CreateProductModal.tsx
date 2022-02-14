@@ -80,6 +80,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
               errors.description =
                 "Description must be less than 1000 characters";
             }
+            if (!values.price || values.price <= 0) {
+              errors.price = "Price must be greater than 0";
+            }
             return errors;
           }}
         >
@@ -191,9 +194,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     )}
                   </ErrorMessage>
                 </div>
-                <div>
+                <div className="mt-4">
                   <Field
-                    className={inputClassNames + " w-1/4"}
+                    className={inputClassNames + " w-1/4 "}
                     id="price"
                     type="number"
                     name="price"

@@ -32,15 +32,14 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
     props.className,
     buttonSizeClassNames,
     variantClassNames,
-    "focus-visible:text-white",
     "uppercase",
     "text-sm",
     "font-bold",
     "tracking-wider",
     loading
       ? variant === "solid"
-        ? "hover:bg-staytard-yellow focus-visible:bg-staytard-yellow"
-        : ""
+        ? "hover:bg-staytard-yellow focus-visible:bg-staytard-yellow focus-visible:text-black"
+        : "focus-visible:text-white"
       : "",
   ].join(" ");
 
