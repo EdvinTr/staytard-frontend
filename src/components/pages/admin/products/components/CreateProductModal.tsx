@@ -1,9 +1,7 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Persist } from "formik-persist";
+import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import React, { Fragment, useEffect, useState } from "react";
-import { LOCAL_STORAGE_KEY } from "../../../../../constants";
 import {
   Brand_Sort_By,
   CreateProductInput,
@@ -83,13 +81,16 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
             if (!values.price || values.price <= 0) {
               errors.price = "Price must be greater than 0";
             }
+            if (values.imageUrls.length === 0) {
+              errors.imageUrls = "At least one image is required";
+            }
             return errors;
           }}
         >
           {({ errors, touched, values, setFieldValue }) => {
             return (
               <Form>
-                <Persist name={LOCAL_STORAGE_KEY.CREATE_PRODUCT_FORM} />
+                {/* <Persist name={LOCAL_STORAGE_KEY.CREATE_PRODUCT_FORM} /> */}
                 <Field
                   className={inputClassNames}
                   id="name"
@@ -190,9 +191,78 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                   />
                   <ErrorMessage name="description">
                     {(msg) => (
-                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                      <div className="pt-0 text-[11px] text-red-600">{msg}</div>
                     )}
                   </ErrorMessage>
+                </div>
+                <div className="mt-4">
+                  <FieldArray
+                    name="imageUrls"
+                    render={(arrayHelpers) => (
+                      <div className="space-y-4">
+                        {values.imageUrls && values.imageUrls.length > 0 ? (
+                          values.imageUrls.map((friend, index) => (
+                            <div
+                              key={index}
+                              className="mr-8 flex w-full justify-between"
+                            >
+                              <div className="w-9/12 xl:w-10/12">
+                                <Field
+                                  name={`imageUrls.${index}`}
+                                  as={BaseInput}
+                                  className=""
+                                  type="url"
+                                  id={`imageUrls.${index}`}
+                                  autoComplete="off"
+                                  label="Image URL"
+                                  value={values.imageUrls[index]}
+                                  placeholder="Image URL"
+                                  aria-label="Image URL"
+                                />
+                              </div>
+                              <div className="space-x-4 pt-2">
+                                <button
+                                  aria-label="Remove image"
+                                  className="h-8 w-8 bg-red-600 text-white"
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                                >
+                                  -
+                                </button>
+                                <button
+                                  aria-label="Add image"
+                                  className="h-8 w-8 bg-green-600 text-white"
+                                  type="button"
+                                  onClick={() => {
+                                    arrayHelpers.insert(index, "");
+                                  }} // insert an empty string at a position
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className="bg-green-600 p-2 text-sm uppercase text-white"
+                              onClick={() => arrayHelpers.push("")}
+                            >
+                              Add Image
+                            </button>
+                            <ErrorMessage name="imageUrls">
+                              {(msg) => (
+                                <div className="text-[11px] text-red-600">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  />
                 </div>
                 <div className="mt-4">
                   <Field
