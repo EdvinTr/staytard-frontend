@@ -17,7 +17,7 @@ import { Modal } from "../../../../global/Modal";
 interface CreateProductModalProps {
   show: boolean;
   onClose: () => void;
-  loading: boolean;
+  onSuccess: () => void;
 }
 type FormValues = CreateProductInput;
 
@@ -34,7 +34,7 @@ const initialValues: FormValues = {
 const inputClassNames =
   "border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0";
 export const CreateProductModal: React.FC<CreateProductModalProps> = ({
-  loading,
+  onSuccess,
   onClose,
   show,
 }) => {
@@ -63,8 +63,8 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
       if (!data || !data.createProduct) {
         throw new Error();
       }
-      // call close
-      // show toast
+      onSuccess();
+      onClose();
     } catch (err) {
       console.log(err);
     }
@@ -446,6 +446,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       )
                     )}
                   </ul>
+                )}
+                {error && (
+                  <div className="text-sm text-red-600">{error.message}</div>
                 )}
                 <div className="space-x-6 pt-8">
                   <BaseButton type="submit" loading={isCreateProductLoading}>

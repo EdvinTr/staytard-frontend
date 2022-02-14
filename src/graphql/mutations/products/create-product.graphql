@@ -1,5 +1,8 @@
 mutation CreateProduct($input: CreateProductInput!) {
   createProduct(input: $input) {
     id
+    attributes {
+      ...CoreAttributeFields
+    }
   }
 }

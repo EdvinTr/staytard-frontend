@@ -45,5 +45,8 @@ export class Localized {
       createProductReviewSuccessMessage:
         "Your review has successfully been created. Please allow up to 48 hours for it to be approved.",
     },
+    admin: {
+      createProductSuccessMessage: "Product has been created.",
+    },
   };
 }

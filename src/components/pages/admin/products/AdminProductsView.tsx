@@ -5,10 +5,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
+import { toast, ToastContainer } from "react-toast";
 import useSWR from "swr";
 import { ADMIN_PAGE_QUERY_KEY, MAX_PRODUCT_LIMIT } from "../../../../constants";
 import { useSsrCompatible } from "../../../../hooks/useSsrCompatible";
 import { useDeleteProductMutation } from "../../../../lib/graphql";
+import { Localized } from "../../../../Localized";
 import {
   GetProductsResponse,
   ProductItem,
@@ -20,6 +22,7 @@ import { CreateProductModal } from "./components/CreateProductModal";
 
 interface AdminProductsViewProps {}
 
+const { createProductSuccessMessage } = Localized.page.admin;
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
@@ -67,6 +70,11 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
       console.log(err);
     }
   };
+  const showSuccessToast = (): void =>
+    toast.success(createProductSuccessMessage, {
+      backgroundColor: "black",
+      color: "white",
+    });
   return (
     <div className="relative pb-20">
       <div className="bg-[#F8F8F9]">
@@ -83,9 +91,13 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
               Create Product
             </button>
             <CreateProductModal
+              onSuccess={() => {
+                showSuccessToast();
+                setIsCreateProductModalOpen(false);
+                mutate();
+              }}
               show={isCreateProductModalOpen}
               onClose={() => setIsCreateProductModalOpen(false)}
-              loading={false}
             />
           </div>
         </ContainerWithPadding>
@@ -189,6 +201,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                   </article>
                 );
               })}
+
             <ConfirmDeletionModal
               heading={`Are you sure you want to delete ${modalData?.name}?`}
               loading={isDeleteProductLoading}
@@ -217,6 +230,13 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
             />
           </div>
         )}
+        <div className="z-50">
+          <ToastContainer
+            position={
+              currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"
+            }
+          />
+        </div>
       </ContainerWithPadding>
     </div>
   );
