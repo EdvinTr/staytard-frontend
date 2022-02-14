@@ -7,6 +7,7 @@ import {
   CreateProductInput,
   Sort_Direction,
   useBasicCategoriesQuery,
+  useCreateProductMutation,
   useGetProductBrandsQuery,
 } from "../../../../../lib/graphql";
 import { BaseButton } from "../../../../global/BaseButton";
@@ -46,6 +47,28 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
     },
   });
   const { data: categoriesData } = useBasicCategoriesQuery();
+
+  const [createProduct, { loading: isCreateProductLoading, error }] =
+    useCreateProductMutation({ fetchPolicy: "network-only" });
+
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const { data } = await createProduct({
+        variables: {
+          input: {
+            ...values,
+          },
+        },
+      });
+      if (!data || !data.createProduct) {
+        throw new Error();
+      }
+      // call close
+      // show toast
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Modal show={show} onClose={onClose}>
       <div className="p-5 md:p-8">
@@ -55,7 +78,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
             ...initialValues,
           }}
           onSubmit={(values: FormValues, { resetForm }) => {
-            console.log("onSubmit:", values);
+            onSubmit(values);
           }}
           validate={(values: FormValues) => {
             const errors: Partial<Record<keyof FormValues, string>> = {};
@@ -83,6 +106,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
             }
             if (values.imageUrls.length === 0) {
               errors.imageUrls = "At least one image is required";
+            }
+            if (values.attributes.length === 0) {
+              errors.attributes = "At least one attribute is required";
             }
             return errors;
           }}
@@ -316,14 +342,14 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           values.attributes.map((attribute, index) => (
                             <div
                               key={index}
-                              className="w-full md:flex md:items-center md:justify-between md:space-x-4"
+                              className="w-full md:flex md:items-center md:justify-between md:space-x-0"
                             >
-                              <div className="md:w-5/12">
+                              <div className="md:w-3/12">
                                 <Field
                                   name={`attributes[${index}].size.value`}
                                   as={BaseInput}
                                   type="text"
-                                  id={`attributes.${index}`}
+                                  id={`attributes.${index}.size`}
                                   autoComplete="off"
                                   label="Size"
                                   value={values.attributes[index].size.value}
@@ -331,12 +357,12 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                   aria-label="Size"
                                 />
                               </div>
-                              <div className="mt-2 md:mt-0 md:w-5/12 md:pr-6">
+                              <div className="mt-2 md:mt-0 md:w-3/12">
                                 <Field
                                   name={`attributes.${index}.color.value`}
                                   as={BaseInput}
                                   type="text"
-                                  id={`attributes.${index}`}
+                                  id={`attributes.${index}.color`}
                                   autoComplete="off"
                                   label="Color"
                                   value={values.attributes[index].color.value}
@@ -344,11 +370,25 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                   aria-label="Color"
                                 />
                               </div>
+                              <div className="mt-2 md:mt-0 md:w-1/5">
+                                <Field
+                                  name={`attributes.${index}.quantity`}
+                                  as={BaseInput}
+                                  type="number"
+                                  id={`attributes.${index}.quantity`}
+                                  autoComplete="off"
+                                  label="Quantity"
+                                  value={values.attributes[index].quantity}
+                                  placeholder="Quantity"
+                                  aria-label="Quantity"
+                                />
+                              </div>
 
                               <div className="space-x-4 pt-2">
                                 <AddRemoveButton
                                   variant="remove"
                                   type="button"
+                                  aria-label="Remove attribute"
                                   onClick={() => arrayHelpers.remove(index)}
                                 >
                                   -
@@ -356,10 +396,12 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                                 <AddRemoveButton
                                   variant="add"
                                   type="button"
+                                  aria-label="Add attribute"
                                   onClick={() =>
                                     arrayHelpers.push({
                                       size: { value: "" },
                                       color: { value: "" },
+                                      quantity: 0,
                                     })
                                   }
                                 >
@@ -369,25 +411,46 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                             </div>
                           ))
                         ) : (
-                          <button
-                            type="button"
-                            className="bg-green-600 p-2 text-sm uppercase text-white"
-                            onClick={() =>
-                              arrayHelpers.push({
-                                size: { value: "" },
-                                color: { value: "" },
-                              })
-                            }
-                          >
-                            Add Attributes
-                          </button>
+                          <div className="flex items-center space-x-4">
+                            <button
+                              type="button"
+                              className="bg-green-600 p-2 text-sm uppercase text-white"
+                              onClick={() =>
+                                arrayHelpers.push({
+                                  size: { value: "" },
+                                  color: { value: "" },
+                                  quantity: 0,
+                                })
+                              }
+                            >
+                              Add Attributes
+                            </button>
+                            <ErrorMessage name="attributes">
+                              {(msg) => (
+                                <div className="text-[11px] text-red-600">
+                                  {msg}
+                                </div>
+                              )}
+                            </ErrorMessage>
+                          </div>
                         )}
                       </div>
                     )}
                   />
                 </div>
+                {error && (
+                  <ul className="list-disc text-xs text-red-600">
+                    {error.graphQLErrors[0]?.extensions?.response?.message?.map(
+                      (msg: string, idx: number) => (
+                        <li key={idx}>{msg}</li>
+                      )
+                    )}
+                  </ul>
+                )}
                 <div className="space-x-6 pt-8">
-                  <BaseButton type="submit">Save</BaseButton>
+                  <BaseButton type="submit" loading={isCreateProductLoading}>
+                    Save
+                  </BaseButton>
                   <BaseButton
                     type="button"
                     variant="outline"
