@@ -14,6 +14,7 @@ const styles: { [key: string]: CSS.Properties } = {
     height: "30px",
     left: "20px",
     top: "20px",
+    zIndex: "10",
   },
   bmBurgerBars: {
     background: "#fff",

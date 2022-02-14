@@ -41,6 +41,7 @@ export enum QUERY_PARAM_KEY {
 export enum LOCAL_STORAGE_KEY {
   CART = "cart",
   PRODUCT_REVIEW_FORM = "product-review-form",
+  CREATE_PRODUCT_FORM = "create-product-form",
 }
 
 export const MAX_PRODUCT_LIMIT = 50;

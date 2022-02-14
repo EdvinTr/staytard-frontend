@@ -1,7 +1,9 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { Fragment, useState } from "react";
+import { Persist } from "formik-persist";
+import React, { Fragment, useEffect, useState } from "react";
+import { LOCAL_STORAGE_KEY } from "../../../../../constants";
 import {
   Brand_Sort_By,
   CreateProductInput,
@@ -11,6 +13,7 @@ import {
 } from "../../../../../lib/graphql";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
+import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { Modal } from "../../../../global/Modal";
 interface CreateProductModalProps {
   show: boolean;
@@ -71,12 +74,20 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
             if (values.categoryId <= 0) {
               errors.categoryId = "Selected a category";
             }
+            if (!values.description) {
+              errors.description = "Required";
+            }
+            if (values.description.length > 1000) {
+              errors.description =
+                "Description must be less than 1000 characters";
+            }
             return errors;
           }}
         >
           {({ errors, touched, values, setFieldValue }) => {
             return (
               <Form>
+                <Persist name={LOCAL_STORAGE_KEY.CREATE_PRODUCT_FORM} />
                 <Field
                   className={inputClassNames}
                   id="name"
@@ -111,7 +122,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           id: item.id,
                           name: item.name,
                         }))}
-                        initialText={"Select a brand"}
+                        initialValue={brandData.productBrands.find(
+                          (item) => item.id === values.brandId
+                        )}
                         onChange={(value: number) => {
                           setFieldValue("brandId", value);
                         }}
@@ -141,7 +154,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           id: item.id,
                           name: item.name,
                         }))}
-                        initialText={"Select a category"}
+                        initialValue={categoriesData.basicCategories.find(
+                          (item) => item.id === values.categoryId
+                        )}
                         onChange={(value: number) => {
                           setFieldValue("categoryId", value);
                         }}
@@ -156,8 +171,31 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     </div>
                   )}
                 </div>
+                <div className=" text-left">
+                  {/* description input */}
+                  <Field
+                    className={`${inputClassNames} text-13 w-full`}
+                    id="description"
+                    name="description"
+                    as={CustomTextArea}
+                    rows={5}
+                    label="Description"
+                    hasError={errors.description && touched.description}
+                    currentValue={values.description}
+                    placeholder="Description"
+                    aria-label="Description"
+                    autoComplete="off"
+                  />
+                  <ErrorMessage name="description">
+                    {(msg) => (
+                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                    )}
+                  </ErrorMessage>
+                </div>
 
-                <BaseButton type="submit">Submit</BaseButton>
+                <BaseButton type="submit" className="mt-8">
+                  Submit
+                </BaseButton>
               </Form>
             );
           }}
@@ -173,18 +211,19 @@ type ListBoxItem = {
 interface MyListBoxProps {
   items: ListBoxItem[];
   onChange: (id: number) => void;
-  initialText: string;
+  initialValue?: ListBoxItem;
 }
 export default function MyListBox({
   items,
   onChange,
-  initialText,
+  initialValue,
 }: MyListBoxProps) {
-  const [selected, setSelected] = useState<ListBoxItem>({
-    id: -999,
-    name: initialText,
-  });
-
+  const [selected, setSelected] = useState<ListBoxItem>(items[0]);
+  useEffect(() => {
+    if (initialValue) {
+      setSelected({ ...initialValue });
+    }
+  }, [initialValue]);
   return (
     <div className="w-full">
       <Listbox
@@ -194,7 +233,7 @@ export default function MyListBox({
           setSelected(value);
         }}
       >
-        <div className="relative mt-1">
+        <div className="relative z-20 mt-1">
           <Listbox.Button className="relative w-full cursor-default border border-gray-700  bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate">{selected.name}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
