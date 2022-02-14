@@ -15,7 +15,7 @@ import {
 } from "../../../../typings/GetProductsResponse.interface";
 import { MyCheckbox } from "../../../global/MyCheckbox";
 import { MyPagination } from "../../../global/MyPagination";
-import { DeleteItemModal } from "../components/DeleteItemModal";
+import { ConfirmDeletionModal } from "../components/ConfirmDeletionModal";
 
 interface AdminProductsViewProps {}
 
@@ -184,7 +184,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                   </article>
                 );
               })}
-            <DeleteItemModal
+            <ConfirmDeletionModal
               heading={`Are you sure you want to delete ${modalData?.name}?`}
               loading={isDeleteProductLoading}
               onClose={() => setIsDeleteProductModalOpen(false)}

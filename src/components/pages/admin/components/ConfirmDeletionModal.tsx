@@ -2,7 +2,7 @@ import React from "react";
 import { BaseButton } from "../../../global/BaseButton";
 import { Modal } from "../../../global/Modal";
 
-interface DeleteItemModalProps {
+interface ConfirmDeletionModalProps {
   show: boolean;
   onClose: () => void;
   loading: boolean;
@@ -11,7 +11,7 @@ interface DeleteItemModalProps {
   heading: string;
 }
 
-export const DeleteItemModal: React.FC<DeleteItemModalProps> = ({
+export const ConfirmDeletionModal: React.FC<ConfirmDeletionModalProps> = ({
   show,
   loading,
   onClose,
