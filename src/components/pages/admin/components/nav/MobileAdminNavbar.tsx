@@ -9,7 +9,7 @@ import { navItems } from "./DefaultAdminNavbar";
 
 const styles: { [key: string]: CSS.Properties } = {
   bmBurgerButton: {
-    position: "fixed",
+    position: "absolute",
     width: "36px",
     height: "30px",
     left: "20px",

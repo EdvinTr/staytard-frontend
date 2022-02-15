@@ -12,9 +12,8 @@ import {
   ADMIN_PAGE_QUERY_KEY,
   ADMIN_SUB_PAGE_ROUTE,
   APP_NAME,
-  COOKIE_NAME,
 } from "../../constants";
-import { ssrMe } from "../../lib/page";
+import { isAdminSsrAuthGuard } from "../../utils/guards/isAdminSsrAuthGuard";
 
 const AdminPage: NextPage = () => {
   const router = useRouter();
@@ -58,29 +57,7 @@ const AdminPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  try {
-    const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
-    if (!accessToken) {
-      // save some bandwidth if no access token is present
-      throw new Error();
-    }
-    // fetch user by passing the cookies in the request header
-    const user = await ssrMe.getServerPage({
-      context: { headers: ctx.req.headers },
-    });
-    // check if user is admin
-    if (!user || !user.props.data || !user.props.data.me.isAdmin) {
-      throw new Error();
-    }
-    return {
-      props: {}, // requesting user is admin
-    };
-  } catch (err) {
-    return {
-      props: {},
-      notFound: true,
-    };
-  }
+  return isAdminSsrAuthGuard(ctx);
 };
 
 export default AdminPage;

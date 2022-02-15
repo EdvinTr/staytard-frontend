@@ -1,24 +1,27 @@
-import { HTMLMotionProps, motion } from "framer-motion";
+import { ChevronRightIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../../constants";
 import { ProductItem } from "../../../../../typings/GetProductsResponse.interface";
-interface ProductViewRowProps extends HTMLMotionProps<"div"> {
+interface ProductViewRowProps {
   product: ProductItem;
 }
 
-export const ProductViewRow: React.FC<ProductViewRowProps> = ({
-  product,
-  ...props
-}) => {
-  const discountPercentage = Math.floor(
-    ((product.originalPrice - product.currentPrice) / product.originalPrice) *
-      100
+const calculateDiscountPercentage = (
+  originalPrice: number,
+  currentPrice: number
+) => {
+  return Math.floor(((originalPrice - currentPrice) / originalPrice) * 100);
+};
+export const ProductViewRow = ({ product }: ProductViewRowProps) => {
+  const discountPercentage = calculateDiscountPercentage(
+    product.originalPrice,
+    product.currentPrice
   );
   const imageUrl = product.images[0].imageUrl.replace("{size}", "90");
   return (
-    <motion.div {...props}>
+    <div>
       <Link
         href={
           APP_PAGE_ROUTE.ADMIN +
@@ -82,7 +85,85 @@ export const ProductViewRow: React.FC<ProductViewRowProps> = ({
           </article>
         </a>
       </Link>
-    </motion.div>
+    </div>
+  );
+};
+
+export const SmallDeviceProductViewRow = ({ product }: ProductViewRowProps) => {
+  const discountPercentage = calculateDiscountPercentage(
+    product.originalPrice,
+    product.currentPrice
+  );
+
+  return (
+    <div className="shadow-md transition-all duration-100 ease-in-out hover:bg-gray-50">
+      <Link
+        href={
+          APP_PAGE_ROUTE.ADMIN +
+          ADMIN_SUB_PAGE_ROUTE.EDIT_PRODUCT +
+          `/${product.id}`
+        }
+      >
+        <a>
+          <article className="p-4 text-sm">
+            <div className="flex items-center justify-between">
+              <h2 className="font-medium">{product.name}</h2>
+              <ChevronRightIcon className="w-6" />
+            </div>
+            <div className="mt-4">
+              <ProductDetailRow
+                backgroundColor="gray"
+                label="Brand"
+                value={`${product.brand.name}`}
+              />
+              <ProductDetailRow
+                backgroundColor="none"
+                label="Original price"
+                value={`${product.originalPrice} EUR`}
+              />
+              <ProductDetailRow
+                backgroundColor="gray"
+                label="Current price"
+                value={`${product.currentPrice} EUR`}
+              />
+              <ProductDetailRow
+                backgroundColor="none"
+                label="Discount"
+                value={`${discountPercentage.toFixed(0)}%`}
+                valueClassName={`${
+                  discountPercentage > 0 ? "text-red-600" : ""
+                }`}
+              />
+            </div>
+          </article>
+        </a>
+      </Link>
+    </div>
+  );
+};
+interface ProductDetailRowProps {
+  label: string;
+  value: string;
+  backgroundColor: "gray" | "none";
+  valueClassName?: string;
+}
+const ProductDetailRow = ({
+  label,
+  value,
+  backgroundColor,
+  valueClassName,
+}: ProductDetailRowProps) => {
+  return (
+    <div
+      className={`flex justify-between rounded-lg ${
+        backgroundColor === "gray" ? "bg-gray-50" : ""
+      } p-3 text-xs`}
+    >
+      <div className="font-light text-stone-600">{label}</div>
+      <div className={`font-medium ${valueClassName ? valueClassName : ""}`}>
+        {value}
+      </div>
+    </div>
   );
 };
 

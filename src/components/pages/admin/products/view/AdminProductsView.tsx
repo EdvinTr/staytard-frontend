@@ -15,8 +15,12 @@ import { Localized } from "../../../../../Localized";
 import { GetProductsResponse } from "../../../../../typings/GetProductsResponse.interface";
 import { MyPagination } from "../../../../global/MyPagination";
 import { PaddingContainer } from "../../components/PaddingContainer";
+import { PageHeading } from "../../components/PageHeading";
 import { CreateProductModal } from "../components/CreateProductModal";
-import { ProductViewRow } from "../components/ProductViewRow";
+import {
+  ProductViewRow,
+  SmallDeviceProductViewRow,
+} from "../components/ProductViewRow";
 
 interface AdminProductsViewProps {}
 
@@ -78,9 +82,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
       <div className="bg-[#F8F8F9]">
         <PaddingContainer>
           <div className="flex items-center lg:justify-between">
-            <h1 className="hidden lg:block lg:text-4xl lg:font-semibold">
-              Products
-            </h1>
+            <PageHeading>Products</PageHeading>
             <button
               onClick={() => setIsCreateProductModalOpen(true)}
               className="flex items-center rounded-md bg-green-700 px-3 py-2 text-sm font-semibold uppercase text-white"
@@ -125,7 +127,13 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
             /> */}
           </div>
         ) : (
-          <div>I small</div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {data?.products.map((product) => {
+              return (
+                <SmallDeviceProductViewRow product={product} key={product.id} />
+              );
+            })}
+          </div>
         )}
         {data && (
           <div className="flex justify-center pt-14">
