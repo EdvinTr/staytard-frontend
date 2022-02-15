@@ -41,7 +41,7 @@ const EditProductPage: NextPage = () => {
           </PaddingContainer>
         </div>
         <PaddingContainer>
-          <EditProductView />
+          {data && <EditProductView product={data.product} />}
           {loading && (
             <div className="fixed top-1/2 left-0 right-0 ">
               <BeatLoader
