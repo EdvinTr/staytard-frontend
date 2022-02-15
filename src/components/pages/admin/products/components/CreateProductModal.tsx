@@ -14,6 +14,7 @@ import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { Modal } from "../../../../global/Modal";
+import { ImageFieldArray } from "./ImageFieldArray";
 interface CreateProductModalProps {
   show: boolean;
   onClose: () => void;
@@ -247,73 +248,9 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
 
                 <div className="pt-6">
                   <h2 className="pb-4 text-xl font-semibold">Images</h2>
-                  <FieldArray
+                  <ImageFieldArray
+                    imageUrls={values.imageUrls}
                     name="imageUrls"
-                    render={(arrayHelpers) => (
-                      <div className="space-y-4">
-                        {values.imageUrls && values.imageUrls.length > 0 ? (
-                          values.imageUrls.map((url, index) => (
-                            <div key={index}>
-                              <div className="mr-8 flex w-full justify-between">
-                                <div className="w-9/12 md:w-10/12">
-                                  <Field
-                                    name={`imageUrls.${index}`}
-                                    as={BaseInput}
-                                    className=""
-                                    type="url"
-                                    required
-                                    id={`imageUrls.${index}`}
-                                    autoComplete="off"
-                                    label="Image URL"
-                                    value={values.imageUrls[index]}
-                                    placeholder="Image URL"
-                                    aria-label="Image URL"
-                                  />
-                                </div>
-                                <div className="space-x-4 pt-2">
-                                  <AddRemoveButton
-                                    variant="remove"
-                                    aria-label="Remove image"
-                                    type="button"
-                                    onClick={() => arrayHelpers.remove(index)} // remove image from the list
-                                  >
-                                    -
-                                  </AddRemoveButton>
-                                  <AddRemoveButton
-                                    variant="add"
-                                    aria-label="Add image"
-                                    className="h-8 w-8 bg-green-600 text-white"
-                                    type="button"
-                                    onClick={() => {
-                                      arrayHelpers.insert(index, "");
-                                    }} // insert an empty string at a position
-                                  >
-                                    +
-                                  </AddRemoveButton>
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="flex items-center space-x-4">
-                            <button
-                              type="button"
-                              className="bg-green-600 p-2 text-sm uppercase text-white"
-                              onClick={() => arrayHelpers.push("")}
-                            >
-                              Add Images
-                            </button>
-                            <ErrorMessage name="imageUrls">
-                              {(msg) => (
-                                <div className="text-[11px] text-red-600">
-                                  {msg}
-                                </div>
-                              )}
-                            </ErrorMessage>
-                          </div>
-                        )}
-                      </div>
-                    )}
                   />
                   {/* currently added images */}
                   <div className="flex items-center space-x-4">
@@ -478,7 +415,7 @@ interface AddRemoveButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "add" | "remove";
 }
-const AddRemoveButton: React.FC<AddRemoveButtonProps> = ({
+export const AddRemoveButton: React.FC<AddRemoveButtonProps> = ({
   variant,
   children,
   ...rest
