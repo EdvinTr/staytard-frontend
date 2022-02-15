@@ -178,6 +178,7 @@ export type Mutation = {
   publishReview: ProductReview;
   registerUser: UserWithTokensDto;
   updatePassword: Scalars['Boolean'];
+  updateProduct: Product;
   updateUserAddress: User;
 };
 
@@ -230,6 +231,11 @@ export type MutationRegisterUserArgs = {
 
 export type MutationUpdatePasswordArgs = {
   input: UpdateUserPasswordInput;
+};
+
+
+export type MutationUpdateProductArgs = {
+  input: UpdateProductInput;
 };
 
 
@@ -455,6 +461,16 @@ export type SearchProductsInput = {
   searchTerm: Scalars['String'];
 };
 
+export type UpdateProductInput = {
+  attributes: Array<CreateProductAttributeInput>;
+  currentPrice: Scalars['Float'];
+  description: Scalars['String'];
+  imageUrls: Array<Scalars['String']>;
+  isDiscontinued: Scalars['Boolean'];
+  name: Scalars['String'];
+  productId: Scalars['Float'];
+};
+
 export type UpdateUserAddressInput = {
   city: Scalars['String'];
   postalCode: Scalars['String'];
@@ -544,6 +560,13 @@ export type DeleteProductMutationVariables = Exact<{
 
 
 export type DeleteProductMutation = { __typename?: 'Mutation', deleteProduct: boolean };
+
+export type UpdateProductMutationVariables = Exact<{
+  input: UpdateProductInput;
+}>;
+
+
+export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
 
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
@@ -912,6 +935,43 @@ export function useDeleteProductMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteProductMutationHookResult = ReturnType<typeof useDeleteProductMutation>;
 export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutation>;
 export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<DeleteProductMutation, DeleteProductMutationVariables>;
+export const UpdateProductDocument = gql`
+    mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
+    ...CoreProductFields
+    attributes {
+      ...CoreAttributeFields
+    }
+  }
+}
+    ${CoreProductFieldsFragmentDoc}
+${CoreAttributeFieldsFragmentDoc}`;
+export type UpdateProductMutationFn = Apollo.MutationFunction<UpdateProductMutation, UpdateProductMutationVariables>;
+
+/**
+ * __useUpdateProductMutation__
+ *
+ * To run a mutation, you first call `useUpdateProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProductMutation, { data, loading, error }] = useUpdateProductMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProductMutation, UpdateProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument, options);
+      }
+export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
+export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
+export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
 export const AuthenticateWithGoogleDocument = gql`
     mutation AuthenticateWithGoogle($googleAuthToken: String!) {
   authenticateWithGoogle(googleAuthToken: $googleAuthToken) {

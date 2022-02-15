@@ -1,0 +1,8 @@
+mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
+    ...CoreProductFields
+    attributes {
+      ...CoreAttributeFields
+    }
+  }
+}
