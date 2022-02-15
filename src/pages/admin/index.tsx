@@ -2,10 +2,10 @@ import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect } from "react";
-import { DefaultNavbar } from "../../components/pages/admin/components/DefaultNavbar";
-import { MobileNavbar } from "../../components/pages/admin/components/MobileNavbar";
+import { AdminNavbarGroup } from "../../components/pages/admin/components/nav/AdminNavbarGroup";
+import { PageContentWrapper } from "../../components/pages/admin/components/PageContentWrapper";
 import { AdminOrdersView } from "../../components/pages/admin/orders/AdminOrdersView";
-import { AdminProductsView } from "../../components/pages/admin/products/AdminProductsView";
+import { AdminProductsView } from "../../components/pages/admin/products/view/AdminProductsView";
 import { AdminProductReviewsView } from "../../components/pages/admin/reviews/AdminProductReviewsView";
 import { AdminUsersView } from "../../components/pages/admin/users/AdminUsersView";
 import {
@@ -37,13 +37,8 @@ const AdminPage: NextPage = () => {
         <title>{APP_NAME}.com</title>
       </Head>
       <div className="text-staytard-dark">
-        <div className="hidden lg:block">
-          <DefaultNavbar />
-        </div>
-        <div className="bg-staytard-dark h-16 lg:hidden">
-          <MobileNavbar />
-        </div>
-        <div className="w-full lg:pl-20">
+        <AdminNavbarGroup />
+        <PageContentWrapper>
           {router.query.show === ADMIN_SUB_PAGE_ROUTE.USERS && (
             <AdminUsersView />
           )}
@@ -56,7 +51,7 @@ const AdminPage: NextPage = () => {
           {router.query.show === ADMIN_SUB_PAGE_ROUTE.REVIEWS && (
             <AdminProductReviewsView />
           )}
-        </div>
+        </PageContentWrapper>
       </div>
     </Fragment>
   );

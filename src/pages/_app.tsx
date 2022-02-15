@@ -68,7 +68,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <Fragment>
           {pathsWithoutMainNavbar.includes(
-            currentPath as APP_PAGE_ROUTE
+            ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
           ) ? null : (
             <Navbar />
           )}
@@ -79,7 +79,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           />
         )} */}
           <Component {...pageProps} />
-          {pathsWithoutFooter.includes(currentPath as APP_PAGE_ROUTE) ? null : (
+          {pathsWithoutFooter.includes(
+            ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+          ) ? null : (
             <Footer />
           )}
         </Fragment>

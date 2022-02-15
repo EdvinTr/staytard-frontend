@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
-import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../constants";
+import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../../constants";
 
 export const navItems = [
   {
@@ -29,7 +29,7 @@ export const navItems = [
   },
 ];
 
-export const DefaultNavbar = () => {
+export const DefaultAdminNavbar = () => {
   const router = useRouter();
   return (
     <Fragment>
@@ -39,7 +39,7 @@ export const DefaultNavbar = () => {
             <div className="flex w-full justify-center bg-black py-4 text-center">
               <Link href={APP_PAGE_ROUTE.INDEX}>
                 <a aria-label={`Home page`}>
-                  <HomeIcon className="hover:text-staytard-yellow w-8 text-gray-200  transition-all duration-150" />
+                  <HomeIcon className="hover:text-staytard-yellow w-6 text-gray-200  transition-all duration-150" />
                 </a>
               </Link>
             </div>
@@ -63,7 +63,7 @@ export const DefaultNavbar = () => {
                   >
                     <a aria-label={`${item.query.show}`}>
                       <item.icon
-                        className={`hover:text-staytard-yellow w-8  transition-all duration-150 ${
+                        className={`hover:text-staytard-yellow w-6  transition-all duration-150 ${
                           currentQuery === item.query.show
                             ? "text-staytard-yellow"
                             : "text-stone-600"

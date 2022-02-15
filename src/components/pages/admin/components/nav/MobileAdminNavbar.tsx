@@ -4,8 +4,8 @@ import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { Fragment, useState } from "react";
 import { slide as Menu } from "react-burger-menu";
-import { APP_PAGE_ROUTE } from "../../../../constants";
-import { navItems } from "./DefaultNavbar";
+import { APP_PAGE_ROUTE } from "../../../../../constants";
+import { navItems } from "./DefaultAdminNavbar";
 
 const styles: { [key: string]: CSS.Properties } = {
   bmBurgerButton: {
@@ -53,11 +53,10 @@ const styles: { [key: string]: CSS.Properties } = {
     background: "rgba(0, 0, 0, 0.3)",
   },
 };
-interface MobileNavbarProps {}
 
 const anchorElementClassNames =
   "hover:text-staytard-yellow text-stone-600 transition-all duration-150 ease-in-out";
-export const MobileNavbar = ({}: MobileNavbarProps) => {
+export const MobileAdminNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentQuery = router.query.show;
