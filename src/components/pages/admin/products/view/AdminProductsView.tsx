@@ -29,19 +29,13 @@ const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
   const [categoryPath, setCategoryPath] = useState("/");
-  /*   const [modalData, setModalData] = useState<ProductItem | null>(null); */
   const [pageIndex, setPageIndex] = useState(1);
-  /*   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] = */
   useState(false);
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] =
     useState(false);
 
   const router = useRouter();
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
-  /*  const [
-    deleteProduct,
-    { loading: isDeleteProductLoading, error: deleteProductError },
-  ] = useDeleteProductMutation(); */
   const { data, error, mutate } = useSWR<GetProductsResponse>(
     `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}`,
     fetcher
@@ -54,24 +48,6 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
     }
   }, [currentPageQuery]); // reruns when the page query changes
 
-  /*  const handleDeleteProduct = async (id?: number) => {
-    if (!id) {
-      return;
-    }
-    try {
-      await deleteProduct({
-        variables: {
-          id,
-        },
-        fetchPolicy: "network-only",
-      });
-      setIsDeleteProductModalOpen(false);
-      setModalData(null);
-      mutate(); // refetch product data
-    } catch (err) {
-      console.log(err);
-    }
-  }; */
   const showSuccessToast = (): void =>
     toast.success(createProductSuccessMessage, {
       backgroundColor: "black",
@@ -117,14 +93,6 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
             {data?.products.map((product) => {
               return <ProductViewRow product={product} key={product.id} />;
             })}
-
-            {/* <ConfirmDeletionModal
-              heading={`Are you sure you want to delete ${modalData?.name}?`}
-              loading={isDeleteProductLoading}
-              onClose={() => setIsDeleteProductModalOpen(false)}
-              show={isDeleteProductModalOpen}
-              onDelete={() => handleDeleteProduct(modalData?.id)}
-            /> */}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

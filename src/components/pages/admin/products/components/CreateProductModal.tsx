@@ -303,11 +303,7 @@ interface MyListBoxProps {
   onChange: (id: number) => void;
   initialValue?: ListBoxItem;
 }
-export default function MyListBox({
-  items,
-  onChange,
-  initialValue,
-}: MyListBoxProps) {
+export function MyListBox({ items, onChange, initialValue }: MyListBoxProps) {
   const [selected, setSelected] = useState<ListBoxItem>(items[0]);
   useEffect(() => {
     if (initialValue) {

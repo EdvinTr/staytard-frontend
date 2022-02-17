@@ -1,17 +1,22 @@
+import { TrashIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toast";
+import { APP_PAGE_ROUTE } from "../../../../../constants";
 import {
   FindOneProductDocument,
   FindOneProductQuery,
   UpdateProductInput,
+  useDeleteProductMutation,
   useUpdateProductMutation,
 } from "../../../../../lib/graphql";
 import { Localized } from "../../../../../Localized";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
+import { ConfirmDeletionModal } from "../../components/ConfirmDeletionModal";
 import { AttributeFieldArray } from "../components/AttributeFieldArray";
 import { ImageFieldArray } from "../components/ImageFieldArray";
 import { ImagePreviews } from "../components/SmallImagePreview";
@@ -30,19 +35,58 @@ const inputClassNames =
 export const EditProductView: React.FC<EditProductViewProps> = ({
   product,
 }) => {
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+    useState(false);
   const currentWindowWidth = useWindowWidth();
   const showSuccessToast = (): void =>
     toast.success(updateProductSuccessMessage, {
       backgroundColor: "black",
       color: "white",
     });
+  const router = useRouter();
   const [updateProduct, { error: updateProductGqlError }] =
     useUpdateProductMutation();
+  const [deleteProduct, { loading: deleteProductLoading }] =
+    useDeleteProductMutation();
+
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      const { data } = await deleteProduct({
+        variables: {
+          id,
+        },
+      });
+      if (!data || !data.deleteProduct) {
+        throw new Error();
+      }
+      setIsConfirmDeleteModalOpen(false);
+      router.push(APP_PAGE_ROUTE.ADMIN);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <div className="mx-auto max-w-2xl text-sm">
-      <h2 className="pb-7 text-2xl font-medium">General information</h2>
+    <div className="mx-auto max-w-2xl pb-20 text-sm">
+      <div className="flex items-center justify-between pb-10">
+        <h2 className="text-2xl font-medium">General information</h2>
+        {/* delete button */}
+        <button
+          onClick={() => setIsConfirmDeleteModalOpen(true)}
+          type="button"
+          aria-label="Open delete product confirmation modal"
+          className="bg-red-100 p-2 text-red-600 transition-all duration-100 ease-in-out hover:bg-red-600 hover:text-white"
+        >
+          <TrashIcon className="h-4" aria-hidden />
+        </button>
+        <ConfirmDeletionModal
+          heading={`Are you sure you want to delete ${product.name}?`}
+          loading={deleteProductLoading}
+          onClose={() => setIsConfirmDeleteModalOpen(false)}
+          show={isConfirmDeleteModalOpen}
+          onDelete={() => handleDeleteProduct(product.id)}
+        />
+      </div>
       <div className="space-y-4 md:flex md:items-center md:justify-between md:space-x-7 md:space-y-0">
-        {/* id and brand disabled inputs */}
         <div className="w-full opacity-50">
           <BasicInputLabel htmlFor="productId">Product ID</BasicInputLabel>
           <input
@@ -98,7 +142,7 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
                     color: { value: attr.color.value },
                     size: { value: attr.size.value },
                     quantity: attr.quantity,
-                  })), // creating a new attribute array because tge endpoint does not need SKU or __typename fields
+                  })), // creating a new attribute array because the endpoint does not need SKU or __typename fields
                   currentPrice: values.currentPrice,
                   description: values.description,
                   productId: values.productId,
@@ -211,13 +255,15 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
                     {updateProductGqlError.message}
                   </div>
                 )}
-                <BaseButton
-                  disabled={isSubmitting}
-                  type="submit"
-                  loading={isSubmitting}
-                >
-                  Save
-                </BaseButton>
+                <div className="pt-4">
+                  <BaseButton
+                    disabled={isSubmitting}
+                    type="submit"
+                    loading={isSubmitting}
+                  >
+                    Save
+                  </BaseButton>
+                </div>
               </div>
             </Form>
           );
