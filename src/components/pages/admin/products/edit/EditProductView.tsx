@@ -1,18 +1,53 @@
+import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
+import { toast, ToastContainer } from "react-toast";
+import * as Yup from "yup";
 import {
+  FindOneProductDocument,
   FindOneProductQuery,
   UpdateProductInput,
+  useUpdateProductMutation,
 } from "../../../../../lib/graphql";
+import { Localized } from "../../../../../Localized";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
+import { AttributeFieldArray } from "../components/AttributeFieldArray";
 import { ImageFieldArray } from "../components/ImageFieldArray";
+import { ImagePreviews } from "../components/SmallImagePreview";
+
 interface EditProductViewProps {
   product: FindOneProductQuery["product"];
 }
 
 type FormValues = UpdateProductInput;
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("Required")
+    .min(1, "Must be at least 1 character")
+    .max(100, "Must be at most 100 characters"),
+  description: Yup.string()
+    .required("Required")
+    .min(1, "Must be at least 1 character")
+    .max(1000, "Must be at most 1000 characters"),
+  currentPrice: Yup.number().required("Required").min(1),
+  imageUrls: Yup.array()
+    .of(Yup.string().required("Required"))
+    .min(1, "At least one image is required"),
+  attributes: Yup.array()
+    .of(
+      Yup.object().shape({
+        size: Yup.object().shape({ value: Yup.string().required("Required") }),
+        color: Yup.object().shape({ value: Yup.string().required("Required") }),
+        quantity: Yup.number().required("Required").min(1),
+      })
+    )
+    .min(1, "At least one attribute is required"),
+});
+
+const { updateProductSuccessMessage } = Localized.page.admin;
 
 // TODO: add category input disabled
 const inputClassNames =
@@ -20,6 +55,13 @@ const inputClassNames =
 export const EditProductView: React.FC<EditProductViewProps> = ({
   product,
 }) => {
+  const currentWindowWidth = useWindowWidth();
+  const showSuccessToast = (): void =>
+    toast.success(updateProductSuccessMessage, {
+      backgroundColor: "black",
+      color: "white",
+    });
+  const [updateProduct] = useUpdateProductMutation();
   return (
     <div className="mx-auto max-w-2xl text-sm">
       <h2 className="pb-7 text-2xl font-medium">General information</h2>
@@ -71,25 +113,42 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
           isDiscontinued: product.isDiscontinued,
           productId: product.id,
         }}
-        onSubmit={(values: FormValues) => {
-          console.log("update save: ", values);
+        onSubmit={async (values: FormValues, { setSubmitting }) => {
+          try {
+            const { data } = await updateProduct({
+              variables: {
+                input: {
+                  attributes: values.attributes.map((attr) => ({
+                    color: { value: attr.color.value },
+                    size: { value: attr.size.value },
+                    quantity: attr.quantity,
+                  })), // creating a new attribute array because tge endpoint does not need SKU or __typename fields
+                  currentPrice: values.currentPrice,
+                  description: values.description,
+                  productId: values.productId,
+                  name: values.name,
+                  imageUrls: values.imageUrls,
+                  isDiscontinued: false,
+                },
+              },
+              refetchQueries: [FindOneProductDocument],
+            });
+            if (!data || !data.updateProduct) {
+              throw new Error();
+            }
+            showSuccessToast();
+          } catch (err) {
+            console.log(err);
+          } finally {
+            setSubmitting(false);
+            setTimeout(() => {
+              toast.hideAll();
+            }, 5000);
+          }
         }}
-        validate={(values: FormValues) => {
-          const errors: Partial<FormValues> = {};
-          if (!values.name) {
-            errors.name = "Required";
-          }
-          if (values.name.length > 100) {
-            errors.name = "Name must be less than 100 characters";
-          }
-          if (!values.description) {
-            errors.description = "Required";
-          }
-
-          return errors;
-        }}
+        validationSchema={validationSchema}
       >
-        {({ values, errors, touched }) => {
+        {({ values, errors, touched, isSubmitting }) => {
           return (
             <Form>
               <div className="mt-8 space-y-5">
@@ -146,12 +205,10 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
                     name="currentPrice"
                     type="number"
                     as={BaseInput}
-                    rows={5}
-                    label="currentPrice"
+                    label="Current price"
                     hasError={errors.currentPrice && touched.currentPrice}
                     value={values.currentPrice}
-                    placeholder="currentPrice"
-                    aria-label="currentPrice"
+                    placeholder="Current price"
                     autoComplete="off"
                   />
                   <ErrorMessage name="currentPrice">
@@ -161,14 +218,23 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
                   </ErrorMessage>
                 </div>
                 {/* image input */}
-                <div>
+                <div className="pt-4">
                   <h2 className="pb-4 text-xl font-semibold">Images</h2>
                   <ImageFieldArray
                     imageUrls={values.imageUrls}
                     name="imageUrls"
                   />
+                  <ImagePreviews imageUrls={values.imageUrls} />
                 </div>
-                <BaseButton type="submit" loading={false}>
+                <div className="pt-4">
+                  <h3 className="pb-4 text-xl font-semibold">Attributes</h3>
+                  <AttributeFieldArray attributes={values.attributes} />
+                </div>
+                <BaseButton
+                  disabled={isSubmitting}
+                  type="submit"
+                  loading={isSubmitting}
+                >
                   Save
                 </BaseButton>
               </div>
@@ -176,6 +242,11 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
           );
         }}
       </Formik>
+      <div className="z-50">
+        <ToastContainer
+          position={currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"}
+        />
+      </div>
     </div>
   );
 };

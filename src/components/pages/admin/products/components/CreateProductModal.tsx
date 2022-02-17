@@ -15,6 +15,7 @@ import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { Modal } from "../../../../global/Modal";
 import { ImageFieldArray } from "./ImageFieldArray";
+import { ImagePreviews } from "./SmallImagePreview";
 interface CreateProductModalProps {
   show: boolean;
   onClose: () => void;
@@ -253,20 +254,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     name="imageUrls"
                   />
                   {/* currently added images */}
-                  <div className="flex items-center space-x-4">
-                    {values.imageUrls &&
-                      values.imageUrls.map((url, index) => {
-                        return (
-                          url.length > 0 && (
-                            <img
-                              key={index}
-                              src={url}
-                              className="mt-4 h-16 w-12 object-cover"
-                            />
-                          )
-                        );
-                      })}
-                  </div>
+                  <ImagePreviews imageUrls={values.imageUrls} />
                 </div>
 
                 <div className="pt-6">
