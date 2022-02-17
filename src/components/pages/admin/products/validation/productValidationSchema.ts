@@ -40,11 +40,9 @@ export const createProductValidationSchema = Yup.object().shape({
   ...descriptionValidation,
   ...imageUrlsValidation,
   ...attributesValidation,
-  brandId: Yup.number().required("Select a brand").min(1),
-  categoryId: Yup.number().required("Select a category").min(1),
-  price: Yup.number()
-    .required("Price must be greater than or equal to 1")
-    .min(1),
+  brandId: Yup.number().min(1, "Select a brand"),
+  categoryId: Yup.number().min(1, "Select a category"),
+  price: Yup.number().min(1, "Price must be greater than 0"),
 });
 
 export const updateProductValidationSchema = Yup.object().shape({
