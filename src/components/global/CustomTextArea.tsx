@@ -1,3 +1,5 @@
+import { FloatingLabel } from "./BaseInput";
+
 export interface CustomTextAreaProps
   extends React.HTMLProps<HTMLTextAreaElement> {
   hasError?: boolean;
@@ -26,14 +28,9 @@ export const CustomTextArea = ({
            } `}
       ></textarea>
       {currentValueLength > 0 && (
-        /* floating label */
-        <span
-          className={`absolute top-2 left-4 py-0 text-[10px] tracking-[1.6px] opacity-50
-            ${hasError && "text-red-600 opacity-100"}
-            `}
-        >
+        <FloatingLabel hasError={!!hasError}>
           {label.toUpperCase()}
-        </span>
+        </FloatingLabel>
       )}
     </div>
   );

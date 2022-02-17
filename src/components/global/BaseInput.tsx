@@ -34,17 +34,38 @@ export const BaseInput = ({
       />
 
       {currentValueLength > 0 && (
-        /* floating label */
-        <span
-          className={`absolute top-2 py-0 text-[10px] tracking-[1.6px] opacity-50
+        <FloatingLabel
+          hasError={!!hasError}
+          isFocused={!!isFocused}
+          hasLeftIcon={!!hasLeftIcon}
+        >
+          {label?.toUpperCase()}
+        </FloatingLabel>
+      )}
+    </div>
+  );
+};
+
+interface FloatingLabelProps {
+  hasLeftIcon?: boolean;
+  hasError?: boolean;
+  isFocused?: boolean;
+}
+export const FloatingLabel: React.FC<FloatingLabelProps> = ({
+  children,
+  hasLeftIcon = false,
+  hasError = false,
+  isFocused = false,
+}) => {
+  return (
+    <span
+      className={`absolute top-[6px] py-0 text-[10px] tracking-[1.6px] opacity-[0.62]
           ${hasLeftIcon ? "left-12" : "left-4"}  
           ${hasError && !isFocused && "text-red-600 opacity-100"}
           ${isFocused && "opacity-50"}
           `}
-        >
-          {label?.toUpperCase()}
-        </span>
-      )}
-    </div>
+    >
+      {children}
+    </span>
   );
 };

@@ -2,7 +2,6 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
 import { toast, ToastContainer } from "react-toast";
-import * as Yup from "yup";
 import {
   FindOneProductDocument,
   FindOneProductQuery,
@@ -16,36 +15,12 @@ import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { AttributeFieldArray } from "../components/AttributeFieldArray";
 import { ImageFieldArray } from "../components/ImageFieldArray";
 import { ImagePreviews } from "../components/SmallImagePreview";
-
+import { updateProductValidationSchema } from "../validation/productValidationSchema";
 interface EditProductViewProps {
   product: FindOneProductQuery["product"];
 }
 
 type FormValues = UpdateProductInput;
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required("Required")
-    .min(1, "Must be at least 1 character")
-    .max(100, "Must be at most 100 characters"),
-  description: Yup.string()
-    .required("Required")
-    .min(1, "Must be at least 1 character")
-    .max(1000, "Must be at most 1000 characters"),
-  currentPrice: Yup.number().required("Required").min(1),
-  imageUrls: Yup.array()
-    .of(Yup.string().required("Required"))
-    .min(1, "At least one image is required"),
-  attributes: Yup.array()
-    .of(
-      Yup.object().shape({
-        size: Yup.object().shape({ value: Yup.string().required("Required") }),
-        color: Yup.object().shape({ value: Yup.string().required("Required") }),
-        quantity: Yup.number().required("Required").min(1),
-      })
-    )
-    .min(1, "At least one attribute is required"),
-});
 
 const { updateProductSuccessMessage } = Localized.page.admin;
 
@@ -61,7 +36,8 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
       backgroundColor: "black",
       color: "white",
     });
-  const [updateProduct] = useUpdateProductMutation();
+  const [updateProduct, { error: updateProductGqlError }] =
+    useUpdateProductMutation();
   return (
     <div className="mx-auto max-w-2xl text-sm">
       <h2 className="pb-7 text-2xl font-medium">General information</h2>
@@ -146,7 +122,7 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
             }, 5000);
           }
         }}
-        validationSchema={validationSchema}
+        validationSchema={updateProductValidationSchema}
       >
         {({ values, errors, touched, isSubmitting }) => {
           return (
@@ -230,6 +206,11 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
                   <h3 className="pb-4 text-xl font-semibold">Attributes</h3>
                   <AttributeFieldArray attributes={values.attributes} />
                 </div>
+                {updateProductGqlError && (
+                  <div className="text-xs text-red-600">
+                    {updateProductGqlError.message}
+                  </div>
+                )}
                 <BaseButton
                   disabled={isSubmitting}
                   type="submit"

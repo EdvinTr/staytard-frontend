@@ -1,7 +1,9 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Persist } from "formik-persist";
 import React, { Fragment, useEffect, useState } from "react";
+import { LOCAL_STORAGE_KEY } from "../../../../../constants";
 import {
   Brand_Sort_By,
   CreateProductInput,
@@ -14,6 +16,8 @@ import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { Modal } from "../../../../global/Modal";
+import { createProductValidationSchema } from "../validation/productValidationSchema";
+import { AttributeFieldArray } from "./AttributeFieldArray";
 import { ImageFieldArray } from "./ImageFieldArray";
 import { ImagePreviews } from "./SmallImagePreview";
 interface CreateProductModalProps {
@@ -50,8 +54,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
   });
   const { data: categoriesData } = useBasicCategoriesQuery();
 
-  const [createProduct, { loading: isCreateProductLoading, error }] =
-    useCreateProductMutation({ fetchPolicy: "network-only" });
+  const [createProduct, { error }] = useCreateProductMutation();
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -79,46 +82,16 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
           initialValues={{
             ...initialValues,
           }}
-          onSubmit={(values: FormValues, { resetForm }) => {
-            onSubmit(values);
+          onSubmit={async (values: FormValues, { setSubmitting }) => {
+            await onSubmit(values);
+            setSubmitting(false);
           }}
-          validate={(values: FormValues) => {
-            const errors: Partial<Record<keyof FormValues, string>> = {};
-            if (!values.name) {
-              errors.name = "Required";
-            }
-            if (values.name.length > 100) {
-              errors.name = "Name must be less than 100 characters";
-            }
-            if (values.brandId <= 0) {
-              errors.brandId = "Selected a brand";
-            }
-            if (values.categoryId <= 0) {
-              errors.categoryId = "Selected a category";
-            }
-            if (!values.description) {
-              errors.description = "Required";
-            }
-            if (values.description.length > 1000) {
-              errors.description =
-                "Description must be less than 1000 characters";
-            }
-            if (!values.price || values.price <= 0) {
-              errors.price = "Price must be greater than 0";
-            }
-            if (values.imageUrls.length === 0) {
-              errors.imageUrls = "At least one image is required";
-            }
-            if (values.attributes.length === 0) {
-              errors.attributes = "At least one attribute is required";
-            }
-            return errors;
-          }}
+          validationSchema={createProductValidationSchema}
         >
-          {({ errors, touched, values, setFieldValue }) => {
+          {({ errors, touched, values, setFieldValue, isSubmitting }) => {
             return (
               <Form className="space-y-4">
-                {/* <Persist name={LOCAL_STORAGE_KEY.CREATE_PRODUCT_FORM} /> */}
+                <Persist name={LOCAL_STORAGE_KEY.CREATE_PRODUCT_FORM} />
                 <div className="">
                   {/* price input */}
                   <Field
@@ -260,112 +233,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                 <div className="pt-6">
                   <h3 className="pb-4 text-xl font-semibold">Attributes</h3>
                   {/* attributes */}
-                  <FieldArray
-                    name="attributes"
-                    render={(arrayHelpers) => (
-                      <div className="w-full space-y-7 md:space-y-4">
-                        {values.attributes.length > 0 ? (
-                          values.attributes.map((attribute, index) => (
-                            <div
-                              key={index}
-                              className="w-full md:flex md:items-center md:justify-between md:space-x-0"
-                            >
-                              <div className="md:w-3/12">
-                                <Field
-                                  name={`attributes[${index}].size.value`}
-                                  as={BaseInput}
-                                  type="text"
-                                  id={`attributes.${index}.size`}
-                                  autoComplete="off"
-                                  label="Size"
-                                  required
-                                  value={values.attributes[index].size.value}
-                                  placeholder="Size"
-                                  aria-label="Size"
-                                />
-                              </div>
-                              <div className="mt-2 md:mt-0 md:w-3/12">
-                                <Field
-                                  name={`attributes.${index}.color.value`}
-                                  as={BaseInput}
-                                  type="text"
-                                  id={`attributes.${index}.color`}
-                                  autoComplete="off"
-                                  label="Color"
-                                  required
-                                  value={values.attributes[index].color.value}
-                                  placeholder="Color"
-                                  aria-label="Color"
-                                />
-                              </div>
-                              <div className="mt-2 md:mt-0 md:w-1/5">
-                                <Field
-                                  name={`attributes.${index}.quantity`}
-                                  as={BaseInput}
-                                  type="number"
-                                  id={`attributes.${index}.quantity`}
-                                  autoComplete="off"
-                                  label="Quantity"
-                                  min="1"
-                                  value={values.attributes[index].quantity}
-                                  placeholder="Quantity"
-                                  aria-label="Quantity"
-                                />
-                              </div>
-
-                              <div className="space-x-4 pt-2">
-                                <AddRemoveButton
-                                  variant="remove"
-                                  type="button"
-                                  aria-label="Remove attribute"
-                                  onClick={() => arrayHelpers.remove(index)}
-                                >
-                                  -
-                                </AddRemoveButton>
-                                <AddRemoveButton
-                                  variant="add"
-                                  type="button"
-                                  aria-label="Add attribute"
-                                  onClick={() =>
-                                    arrayHelpers.push({
-                                      size: { value: "" },
-                                      color: { value: "" },
-                                      quantity: 0,
-                                    })
-                                  }
-                                >
-                                  +
-                                </AddRemoveButton>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="flex items-center space-x-4">
-                            <button
-                              type="button"
-                              className="bg-green-600 p-2 text-sm uppercase text-white"
-                              onClick={() =>
-                                arrayHelpers.push({
-                                  size: { value: "" },
-                                  color: { value: "" },
-                                  quantity: 0,
-                                })
-                              }
-                            >
-                              Add Attributes
-                            </button>
-                            <ErrorMessage name="attributes">
-                              {(msg) => (
-                                <div className="text-[11px] text-red-600">
-                                  {msg}
-                                </div>
-                              )}
-                            </ErrorMessage>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  />
+                  <AttributeFieldArray attributes={values.attributes} />
                 </div>
                 {error && (
                   <ul className="list-disc text-xs text-red-600">
@@ -380,7 +248,11 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                   <div className="text-sm text-red-600">{error.message}</div>
                 )}
                 <div className="space-x-6 pt-8">
-                  <BaseButton type="submit" loading={isCreateProductLoading}>
+                  <BaseButton
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                  >
                     Save
                   </BaseButton>
                   <BaseButton
