@@ -541,6 +541,8 @@ export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, na
 
 export type CoreProductReviewFieldsFragment = { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any };
 
+export type ProductReviewPartsFragment = { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined };
+
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
 export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean };
@@ -664,7 +666,7 @@ export type FindAllProductReviewsQueryVariables = Exact<{
 }>;
 
 
-export type FindAllProductReviewsQuery = { __typename?: 'Query', allProductReviews: { __typename?: 'QueryAllProductReviewsOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any }> } };
+export type FindAllProductReviewsQuery = { __typename?: 'Query', allProductReviews: { __typename?: 'QueryAllProductReviewsOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined }> } };
 
 export type PublishedProductReviewsQueryVariables = Exact<{
   input: FindPublishedProductReviewsInput;
@@ -757,6 +759,19 @@ export const CoreProductReviewFieldsFragmentDoc = gql`
   productId
   publishedAt
   updatedAt
+}
+    `;
+export const ProductReviewPartsFragmentDoc = gql`
+    fragment ProductReviewParts on ProductReview {
+  id
+  title
+  rating
+  wouldRecommend
+  isPublished
+  nickname
+  createdAt
+  productId
+  publishedAt
 }
     `;
 export const CoreAddressFieldsFragmentDoc = gql`
@@ -1425,11 +1440,11 @@ export const FindAllProductReviewsDocument = gql`
     hasMore
     totalCount
     items {
-      ...CoreProductReviewFields
+      ...ProductReviewParts
     }
   }
 }
-    ${CoreProductReviewFieldsFragmentDoc}`;
+    ${ProductReviewPartsFragmentDoc}`;
 
 /**
  * __useFindAllProductReviewsQuery__

@@ -144,23 +144,23 @@ export const SmallDeviceProductViewRow = ({ product }: ProductViewRowProps) => {
 };
 interface ItemDetailRowProps {
   label: string;
-  value: string;
-  backgroundColor: "gray" | "none";
+  value: string | React.ReactNode;
+  backgroundColor?: "gray" | "none";
   valueClassName?: string;
 }
 export const ItemDetailRow = ({
   label,
   value,
-  backgroundColor,
+  backgroundColor = "gray",
   valueClassName,
 }: ItemDetailRowProps) => {
   return (
     <div
-      className={`flex justify-between rounded-lg ${
+      className={`flex justify-between space-x-8 rounded-lg ${
         backgroundColor === "gray" ? "bg-gray-50" : ""
       } p-3 text-xs`}
     >
-      <div className="font-light text-stone-600">{label}</div>
+      <div className="font-light text-stone-600 ">{label}</div>
       <div className={`font-medium ${valueClassName ? valueClassName : ""}`}>
         {value}
       </div>

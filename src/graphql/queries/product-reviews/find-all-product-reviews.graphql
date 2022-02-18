@@ -3,7 +3,7 @@ query FindAllProductReviews($input: FindAllProductReviewsInput!) {
     hasMore
     totalCount
     items {
-      ...CoreProductReviewFields
+      ...ProductReviewParts
     }
   }
 }

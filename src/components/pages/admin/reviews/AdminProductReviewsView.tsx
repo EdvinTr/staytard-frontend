@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from "@heroicons/react/solid";
+import { CheckIcon, ChevronRightIcon, XIcon } from "@heroicons/react/solid";
 import React from "react";
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
 import { BasicCard } from "../../../global/BasicCard";
@@ -39,7 +39,20 @@ export const AdminProductReviewsView = () => {
                   </div>
                   <div className="mt-4">
                     <ItemDetailRow
-                      backgroundColor="gray"
+                      valueClassName="truncate"
+                      label="Nickname"
+                      value={`${review.nickname}`}
+                    />
+                    <ItemDetailRow
+                      valueClassName="truncate"
+                      label="Product ID"
+                      value={`${review.productId}`}
+                      backgroundColor="none"
+                    />
+
+                    <ItemDetailRow label="Rating" value={`${review.rating}`} />
+                    <ItemDetailRow
+                      backgroundColor="none"
                       label="Status"
                       value={`${
                         review.isPublished ? "Published" : "Unpublished"
@@ -49,16 +62,18 @@ export const AdminProductReviewsView = () => {
                       }`}
                     />
                     <ItemDetailRow
-                      backgroundColor="none"
-                      label="Rating"
-                      value={`${review.rating}`}
+                      label="Recommended"
+                      value={
+                        <div>
+                          {review.wouldRecommend ? (
+                            <CheckIcon className="w-4 text-green-600" />
+                          ) : (
+                            <XIcon className="w-4 text-red-600" />
+                          )}
+                        </div>
+                      }
                     />
-                    <ItemDetailRow
-                      valueClassName="truncate"
-                      backgroundColor="gray"
-                      label="Nickname"
-                      value={`${review.nickname}`}
-                    />
+
                     {review.publishedAt && (
                       <ItemDetailRow
                         backgroundColor="none"

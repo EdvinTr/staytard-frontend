@@ -1,0 +1,11 @@
+fragment ProductReviewParts on ProductReview {
+  id
+  title
+  rating
+  wouldRecommend
+  isPublished
+  nickname
+  createdAt
+  productId
+  publishedAt
+}
