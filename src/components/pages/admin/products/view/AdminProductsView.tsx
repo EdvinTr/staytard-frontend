@@ -70,7 +70,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
     });
   return (
     <div className="relative pb-20">
-      <div className="bg-[#F8F8F9]">
+      <div className="bg-staytard-semi-light-gray">
         <PaddingContainer>
           <div className="flex items-center lg:justify-between">
             <PageHeading>Products</PageHeading>

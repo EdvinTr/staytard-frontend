@@ -1,15 +1,27 @@
 import React from "react";
+import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
+import { PaddingContainer } from "../components/PaddingContainer";
+import { PageHeading } from "../components/PageHeading";
 
-interface AdminProductReviewsViewProps {}
-
-export const AdminProductReviewsView: React.FC<
-  AdminProductReviewsViewProps
-> = ({}) => {
+export const AdminProductReviewsView = () => {
+  const { data, fetchMore, loading } = useFindAllProductReviewsQuery({
+    variables: {
+      input: {
+        limit: 50,
+        offset: 0,
+      },
+    },
+  });
+  console.log(data);
   return (
-    <div className="w-96 bg-red-500">
-      <h1 className="text-2xl font-bold">
-        Reviews for products are shown here
-      </h1>
+    <div>
+      <div className="bg-staytard-semi-light-gray">
+        <PaddingContainer>
+          <div className="flex items-center lg:justify-between">
+            <PageHeading>Reviews</PageHeading>
+          </div>
+        </PaddingContainer>
+      </div>
     </div>
   );
 };

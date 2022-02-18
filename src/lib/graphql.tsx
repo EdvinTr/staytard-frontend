@@ -111,6 +111,13 @@ export type CustomerOrderStatus = {
   status: Scalars['String'];
 };
 
+export type FindAllProductReviewsInput = {
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+  sortBy?: InputMaybe<Product_Review_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
+};
+
 export type FindCustomerOrdersInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
@@ -379,6 +386,7 @@ export type PublishedProductReviewsOutput = {
 
 export type Query = {
   __typename?: 'Query';
+  allProductReviews: QueryAllProductReviewsOutput;
   basicCategories: Array<BasicCategory>;
   categories: Array<ProductCategory>;
   customerOrders: PaginatedCustomerOrdersOutput;
@@ -391,6 +399,11 @@ export type Query = {
   productsBySku: QueryProductsOutput;
   publishedProductReviews: PublishedProductReviewsOutput;
   searchProducts: Array<Product>;
+};
+
+
+export type QueryAllProductReviewsArgs = {
+  input: FindAllProductReviewsInput;
 };
 
 
@@ -431,6 +444,13 @@ export type QueryPublishedProductReviewsArgs = {
 
 export type QuerySearchProductsArgs = {
   input: SearchProductsInput;
+};
+
+export type QueryAllProductReviewsOutput = {
+  __typename?: 'QueryAllProductReviewsOutput';
+  hasMore: Scalars['Boolean'];
+  items: Array<ProductReview>;
+  totalCount: Scalars['Float'];
 };
 
 export type QueryProductsOutput = {
@@ -519,7 +539,7 @@ export type CoreAttributeFieldsFragment = { __typename?: 'ProductAttribute', sku
 
 export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> };
 
-export type CoreProductReviewFieldsFragment = { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any };
+export type CoreProductReviewFieldsFragment = { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any };
 
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
@@ -545,7 +565,7 @@ export type CreateProductReviewMutationVariables = Exact<{
 }>;
 
 
-export type CreateProductReviewMutation = { __typename?: 'Mutation', createProductReview: { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any } };
+export type CreateProductReviewMutation = { __typename?: 'Mutation', createProductReview: { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any } };
 
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
@@ -639,12 +659,19 @@ export type GetProductBrandsQueryVariables = Exact<{
 
 export type GetProductBrandsQuery = { __typename?: 'Query', productBrands: Array<{ __typename?: 'ProductBrand', id: number, name: string, path: string }> };
 
+export type FindAllProductReviewsQueryVariables = Exact<{
+  input: FindAllProductReviewsInput;
+}>;
+
+
+export type FindAllProductReviewsQuery = { __typename?: 'Query', allProductReviews: { __typename?: 'QueryAllProductReviewsOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any }> } };
+
 export type PublishedProductReviewsQueryVariables = Exact<{
   input: FindPublishedProductReviewsInput;
 }>;
 
 
-export type PublishedProductReviewsQuery = { __typename?: 'Query', publishedProductReviews: { __typename?: 'PublishedProductReviewsOutput', totalCount: number, hasMore: boolean, averageRating: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, publishedAt?: any | null | undefined, updatedAt: any }> } };
+export type PublishedProductReviewsQuery = { __typename?: 'Query', publishedProductReviews: { __typename?: 'PublishedProductReviewsOutput', totalCount: number, hasMore: boolean, averageRating: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any }> } };
 
 export type FindOneProductQueryVariables = Exact<{
   id: Scalars['Float'];
@@ -727,6 +754,7 @@ export const CoreProductReviewFieldsFragmentDoc = gql`
   isPublished
   nickname
   createdAt
+  productId
   publishedAt
   updatedAt
 }
@@ -1390,6 +1418,48 @@ export type GetProductBrandsLazyQueryHookResult = ReturnType<typeof useGetProduc
 export type GetProductBrandsQueryResult = Apollo.QueryResult<GetProductBrandsQuery, GetProductBrandsQueryVariables>;
 export function refetchGetProductBrandsQuery(variables: GetProductBrandsQueryVariables) {
       return { query: GetProductBrandsDocument, variables: variables }
+    }
+export const FindAllProductReviewsDocument = gql`
+    query FindAllProductReviews($input: FindAllProductReviewsInput!) {
+  allProductReviews(input: $input) {
+    hasMore
+    totalCount
+    items {
+      ...CoreProductReviewFields
+    }
+  }
+}
+    ${CoreProductReviewFieldsFragmentDoc}`;
+
+/**
+ * __useFindAllProductReviewsQuery__
+ *
+ * To run a query within a React component, call `useFindAllProductReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllProductReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllProductReviewsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindAllProductReviewsQuery(baseOptions: Apollo.QueryHookOptions<FindAllProductReviewsQuery, FindAllProductReviewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllProductReviewsQuery, FindAllProductReviewsQueryVariables>(FindAllProductReviewsDocument, options);
+      }
+export function useFindAllProductReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllProductReviewsQuery, FindAllProductReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllProductReviewsQuery, FindAllProductReviewsQueryVariables>(FindAllProductReviewsDocument, options);
+        }
+export type FindAllProductReviewsQueryHookResult = ReturnType<typeof useFindAllProductReviewsQuery>;
+export type FindAllProductReviewsLazyQueryHookResult = ReturnType<typeof useFindAllProductReviewsLazyQuery>;
+export type FindAllProductReviewsQueryResult = Apollo.QueryResult<FindAllProductReviewsQuery, FindAllProductReviewsQueryVariables>;
+export function refetchFindAllProductReviewsQuery(variables: FindAllProductReviewsQueryVariables) {
+      return { query: FindAllProductReviewsDocument, variables: variables }
     }
 export const PublishedProductReviewsDocument = gql`
     query PublishedProductReviews($input: FindPublishedProductReviewsInput!) {

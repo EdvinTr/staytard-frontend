@@ -1,0 +1,9 @@
+query FindAllProductReviews($input: FindAllProductReviewsInput!) {
+  allProductReviews(input: $input) {
+    hasMore
+    totalCount
+    items {
+      ...CoreProductReviewFields
+    }
+  }
+}

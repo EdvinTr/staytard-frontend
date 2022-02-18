@@ -111,22 +111,22 @@ export const SmallDeviceProductViewRow = ({ product }: ProductViewRowProps) => {
               <ChevronRightIcon className="w-6" />
             </div>
             <div className="mt-4">
-              <ProductDetailRow
+              <ItemDetailRow
                 backgroundColor="gray"
                 label="Brand"
                 value={`${product.brand.name}`}
               />
-              <ProductDetailRow
+              <ItemDetailRow
                 backgroundColor="none"
                 label="Original price"
                 value={`${product.originalPrice} EUR`}
               />
-              <ProductDetailRow
+              <ItemDetailRow
                 backgroundColor="gray"
                 label="Current price"
                 value={`${product.currentPrice} EUR`}
               />
-              <ProductDetailRow
+              <ItemDetailRow
                 backgroundColor="none"
                 label="Discount"
                 value={`${discountPercentage.toFixed(0)}%`}
@@ -141,18 +141,18 @@ export const SmallDeviceProductViewRow = ({ product }: ProductViewRowProps) => {
     </div>
   );
 };
-interface ProductDetailRowProps {
+interface ItemDetailRowProps {
   label: string;
   value: string;
   backgroundColor: "gray" | "none";
   valueClassName?: string;
 }
-const ProductDetailRow = ({
+export const ItemDetailRow = ({
   label,
   value,
   backgroundColor,
   valueClassName,
-}: ProductDetailRowProps) => {
+}: ItemDetailRowProps) => {
   return (
     <div
       className={`flex justify-between rounded-lg ${

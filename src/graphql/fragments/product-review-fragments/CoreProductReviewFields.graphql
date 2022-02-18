@@ -7,6 +7,7 @@ fragment CoreProductReviewFields on ProductReview {
   isPublished
   nickname
   createdAt
+  productId
   publishedAt
   updatedAt
 }
