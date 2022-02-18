@@ -3,7 +3,6 @@ import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { BeatLoader } from "react-spinners";
 import { toast, ToastContainer } from "react-toast";
 import useSWR from "swr";
 import { useDebounce } from "usehooks-ts";
@@ -15,6 +14,7 @@ import { useSsrCompatible } from "../../../../../hooks/useSsrCompatible";
 import { Localized } from "../../../../../Localized";
 import { GetProductsResponse } from "../../../../../typings/GetProductsResponse.interface";
 import { BaseInput } from "../../../../global/BaseInput";
+import { CenteredBeatLoader } from "../../../../global/CenteredBeatLoader";
 import { MyPagination } from "../../../../global/MyPagination";
 import { PaddingContainer } from "../../components/PaddingContainer";
 import { PageHeading } from "../../components/PageHeading";
@@ -109,15 +109,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
           />
           <SearchIcon className="absolute top-3 left-3 w-6 text-stone-700" />
         </div>
-        {!data && !error && (
-          <div className="fixed top-1/2 left-0 right-0 ">
-            <BeatLoader
-              color="#faba"
-              size={20}
-              css="display:flex; justify-content:center; align-items:center;"
-            />
-          </div>
-        )}
+        {!data && !error && <CenteredBeatLoader />}
         {currentWindowWidth >= 1024 ? (
           <div>
             {data?.products.map((product) => {

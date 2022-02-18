@@ -1,5 +1,6 @@
 import React from "react";
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
+import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { PaddingContainer } from "../components/PaddingContainer";
 import { PageHeading } from "../components/PageHeading";
 
@@ -14,7 +15,7 @@ export const AdminProductReviewsView = () => {
   });
   console.log(data);
   return (
-    <div>
+    <div className="relative">
       <div className="bg-staytard-semi-light-gray">
         <PaddingContainer>
           <div className="flex items-center lg:justify-between">
@@ -22,6 +23,7 @@ export const AdminProductReviewsView = () => {
           </div>
         </PaddingContainer>
       </div>
+      <PaddingContainer>{loading && <CenteredBeatLoader />}</PaddingContainer>
     </div>
   );
 };

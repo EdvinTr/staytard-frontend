@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../../constants";
 import { ProductItem } from "../../../../../typings/GetProductsResponse.interface";
+import { BasicCard } from "../../../../global/BasicCard";
 interface ProductViewRowProps {
   product: ProductItem;
 }
@@ -96,7 +97,7 @@ export const SmallDeviceProductViewRow = ({ product }: ProductViewRowProps) => {
   );
 
   return (
-    <div className="shadow-md transition-all duration-100 ease-in-out hover:bg-gray-50">
+    <BasicCard>
       <Link
         href={
           APP_PAGE_ROUTE.ADMIN +
@@ -138,7 +139,7 @@ export const SmallDeviceProductViewRow = ({ product }: ProductViewRowProps) => {
           </article>
         </a>
       </Link>
-    </div>
+    </BasicCard>
   );
 };
 interface ItemDetailRowProps {
