@@ -15,16 +15,16 @@ import { APP_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import {
   FindOneProductQuery,
-  ProductReviewsQuery,
   Product_Review_Sort_By,
+  PublishedProductReviewsQuery,
   Sort_Direction,
 } from "../../lib/graphql";
-import { ssrFindOneProduct, ssrProductReviews } from "../../lib/page";
+import { ssrFindOneProduct, ssrPublishedProductReviews } from "../../lib/page";
 SwiperCore.use([Pagination]);
 SwiperCore.use([Navigation]);
 interface ProductPageProps {
   product: FindOneProductQuery["product"];
-  reviews: ProductReviewsQuery["productReviews"];
+  reviews: PublishedProductReviewsQuery["publishedProductReviews"];
 }
 interface SelectOption {
   label: string;
@@ -225,7 +225,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     });
     const { props: productReviewsProps } =
-      await ssrProductReviews.getServerPage({
+      await ssrPublishedProductReviews.getServerPage({
         variables: {
           input: {
             limit: 6,
@@ -239,7 +239,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         product: props.data.product,
-        reviews: productReviewsProps.data.productReviews,
+        reviews: productReviewsProps.data.publishedProductReviews,
         initialApolloState: productReviewsProps.apolloState,
       },
     };

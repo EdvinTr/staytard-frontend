@@ -1,0 +1,10 @@
+query PublishedProductReviews($input: FindPublishedProductReviewsInput!) {
+  publishedProductReviews(input: $input) {
+    totalCount
+    hasMore
+    averageRating
+    items {
+      ...CoreProductReviewFields
+    }
+  }
+}

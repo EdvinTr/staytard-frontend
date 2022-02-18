@@ -10,8 +10,11 @@ import { BeatLoader } from "react-spinners";
 import { toast, ToastContainer } from "react-toast";
 import { LOCAL_STORAGE_KEY } from "../../../constants";
 import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
-import { FindOneProductQuery, ProductReviewsQuery } from "../../../lib/graphql";
-import { ssrProductReviews } from "../../../lib/page";
+import {
+  FindOneProductQuery,
+  PublishedProductReviewsQuery,
+} from "../../../lib/graphql";
+import { ssrPublishedProductReviews } from "../../../lib/page";
 import { Localized } from "../../../Localized";
 import { MyContainer } from "../../global/MyContainer";
 import { PaginationProgressTracker } from "../../global/PaginationProgressTracker";
@@ -35,8 +38,9 @@ export const ProductReviewsDisplay = ({
       backgroundColor: "black",
       color: "white",
     });
-  const { data, fetchMore } = ssrProductReviews.usePage();
-  const reviews = data?.productReviews;
+  const { data, fetchMore } = ssrPublishedProductReviews.usePage();
+  console.log(data);
+  const reviews = data?.publishedProductReviews;
   const [offset, setOffset] = useState(0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -185,7 +189,8 @@ export const ProductReviewsDisplay = ({
     </ReviewSectionContainer>
   );
 };
-type Review = ProductReviewsQuery["productReviews"]["items"][0];
+type Review =
+  PublishedProductReviewsQuery["publishedProductReviews"]["items"][0];
 interface ProductReviewCardProps {
   review: Review;
   isLoadingMore: boolean;

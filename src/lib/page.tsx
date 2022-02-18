@@ -158,11 +158,11 @@ export const ssrGetProductBrands = {
       
       usePage: useGetProductBrands,
     }
-export async function getServerPageProductReviews
-    (options: Omit<Apollo.QueryOptions<Types.ProductReviewsQueryVariables>, 'query'>, ctx?: any ){
+export async function getServerPagePublishedProductReviews
+    (options: Omit<Apollo.QueryOptions<Types.PublishedProductReviewsQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
         
-        const data = await apolloClient.query<Types.ProductReviewsQuery>({ ...options, query: Operations.ProductReviewsDocument });
+        const data = await apolloClient.query<Types.PublishedProductReviewsQuery>({ ...options, query: Operations.PublishedProductReviewsDocument });
         
         const apolloState = apolloClient.cache.extract();
 
@@ -174,17 +174,17 @@ export async function getServerPageProductReviews
             },
         };
       }
-export const useProductReviews = (
-  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.ProductReviewsQuery, Types.ProductReviewsQueryVariables>) => {
+export const usePublishedProductReviews = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.PublishedProductReviewsQuery, Types.PublishedProductReviewsQueryVariables>) => {
   const router = useRouter();
   const options = optionsFunc ? optionsFunc(router) : {};
-  return useQuery(Operations.ProductReviewsDocument, options);
+  return useQuery(Operations.PublishedProductReviewsDocument, options);
 };
-export type PageProductReviewsComp = React.FC<{data?: Types.ProductReviewsQuery, error?: Apollo.ApolloError}>;
-export const ssrProductReviews = {
-      getServerPage: getServerPageProductReviews,
+export type PagePublishedProductReviewsComp = React.FC<{data?: Types.PublishedProductReviewsQuery, error?: Apollo.ApolloError}>;
+export const ssrPublishedProductReviews = {
+      getServerPage: getServerPagePublishedProductReviews,
       
-      usePage: useProductReviews,
+      usePage: usePublishedProductReviews,
     }
 export async function getServerPageFindOneProduct
     (options: Omit<Apollo.QueryOptions<Types.FindOneProductQueryVariables>, 'query'>, ctx?: any ){
