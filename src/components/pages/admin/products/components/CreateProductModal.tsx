@@ -235,19 +235,10 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                   {/* attributes */}
                   <AttributeFieldArray attributes={values.attributes} />
                 </div>
-                {error && (
-                  <ul className="list-disc text-xs text-red-600">
-                    {error.graphQLErrors[0]?.extensions?.response?.message?.map(
-                      (msg: string, idx: number) => (
-                        <li key={idx}>{msg}</li>
-                      )
-                    )}
-                  </ul>
-                )}
-                {error && (
-                  <div className="text-sm text-red-600">{error.message}</div>
-                )}
-                <div className="space-x-6 pt-8">
+                <div className="pt-6 pb-2 text-sm text-red-600">
+                  {error?.message}
+                </div>
+                <div className="space-x-6 ">
                   <BaseButton
                     type="submit"
                     loading={isSubmitting}

@@ -46,8 +46,10 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
   const router = useRouter();
   const [updateProduct, { error: updateProductGqlError }] =
     useUpdateProductMutation();
-  const [deleteProduct, { loading: deleteProductLoading }] =
-    useDeleteProductMutation();
+  const [
+    deleteProduct,
+    { loading: deleteProductLoading, error: deleteProductError },
+  ] = useDeleteProductMutation();
 
   const handleDeleteProduct = async (id: number) => {
     try {
@@ -84,6 +86,7 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
           onClose={() => setIsConfirmDeleteModalOpen(false)}
           show={isConfirmDeleteModalOpen}
           onDelete={() => handleDeleteProduct(product.id)}
+          error={deleteProductError?.message}
         />
       </div>
       <div className="space-y-4 md:flex md:items-center md:justify-between md:space-x-7 md:space-y-0">
