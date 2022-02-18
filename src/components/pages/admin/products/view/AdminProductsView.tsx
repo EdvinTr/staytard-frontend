@@ -1,11 +1,12 @@
-import { PlusIcon } from "@heroicons/react/solid";
+import { PlusIcon, SearchIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { toast, ToastContainer } from "react-toast";
 import useSWR from "swr";
+import { useDebounce } from "usehooks-ts";
 import {
   ADMIN_PAGE_QUERY_KEY,
   MAX_PRODUCT_LIMIT,
@@ -13,6 +14,7 @@ import {
 import { useSsrCompatible } from "../../../../../hooks/useSsrCompatible";
 import { Localized } from "../../../../../Localized";
 import { GetProductsResponse } from "../../../../../typings/GetProductsResponse.interface";
+import { BaseInput } from "../../../../global/BaseInput";
 import { MyPagination } from "../../../../global/MyPagination";
 import { PaddingContainer } from "../../components/PaddingContainer";
 import { PageHeading } from "../../components/PageHeading";
@@ -33,11 +35,15 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
   useState(false);
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] =
     useState(false);
-
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState(
+    router.query.q ? (router.query.q as string) : ""
+  );
+  const debouncedSearchTerm = useDebounce<string>(searchTerm, 500);
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
+
   const { data, error, mutate } = useSWR<GetProductsResponse>(
-    `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}`,
+    `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}&page=${pageIndex}&categoryPath=${categoryPath}&q=${debouncedSearchTerm}`,
     fetcher
   );
 
@@ -47,6 +53,15 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
       setPageIndex(parseInt(currentPageQuery as string));
     }
   }, [currentPageQuery]); // reruns when the page query changes
+
+  useEffect(() => {
+    Router.replace({
+      query: {
+        ...Router.query,
+        q: debouncedSearchTerm,
+      },
+    }); // Using default Router to avoid missing dependency eslint warnings
+  }, [debouncedSearchTerm]); // update URL when search term changes
 
   const showSuccessToast = (): void =>
     toast.success(createProductSuccessMessage, {
@@ -79,6 +94,21 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
         </PaddingContainer>
       </div>
       <PaddingContainer>
+        <div className="relative md:max-w-sm">
+          <BaseInput
+            type="text"
+            aria-label="Search"
+            className="mb-3 border-opacity-[0.1]"
+            placeholder="Search"
+            label="Search"
+            name="search"
+            autoComplete="off"
+            hasLeftIcon
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <SearchIcon className="absolute top-3 left-3 w-6 text-stone-700" />
+        </div>
         {!data && !error && (
           <div className="fixed top-1/2 left-0 right-0 ">
             <BeatLoader
