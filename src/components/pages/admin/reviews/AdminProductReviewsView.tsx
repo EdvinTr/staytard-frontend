@@ -27,8 +27,7 @@ export const AdminProductReviewsView = () => {
       </div>
       <PaddingContainer className="text-sm">
         {loading && <CenteredBeatLoader />}
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-5">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-4">
           {data?.allProductReviews.items.map((review) => {
             return (
               <BasicCard key={review.id}>
