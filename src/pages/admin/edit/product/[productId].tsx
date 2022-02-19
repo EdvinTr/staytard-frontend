@@ -1,4 +1,3 @@
-import { ArrowLeftIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -7,7 +6,7 @@ import { BeatLoader } from "react-spinners";
 import { AdminNavbarGroup } from "../../../../components/pages/admin/components/nav/AdminNavbarGroup";
 import { PaddingContainer } from "../../../../components/pages/admin/components/PaddingContainer";
 import { PageContentWrapper } from "../../../../components/pages/admin/components/PageContentWrapper";
-import { PageHeading } from "../../../../components/pages/admin/components/PageHeading";
+import { SubPageHeader } from "../../../../components/pages/admin/components/SubPageHeader";
 import { EditProductView } from "../../../../components/pages/admin/products/edit/EditProductView";
 import { APP_NAME } from "../../../../constants";
 import { useFindOneProductQuery } from "../../../../lib/graphql";
@@ -32,14 +31,8 @@ const EditProductPage: NextPage = () => {
       </Head>
       <AdminNavbarGroup />
       <PageContentWrapper>
-        <div className="bg-[#F8F8F9]">
-          <PaddingContainer className="flex items-center space-x-5">
-            <button aria-label="Navigate back" onClick={() => router.back()}>
-              <ArrowLeftIcon className="h-6" aria-hidden />
-            </button>
-            <PageHeading visibleOnMobile>{data?.product.name}</PageHeading>
-          </PaddingContainer>
-        </div>
+        <SubPageHeader title={data?.product.name || ""} />
+
         <PaddingContainer>
           {data && <EditProductView product={data.product} />}
           {loading && (
