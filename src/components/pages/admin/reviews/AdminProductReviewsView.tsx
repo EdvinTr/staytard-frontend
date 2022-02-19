@@ -1,7 +1,7 @@
 import { CheckIcon, ChevronRightIcon, XIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ADMIN_PAGE_QUERY_KEY,
   ADMIN_SUB_PAGE_ROUTE,
@@ -16,6 +16,16 @@ import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
 import { ItemDetailRow } from "../products/components/ProductViewRow";
 
+const getOffset = (limit: number, pageNumber?: string | string[]) => {
+  if (!pageNumber || Array.isArray(pageNumber)) {
+    return 0;
+  }
+  const parsedPageNumber = parseInt(pageNumber) - 1;
+  if (parsedPageNumber < 0) {
+    return 0;
+  }
+  return parsedPageNumber * limit;
+};
 const MAX_PRODUCT_REVIEW_LIMIT = 50;
 export const AdminProductReviewsView = () => {
   const [offset, setOffset] = useState(0);
@@ -24,11 +34,23 @@ export const AdminProductReviewsView = () => {
   const { data, fetchMore, loading, error } = useFindAllProductReviewsQuery({
     variables: {
       input: {
+        offset: getOffset(MAX_PRODUCT_REVIEW_LIMIT, activePage),
         limit: MAX_PRODUCT_REVIEW_LIMIT,
-        offset: 0,
       },
     },
+    notifyOnNetworkStatusChange: true,
   });
+
+  useEffect(() => {
+    fetchMore({
+      variables: {
+        input: {
+          offset: getOffset(MAX_PRODUCT_REVIEW_LIMIT, activePage),
+          limit: MAX_PRODUCT_REVIEW_LIMIT,
+        },
+      },
+    });
+  }, [activePage, fetchMore]);
 
   return (
     <div className="relative">
@@ -119,10 +141,13 @@ export const AdminProductReviewsView = () => {
         <div className="flex justify-center pt-14">
           {data && (
             <MyPagination
-              currentPage={Math.floor(offset / MAX_PRODUCT_REVIEW_LIMIT)}
+              currentPage={
+                activePage
+                  ? +activePage - 1
+                  : Math.floor(offset / MAX_PRODUCT_REVIEW_LIMIT)
+              }
               disableInitialCallback
               onPageChange={async (page) => {
-                const newOffset = page * MAX_PRODUCT_REVIEW_LIMIT;
                 router.replace(
                   {
                     pathname: router.pathname,
@@ -134,16 +159,6 @@ export const AdminProductReviewsView = () => {
                   undefined,
                   { shallow: true }
                 );
-                await fetchMore({
-                  variables: {
-                    input: {
-                      limit: MAX_PRODUCT_REVIEW_LIMIT,
-                      offset: newOffset,
-                    },
-                  },
-                }).then(() => {
-                  setOffset((cur) => cur + MAX_PRODUCT_REVIEW_LIMIT);
-                });
               }}
               totalPages={getTotalPages(
                 data.allProductReviews.totalCount,
