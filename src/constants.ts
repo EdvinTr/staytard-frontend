@@ -22,6 +22,7 @@ export enum ADMIN_SUB_PAGE_ROUTE {
   REVIEWS = "reviews",
   USERS = "users",
   EDIT_PRODUCT = "/edit/product",
+  EDIT_PRODUCT_REVIEW = "/edit/review",
 }
 
 export enum ADMIN_PAGE_QUERY_KEY {
