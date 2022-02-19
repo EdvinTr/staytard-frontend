@@ -1,0 +1,5 @@
+query FindOneProductReview($id: Float!) {
+  oneProductReview(id: $id) {
+    ...CoreProductReviewFields
+  }
+}

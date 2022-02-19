@@ -1,6 +1,7 @@
 import { CheckIcon, ChevronRightIcon, XIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../constants";
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
 import { BasicCard } from "../../../global/BasicCard";
@@ -9,15 +10,18 @@ import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
 import { ItemDetailRow } from "../products/components/ProductViewRow";
 
+const MAX_PRODUCT_REVIEW_LIMIT = 50;
 export const AdminProductReviewsView = () => {
+  const [offset, setOffset] = useState(0);
   const { data, fetchMore, loading, error } = useFindAllProductReviewsQuery({
     variables: {
       input: {
-        limit: 50,
-        offset: 0,
+        limit: MAX_PRODUCT_REVIEW_LIMIT,
+        offset: offset,
       },
     },
   });
+  const router = useRouter();
   return (
     <div className="relative">
       <SubPageHeader title="Reviews" />
@@ -103,6 +107,26 @@ export const AdminProductReviewsView = () => {
               </Link>
             );
           })}
+        </div>
+        <div className="flex justify-center pt-14">
+          {/*    {data && (
+            <MyPagination
+              currentPage={Math.floor(offset / MAX_PRODUCT_REVIEW_LIMIT)}
+              onPageChange={(page) => {
+                router.replace({
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    page: page + 1,
+                  },
+                });
+              }}
+              totalPages={getTotalPages(
+                data.allProductReviews.totalCount,
+                MAX_PRODUCT_REVIEW_LIMIT
+              )}
+            />
+          )} */}
         </div>
       </PaddingContainer>
     </div>

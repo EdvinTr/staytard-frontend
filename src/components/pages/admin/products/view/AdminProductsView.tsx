@@ -59,6 +59,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
       query: {
         ...Router.query,
         q: debouncedSearchTerm,
+        [ADMIN_PAGE_QUERY_KEY.PAGE]: 1,
       },
     }); // Using default Router to avoid missing dependency eslint warnings
   }, [debouncedSearchTerm]); // update URL when search term changes
@@ -135,7 +136,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
                   pathname: router.pathname,
                   query: {
                     ...router.query,
-                    page: page + 1,
+                    [ADMIN_PAGE_QUERY_KEY.PAGE]: page + 1,
                   },
                 });
               }}

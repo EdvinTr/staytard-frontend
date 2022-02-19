@@ -293,8 +293,11 @@ export type PaymentMethodCategory = {
 export enum Permission {
   CreateProduct = 'CREATE_PRODUCT',
   DeleteProduct = 'DELETE_PRODUCT',
+  DeleteProductReview = 'DELETE_PRODUCT_REVIEW',
   PublishReview = 'PUBLISH_REVIEW',
-  UpdateProduct = 'UPDATE_PRODUCT'
+  ReadProductReview = 'READ_PRODUCT_REVIEW',
+  UpdateProduct = 'UPDATE_PRODUCT',
+  UpdateProductReview = 'UPDATE_PRODUCT_REVIEW'
 }
 
 export type Product = {
@@ -393,6 +396,7 @@ export type Query = {
   getOneCategory: ProductCategory;
   hasPassword: Scalars['Boolean'];
   me: User;
+  oneProductReview: ProductReview;
   product: Product;
   productBrands: Array<ProductBrand>;
   products: QueryProductsOutput;
@@ -414,6 +418,11 @@ export type QueryCustomerOrdersArgs = {
 
 export type QueryGetOneCategoryArgs = {
   path: Scalars['String'];
+};
+
+
+export type QueryOneProductReviewArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -667,6 +676,13 @@ export type FindAllProductReviewsQueryVariables = Exact<{
 
 
 export type FindAllProductReviewsQuery = { __typename?: 'Query', allProductReviews: { __typename?: 'QueryAllProductReviewsOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined }> } };
+
+export type FindOneProductReviewQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type FindOneProductReviewQuery = { __typename?: 'Query', oneProductReview: { __typename?: 'ProductReview', id: number, title: string, rating: number, wouldRecommend: boolean, content: string, isPublished: boolean, nickname: string, createdAt: any, productId: number, publishedAt?: any | null | undefined, updatedAt: any } };
 
 export type PublishedProductReviewsQueryVariables = Exact<{
   input: FindPublishedProductReviewsInput;
@@ -1475,6 +1491,44 @@ export type FindAllProductReviewsLazyQueryHookResult = ReturnType<typeof useFind
 export type FindAllProductReviewsQueryResult = Apollo.QueryResult<FindAllProductReviewsQuery, FindAllProductReviewsQueryVariables>;
 export function refetchFindAllProductReviewsQuery(variables: FindAllProductReviewsQueryVariables) {
       return { query: FindAllProductReviewsDocument, variables: variables }
+    }
+export const FindOneProductReviewDocument = gql`
+    query FindOneProductReview($id: Float!) {
+  oneProductReview(id: $id) {
+    ...CoreProductReviewFields
+  }
+}
+    ${CoreProductReviewFieldsFragmentDoc}`;
+
+/**
+ * __useFindOneProductReviewQuery__
+ *
+ * To run a query within a React component, call `useFindOneProductReviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOneProductReviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOneProductReviewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindOneProductReviewQuery(baseOptions: Apollo.QueryHookOptions<FindOneProductReviewQuery, FindOneProductReviewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindOneProductReviewQuery, FindOneProductReviewQueryVariables>(FindOneProductReviewDocument, options);
+      }
+export function useFindOneProductReviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOneProductReviewQuery, FindOneProductReviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindOneProductReviewQuery, FindOneProductReviewQueryVariables>(FindOneProductReviewDocument, options);
+        }
+export type FindOneProductReviewQueryHookResult = ReturnType<typeof useFindOneProductReviewQuery>;
+export type FindOneProductReviewLazyQueryHookResult = ReturnType<typeof useFindOneProductReviewLazyQuery>;
+export type FindOneProductReviewQueryResult = Apollo.QueryResult<FindOneProductReviewQuery, FindOneProductReviewQueryVariables>;
+export function refetchFindOneProductReviewQuery(variables: FindOneProductReviewQueryVariables) {
+      return { query: FindOneProductReviewDocument, variables: variables }
     }
 export const PublishedProductReviewsDocument = gql`
     query PublishedProductReviews($input: FindPublishedProductReviewsInput!) {

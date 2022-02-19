@@ -186,6 +186,34 @@ export const ssrFindAllProductReviews = {
       
       usePage: useFindAllProductReviews,
     }
+export async function getServerPageFindOneProductReview
+    (options: Omit<Apollo.QueryOptions<Types.FindOneProductReviewQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.FindOneProductReviewQuery>({ ...options, query: Operations.FindOneProductReviewDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useFindOneProductReview = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.FindOneProductReviewQuery, Types.FindOneProductReviewQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.FindOneProductReviewDocument, options);
+};
+export type PageFindOneProductReviewComp = React.FC<{data?: Types.FindOneProductReviewQuery, error?: Apollo.ApolloError}>;
+export const ssrFindOneProductReview = {
+      getServerPage: getServerPageFindOneProductReview,
+      
+      usePage: useFindOneProductReview,
+    }
 export async function getServerPagePublishedProductReviews
     (options: Omit<Apollo.QueryOptions<Types.PublishedProductReviewsQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

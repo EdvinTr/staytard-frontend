@@ -286,7 +286,7 @@ interface BasicInputLabelProps
     React.LabelHTMLAttributes<HTMLLabelElement>,
     HTMLLabelElement
   > {}
-const BasicInputLabel = ({ ...props }: BasicInputLabelProps) => {
+export const BasicInputLabel = ({ ...props }: BasicInputLabelProps) => {
   return (
     <label {...props} className="text-xs font-medium">
       {props.children}
