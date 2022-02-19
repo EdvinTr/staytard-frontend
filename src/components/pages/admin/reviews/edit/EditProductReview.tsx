@@ -1,8 +1,13 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toast";
-import { successToastColors } from "../../../../../constants";
+import {
+  ADMIN_PAGE_QUERY_KEY,
+  APP_PAGE_ROUTE,
+  successToastColors,
+} from "../../../../../constants";
 import {
   FindOneProductReviewDocument,
   ProductReview,
@@ -44,9 +49,12 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
       ...successToastColors,
     });
   const currentWindowWidth = useWindowWidth();
+  const router = useRouter();
 
-  const [updateReview] = useUpdateProductReviewMutation();
-  const [deleteReview] = useDeleteProductReviewMutation();
+  const [updateReview, { error: updateReviewError }] =
+    useUpdateProductReviewMutation();
+  const [deleteReview, { error: deleteReviewError }] =
+    useDeleteProductReviewMutation();
   return (
     <div>
       <div className="flex items-center justify-between pb-10">
@@ -62,16 +70,23 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
           show={isConfirmDeleteModalOpen}
           onDelete={async () => {
             try {
-              console.log("Do delete");
-              // check data was returned
-
-              // hide modal
+              const { data } = await deleteReview({
+                variables: {
+                  id: review.id,
+                },
+              });
+              if (!data || !data.deleteProductReview) {
+                throw new Error();
+              }
               setIsConfirmDeleteModalOpen(false);
+              router.push(
+                `${APP_PAGE_ROUTE.ADMIN}?${ADMIN_PAGE_QUERY_KEY.SHOW}=reviews`
+              );
             } catch (err) {
               console.log(err);
             }
           }}
-          error={undefined}
+          error={deleteReviewError?.message}
         />
       </div>
       <div className="space-y-6">
@@ -226,6 +241,11 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
               </div>
 
               <div className="pt-12">
+                {updateReviewError && (
+                  <div className="pb-4 text-xs text-red-600">
+                    {updateReviewError.message}
+                  </div>
+                )}
                 <BaseButton
                   type="submit"
                   disabled={isSubmitting}
