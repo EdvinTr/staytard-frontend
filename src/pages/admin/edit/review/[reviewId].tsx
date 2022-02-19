@@ -7,7 +7,7 @@ import { AdminNavbarGroup } from "../../../../components/pages/admin/components/
 import { PaddingContainer } from "../../../../components/pages/admin/components/PaddingContainer";
 import { PageContentWrapper } from "../../../../components/pages/admin/components/PageContentWrapper";
 import { SubPageHeader } from "../../../../components/pages/admin/components/SubPageHeader";
-import { BasicInputLabel } from "../../../../components/pages/admin/products/edit/EditProductView";
+import { EditProductReview } from "../../../../components/pages/admin/reviews/edit/EditProductReview";
 import { APP_NAME } from "../../../../constants";
 import { useFindOneProductReviewQuery } from "../../../../lib/graphql";
 import { isAdminSsrAuthGuard } from "../../../../utils/guards/isAdminSsrAuthGuard";
@@ -21,6 +21,40 @@ const ProductReviewPage: NextPage = () => {
       id: +reviewId,
     },
   });
+  if (loading) {
+    return <WrapperGroup loading />;
+  }
+  if (error) {
+    return (
+      <WrapperGroup loading={false}>
+        <BasicErrorMessage error={error.message} />
+      </WrapperGroup>
+    );
+  }
+  if (!data || !data.oneProductReview) {
+    return (
+      <WrapperGroup loading={false}>
+        <BasicErrorMessage error="Data for this review could not be found." />
+      </WrapperGroup>
+    );
+  }
+  return (
+    <WrapperGroup loading={false}>
+      <div className="mx-auto max-w-2xl pb-20 text-sm">
+        <EditProductReview review={data.oneProductReview} />
+      </div>
+    </WrapperGroup>
+  );
+};
+
+const BasicErrorMessage = ({ error }: { error: string }) => {
+  return <div className="text-sm text-red-600">{error}</div>;
+};
+
+interface WrapperGroupProps {
+  loading: boolean;
+}
+const WrapperGroup: React.FC<WrapperGroupProps> = ({ children, loading }) => {
   return (
     <Fragment>
       <Head>
@@ -31,18 +65,7 @@ const ProductReviewPage: NextPage = () => {
         <SubPageHeader title={`Edit review`} />
         <PaddingContainer>
           {loading && <CenteredBeatLoader />}
-
-          <div className="w-full opacity-50">
-            <BasicInputLabel htmlFor="productId">Product ID</BasicInputLabel>
-            <input
-              className="mt-2 block w-full border border-opacity-0 bg-blue-50 text-sm"
-              type="text"
-              id="productId"
-              name="productId"
-              disabled
-              value={data?.oneProductReview?.productId}
-            />
-          </div>
+          {children}
         </PaddingContainer>
       </PageContentWrapper>
     </Fragment>

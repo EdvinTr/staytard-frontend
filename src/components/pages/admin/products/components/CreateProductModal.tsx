@@ -12,11 +12,11 @@ import {
   useCreateProductMutation,
   useGetProductBrandsQuery,
 } from "../../../../../lib/graphql";
+import { createProductValidationSchema } from "../../../../../utils/validation/productValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { Modal } from "../../../../global/Modal";
-import { createProductValidationSchema } from "../validation/productValidationSchema";
 import { AttributeFieldArray } from "./AttributeFieldArray";
 import { ImageFieldArray } from "./ImageFieldArray";
 import { ImagePreviews } from "./SmallImagePreview";

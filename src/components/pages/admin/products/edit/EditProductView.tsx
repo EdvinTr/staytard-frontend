@@ -13,6 +13,7 @@ import {
   useUpdateProductMutation,
 } from "../../../../../lib/graphql";
 import { Localized } from "../../../../../Localized";
+import { updateProductValidationSchema } from "../../../../../utils/validation/productValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
@@ -20,7 +21,6 @@ import { ConfirmDeletionModal } from "../../components/ConfirmDeletionModal";
 import { AttributeFieldArray } from "../components/AttributeFieldArray";
 import { ImageFieldArray } from "../components/ImageFieldArray";
 import { ImagePreviews } from "../components/SmallImagePreview";
-import { updateProductValidationSchema } from "../validation/productValidationSchema";
 interface EditProductViewProps {
   product: FindOneProductQuery["product"];
 }
@@ -92,36 +92,18 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
       <div className="space-y-4 md:flex md:items-center md:justify-between md:space-x-7 md:space-y-0">
         <div className="w-full opacity-50">
           <BasicInputLabel htmlFor="productId">Product ID</BasicInputLabel>
-          <input
-            className="mt-2 block w-full border border-opacity-0 bg-blue-50 text-sm"
-            type="text"
-            id="productId"
-            name="productId"
-            disabled
-            value={product.id}
-          />
+          <DisabledInput name="productId" value={product.id.toString()} />
         </div>
         <div className="w-full opacity-50">
           <BasicInputLabel htmlFor="brand">Brand name</BasicInputLabel>
-          <input
-            className="mt-2 block w-full border border-opacity-0 bg-blue-50 text-sm"
-            type="text"
-            id="brand"
-            name="brand"
-            disabled
-            value={product.brand.name}
-          />
+          <DisabledInput name="brand" value={product.brand.name} />
         </div>
         <div className="w-full opacity-50">
           <BasicInputLabel htmlFor="originalPrice">
             Original price
           </BasicInputLabel>
-          <input
-            className="mt-2 block w-full border border-opacity-0 bg-blue-50 text-sm"
-            type="text"
-            id="originalPrice"
+          <DisabledInput
             name="originalPrice"
-            disabled
             value={product.originalPrice + " EUR"}
           />
         </div>
@@ -277,6 +259,25 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
           position={currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"}
         />
       </div>
+    </div>
+  );
+};
+
+interface DisabledInputProps {
+  value: string;
+  name: string;
+}
+export const DisabledInput = ({ name, value }: DisabledInputProps) => {
+  return (
+    <div className="w-full opacity-50">
+      <input
+        className="mt-2 block w-full border border-opacity-0 bg-blue-50 text-sm"
+        type="text"
+        id={name}
+        name={name}
+        disabled
+        value={value}
+      />
     </div>
   );
 };
