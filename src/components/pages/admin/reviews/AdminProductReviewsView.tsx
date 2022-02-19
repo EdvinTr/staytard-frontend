@@ -113,6 +113,12 @@ export const AdminProductReviewsView = () => {
                         />
                         <ItemDetailRow
                           backgroundColor="none"
+                          label="Created At"
+                          value={`${new Date(
+                            review.createdAt
+                          ).toLocaleString()}`}
+                        />
+                        <ItemDetailRow
                           label="Published At"
                           value={`${
                             review.publishedAt
