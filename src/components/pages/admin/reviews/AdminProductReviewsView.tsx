@@ -1,13 +1,14 @@
 import { CheckIcon, ChevronRightIcon, XIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   ADMIN_PAGE_QUERY_KEY,
   ADMIN_SUB_PAGE_ROUTE,
   APP_PAGE_ROUTE,
 } from "../../../../constants";
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
+import { getOffset } from "../../../../utils/pagination/getOffset";
 import { getTotalPages } from "../../../../utils/pagination/getTotalPages";
 import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
@@ -16,19 +17,8 @@ import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
 import { ItemDetailRow } from "../products/components/ProductViewRow";
 
-const getOffset = (limit: number, pageNumber?: string | string[]) => {
-  if (!pageNumber || Array.isArray(pageNumber)) {
-    return 0;
-  }
-  const parsedPageNumber = parseInt(pageNumber) - 1;
-  if (parsedPageNumber < 0) {
-    return 0;
-  }
-  return parsedPageNumber * limit;
-};
 const MAX_PRODUCT_REVIEW_LIMIT = 50;
 export const AdminProductReviewsView = () => {
-  const [offset, setOffset] = useState(0);
   const router = useRouter();
   const activePage = router.query[ADMIN_PAGE_QUERY_KEY.PAGE];
   const { data, fetchMore, loading, error } = useFindAllProductReviewsQuery({
@@ -141,11 +131,7 @@ export const AdminProductReviewsView = () => {
         <div className="flex justify-center pt-14">
           {data && (
             <MyPagination
-              currentPage={
-                activePage
-                  ? +activePage - 1
-                  : Math.floor(offset / MAX_PRODUCT_REVIEW_LIMIT)
-              }
+              currentPage={activePage ? +activePage - 1 : 0}
               disableInitialCallback
               onPageChange={async (page) => {
                 router.replace(
