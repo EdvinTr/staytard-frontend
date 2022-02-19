@@ -7,10 +7,12 @@ interface MyPaginationProps {
   totalPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  disableInitialCallback?: boolean;
 }
 
 export const MyPagination = ({
   currentPage,
+  disableInitialCallback,
   onPageChange,
   totalPages,
 }: MyPaginationProps) => {
@@ -30,6 +32,7 @@ export const MyPagination = ({
       nextAriaLabel="Next"
       initialPage={currentPage}
       previousAriaLabel="Previous"
+      disableInitialCallback={disableInitialCallback}
     />
   );
 };

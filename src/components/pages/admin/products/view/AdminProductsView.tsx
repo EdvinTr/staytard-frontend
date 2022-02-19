@@ -52,7 +52,7 @@ export const AdminProductsView: React.FC<AdminProductsViewProps> = ({}) => {
     if (currentPageQuery) {
       setPageIndex(parseInt(currentPageQuery as string));
     }
-  }, [currentPageQuery]); // reruns when the page query changes
+  }, [currentPageQuery]); // reruns when the page query changes. TODO: this is not ideal. The second useEffect triggers this useEffect so it fetches twice
 
   useEffect(() => {
     Router.replace({
