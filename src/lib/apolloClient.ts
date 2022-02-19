@@ -53,8 +53,8 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
             },
             allProductReviews: {
               keyArgs: false,
-              read(incoming) {
-                return incoming;
+              merge(_, incoming) {
+                return incoming; // no merging
               },
             },
             publishedProductReviews: {
