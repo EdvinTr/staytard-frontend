@@ -39,7 +39,6 @@ export const ProductReviewsDisplay = ({
       color: "white",
     });
   const { data, fetchMore } = ssrPublishedProductReviews.usePage();
-  console.log(data);
   const reviews = data?.publishedProductReviews;
   const [offset, setOffset] = useState(0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);

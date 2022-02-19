@@ -3,7 +3,7 @@ import { Persist } from "formik-persist";
 import React, { useState } from "react";
 import { LOCAL_STORAGE_KEY } from "../../../constants";
 import { useCreateProductReviewMutation } from "../../../lib/graphql";
-import { isEmailAddress } from "../../../utils/validation/isEmailAddress";
+import { createProductReviewValidationSchema } from "../../../utils/validation/productReviewValidationSchema";
 import { BaseButton } from "../../global/BaseButton";
 import { BaseInput } from "../../global/BaseInput";
 import { CustomTextArea } from "../../global/CustomTextArea";
@@ -87,31 +87,7 @@ export const ProductReviewFormModal = ({
             nickname: "",
             rating: 0,
           }}
-          validate={(values) => {
-            const errors: Partial<FormValues> = {};
-            if (!values.nickname) {
-              errors.nickname = "Required";
-            }
-            if (values.nickname.length > 50) {
-              errors.nickname = "Nickname must be 50 characters or less";
-            }
-            if (!isEmailAddress(values.email)) {
-              errors.email = "Invalid email address";
-            }
-            if (!values.title) {
-              errors.title = "Required";
-            }
-            if (values.title.length > 50) {
-              errors.title = "Title must be 50 characters or less";
-            }
-            if (!values.content) {
-              errors.content = "Required";
-            }
-            if (values.content.length > 1000) {
-              errors.content = "Content must be 1000 characters or less";
-            }
-            return errors;
-          }}
+          validationSchema={createProductReviewValidationSchema}
           onSubmit={async (
             values: FormValues,
             { setSubmitting, resetForm }: FormikHelpers<FormValues>
