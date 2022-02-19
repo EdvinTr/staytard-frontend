@@ -1,0 +1,3 @@
+mutation DeleteProductReview($id: Float!) {
+  deleteProductReview(id: $id)
+}

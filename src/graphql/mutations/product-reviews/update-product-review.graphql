@@ -1,0 +1,5 @@
+mutation UpdateProductReview($input: UpdateProductReviewInput!) {
+  updateProductReview(input: $input) {
+    id
+  }
+}
