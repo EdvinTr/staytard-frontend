@@ -46,6 +46,11 @@ export enum LOCAL_STORAGE_KEY {
   CREATE_PRODUCT_FORM = "create-product-form",
 }
 
+export const successToastColors = {
+  backgroundColor: "black",
+  color: "white",
+};
+
 export const MAX_PRODUCT_LIMIT = 50;
 
 export const APP_NAME = "Staytard";

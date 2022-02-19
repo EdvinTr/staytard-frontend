@@ -4,7 +4,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toast";
-import { APP_PAGE_ROUTE } from "../../../../../constants";
+import { APP_PAGE_ROUTE, successToastColors } from "../../../../../constants";
 import {
   FindOneProductDocument,
   FindOneProductQuery,
@@ -40,8 +40,7 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
   const currentWindowWidth = useWindowWidth();
   const showSuccessToast = (): void =>
     toast.success(updateProductSuccessMessage, {
-      backgroundColor: "black",
-      color: "white",
+      ...successToastColors,
     });
   const router = useRouter();
   const [updateProduct, { error: updateProductGqlError }] =
@@ -289,7 +288,7 @@ interface BasicInputLabelProps
   > {}
 export const BasicInputLabel = ({ ...props }: BasicInputLabelProps) => {
   return (
-    <label {...props} className="text-xs font-medium">
+    <label {...props} className="text-xs font-medium tracking-wide">
       {props.children}
     </label>
   );

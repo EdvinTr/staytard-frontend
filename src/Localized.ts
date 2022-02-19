@@ -48,6 +48,7 @@ export class Localized {
     admin: {
       createProductSuccessMessage: "Product has been created.",
       updateProductSuccessMessage: "Product has been updated.",
+      updateProductReviewSuccessMessage: "Review has been updated.",
     },
   };
 }

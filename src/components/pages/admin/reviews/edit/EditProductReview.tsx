@@ -1,11 +1,21 @@
+import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { ProductReview } from "../../../../../lib/graphql";
+import { toast, ToastContainer } from "react-toast";
+import { successToastColors } from "../../../../../constants";
+import {
+  FindOneProductReviewDocument,
+  ProductReview,
+  useDeleteProductReviewMutation,
+  useUpdateProductReviewMutation,
+} from "../../../../../lib/graphql";
+import { Localized } from "../../../../../Localized";
 import { updateProductReviewValidationSchema } from "../../../../../utils/validation/productReviewValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
 import { CustomTextArea } from "../../../../global/CustomTextArea";
 import { DeleteButton } from "../../../../global/DeleteButton";
+import { MyCheckbox } from "../../../../global/MyCheckbox";
 import { MyRatingSelect } from "../../../../global/MyRatingSelect";
 import { ConfirmDeletionModal } from "../../components/ConfirmDeletionModal";
 import {
@@ -22,11 +32,21 @@ interface FormValues {
   isPublished: boolean;
 }
 
+const { updateProductReviewSuccessMessage } = Localized.page.admin;
+
 const inputClassNames =
   "border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0";
 export const EditProductReview = ({ review }: EditProductReviewProps) => {
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
+  const showSuccessToast = (): void =>
+    toast.success(updateProductReviewSuccessMessage, {
+      ...successToastColors,
+    });
+  const currentWindowWidth = useWindowWidth();
+
+  const [updateReview] = useUpdateProductReviewMutation();
+  const [deleteReview] = useDeleteProductReviewMutation();
   return (
     <div>
       <div className="flex items-center justify-between pb-10">
@@ -57,7 +77,7 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
       <div className="space-y-6">
         <MyWrapper>
           <div className="w-full">
-            <BasicInputLabel htmlFor="productId">Review ID</BasicInputLabel>
+            <BasicInputLabel htmlFor="reviewId">Review ID</BasicInputLabel>
             <DisabledInput name="reviewId" value={review.id.toString()} />
           </div>
           <div className="w-full">
@@ -79,7 +99,11 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
             </BasicInputLabel>
             <DisabledInput
               name="publishedAt"
-              value={review.publishedAt ? review.publishedAt.toString() : "-"}
+              value={
+                review.publishedAt
+                  ? new Date(review.publishedAt).toLocaleString()
+                  : "-"
+              }
             />
           </div>
         </MyWrapper>
@@ -101,18 +125,36 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
         </MyWrapper>
       </div>
 
-      <div className="pt-4">
-        <MyRatingSelect readonly initialRating={review.rating} />
+      <div className="space-y-2 py-6">
+        <div className="text-xs font-medium">Rating</div>
+        <div>
+          <MyRatingSelect readonly initialRating={review.rating} />
+        </div>
       </div>
       <Formik
         validationSchema={updateProductReviewValidationSchema}
         onSubmit={async (values: FormValues, { setSubmitting }) => {
           try {
-            console.log("Submit form:", values);
+            const { data } = await updateReview({
+              variables: {
+                input: {
+                  ...values,
+                  reviewId: review.id,
+                },
+              },
+              refetchQueries: [FindOneProductReviewDocument], // could also manually write to cache but who has time for that
+            });
+            if (!data || !data.updateProductReview) {
+              throw new Error();
+            }
+            showSuccessToast();
           } catch (e) {
             console.log(e);
           } finally {
             setSubmitting(false);
+            setTimeout(() => {
+              toast.hideAll();
+            }, 8000);
           }
         }}
         initialValues={{
@@ -141,14 +183,13 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
                   />
                   <ErrorMessage name="title">
                     {(msg) => (
-                      <div className="pt-0 text-[11px] text-red-600">{msg}</div>
+                      <div className="text-[11px] text-red-600">{msg}</div>
                     )}
                   </ErrorMessage>
                 </div>
 
                 <div className="space-y-2">
                   <BasicInputLabel htmlFor="content">Content</BasicInputLabel>
-
                   <Field
                     className={`${inputClassNames} text-13 w-full`}
                     id="content"
@@ -164,13 +205,27 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
                   />
                   <ErrorMessage name="content">
                     {(msg) => (
-                      <div className="pt-2 text-[11px] text-red-600">{msg}</div>
+                      <div className="text-[11px] text-red-600">{msg}</div>
                     )}
                   </ErrorMessage>
                 </div>
+                <div className="space-x-2">
+                  <Field
+                    className={``}
+                    id="isPublished"
+                    name="isPublished"
+                    as={MyCheckbox}
+                    rounded="md"
+                    value={values.isPublished}
+                    checked={values.isPublished}
+                  />
+                  <BasicInputLabel htmlFor="isPublished">
+                    Publish
+                  </BasicInputLabel>
+                </div>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-12">
                 <BaseButton
                   type="submit"
                   disabled={isSubmitting}
@@ -183,6 +238,11 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
           );
         }}
       </Formik>
+      <div className="z-50">
+        <ToastContainer
+          position={currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"}
+        />
+      </div>
     </div>
   );
 };
