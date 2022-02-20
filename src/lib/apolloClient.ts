@@ -54,11 +54,8 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
             allProductReviews: {
               keyArgs: false,
               merge(existing, incoming, { args }) {
-                console.log(existing);
                 if (!incoming) return existing;
                 if (!existing) return incoming;
-                console.log(args);
-
                 return {
                   ...incoming,
                   items: [...existing.items, ...incoming.items],

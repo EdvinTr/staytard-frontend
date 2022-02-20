@@ -93,14 +93,13 @@ export const AdminProductReviewsView = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-4">
           {data?.allProductReviews.items.map((review) => {
             return (
-              <BasicCard>
+              <BasicCard key={review.id}>
                 <article
                   className={`${
                     loading ? "opacity-50" : ""
                   } transition-opacity duration-100 ease-in-out`}
                 >
                   <Link
-                    key={review.id}
                     href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_PRODUCT_REVIEW}/${review.id}`}
                   >
                     <a title={`Edit review ${review.id}`}>
