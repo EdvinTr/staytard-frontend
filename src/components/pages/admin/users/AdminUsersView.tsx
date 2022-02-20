@@ -1,6 +1,6 @@
 import { CheckIcon, SearchIcon, XIcon } from "@heroicons/react/solid";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import Router, { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useDebounce } from "usehooks-ts";
 import {
   ADMIN_PAGE_QUERY_KEY,
@@ -11,6 +11,9 @@ import { useFindAllUsersQuery } from "../../../../lib/graphql";
 import { BaseInput } from "../../../global/BaseInput";
 import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
+import { LoadMoreButton } from "../../../global/LoadMoreButton";
+import { PaginationLoadMoreContainer } from "../../../global/PaginationLoadMoreContainer";
+import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
 import { InformationDetailsCard } from "../components/InformationDetailsCard";
 import { MyGrid } from "../components/MyGrid";
 import { PaddingContainer } from "../components/PaddingContainer";
@@ -18,24 +21,62 @@ import { SubPageHeader } from "../components/SubPageHeader";
 
 interface AdminUsersViewProps {}
 
-const MAX_FETCH_LIMIT = 50;
+const MAX_USER_FETCH_LIMIT = 50;
 export const AdminUsersView: React.FC<AdminUsersViewProps> = ({}) => {
   const router = useRouter();
+  const [offset, setOffset] = useState(0);
   const [searchTerm, setSearchTerm] = useState(
     router.query[ADMIN_PAGE_QUERY_KEY.Q]
       ? (router.query[ADMIN_PAGE_QUERY_KEY.Q] as string)
       : ""
   );
   const debouncedSearchTerm = useDebounce<string>(searchTerm, 500);
-  const { data, fetchMore, error, loading } = useFindAllUsersQuery({
-    variables: {
-      input: {
-        limit: MAX_FETCH_LIMIT,
-        offset: 0,
+  const { data, fetchMore, error, loading, refetch, previousData } =
+    useFindAllUsersQuery({
+      variables: {
+        input: {
+          limit: MAX_USER_FETCH_LIMIT,
+          offset: 0,
+          q: debouncedSearchTerm,
+        },
       },
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+      notifyOnNetworkStatusChange: true,
+    });
+
+  const handleFetchMore = async () => {
+    try {
+      await fetchMore({
+        variables: {
+          input: {
+            limit: MAX_USER_FETCH_LIMIT,
+            offset: offset + MAX_USER_FETCH_LIMIT,
+            q: debouncedSearchTerm,
+          },
+        },
+      });
+      setOffset(offset + MAX_USER_FETCH_LIMIT);
+    } catch {}
+  };
+
+  useEffect(() => {
+    Router.replace(
+      {
+        query: {
+          ...Router.query,
+          q: debouncedSearchTerm,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+    refetch({
+      input: {
+        limit: MAX_USER_FETCH_LIMIT,
+        offset: 0,
+        q: debouncedSearchTerm,
+      },
+    }).then(() => setOffset(0));
+  }, [debouncedSearchTerm, refetch]);
   return (
     <div className="pb-20">
       <SubPageHeader title="Users" />
@@ -79,10 +120,14 @@ export const AdminUsersView: React.FC<AdminUsersViewProps> = ({}) => {
                   </InformationDetailsCard.Header>
                   <InformationDetailsCard.Body
                     items={[
+                      { label: "User ID", value: user.id },
                       { label: "First name", value: user.firstName },
                       { label: "Last name", value: user.lastName },
                       { label: "Email", value: user.email },
-                      { label: "Phone", value: user.mobilePhoneNumber || "" },
+                      { label: "Phone", value: user.mobilePhoneNumber || "-" },
+                      { label: "Street", value: user.address?.street || "-" },
+                      { label: "Zip", value: user.address?.postalCode || "-" },
+                      { label: "City", value: user.address?.city || "-" },
                       {
                         label: "Admin",
                         value: (
@@ -111,12 +156,36 @@ export const AdminUsersView: React.FC<AdminUsersViewProps> = ({}) => {
                         label: "Registered",
                         value: new Date(user.createdAt).toLocaleString(),
                       },
+                      {
+                        label: "Updated",
+                        value: new Date(user.updatedAt).toLocaleString(),
+                      },
                     ]}
                   />
                 </InformationDetailsCard>
               );
             })}
         </MyGrid>
+        {data && data.users && (
+          <PaginationLoadMoreContainer>
+            <PaginationProgressTracker
+              currentCount={data.users.items.length}
+              totalCount={data.users.totalCount}
+              text={`You have seen ${data.users.items.length} of ${data.users.totalCount} users`}
+            />
+
+            {data.users.hasMore && (
+              <LoadMoreButton
+                disabled={loading}
+                onClick={async () => {
+                  await handleFetchMore();
+                }}
+              >
+                Show more
+              </LoadMoreButton>
+            )}
+          </PaginationLoadMoreContainer>
+        )}
       </PaddingContainer>
     </div>
   );

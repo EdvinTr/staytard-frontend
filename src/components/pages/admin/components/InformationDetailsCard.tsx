@@ -58,7 +58,7 @@ const Body: React.FC<BodyProps> = ({ items }): JSX.Element => (
         <ItemDetailRow
           key={idx}
           backgroundColor={idx % 2 === 0 ? "gray" : "none"}
-          valueClassName={`${valueClassName ? valueClassName : ""}`}
+          valueClassName={`${valueClassName ? valueClassName : ""} truncate`}
           label={label}
           value={value}
         />
