@@ -23,7 +23,7 @@ import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
 import { ItemDetailRow } from "../products/components/ProductViewRow";
 
-const MAX_PRODUCT_REVIEW_LIMIT = 5;
+const MAX_PRODUCT_REVIEW_LIMIT = 50;
 export const AdminProductReviewsView = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(
@@ -94,13 +94,17 @@ export const AdminProductReviewsView = () => {
           {data?.allProductReviews.items.map((review) => {
             return (
               <BasicCard>
-                <article className="truncate">
+                <article
+                  className={`${
+                    loading ? "opacity-50" : ""
+                  } transition-opacity duration-100 ease-in-out`}
+                >
                   <Link
                     key={review.id}
                     href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_PRODUCT_REVIEW}/${review.id}`}
                   >
-                    <a title={`Edit review ${review.id}`} className="">
-                      <div className="flex w-full items-center justify-between rounded-md p-4  transition-all duration-100 ease-in-out hover:bg-gray-50">
+                    <a title={`Edit review ${review.id}`}>
+                      <div className="flex items-center justify-between p-4 hover:underline">
                         <h2 className="truncate font-medium">{review.title}</h2>
                         <ChevronRightIcon className="w-6" />
                       </div>
