@@ -1,5 +1,4 @@
 import {
-  ChevronDownIcon,
   ChevronRightIcon,
   StarIcon as OutlineStarIcon,
 } from "@heroicons/react/outline";
@@ -16,6 +15,7 @@ import {
 } from "../../../lib/graphql";
 import { ssrPublishedProductReviews } from "../../../lib/page";
 import { Localized } from "../../../Localized";
+import { LoadMoreButton } from "../../global/LoadMoreButton";
 import { MyContainer } from "../../global/MyContainer";
 import { PaginationProgressTracker } from "../../global/PaginationProgressTracker";
 import { ProductReviewFormModal } from "./ProductReviewFormModal";
@@ -152,8 +152,7 @@ export const ProductReviewsDisplay = ({
             </div>
           )}
           {reviews.hasMore && (
-            <button
-              className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
+            <LoadMoreButton
               onClick={async () => {
                 if (isLoadingMore) {
                   return; // prevent spam
@@ -173,8 +172,7 @@ export const ProductReviewsDisplay = ({
               }}
             >
               <span>Show more</span>
-              <ChevronDownIcon className="w-6" />
-            </button>
+            </LoadMoreButton>
           )}
         </div>
         <div className="z-50">

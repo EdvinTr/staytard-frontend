@@ -14,17 +14,16 @@ import {
   APP_PAGE_ROUTE,
 } from "../../../../constants";
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
-import { getOffset } from "../../../../utils/pagination/getOffset";
-import { getTotalPages } from "../../../../utils/pagination/getTotalPages";
 import { BaseInput } from "../../../global/BaseInput";
 import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
-import { MyPagination } from "../../../global/MyPagination";
+import { LoadMoreButton } from "../../../global/LoadMoreButton";
+import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
 import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
 import { ItemDetailRow } from "../products/components/ProductViewRow";
 
-const MAX_PRODUCT_REVIEW_LIMIT = 50;
+const MAX_PRODUCT_REVIEW_LIMIT = 5;
 export const AdminProductReviewsView = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(
@@ -33,51 +32,34 @@ export const AdminProductReviewsView = () => {
       : ""
   );
   const debouncedSearchTerm = useDebounce<string>(searchTerm, 500);
-  const activePage = router.query[ADMIN_PAGE_QUERY_KEY.PAGE];
-  const { data, fetchMore, loading, error } = useFindAllProductReviewsQuery({
-    variables: {
-      input: {
-        offset: getOffset(MAX_PRODUCT_REVIEW_LIMIT, activePage),
-        limit: MAX_PRODUCT_REVIEW_LIMIT,
-        q: debouncedSearchTerm,
-      },
-    },
-    notifyOnNetworkStatusChange: true,
-  });
-
-  useEffect(() => {
-    Router.replace(
-      {
-        pathname: Router.pathname,
-        query: {
-          ...router.query,
-          [ADMIN_PAGE_QUERY_KEY.Q]: debouncedSearchTerm,
-          [ADMIN_PAGE_QUERY_KEY.PAGE]: activePage,
-        },
-      },
-      undefined,
-      { shallow: true }
-    );
-    fetchMore({
+  const [offset, setOffset] = useState(0);
+  const { data, fetchMore, refetch, loading, error } =
+    useFindAllProductReviewsQuery({
       variables: {
         input: {
-          offset: getOffset(MAX_PRODUCT_REVIEW_LIMIT, activePage),
+          offset: 0,
           limit: MAX_PRODUCT_REVIEW_LIMIT,
           q: debouncedSearchTerm,
         },
       },
+      notifyOnNetworkStatusChange: true,
     });
-  }, [activePage, fetchMore, debouncedSearchTerm]);
 
   useEffect(() => {
     Router.replace({
       query: {
         ...Router.query,
         q: debouncedSearchTerm,
-        [ADMIN_PAGE_QUERY_KEY.PAGE]: 1,
       },
     });
-  }, [debouncedSearchTerm]);
+    refetch({
+      input: {
+        limit: MAX_PRODUCT_REVIEW_LIMIT,
+        offset: 0,
+        q: debouncedSearchTerm,
+      },
+    }).then(() => setOffset(0));
+  }, [debouncedSearchTerm, refetch]);
 
   return (
     <div className="relative pb-20">
@@ -111,106 +93,114 @@ export const AdminProductReviewsView = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-4">
           {data?.allProductReviews.items.map((review) => {
             return (
-              <Link
-                key={review.id}
-                href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_PRODUCT_REVIEW}/${review.id}`}
-              >
-                <a title={`Edit review ${review.id}`}>
-                  <BasicCard>
-                    <article className="truncate p-4">
-                      <div className="flex items-center justify-between">
+              <BasicCard>
+                <article className="truncate">
+                  <Link
+                    key={review.id}
+                    href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_PRODUCT_REVIEW}/${review.id}`}
+                  >
+                    <a title={`Edit review ${review.id}`} className="">
+                      <div className="flex w-full items-center justify-between rounded-md p-4  transition-all duration-100 ease-in-out hover:bg-gray-50">
                         <h2 className="truncate font-medium">{review.title}</h2>
                         <ChevronRightIcon className="w-6" />
                       </div>
-                      <div className="mt-4">
-                        <ItemDetailRow
-                          valueClassName="truncate"
-                          label="Nickname"
-                          value={`${review.nickname}`}
-                        />
-                        <ItemDetailRow
-                          valueClassName="truncate"
-                          label="Product ID"
-                          value={`${review.productId}`}
-                          backgroundColor="none"
-                        />
+                    </a>
+                  </Link>
+                  <div className="px-4 pb-4">
+                    <div className="">
+                      <ItemDetailRow
+                        valueClassName="truncate"
+                        label="Nickname"
+                        value={`${review.nickname}`}
+                      />
+                      <ItemDetailRow
+                        backgroundColor="none"
+                        valueClassName="truncate"
+                        label="Review ID"
+                        value={`${review.id}`}
+                      />
+                      <ItemDetailRow
+                        valueClassName="truncate"
+                        label="Product ID"
+                        value={`${review.productId}`}
+                      />
 
-                        <ItemDetailRow
-                          label="Rating"
-                          value={`${review.rating}`}
-                        />
-                        <ItemDetailRow
-                          backgroundColor="none"
-                          label="Status"
-                          value={`${
-                            review.isPublished ? "Published" : "Unpublished"
-                          }`}
-                          valueClassName={`${
-                            review.isPublished
-                              ? "text-green-700"
-                              : "text-red-700"
-                          }`}
-                        />
-                        <ItemDetailRow
-                          label="Recommended"
-                          value={
-                            <div>
-                              {review.wouldRecommend ? (
-                                <CheckIcon className="w-4 text-green-700" />
-                              ) : (
-                                <XIcon className="w-4 text-red-700" />
-                              )}
-                            </div>
-                          }
-                        />
-                        <ItemDetailRow
-                          backgroundColor="none"
-                          label="Created At"
-                          value={`${new Date(
-                            review.createdAt
-                          ).toLocaleString()}`}
-                        />
-                        <ItemDetailRow
-                          label="Published At"
-                          value={`${
-                            review.publishedAt
-                              ? new Date(review.publishedAt).toLocaleString()
-                              : "-"
-                          }`}
-                        />
-                      </div>
-                    </article>
-                  </BasicCard>
-                </a>
-              </Link>
+                      <ItemDetailRow
+                        backgroundColor="none"
+                        label="Rating"
+                        value={`${review.rating}`}
+                      />
+                      <ItemDetailRow
+                        label="Status"
+                        value={`${
+                          review.isPublished ? "Published" : "Unpublished"
+                        }`}
+                        valueClassName={`${
+                          review.isPublished ? "text-green-700" : "text-red-700"
+                        }`}
+                      />
+                      <ItemDetailRow
+                        backgroundColor="none"
+                        label="Recommended"
+                        value={
+                          <div>
+                            {review.wouldRecommend ? (
+                              <CheckIcon className="w-4 text-green-700" />
+                            ) : (
+                              <XIcon className="w-4 text-red-700" />
+                            )}
+                          </div>
+                        }
+                      />
+                      <ItemDetailRow
+                        label="Created At"
+                        value={`${new Date(review.createdAt).toLocaleString()}`}
+                      />
+                      <ItemDetailRow
+                        backgroundColor="none"
+                        label="Published At"
+                        value={`${
+                          review.publishedAt
+                            ? new Date(review.publishedAt).toLocaleString()
+                            : "-"
+                        }`}
+                      />
+                    </div>
+                  </div>
+                </article>
+              </BasicCard>
             );
           })}
         </div>
-        <div className="flex justify-center pt-14">
-          {data && (
-            <MyPagination
-              currentPage={activePage ? +activePage - 1 : 0}
-              disableInitialCallback
-              onPageChange={async (page) => {
-                router.replace(
-                  {
-                    pathname: router.pathname,
-                    query: {
-                      ...router.query,
-                      [ADMIN_PAGE_QUERY_KEY.PAGE]: page + 1,
-                    },
-                  },
-                  undefined,
-                  { shallow: true }
-                );
-              }}
-              totalPages={getTotalPages(
-                data.allProductReviews.totalCount,
-                MAX_PRODUCT_REVIEW_LIMIT
-              )}
+        {data && data.allProductReviews && (
+          <div className="relative mx-auto max-w-xs space-y-4 pt-8">
+            <PaginationProgressTracker
+              currentCount={data.allProductReviews.items.length}
+              totalCount={data.allProductReviews.totalCount}
+              text={`You have seen ${data.allProductReviews.items.length} of ${data.allProductReviews.totalCount} reviews`}
             />
-          )}
-        </div>
+
+            {data.allProductReviews.hasMore && (
+              <LoadMoreButton
+                disabled={loading}
+                onClick={async () => {
+                  await fetchMore({
+                    variables: {
+                      input: {
+                        limit: MAX_PRODUCT_REVIEW_LIMIT,
+                        offset: offset + MAX_PRODUCT_REVIEW_LIMIT,
+                        q: debouncedSearchTerm,
+                      },
+                    },
+                  });
+                  setOffset(offset + MAX_PRODUCT_REVIEW_LIMIT);
+                }}
+              >
+                <span>Show more</span>
+              </LoadMoreButton>
+            )}
+          </div>
+        )}
       </PaddingContainer>
     </div>
   );
