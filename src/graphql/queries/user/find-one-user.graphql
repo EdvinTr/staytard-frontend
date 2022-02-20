@@ -1,0 +1,8 @@
+query FindOneUser($id: String!) {
+  user(id: $id) {
+    ...CoreUserFields
+    address {
+      ...CoreAddressFields
+    }
+  }
+}

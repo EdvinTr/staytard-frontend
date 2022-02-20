@@ -437,6 +437,7 @@ export type Query = {
   productsBySku: QueryProductsOutput;
   publishedProductReviews: PublishedProductReviewsOutput;
   searchProducts: Array<Product>;
+  user: User;
   users: PaginatedUsersOutput;
 };
 
@@ -488,6 +489,11 @@ export type QueryPublishedProductReviewsArgs = {
 
 export type QuerySearchProductsArgs = {
   input: SearchProductsInput;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -784,6 +790,13 @@ export type FindAllUsersQueryVariables = Exact<{
 
 
 export type FindAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'User', createdAt: any, updatedAt: any, id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined }> } };
+
+export type FindOneUserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FindOneUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined } };
 
 export type HasPasswordQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1885,6 +1898,48 @@ export type FindAllUsersLazyQueryHookResult = ReturnType<typeof useFindAllUsersL
 export type FindAllUsersQueryResult = Apollo.QueryResult<FindAllUsersQuery, FindAllUsersQueryVariables>;
 export function refetchFindAllUsersQuery(variables: FindAllUsersQueryVariables) {
       return { query: FindAllUsersDocument, variables: variables }
+    }
+export const FindOneUserDocument = gql`
+    query FindOneUser($id: String!) {
+  user(id: $id) {
+    ...CoreUserFields
+    address {
+      ...CoreAddressFields
+    }
+  }
+}
+    ${CoreUserFieldsFragmentDoc}
+${CoreAddressFieldsFragmentDoc}`;
+
+/**
+ * __useFindOneUserQuery__
+ *
+ * To run a query within a React component, call `useFindOneUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOneUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOneUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindOneUserQuery(baseOptions: Apollo.QueryHookOptions<FindOneUserQuery, FindOneUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindOneUserQuery, FindOneUserQueryVariables>(FindOneUserDocument, options);
+      }
+export function useFindOneUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOneUserQuery, FindOneUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindOneUserQuery, FindOneUserQueryVariables>(FindOneUserDocument, options);
+        }
+export type FindOneUserQueryHookResult = ReturnType<typeof useFindOneUserQuery>;
+export type FindOneUserLazyQueryHookResult = ReturnType<typeof useFindOneUserLazyQuery>;
+export type FindOneUserQueryResult = Apollo.QueryResult<FindOneUserQuery, FindOneUserQueryVariables>;
+export function refetchFindOneUserQuery(variables: FindOneUserQueryVariables) {
+      return { query: FindOneUserDocument, variables: variables }
     }
 export const HasPasswordDocument = gql`
     query HasPassword {

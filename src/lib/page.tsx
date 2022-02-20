@@ -356,6 +356,34 @@ export const ssrFindAllUsers = {
       
       usePage: useFindAllUsers,
     }
+export async function getServerPageFindOneUser
+    (options: Omit<Apollo.QueryOptions<Types.FindOneUserQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.FindOneUserQuery>({ ...options, query: Operations.FindOneUserDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useFindOneUser = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.FindOneUserQuery, Types.FindOneUserQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.FindOneUserDocument, options);
+};
+export type PageFindOneUserComp = React.FC<{data?: Types.FindOneUserQuery, error?: Apollo.ApolloError}>;
+export const ssrFindOneUser = {
+      getServerPage: getServerPageFindOneUser,
+      
+      usePage: useFindOneUser,
+    }
 export async function getServerPageHasPassword
     (options: Omit<Apollo.QueryOptions<Types.HasPasswordQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
