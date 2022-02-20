@@ -1,0 +1,14 @@
+query FindAllUsers($input: FindAllUsersInput!) {
+  users(input: $input) {
+    totalCount
+    hasMore
+    items {
+      ...CoreUserFields
+      createdAt
+      updatedAt
+      address {
+        ...CoreAddressFields
+      }
+    }
+  }
+}

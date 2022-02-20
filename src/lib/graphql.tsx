@@ -120,6 +120,14 @@ export type FindAllProductReviewsInput = {
   sortDirection?: InputMaybe<Sort_Direction>;
 };
 
+export type FindAllUsersInput = {
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+  q?: InputMaybe<Scalars['String']>;
+  sortBy?: InputMaybe<User_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
+};
+
 export type FindCustomerOrdersInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
@@ -294,6 +302,13 @@ export type PaginatedCustomerOrdersOutput = {
   totalCount: Scalars['Float'];
 };
 
+export type PaginatedUsersOutput = {
+  __typename?: 'PaginatedUsersOutput';
+  hasMore: Scalars['Boolean'];
+  items: Array<User>;
+  totalCount: Scalars['Float'];
+};
+
 export type PaymentMethodCategory = {
   __typename?: 'PaymentMethodCategory';
   asset_urls: AssetUrl;
@@ -306,10 +321,12 @@ export enum Permission {
   CreateProduct = 'CREATE_PRODUCT',
   DeleteProduct = 'DELETE_PRODUCT',
   DeleteProductReview = 'DELETE_PRODUCT_REVIEW',
-  PublishReview = 'PUBLISH_REVIEW',
+  DeleteUser = 'DELETE_USER',
   ReadProductReview = 'READ_PRODUCT_REVIEW',
+  ReadUser = 'READ_USER',
   UpdateProduct = 'UPDATE_PRODUCT',
-  UpdateProductReview = 'UPDATE_PRODUCT_REVIEW'
+  UpdateProductReview = 'UPDATE_PRODUCT_REVIEW',
+  UpdateUser = 'UPDATE_USER'
 }
 
 export type Product = {
@@ -420,6 +437,7 @@ export type Query = {
   productsBySku: QueryProductsOutput;
   publishedProductReviews: PublishedProductReviewsOutput;
   searchProducts: Array<Product>;
+  users: PaginatedUsersOutput;
 };
 
 
@@ -472,6 +490,11 @@ export type QuerySearchProductsArgs = {
   input: SearchProductsInput;
 };
 
+
+export type QueryUsersArgs = {
+  input: FindAllUsersInput;
+};
+
 export type QueryAllProductReviewsOutput = {
   __typename?: 'QueryAllProductReviewsOutput';
   hasMore: Scalars['Boolean'];
@@ -506,6 +529,11 @@ export type SearchProductsInput = {
   resultLimit: Scalars['Float'];
   searchTerm: Scalars['String'];
 };
+
+export enum User_Sort_By {
+  Id = 'ID',
+  IsAdmin = 'IS_ADMIN'
+}
 
 export type UpdateProductInput = {
   attributes: Array<CreateProductAttributeInput>;
@@ -749,6 +777,13 @@ export type SearchProductsQueryVariables = Exact<{
 
 
 export type SearchProductsQuery = { __typename?: 'Query', searchProducts: Array<{ __typename?: 'Product', id: number, name: string }> };
+
+export type FindAllUsersQueryVariables = Exact<{
+  input: FindAllUsersInput;
+}>;
+
+
+export type FindAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'User', createdAt: any, updatedAt: any, id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined }> } };
 
 export type HasPasswordQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1802,6 +1837,54 @@ export type SearchProductsLazyQueryHookResult = ReturnType<typeof useSearchProdu
 export type SearchProductsQueryResult = Apollo.QueryResult<SearchProductsQuery, SearchProductsQueryVariables>;
 export function refetchSearchProductsQuery(variables: SearchProductsQueryVariables) {
       return { query: SearchProductsDocument, variables: variables }
+    }
+export const FindAllUsersDocument = gql`
+    query FindAllUsers($input: FindAllUsersInput!) {
+  users(input: $input) {
+    totalCount
+    hasMore
+    items {
+      ...CoreUserFields
+      createdAt
+      updatedAt
+      address {
+        ...CoreAddressFields
+      }
+    }
+  }
+}
+    ${CoreUserFieldsFragmentDoc}
+${CoreAddressFieldsFragmentDoc}`;
+
+/**
+ * __useFindAllUsersQuery__
+ *
+ * To run a query within a React component, call `useFindAllUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllUsersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindAllUsersQuery(baseOptions: Apollo.QueryHookOptions<FindAllUsersQuery, FindAllUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllUsersQuery, FindAllUsersQueryVariables>(FindAllUsersDocument, options);
+      }
+export function useFindAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllUsersQuery, FindAllUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllUsersQuery, FindAllUsersQueryVariables>(FindAllUsersDocument, options);
+        }
+export type FindAllUsersQueryHookResult = ReturnType<typeof useFindAllUsersQuery>;
+export type FindAllUsersLazyQueryHookResult = ReturnType<typeof useFindAllUsersLazyQuery>;
+export type FindAllUsersQueryResult = Apollo.QueryResult<FindAllUsersQuery, FindAllUsersQueryVariables>;
+export function refetchFindAllUsersQuery(variables: FindAllUsersQueryVariables) {
+      return { query: FindAllUsersDocument, variables: variables }
     }
 export const HasPasswordDocument = gql`
     query HasPassword {

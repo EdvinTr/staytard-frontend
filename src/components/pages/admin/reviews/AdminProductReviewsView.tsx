@@ -19,6 +19,7 @@ import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../../global/LoadMoreButton";
 import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
+import { MyGrid } from "../components/MyGrid";
 import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
 import { ItemDetailRow } from "../products/components/ProductViewRow";
@@ -90,7 +91,7 @@ export const AdminProductReviewsView = () => {
           <SearchIcon className="absolute top-3 left-3 w-6 text-stone-700" />
         </div>
         {loading && <CenteredBeatLoader />}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-4">
+        <MyGrid>
           {data?.allProductReviews.items.map((review) => {
             return (
               <BasicCard key={review.id}>
@@ -174,7 +175,7 @@ export const AdminProductReviewsView = () => {
               </BasicCard>
             );
           })}
-        </div>
+        </MyGrid>
         {data && data.allProductReviews && (
           <div className="relative mx-auto max-w-xs space-y-4 pt-8">
             <PaginationProgressTracker
