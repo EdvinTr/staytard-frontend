@@ -46,6 +46,18 @@ export const AdminProductReviewsView = () => {
   });
 
   useEffect(() => {
+    Router.replace(
+      {
+        pathname: Router.pathname,
+        query: {
+          ...router.query,
+          [ADMIN_PAGE_QUERY_KEY.Q]: debouncedSearchTerm,
+          [ADMIN_PAGE_QUERY_KEY.PAGE]: activePage,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
     fetchMore({
       variables: {
         input: {
@@ -64,8 +76,8 @@ export const AdminProductReviewsView = () => {
         q: debouncedSearchTerm,
         [ADMIN_PAGE_QUERY_KEY.PAGE]: 1,
       },
-    }); // Using default Router to avoid missing dependency eslint warnings
-  }, [debouncedSearchTerm]); // update URL when search term changes
+    });
+  }, [debouncedSearchTerm]);
 
   return (
     <div className="relative pb-20">
