@@ -1,7 +1,13 @@
-import { CheckIcon, ChevronRightIcon, XIcon } from "@heroicons/react/solid";
+import {
+  CheckIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  XIcon,
+} from "@heroicons/react/solid";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import Router, { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useDebounce } from "usehooks-ts";
 import {
   ADMIN_PAGE_QUERY_KEY,
   ADMIN_SUB_PAGE_ROUTE,
@@ -10,6 +16,7 @@ import {
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
 import { getOffset } from "../../../../utils/pagination/getOffset";
 import { getTotalPages } from "../../../../utils/pagination/getTotalPages";
+import { BaseInput } from "../../../global/BaseInput";
 import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { MyPagination } from "../../../global/MyPagination";
@@ -20,12 +27,19 @@ import { ItemDetailRow } from "../products/components/ProductViewRow";
 const MAX_PRODUCT_REVIEW_LIMIT = 50;
 export const AdminProductReviewsView = () => {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState(
+    router.query[ADMIN_PAGE_QUERY_KEY.Q]
+      ? (router.query[ADMIN_PAGE_QUERY_KEY.Q] as string)
+      : ""
+  );
+  const debouncedSearchTerm = useDebounce<string>(searchTerm, 500);
   const activePage = router.query[ADMIN_PAGE_QUERY_KEY.PAGE];
   const { data, fetchMore, loading, error } = useFindAllProductReviewsQuery({
     variables: {
       input: {
         offset: getOffset(MAX_PRODUCT_REVIEW_LIMIT, activePage),
         limit: MAX_PRODUCT_REVIEW_LIMIT,
+        q: debouncedSearchTerm,
       },
     },
     notifyOnNetworkStatusChange: true,
@@ -37,13 +51,24 @@ export const AdminProductReviewsView = () => {
         input: {
           offset: getOffset(MAX_PRODUCT_REVIEW_LIMIT, activePage),
           limit: MAX_PRODUCT_REVIEW_LIMIT,
+          q: debouncedSearchTerm,
         },
       },
     });
-  }, [activePage, fetchMore]);
+  }, [activePage, fetchMore, debouncedSearchTerm]);
+
+  useEffect(() => {
+    Router.replace({
+      query: {
+        ...Router.query,
+        q: debouncedSearchTerm,
+        [ADMIN_PAGE_QUERY_KEY.PAGE]: 1,
+      },
+    }); // Using default Router to avoid missing dependency eslint warnings
+  }, [debouncedSearchTerm]); // update URL when search term changes
 
   return (
-    <div className="relative">
+    <div className="relative pb-20">
       <SubPageHeader title="Reviews" />
       <PaddingContainer className="text-sm">
         {error && (
@@ -55,6 +80,21 @@ export const AdminProductReviewsView = () => {
             </h3>
           </BasicCard>
         )}
+        <div className="relative md:max-w-sm">
+          <BaseInput
+            type="text"
+            aria-label="Search"
+            className="mb-3 border-opacity-[0.1]"
+            placeholder="Search by any review parameter"
+            label="Search"
+            name="search"
+            autoComplete="off"
+            hasLeftIcon
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <SearchIcon className="absolute top-3 left-3 w-6 text-stone-700" />
+        </div>
         {loading && <CenteredBeatLoader />}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-4">
           {data?.allProductReviews.items.map((review) => {

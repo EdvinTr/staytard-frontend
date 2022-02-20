@@ -7,7 +7,7 @@ interface DeleteButtonProps
     HTMLButtonElement
   > {}
 
-export const DeleteButton = ({ ...props }) => {
+export const DeleteButton = ({ ...props }: DeleteButtonProps) => {
   return (
     <button
       {...props}

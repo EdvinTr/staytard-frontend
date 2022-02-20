@@ -114,6 +114,7 @@ export type CustomerOrderStatus = {
 export type FindAllProductReviewsInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
+  q?: InputMaybe<Scalars['String']>;
   sortBy?: InputMaybe<Product_Review_Sort_By>;
   sortDirection?: InputMaybe<Sort_Direction>;
 };

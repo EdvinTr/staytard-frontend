@@ -40,7 +40,7 @@ const ProductReviewPage: NextPage = () => {
   }
   return (
     <WrapperGroup loading={false}>
-      <div className="mx-auto max-w-2xl pb-20 text-sm">
+      <div className="pb-20text-sm mx-auto max-w-2xl">
         <EditProductReview review={data.oneProductReview} />
       </div>
     </WrapperGroup>

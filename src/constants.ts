@@ -28,6 +28,7 @@ export enum ADMIN_SUB_PAGE_ROUTE {
 export enum ADMIN_PAGE_QUERY_KEY {
   PAGE = "page",
   SHOW = "show",
+  Q = "q",
 }
 
 export enum COOKIE_NAME {
