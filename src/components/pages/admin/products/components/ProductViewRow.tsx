@@ -156,7 +156,7 @@ export const ItemDetailRow = ({
 }: ItemDetailRowProps) => {
   return (
     <div
-      className={`flex justify-between space-x-8 rounded-lg ${
+      className={`flex justify-between space-x-8  ${
         backgroundColor === "gray" ? "bg-gray-50" : ""
       } p-3 text-xs`}
     >
