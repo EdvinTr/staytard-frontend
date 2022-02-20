@@ -25,11 +25,16 @@ export const InformationDetailsCard: React.FC<InformationDetailsCardProps> & {
 
 interface HeaderProps {
   href: string;
+  anchorTitle: string;
 }
-const Header: React.FC<HeaderProps> = ({ children, href }): JSX.Element => (
+const Header: React.FC<HeaderProps> = ({
+  children,
+  href,
+  anchorTitle,
+}): JSX.Element => (
   <>
     <Link href={href}>
-      <a>
+      <a title={anchorTitle}>
         <div className="flex items-center justify-between p-4 hover:underline">
           {children}
           <ChevronRightIcon className="w-6" />
@@ -40,16 +45,20 @@ const Header: React.FC<HeaderProps> = ({ children, href }): JSX.Element => (
 );
 
 interface BodyProps {
-  items: { label: string; value: string | React.ReactNode }[];
+  items: {
+    label: string;
+    value: string | React.ReactNode;
+    valueClassName?: string;
+  }[];
 }
 const Body: React.FC<BodyProps> = ({ items }): JSX.Element => (
   <div className="px-4 pb-4">
-    {items.map(({ label, value }, idx) => {
+    {items.map(({ label, value, valueClassName }, idx) => {
       return (
         <ItemDetailRow
           key={idx}
           backgroundColor={idx % 2 === 0 ? "gray" : "none"}
-          valueClassName="truncate"
+          valueClassName={`${valueClassName ? valueClassName : ""}`}
           label={label}
           value={value}
         />

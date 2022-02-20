@@ -73,6 +73,7 @@ export const AdminUsersView: React.FC<AdminUsersViewProps> = ({}) => {
                 <InformationDetailsCard key={user.id} loading={loading}>
                   <InformationDetailsCard.Header
                     href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_USER}/${user.id}`}
+                    anchorTitle={`Edit user ${user.firstName} ${user.lastName}`}
                   >
                     <h2 className="font-medium">{user.firstName}</h2>
                   </InformationDetailsCard.Header>

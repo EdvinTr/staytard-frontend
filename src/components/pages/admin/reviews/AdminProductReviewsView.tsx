@@ -1,10 +1,4 @@
-import {
-  CheckIcon,
-  ChevronRightIcon,
-  SearchIcon,
-  XIcon,
-} from "@heroicons/react/solid";
-import Link from "next/link";
+import { CheckIcon, SearchIcon, XIcon } from "@heroicons/react/solid";
 import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "usehooks-ts";
@@ -19,10 +13,10 @@ import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../../global/LoadMoreButton";
 import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
+import { InformationDetailsCard } from "../components/InformationDetailsCard";
 import { MyGrid } from "../components/MyGrid";
 import { PaddingContainer } from "../components/PaddingContainer";
 import { SubPageHeader } from "../components/SubPageHeader";
-import { ItemDetailRow } from "../products/components/ProductViewRow";
 
 const MAX_PRODUCT_REVIEW_LIMIT = 50;
 export const AdminProductReviewsView = () => {
@@ -94,59 +88,32 @@ export const AdminProductReviewsView = () => {
         <MyGrid>
           {data?.allProductReviews.items.map((review) => {
             return (
-              <BasicCard key={review.id}>
-                <article
-                  className={`${
-                    loading ? "opacity-50" : ""
-                  } transition-opacity duration-100 ease-in-out`}
-                >
-                  <Link
+              <InformationDetailsCard key={review.id} loading={loading}>
+                <article>
+                  <InformationDetailsCard.Header
                     href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_PRODUCT_REVIEW}/${review.id}`}
+                    anchorTitle={`Edit review ${review.id}`}
                   >
-                    <a title={`Edit review ${review.id}`}>
-                      <div className="flex items-center justify-between p-4 hover:underline">
-                        <h2 className="truncate font-medium">{review.title}</h2>
-                        <ChevronRightIcon className="w-6" />
-                      </div>
-                    </a>
-                  </Link>
-                  <div className="px-4 pb-4">
-                    <div className="">
-                      <ItemDetailRow
-                        valueClassName="truncate"
-                        label="Nickname"
-                        value={`${review.nickname}`}
-                      />
-                      <ItemDetailRow
-                        backgroundColor="none"
-                        valueClassName="truncate"
-                        label="Review ID"
-                        value={`${review.id}`}
-                      />
-                      <ItemDetailRow
-                        valueClassName="truncate"
-                        label="Product ID"
-                        value={`${review.productId}`}
-                      />
-
-                      <ItemDetailRow
-                        backgroundColor="none"
-                        label="Rating"
-                        value={`${review.rating}`}
-                      />
-                      <ItemDetailRow
-                        label="Status"
-                        value={`${
+                    <h2 className="truncate font-medium">{review.title}</h2>
+                  </InformationDetailsCard.Header>
+                  <InformationDetailsCard.Body
+                    items={[
+                      { label: "Nickname", value: review.nickname },
+                      { label: "Review ID", value: review.id },
+                      { label: "Product ID", value: review.productId },
+                      { label: "Rating", value: review.rating },
+                      {
+                        label: "Status",
+                        value: `${
                           review.isPublished ? "Published" : "Unpublished"
-                        }`}
-                        valueClassName={`${
+                        }`,
+                        valueClassName: `${
                           review.isPublished ? "text-green-700" : "text-red-700"
-                        }`}
-                      />
-                      <ItemDetailRow
-                        backgroundColor="none"
-                        label="Recommended"
-                        value={
+                        }`,
+                      },
+                      {
+                        label: "Recommended",
+                        value: (
                           <div>
                             {review.wouldRecommend ? (
                               <CheckIcon className="w-4 text-green-700" />
@@ -154,25 +121,24 @@ export const AdminProductReviewsView = () => {
                               <XIcon className="w-4 text-red-700" />
                             )}
                           </div>
-                        }
-                      />
-                      <ItemDetailRow
-                        label="Created At"
-                        value={`${new Date(review.createdAt).toLocaleString()}`}
-                      />
-                      <ItemDetailRow
-                        backgroundColor="none"
-                        label="Published At"
-                        value={`${
+                        ),
+                      },
+                      {
+                        label: "Created At",
+                        value: `${new Date(review.createdAt).toLocaleString()}`,
+                      },
+                      {
+                        label: "Published At",
+                        value: `${
                           review.publishedAt
                             ? new Date(review.publishedAt).toLocaleString()
                             : "-"
-                        }`}
-                      />
-                    </div>
-                  </div>
+                        }`,
+                      },
+                    ]}
+                  />
                 </article>
-              </BasicCard>
+              </InformationDetailsCard>
             );
           })}
         </MyGrid>
