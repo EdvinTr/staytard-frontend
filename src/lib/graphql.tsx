@@ -112,6 +112,7 @@ export type CustomerOrderStatus = {
 };
 
 export type FindAllProductReviewsInput = {
+  filter?: InputMaybe<ProductReviewsFilterInput>;
   limit: Scalars['Float'];
   offset: Scalars['Float'];
   q?: InputMaybe<Scalars['String']>;
@@ -271,6 +272,10 @@ export type OrderLineInput = {
   unit_price: Scalars['Float'];
 };
 
+export enum Product_Review_Filter {
+  IsPublished = 'IS_PUBLISHED'
+}
+
 export enum Product_Review_Sort_By {
   CreatedAt = 'CREATED_AT',
   Id = 'ID'
@@ -378,6 +383,11 @@ export type ProductReview = {
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   wouldRecommend: Scalars['Boolean'];
+};
+
+export type ProductReviewsFilterInput = {
+  applied: Scalars['Boolean'];
+  type: Product_Review_Filter;
 };
 
 export type ProductSize = {
