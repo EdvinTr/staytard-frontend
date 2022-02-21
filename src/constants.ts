@@ -56,3 +56,6 @@ export const successToastColors = {
 export const MAX_PRODUCT_LIMIT = 50;
 
 export const APP_NAME = "Staytard";
+
+export const editInputClassNames =
+  "border border-black border-opacity-10 focus:border-opacity-100 focus:outline-none focus:ring-0";

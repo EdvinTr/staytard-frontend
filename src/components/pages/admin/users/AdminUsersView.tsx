@@ -125,9 +125,6 @@ export const AdminUsersView: React.FC<AdminUsersViewProps> = ({}) => {
                       { label: "Last name", value: user.lastName },
                       { label: "Email", value: user.email },
                       { label: "Phone", value: user.mobilePhoneNumber || "-" },
-                      { label: "Street", value: user.address?.street || "-" },
-                      { label: "Zip", value: user.address?.postalCode || "-" },
-                      { label: "City", value: user.address?.city || "-" },
                       {
                         label: "Admin",
                         value: (

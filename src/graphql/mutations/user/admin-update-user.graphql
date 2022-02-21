@@ -1,0 +1,5 @@
+mutation AdminUpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+  }
+}

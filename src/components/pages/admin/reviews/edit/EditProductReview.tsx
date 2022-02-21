@@ -267,7 +267,7 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
   );
 };
 
-const MyWrapper: React.FC<
+export const MyWrapper: React.FC<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 > = ({ children, ...props }) => {
   return (

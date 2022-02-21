@@ -6,9 +6,6 @@ query FindAllUsers($input: FindAllUsersInput!) {
       ...CoreUserFields
       createdAt
       updatedAt
-      address {
-        ...CoreAddressFields
-      }
     }
   }
 }

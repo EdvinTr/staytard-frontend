@@ -197,6 +197,7 @@ export type Mutation = {
   updatePassword: Scalars['Boolean'];
   updateProduct: Product;
   updateProductReview: ProductReview;
+  updateUser: User;
   updateUserAddress: User;
 };
 
@@ -259,6 +260,11 @@ export type MutationUpdateProductArgs = {
 
 export type MutationUpdateProductReviewArgs = {
   input: UpdateProductReviewInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 
@@ -564,6 +570,17 @@ export type UpdateUserAddressInput = {
   street: Scalars['String'];
 };
 
+export type UpdateUserInput = {
+  city: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  mobilePhoneNumber: Scalars['String'];
+  postalCode: Scalars['String'];
+  street: Scalars['String'];
+  userId: Scalars['String'];
+};
+
 export type UpdateUserPasswordInput = {
   newPassword: Scalars['String'];
   oldPassword?: InputMaybe<Scalars['String']>;
@@ -670,6 +687,13 @@ export type UpdateProductMutationVariables = Exact<{
 
 
 export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
+
+export type AdminUpdateUserMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type AdminUpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string } };
 
 export type AuthenticateWithGoogleMutationVariables = Exact<{
   googleAuthToken: Scalars['String'];
@@ -789,7 +813,7 @@ export type FindAllUsersQueryVariables = Exact<{
 }>;
 
 
-export type FindAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'User', createdAt: any, updatedAt: any, id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean, address?: { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string } | null | undefined }> } };
+export type FindAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'User', createdAt: any, updatedAt: any, id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean }> } };
 
 export type FindOneUserQueryVariables = Exact<{
   id: Scalars['String'];
@@ -1181,6 +1205,39 @@ export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
 export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
+export const AdminUpdateUserDocument = gql`
+    mutation AdminUpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+  }
+}
+    `;
+export type AdminUpdateUserMutationFn = Apollo.MutationFunction<AdminUpdateUserMutation, AdminUpdateUserMutationVariables>;
+
+/**
+ * __useAdminUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useAdminUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminUpdateUserMutation, { data, loading, error }] = useAdminUpdateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAdminUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateUserMutation, AdminUpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminUpdateUserMutation, AdminUpdateUserMutationVariables>(AdminUpdateUserDocument, options);
+      }
+export type AdminUpdateUserMutationHookResult = ReturnType<typeof useAdminUpdateUserMutation>;
+export type AdminUpdateUserMutationResult = Apollo.MutationResult<AdminUpdateUserMutation>;
+export type AdminUpdateUserMutationOptions = Apollo.BaseMutationOptions<AdminUpdateUserMutation, AdminUpdateUserMutationVariables>;
 export const AuthenticateWithGoogleDocument = gql`
     mutation AuthenticateWithGoogle($googleAuthToken: String!) {
   authenticateWithGoogle(googleAuthToken: $googleAuthToken) {
@@ -1860,14 +1917,10 @@ export const FindAllUsersDocument = gql`
       ...CoreUserFields
       createdAt
       updatedAt
-      address {
-        ...CoreAddressFields
-      }
     }
   }
 }
-    ${CoreUserFieldsFragmentDoc}
-${CoreAddressFieldsFragmentDoc}`;
+    ${CoreUserFieldsFragmentDoc}`;
 
 /**
  * __useFindAllUsersQuery__
