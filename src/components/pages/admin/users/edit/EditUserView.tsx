@@ -2,8 +2,16 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, FieldAttributes, Form, Formik, useField } from "formik";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toast";
-import { editInputClassNames } from "../../../../../constants";
-import { UpdateUserInput, User } from "../../../../../lib/graphql";
+import {
+  editInputClassNames,
+  successToastColors,
+} from "../../../../../constants";
+import {
+  UpdateUserInput,
+  useAdminUpdateUserMutation,
+  User,
+} from "../../../../../lib/graphql";
+import { Localized } from "../../../../../Localized";
 import { updateUserValidationSchema } from "../../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput, BaseInputProps } from "../../../../global/BaseInput";
@@ -20,40 +28,24 @@ interface EditUserViewProps {
 
 interface FormValues extends UpdateUserInput {}
 
-type CustomTextFieldProps = BaseInputProps & FieldAttributes<{}>;
-const CustomTextField: React.FC<CustomTextFieldProps> = ({
-  label,
-  id,
-  value,
-  ...props
-}) => {
-  const [field, meta] = useField(props);
-  return (
-    <BaseInput
-      {...field}
-      {...props}
-      className={`${editInputClassNames} text-13`}
-      id={id}
-      name={field.name}
-      type="text"
-      label={label}
-      hasError={!!meta.error && meta.touched}
-      value={value}
-    />
-  );
-};
-
+const { updateUserSuccessMessage } = Localized.page.admin;
 export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
-  const [activeField, setActiveField] = useState("");
+  const showSuccessToast = (): void =>
+    toast.success(updateUserSuccessMessage, {
+      ...successToastColors,
+    });
   const currentWindowWidth = useWindowWidth();
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
+  const [updateUser, { error: updateUserError }] = useAdminUpdateUserMutation({
+    notifyOnNetworkStatusChange: true,
+  });
   return (
     <div>
       <div className="flex items-center justify-between pb-10">
         <h2 className="text-2xl font-medium">General information</h2>
         <DeleteButton
-          // onClick={() => setIsConfirmDeleteModalOpen(true)}
+          onClick={() => setIsConfirmDeleteModalOpen(true)}
           aria-label="Open delete user confirmation modal"
         />
         <ConfirmDeletionModal
@@ -83,7 +75,17 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
         validationSchema={updateUserValidationSchema}
         onSubmit={async (values: FormValues, { setSubmitting }) => {
           try {
-            console.log(values);
+            const { data } = await updateUser({
+              variables: {
+                input: {
+                  ...values,
+                },
+              },
+            });
+            if (!data || !data.updateUser) {
+              throw new Error();
+            }
+            showSuccessToast();
           } catch (e) {
             console.log(e);
           } finally {
@@ -257,11 +259,11 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
               </div>
 
               <div className="pt-12">
-                {/*   {updateReviewError && (
-                        <div className="pb-4 text-xs text-red-600">
-                          {updateReviewError.message}
-                        </div>
-                      )} */}
+                {updateUserError && (
+                  <div className="pb-4 text-xs text-red-600">
+                    {updateUserError.message}
+                  </div>
+                )}
 
                 <BaseButton
                   type="submit"
@@ -286,4 +288,27 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
 
 const InputGroupContainer: React.FC = ({ children }) => {
   return <div className="flex w-full space-x-4">{children}</div>;
+};
+
+type CustomTextFieldProps = BaseInputProps & FieldAttributes<{}>;
+const CustomTextField: React.FC<CustomTextFieldProps> = ({
+  label,
+  id,
+  value,
+  ...props
+}) => {
+  const [field, meta] = useField(props);
+  return (
+    <BaseInput
+      {...field}
+      {...props}
+      className={`${editInputClassNames} text-13`}
+      id={id}
+      name={field.name}
+      type="text"
+      label={label}
+      hasError={!!meta.error && meta.touched}
+      value={value}
+    />
+  );
 };
