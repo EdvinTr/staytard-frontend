@@ -108,11 +108,8 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
           return (
             <Form>
               <div className="space-y-6 pt-6">
-                <div className="flex w-full space-x-8">
+                <InputGroupContainer>
                   <div className="w-full space-y-2">
-                    <BasicInputLabel htmlFor="firstName">
-                      First name
-                    </BasicInputLabel>
                     <CustomTextField
                       id="firstName"
                       name="firstName"
@@ -130,9 +127,6 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     </ErrorMessage>
                   </div>
                   <div className="w-full space-y-2">
-                    <BasicInputLabel htmlFor="lastName">
-                      Last name
-                    </BasicInputLabel>
                     <CustomTextField
                       id="lastName"
                       name="lastName"
@@ -148,6 +142,109 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                         <div className={`text-[11px] text-red-600`}>{msg}</div>
                       )}
                     </ErrorMessage>
+                  </div>
+                </InputGroupContainer>
+                <InputGroupContainer>
+                  <div className="w-full space-y-2">
+                    <CustomTextField
+                      id="mobilePhoneNumber"
+                      name="mobilePhoneNumber"
+                      type="text"
+                      label="Mobile number"
+                      value={values.mobilePhoneNumber}
+                      hasError={
+                        !!errors.mobilePhoneNumber && touched.mobilePhoneNumber
+                      }
+                      placeholder="Mobile number"
+                      autoComplete="off"
+                    />
+                    <ErrorMessage name="mobilePhoneNumber">
+                      {(msg) => (
+                        <div className={`text-[11px] text-red-600`}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </div>
+                  <div className="w-full space-y-2">
+                    <CustomTextField
+                      id="email"
+                      name="email"
+                      type="text"
+                      label="Email"
+                      value={values.email}
+                      hasError={!!errors.email && touched.email}
+                      placeholder="Email"
+                      autoComplete="off"
+                    />
+                    <ErrorMessage name="email">
+                      {(msg) => (
+                        <div className={`text-[11px] text-red-600`}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </div>
+                </InputGroupContainer>
+
+                <div>
+                  <h3 className="pb-4 pt-2 text-xl font-semibold">Address</h3>
+                  <div className="space-y-6">
+                    <div className="w-full space-y-2">
+                      <CustomTextField
+                        id="street"
+                        name="street"
+                        type="text"
+                        label="Street"
+                        value={values.street}
+                        hasError={!!errors.street && touched.street}
+                        placeholder="Street"
+                        autoComplete="off"
+                      />
+                      <ErrorMessage name="Street">
+                        {(msg) => (
+                          <div className={`text-[11px] text-red-600`}>
+                            {msg}
+                          </div>
+                        )}
+                      </ErrorMessage>
+                    </div>
+                    <InputGroupContainer>
+                      <div className="w-full space-y-2">
+                        <CustomTextField
+                          id="postalCode"
+                          name="postalCode"
+                          type="text"
+                          label="ZIP Code"
+                          value={values.postalCode}
+                          hasError={!!errors.postalCode && touched.postalCode}
+                          placeholder="ZIP Code"
+                          autoComplete="off"
+                        />
+                        <ErrorMessage name="postalCode">
+                          {(msg) => (
+                            <div className={`text-[11px] text-red-600`}>
+                              {msg}
+                            </div>
+                          )}
+                        </ErrorMessage>
+                      </div>
+                      <div className="w-full space-y-2">
+                        <CustomTextField
+                          id="city"
+                          name="city"
+                          type="text"
+                          label="City"
+                          value={values.city}
+                          hasError={!!errors.city && touched.city}
+                          placeholder="City"
+                          autoComplete="off"
+                        />
+                        <ErrorMessage name="city">
+                          {(msg) => (
+                            <div className={`text-[11px] text-red-600`}>
+                              {msg}
+                            </div>
+                          )}
+                        </ErrorMessage>
+                      </div>
+                    </InputGroupContainer>
                   </div>
                 </div>
               </div>
@@ -178,4 +275,8 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
       </div>
     </div>
   );
+};
+
+const InputGroupContainer: React.FC = ({ children }) => {
+  return <div className="flex w-full space-x-4">{children}</div>;
 };
