@@ -112,6 +112,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                   <div className="w-full space-y-2">
                     <CustomTextField
                       id="firstName"
+                      aria-label="First name"
                       name="firstName"
                       type="text"
                       label="First name"
@@ -130,6 +131,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     <CustomTextField
                       id="lastName"
                       name="lastName"
+                      aria-label="Last name"
                       type="text"
                       label="Last name"
                       value={values.lastName}
@@ -149,6 +151,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     <CustomTextField
                       id="mobilePhoneNumber"
                       name="mobilePhoneNumber"
+                      aria-label="Mobile phone number"
                       type="text"
                       label="Mobile number"
                       value={values.mobilePhoneNumber}
@@ -168,7 +171,8 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     <CustomTextField
                       id="email"
                       name="email"
-                      type="text"
+                      aria-label="Email"
+                      type="email"
                       label="Email"
                       value={values.email}
                       hasError={!!errors.email && touched.email}
@@ -190,6 +194,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                       <CustomTextField
                         id="street"
                         name="street"
+                        aria-label="Street"
                         type="text"
                         label="Street"
                         value={values.street}
@@ -197,7 +202,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                         placeholder="Street"
                         autoComplete="off"
                       />
-                      <ErrorMessage name="Street">
+                      <ErrorMessage name="street">
                         {(msg) => (
                           <div className={`text-[11px] text-red-600`}>
                             {msg}
@@ -210,6 +215,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                         <CustomTextField
                           id="postalCode"
                           name="postalCode"
+                          aria-label="Postal code"
                           type="text"
                           label="ZIP Code"
                           value={values.postalCode}
@@ -230,6 +236,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                           id="city"
                           name="city"
                           type="text"
+                          aria-label="City"
                           label="City"
                           value={values.city}
                           hasError={!!errors.city && touched.city}
