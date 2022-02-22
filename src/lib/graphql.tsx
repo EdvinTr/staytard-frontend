@@ -133,7 +133,7 @@ export type FindAllUsersInput = {
   sortDirection?: InputMaybe<Sort_Direction>;
 };
 
-export type FindCustomerOrdersInput = {
+export type FindMyCustomerOrdersInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
 };
@@ -339,8 +339,10 @@ export enum Permission {
   DeleteProduct = 'DELETE_PRODUCT',
   DeleteProductReview = 'DELETE_PRODUCT_REVIEW',
   DeleteUser = 'DELETE_USER',
+  ReadCustomerOrder = 'READ_CUSTOMER_ORDER',
   ReadProductReview = 'READ_PRODUCT_REVIEW',
   ReadUser = 'READ_USER',
+  UpdateCustomerOrder = 'UPDATE_CUSTOMER_ORDER',
   UpdateProduct = 'UPDATE_PRODUCT',
   UpdateProductReview = 'UPDATE_PRODUCT_REVIEW',
   UpdateUser = 'UPDATE_USER'
@@ -443,6 +445,7 @@ export type Query = {
   allProductReviews: QueryAllProductReviewsOutput;
   basicCategories: Array<BasicCategory>;
   categories: Array<ProductCategory>;
+  customerOrders: PaginatedCustomerOrdersOutput;
   getOneCategory: ProductCategory;
   hasPassword: Scalars['Boolean'];
   me: User;
@@ -464,13 +467,18 @@ export type QueryAllProductReviewsArgs = {
 };
 
 
+export type QueryCustomerOrdersArgs = {
+  input: FindMyCustomerOrdersInput;
+};
+
+
 export type QueryGetOneCategoryArgs = {
   path: Scalars['String'];
 };
 
 
 export type QueryMyOrdersArgs = {
-  input: FindCustomerOrdersInput;
+  input: FindMyCustomerOrdersInput;
 };
 
 
@@ -772,7 +780,7 @@ export type GetOneCategoryQueryVariables = Exact<{
 export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, path: string, description: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined } };
 
 export type MyCustomerOrdersQueryVariables = Exact<{
-  input: FindCustomerOrdersInput;
+  input: FindMyCustomerOrdersInput;
 }>;
 
 
@@ -1613,7 +1621,7 @@ export function refetchGetOneCategoryQuery(variables: GetOneCategoryQueryVariabl
       return { query: GetOneCategoryDocument, variables: variables }
     }
 export const MyCustomerOrdersDocument = gql`
-    query MyCustomerOrders($input: FindCustomerOrdersInput!) {
+    query MyCustomerOrders($input: FindMyCustomerOrdersInput!) {
   myOrders(input: $input) {
     totalCount
     hasMore
