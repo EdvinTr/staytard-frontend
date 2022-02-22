@@ -51,6 +51,23 @@ export type BillingAddressInput = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export enum Customer_Order_Sort_By {
+  CreatedAt = 'CREATED_AT',
+  GrandTotal = 'GRAND_TOTAL',
+  Id = 'ID'
+}
+
+export enum Customer_Order_Status {
+  Cancelled = 'CANCELLED',
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  OnHold = 'ON_HOLD',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING',
+  Refunded = 'REFUNDED',
+  Shipped = 'SHIPPED'
+}
+
 export type CreateProductAttributeInput = {
   color: AttributeValueType;
   quantity: Scalars['Float'];
@@ -97,6 +114,10 @@ export type CustomerOrder = {
   userId: Scalars['String'];
 };
 
+export type CustomerOrderFilter = {
+  orderStatusFilter?: InputMaybe<Array<Customer_Order_Status>>;
+};
+
 export type CustomerOrderItem = {
   __typename?: 'CustomerOrderItem';
   orderId: Scalars['Float'];
@@ -114,6 +135,15 @@ export type CustomerOrderStatus = {
 export type DeleteUserInput = {
   password: Scalars['String'];
   userId: Scalars['String'];
+};
+
+export type FindAllCustomerOrdersInput = {
+  filters?: InputMaybe<CustomerOrderFilter>;
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+  q?: InputMaybe<Scalars['String']>;
+  sortBy?: InputMaybe<Customer_Order_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
 };
 
 export type FindAllProductReviewsInput = {
@@ -468,7 +498,7 @@ export type QueryAllProductReviewsArgs = {
 
 
 export type QueryCustomerOrdersArgs = {
-  input: FindMyCustomerOrdersInput;
+  input: FindAllCustomerOrdersInput;
 };
 
 
@@ -778,6 +808,13 @@ export type GetOneCategoryQueryVariables = Exact<{
 
 
 export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, path: string, description: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined } };
+
+export type FindAllCustomerOrdersQueryVariables = Exact<{
+  input: FindAllCustomerOrdersInput;
+}>;
+
+
+export type FindAllCustomerOrdersQuery = { __typename?: 'Query', customerOrders: { __typename?: 'PaginatedCustomerOrdersOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, grandTotal: number, purchaseCurrency: string, userId: string, createdAt: any, shippingCost: number, paymentType: string, totalAmount: number, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
 
 export type MyCustomerOrdersQueryVariables = Exact<{
   input: FindMyCustomerOrdersInput;
@@ -1619,6 +1656,59 @@ export type GetOneCategoryLazyQueryHookResult = ReturnType<typeof useGetOneCateg
 export type GetOneCategoryQueryResult = Apollo.QueryResult<GetOneCategoryQuery, GetOneCategoryQueryVariables>;
 export function refetchGetOneCategoryQuery(variables: GetOneCategoryQueryVariables) {
       return { query: GetOneCategoryDocument, variables: variables }
+    }
+export const FindAllCustomerOrdersDocument = gql`
+    query FindAllCustomerOrders($input: FindAllCustomerOrdersInput!) {
+  customerOrders(input: $input) {
+    hasMore
+    totalCount
+    items {
+      id
+      orderNumber
+      grandTotal
+      purchaseCurrency
+      userId
+      createdAt
+      shippingCost
+      paymentType
+      totalAmount
+      orderStatus {
+        status
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAllCustomerOrdersQuery__
+ *
+ * To run a query within a React component, call `useFindAllCustomerOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllCustomerOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllCustomerOrdersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindAllCustomerOrdersQuery(baseOptions: Apollo.QueryHookOptions<FindAllCustomerOrdersQuery, FindAllCustomerOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllCustomerOrdersQuery, FindAllCustomerOrdersQueryVariables>(FindAllCustomerOrdersDocument, options);
+      }
+export function useFindAllCustomerOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllCustomerOrdersQuery, FindAllCustomerOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllCustomerOrdersQuery, FindAllCustomerOrdersQueryVariables>(FindAllCustomerOrdersDocument, options);
+        }
+export type FindAllCustomerOrdersQueryHookResult = ReturnType<typeof useFindAllCustomerOrdersQuery>;
+export type FindAllCustomerOrdersLazyQueryHookResult = ReturnType<typeof useFindAllCustomerOrdersLazyQuery>;
+export type FindAllCustomerOrdersQueryResult = Apollo.QueryResult<FindAllCustomerOrdersQuery, FindAllCustomerOrdersQueryVariables>;
+export function refetchFindAllCustomerOrdersQuery(variables: FindAllCustomerOrdersQueryVariables) {
+      return { query: FindAllCustomerOrdersDocument, variables: variables }
     }
 export const MyCustomerOrdersDocument = gql`
     query MyCustomerOrders($input: FindMyCustomerOrdersInput!) {

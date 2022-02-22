@@ -62,6 +62,17 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
                 };
               },
             },
+            customerOrders: {
+              keyArgs: false,
+              merge(existing, incoming) {
+                if (!incoming) return existing;
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
             allProductReviews: {
               keyArgs: false,
               merge(existing, incoming) {

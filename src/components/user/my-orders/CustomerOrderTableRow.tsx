@@ -51,7 +51,7 @@ export enum ORDER_STATUS {
   ON_HOLD = "On-Hold",
 }
 
-const getOrderStatusClassNames = (orderStatus: ORDER_STATUS) => {
+export const getOrderStatusClassNames = (orderStatus: ORDER_STATUS) => {
   switch (orderStatus) {
     case ORDER_STATUS.PENDING:
       return "bg-yellow-100";

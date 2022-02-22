@@ -106,6 +106,34 @@ export const ssrGetOneCategory = {
       
       usePage: useGetOneCategory,
     }
+export async function getServerPageFindAllCustomerOrders
+    (options: Omit<Apollo.QueryOptions<Types.FindAllCustomerOrdersQueryVariables>, 'query'>, ctx?: any ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.FindAllCustomerOrdersQuery>({ ...options, query: Operations.FindAllCustomerOrdersDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useFindAllCustomerOrders = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.FindAllCustomerOrdersQuery, Types.FindAllCustomerOrdersQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.FindAllCustomerOrdersDocument, options);
+};
+export type PageFindAllCustomerOrdersComp = React.FC<{data?: Types.FindAllCustomerOrdersQuery, error?: Apollo.ApolloError}>;
+export const ssrFindAllCustomerOrders = {
+      getServerPage: getServerPageFindAllCustomerOrders,
+      
+      usePage: useFindAllCustomerOrders,
+    }
 export async function getServerPageMyCustomerOrders
     (options: Omit<Apollo.QueryOptions<Types.MyCustomerOrdersQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
