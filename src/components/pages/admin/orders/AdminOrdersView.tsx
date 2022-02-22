@@ -14,10 +14,7 @@ import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../../global/LoadMoreButton";
 import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
-import {
-  getOrderStatusClassNames,
-  ORDER_STATUS,
-} from "../../../user/my-orders/CustomerOrderTableRow";
+import { ORDER_STATUS } from "../../../user/my-orders/CustomerOrderTableRow";
 import { InformationDetailsCard } from "../components/InformationDetailsCard";
 import { MyGrid } from "../components/MyGrid";
 import { PaddingContainer } from "../components/PaddingContainer";
@@ -105,9 +102,9 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
                         label: "Status",
                         value: (
                           <div
-                            className={getOrderStatusClassNames(
-                              order.orderStatus.status as ORDER_STATUS
-                            )}
+                            className={`${
+                              orderStatusColors[order.orderStatus.status]
+                            }`}
                           >
                             {order.orderStatus.status}
                           </div>
@@ -152,4 +149,15 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
       </PaddingContainer>
     </div>
   );
+};
+
+const orderStatusColors: Record<string, string> = {
+  [ORDER_STATUS.PROCESSING]: "text-yellow-700",
+  [ORDER_STATUS.SHIPPED]: "text-blue-700",
+  [ORDER_STATUS.ON_HOLD]: "text-purple-700",
+  [ORDER_STATUS.COMPLETED]: "text-green-700",
+  [ORDER_STATUS.CANCELLED]: "text-red-600",
+  [ORDER_STATUS.FAILED]: "text-red-700",
+  [ORDER_STATUS.REFUNDED]: "text-orange-700",
+  [ORDER_STATUS.PENDING]: "text-yellow-700",
 };

@@ -30,9 +30,9 @@ export const CustomerOrderTableRow = ({
       {/* status */}
       <td className={`font-semibold`}>
         <span
-          className={`rounded-md p-2 ${getOrderStatusClassNames(
+          className={`rounded-md p-2 bg-${getOrderStatusColorName(
             customerOrder.orderStatus.status as ORDER_STATUS
-          )}`}
+          )}-100`}
         >
           {customerOrder.orderStatus.status}
         </span>
@@ -51,31 +51,31 @@ export enum ORDER_STATUS {
   ON_HOLD = "On-Hold",
 }
 
-export const getOrderStatusClassNames = (orderStatus: ORDER_STATUS) => {
+export const getOrderStatusColorName = (orderStatus: ORDER_STATUS) => {
   switch (orderStatus) {
     case ORDER_STATUS.PENDING:
-      return "bg-yellow-100";
+      return "yellow";
 
     case ORDER_STATUS.PROCESSING:
-      return "bg-yellow-100";
+      return "yellow";
 
     case ORDER_STATUS.SHIPPED:
-      return "bg-blue-100";
+      return "blue";
 
     case ORDER_STATUS.ON_HOLD:
-      return "bg-blue-100";
+      return "blue";
 
     case ORDER_STATUS.COMPLETED:
-      return "bg-green-100";
+      return "green";
 
     case ORDER_STATUS.CANCELLED:
-      return "bg-red-100";
+      return "red";
 
     case ORDER_STATUS.FAILED:
-      return "bg-red-100";
+      return "red";
 
     case ORDER_STATUS.REFUNDED:
-      return "bg-orange-100";
+      return "orange";
 
     default:
       return "";

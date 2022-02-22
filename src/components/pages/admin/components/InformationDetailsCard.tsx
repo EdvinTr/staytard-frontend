@@ -45,12 +45,13 @@ const Header: React.FC<HeaderProps> = ({
 );
 
 interface BodyProps {
-  items: {
-    label: string;
-    value: string | React.ReactNode;
-    valueClassName?: string;
-  }[];
+  items: BodyItem[];
 }
+export type BodyItem = {
+  label: string;
+  value: string | React.ReactNode;
+  valueClassName?: string;
+};
 const Body: React.FC<BodyProps> = ({ items }): JSX.Element => (
   <div className="px-4 pb-4">
     {items.map(({ label, value, valueClassName }, idx) => {
