@@ -1,12 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
-import { CenteredBeatLoader } from "../../../../components/global/CenteredBeatLoader";
-import { AdminNavbarGroup } from "../../../../components/pages/admin/components/nav/AdminNavbarGroup";
-import { PaddingContainer } from "../../../../components/pages/admin/components/PaddingContainer";
-import { PageContentWrapper } from "../../../../components/pages/admin/components/PageContentWrapper";
-import { SubPageHeader } from "../../../../components/pages/admin/components/SubPageHeader";
+import React from "react";
+import { EditPageWrapper } from "../../../../components/pages/admin/components/EditPageWrapper";
 import { EditProductReview } from "../../../../components/pages/admin/reviews/edit/EditProductReview";
 import { APP_NAME } from "../../../../constants";
 import { useFindOneProductReviewQuery } from "../../../../lib/graphql";
@@ -21,54 +17,19 @@ const ProductReviewPage: NextPage = () => {
       id: +reviewId,
     },
   });
-  if (loading) {
-    return <WrapperGroup loading />;
-  }
-  if (error) {
-    return (
-      <WrapperGroup loading={false}>
-        <BasicErrorMessage error={error.message} />
-      </WrapperGroup>
-    );
-  }
-  if (!data || !data.oneProductReview) {
-    return (
-      <WrapperGroup loading={false}>
-        <BasicErrorMessage error="Data for this review could not be found." />
-      </WrapperGroup>
-    );
-  }
   return (
-    <WrapperGroup loading={false}>
-      <div className="pb-20text-sm mx-auto max-w-2xl">
-        <EditProductReview review={data.oneProductReview} />
-      </div>
-    </WrapperGroup>
-  );
-};
-
-const BasicErrorMessage = ({ error }: { error: string }) => {
-  return <div className="text-sm text-red-600">{error}</div>;
-};
-
-interface WrapperGroupProps {
-  loading: boolean;
-}
-const WrapperGroup: React.FC<WrapperGroupProps> = ({ children, loading }) => {
-  return (
-    <Fragment>
+    <EditPageWrapper
+      hasData={!!data && !!data.oneProductReview}
+      noDataErrorMessage="Data for this review could not be found."
+      navTitle="Edit review"
+      error={error}
+      loading={loading}
+    >
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <AdminNavbarGroup />
-      <PageContentWrapper>
-        <SubPageHeader title={`Edit review`} />
-        <PaddingContainer>
-          {loading && <CenteredBeatLoader />}
-          {children}
-        </PaddingContainer>
-      </PageContentWrapper>
-    </Fragment>
+      {data && <EditProductReview review={data.oneProductReview} />}
+    </EditPageWrapper>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

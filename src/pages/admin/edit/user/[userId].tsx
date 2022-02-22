@@ -1,12 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
-import { CenteredBeatLoader } from "../../../../components/global/CenteredBeatLoader";
-import { AdminNavbarGroup } from "../../../../components/pages/admin/components/nav/AdminNavbarGroup";
-import { PaddingContainer } from "../../../../components/pages/admin/components/PaddingContainer";
-import { PageContentWrapper } from "../../../../components/pages/admin/components/PageContentWrapper";
-import { SubPageHeader } from "../../../../components/pages/admin/components/SubPageHeader";
+import React from "react";
+import { EditPageWrapper } from "../../../../components/pages/admin/components/EditPageWrapper";
 import { EditUserView } from "../../../../components/pages/admin/users/edit/EditUserView";
 import { APP_NAME } from "../../../../constants";
 import { useFindOneUserQuery, User } from "../../../../lib/graphql";
@@ -21,56 +17,22 @@ const EditUserPage: NextPage = () => {
       id: userId,
     },
   });
-  if (loading) {
-    return <WrapperGroup loading />;
-  }
-  if (error) {
-    return (
-      <WrapperGroup loading={false}>
-        <BasicErrorMessage error={error.message} />
-      </WrapperGroup>
-    );
-  }
-  if (!data || !data.user) {
-    return (
-      <WrapperGroup loading={false}>
-        <BasicErrorMessage error="Data for this user could not be found." />
-      </WrapperGroup>
-    );
-  }
   return (
-    <WrapperGroup loading={false}>
-      <div className="mx-auto max-w-2xl pb-20 text-sm">
-        <EditUserView user={data.user as User} />
-      </div>
-    </WrapperGroup>
-  );
-};
-
-const BasicErrorMessage = ({ error }: { error: string }) => {
-  return <div className="text-sm text-red-600">{error}</div>;
-};
-
-interface WrapperGroupProps {
-  loading: boolean;
-}
-const WrapperGroup: React.FC<WrapperGroupProps> = ({ children, loading }) => {
-  return (
-    <Fragment>
+    <EditPageWrapper
+      hasData={!!data && !!data.user}
+      noDataErrorMessage="No data for this user could be found"
+      navTitle="Edit user"
+      error={error}
+      loading={loading}
+    >
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <AdminNavbarGroup />
-      <PageContentWrapper>
-        <SubPageHeader title={`Edit user`} />
-        <PaddingContainer>
-          {loading && <CenteredBeatLoader />}
-          {children}
-        </PaddingContainer>
-      </PageContentWrapper>
-    </Fragment>
+      {data && <EditUserView user={data.user as User} />}
+    </EditPageWrapper>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return isAdminSsrAuthGuard(ctx);
 };
