@@ -160,7 +160,7 @@ export const ItemDetailRow = ({
         backgroundColor === "gray" ? "bg-gray-50" : ""
       } p-3 text-xs`}
     >
-      <div className="min-w-[6rem] font-light text-stone-600 ">{label}</div>
+      <div className="min-w-[6rem] text-stone-600 ">{label}</div>
       <div className={`font-medium ${valueClassName ? valueClassName : ""}`}>
         {value}
       </div>

@@ -8,6 +8,9 @@ module.exports = {
       fontSize: {
         13: ["13px", "18px"],
       },
+      screens: {
+        "3xl": "1792px",
+      },
       colors: {
         "staytard-yellow": "#ffeb00",
         "staytard-pink": "#EA4262",
