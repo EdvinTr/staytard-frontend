@@ -1,13 +1,18 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, FieldAttributes, Form, Formik, useField } from "formik";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toast";
 import {
+  ADMIN_PAGE_QUERY_KEY,
+  ADMIN_SUB_PAGE_ROUTE,
+  APP_PAGE_ROUTE,
   editInputClassNames,
   successToastColors,
 } from "../../../../../constants";
 import {
   UpdateUserInput,
+  useAdminDeleteUserMutation,
   useAdminUpdateUserMutation,
   User,
 } from "../../../../../lib/graphql";
@@ -30,16 +35,22 @@ interface FormValues extends UpdateUserInput {}
 
 const { updateUserSuccessMessage } = Localized.page.admin;
 export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
+  const [adminPassword, setAdminPassword] = useState("");
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+    useState(false);
+
   const showSuccessToast = (): void =>
     toast.success(updateUserSuccessMessage, {
       ...successToastColors,
     });
   const currentWindowWidth = useWindowWidth();
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
+  const router = useRouter();
+
   const [updateUser, { error: updateUserError }] = useAdminUpdateUserMutation({
     notifyOnNetworkStatusChange: true,
   });
+  const [deleteUser, { error: deleteUserError, loading: deleteUserLoading }] =
+    useAdminDeleteUserMutation({ notifyOnNetworkStatusChange: true });
   return (
     <div>
       <div className="flex items-center justify-between pb-10">
@@ -50,17 +61,45 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
         />
         <ConfirmDeletionModal
           heading={`Are you sure you want to delete this user?`}
-          loading={false}
+          loading={deleteUserLoading}
           onClose={() => setIsConfirmDeleteModalOpen(false)}
           show={isConfirmDeleteModalOpen}
           onDelete={async () => {
             try {
-            } catch (err) {
-              console.log(err);
-            }
+              const { data } = await deleteUser({
+                variables: {
+                  input: {
+                    password: adminPassword,
+                    userId: user.id,
+                  },
+                },
+              });
+              if (!data || !data.deleteUser) {
+                throw new Error();
+              }
+              // navigate to users list
+              const usersListRoute = `${APP_PAGE_ROUTE.ADMIN}?${ADMIN_PAGE_QUERY_KEY.SHOW}=${ADMIN_SUB_PAGE_ROUTE.USERS}`;
+              router.push(usersListRoute);
+            } catch {}
           }}
-          error={undefined}
-        />
+          error={deleteUserError?.message}
+        >
+          <div className="space-y-2 pb-8 lg:w-1/2">
+            <BasicInputLabel htmlFor="password">Your password</BasicInputLabel>
+            <BaseInput
+              id="password"
+              aria-label="Password"
+              name="password"
+              type="password"
+              label="Password"
+              value={adminPassword}
+              hasError={false}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              placeholder="Password"
+              autoComplete="off"
+            />
+          </div>
+        </ConfirmDeletionModal>
       </div>
 
       <div className="space-y-6">
@@ -302,10 +341,11 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
     <BaseInput
       {...field}
       {...props}
-      className={`${editInputClassNames} text-13`}
+      className={`${editInputClassNames} text-13 ${
+        props.className ? props.className : ""
+      }`}
       id={id}
       name={field.name}
-      type="text"
       label={label}
       hasError={!!meta.error && meta.touched}
       value={value}

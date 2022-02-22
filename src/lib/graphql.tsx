@@ -111,6 +111,11 @@ export type CustomerOrderStatus = {
   status: Scalars['String'];
 };
 
+export type DeleteUserInput = {
+  password: Scalars['String'];
+  userId: Scalars['String'];
+};
+
 export type FindAllProductReviewsInput = {
   filter?: InputMaybe<ProductReviewsFilterInput>;
   limit: Scalars['Float'];
@@ -190,6 +195,7 @@ export type Mutation = {
   createProductReview: ProductReview;
   deleteProduct: Scalars['Boolean'];
   deleteProductReview: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
   initializeKlarnaSession: KlarnaSessionResponse;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
@@ -230,6 +236,11 @@ export type MutationDeleteProductArgs = {
 
 export type MutationDeleteProductReviewArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  input: DeleteUserInput;
 };
 
 
@@ -590,6 +601,7 @@ export type User = {
   __typename?: 'User';
   address?: Maybe<UserAddress>;
   createdAt: Scalars['DateTime'];
+  deletedAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['String'];
@@ -687,6 +699,13 @@ export type UpdateProductMutationVariables = Exact<{
 
 
 export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
+
+export type AdminDeleteUserMutationVariables = Exact<{
+  input: DeleteUserInput;
+}>;
+
+
+export type AdminDeleteUserMutation = { __typename?: 'Mutation', deleteUser: boolean };
 
 export type AdminUpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
@@ -1205,6 +1224,37 @@ export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
 export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
+export const AdminDeleteUserDocument = gql`
+    mutation AdminDeleteUser($input: DeleteUserInput!) {
+  deleteUser(input: $input)
+}
+    `;
+export type AdminDeleteUserMutationFn = Apollo.MutationFunction<AdminDeleteUserMutation, AdminDeleteUserMutationVariables>;
+
+/**
+ * __useAdminDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useAdminDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminDeleteUserMutation, { data, loading, error }] = useAdminDeleteUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAdminDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<AdminDeleteUserMutation, AdminDeleteUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminDeleteUserMutation, AdminDeleteUserMutationVariables>(AdminDeleteUserDocument, options);
+      }
+export type AdminDeleteUserMutationHookResult = ReturnType<typeof useAdminDeleteUserMutation>;
+export type AdminDeleteUserMutationResult = Apollo.MutationResult<AdminDeleteUserMutation>;
+export type AdminDeleteUserMutationOptions = Apollo.BaseMutationOptions<AdminDeleteUserMutation, AdminDeleteUserMutationVariables>;
 export const AdminUpdateUserDocument = gql`
     mutation AdminUpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
