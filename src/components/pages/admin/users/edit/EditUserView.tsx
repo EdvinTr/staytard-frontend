@@ -101,7 +101,6 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
           </div>
         </ConfirmDeletionModal>
       </div>
-
       <div className="space-y-6">
         <div>
           <div className="w-full">
@@ -227,7 +226,6 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     </ErrorMessage>
                   </div>
                 </InputGroupContainer>
-
                 <div>
                   <h3 className="pb-4 pt-2 text-xl font-semibold">Address</h3>
                   <div className="space-y-6">
@@ -296,14 +294,12 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                   </div>
                 </div>
               </div>
-
               <div className="pt-12">
                 {updateUserError && (
                   <div className="pb-4 text-xs text-red-600">
                     {updateUserError.message}
                   </div>
                 )}
-
                 <BaseButton
                   type="submit"
                   disabled={isSubmitting}

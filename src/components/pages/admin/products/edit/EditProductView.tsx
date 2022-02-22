@@ -89,15 +89,15 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
         />
       </div>
       <div className="space-y-4 md:flex md:items-center md:justify-between md:space-x-7 md:space-y-0">
-        <div className="w-full opacity-50">
+        <div className="w-full">
           <BasicInputLabel htmlFor="productId">Product ID</BasicInputLabel>
           <DisabledInput name="productId" value={product.id.toString()} />
         </div>
-        <div className="w-full opacity-50">
+        <div className="w-full">
           <BasicInputLabel htmlFor="brand">Brand name</BasicInputLabel>
           <DisabledInput name="brand" value={product.brand.name} />
         </div>
-        <div className="w-full opacity-50">
+        <div className="w-full">
           <BasicInputLabel htmlFor="originalPrice">
             Original price
           </BasicInputLabel>
