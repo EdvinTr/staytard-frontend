@@ -443,10 +443,10 @@ export type Query = {
   allProductReviews: QueryAllProductReviewsOutput;
   basicCategories: Array<BasicCategory>;
   categories: Array<ProductCategory>;
-  customerOrders: PaginatedCustomerOrdersOutput;
   getOneCategory: ProductCategory;
   hasPassword: Scalars['Boolean'];
   me: User;
+  myOrders: PaginatedCustomerOrdersOutput;
   oneProductReview: ProductReview;
   product: Product;
   productBrands: Array<ProductBrand>;
@@ -464,13 +464,13 @@ export type QueryAllProductReviewsArgs = {
 };
 
 
-export type QueryCustomerOrdersArgs = {
-  input: FindCustomerOrdersInput;
+export type QueryGetOneCategoryArgs = {
+  path: Scalars['String'];
 };
 
 
-export type QueryGetOneCategoryArgs = {
-  path: Scalars['String'];
+export type QueryMyOrdersArgs = {
+  input: FindCustomerOrdersInput;
 };
 
 
@@ -771,12 +771,12 @@ export type GetOneCategoryQueryVariables = Exact<{
 
 export type GetOneCategoryQuery = { __typename?: 'Query', getOneCategory: { __typename?: 'ProductCategory', id: number, name: string, path: string, description: string, children?: Array<{ __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string }> | null | undefined } };
 
-export type CustomerOrdersQueryVariables = Exact<{
+export type MyCustomerOrdersQueryVariables = Exact<{
   input: FindCustomerOrdersInput;
 }>;
 
 
-export type CustomerOrdersQuery = { __typename?: 'Query', customerOrders: { __typename?: 'PaginatedCustomerOrdersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, createdAt: any, paymentType: string, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
+export type MyCustomerOrdersQuery = { __typename?: 'Query', myOrders: { __typename?: 'PaginatedCustomerOrdersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, createdAt: any, paymentType: string, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
 
 export type GetProductBrandsQueryVariables = Exact<{
   input: GetProductBrandsInput;
@@ -1612,9 +1612,9 @@ export type GetOneCategoryQueryResult = Apollo.QueryResult<GetOneCategoryQuery, 
 export function refetchGetOneCategoryQuery(variables: GetOneCategoryQueryVariables) {
       return { query: GetOneCategoryDocument, variables: variables }
     }
-export const CustomerOrdersDocument = gql`
-    query CustomerOrders($input: FindCustomerOrdersInput!) {
-  customerOrders(input: $input) {
+export const MyCustomerOrdersDocument = gql`
+    query MyCustomerOrders($input: FindCustomerOrdersInput!) {
+  myOrders(input: $input) {
     totalCount
     hasMore
     items {
@@ -1638,34 +1638,34 @@ export const CustomerOrdersDocument = gql`
     `;
 
 /**
- * __useCustomerOrdersQuery__
+ * __useMyCustomerOrdersQuery__
  *
- * To run a query within a React component, call `useCustomerOrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useCustomerOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyCustomerOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyCustomerOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCustomerOrdersQuery({
+ * const { data, loading, error } = useMyCustomerOrdersQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCustomerOrdersQuery(baseOptions: Apollo.QueryHookOptions<CustomerOrdersQuery, CustomerOrdersQueryVariables>) {
+export function useMyCustomerOrdersQuery(baseOptions: Apollo.QueryHookOptions<MyCustomerOrdersQuery, MyCustomerOrdersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CustomerOrdersQuery, CustomerOrdersQueryVariables>(CustomerOrdersDocument, options);
+        return Apollo.useQuery<MyCustomerOrdersQuery, MyCustomerOrdersQueryVariables>(MyCustomerOrdersDocument, options);
       }
-export function useCustomerOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomerOrdersQuery, CustomerOrdersQueryVariables>) {
+export function useMyCustomerOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyCustomerOrdersQuery, MyCustomerOrdersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CustomerOrdersQuery, CustomerOrdersQueryVariables>(CustomerOrdersDocument, options);
+          return Apollo.useLazyQuery<MyCustomerOrdersQuery, MyCustomerOrdersQueryVariables>(MyCustomerOrdersDocument, options);
         }
-export type CustomerOrdersQueryHookResult = ReturnType<typeof useCustomerOrdersQuery>;
-export type CustomerOrdersLazyQueryHookResult = ReturnType<typeof useCustomerOrdersLazyQuery>;
-export type CustomerOrdersQueryResult = Apollo.QueryResult<CustomerOrdersQuery, CustomerOrdersQueryVariables>;
-export function refetchCustomerOrdersQuery(variables: CustomerOrdersQueryVariables) {
-      return { query: CustomerOrdersDocument, variables: variables }
+export type MyCustomerOrdersQueryHookResult = ReturnType<typeof useMyCustomerOrdersQuery>;
+export type MyCustomerOrdersLazyQueryHookResult = ReturnType<typeof useMyCustomerOrdersLazyQuery>;
+export type MyCustomerOrdersQueryResult = Apollo.QueryResult<MyCustomerOrdersQuery, MyCustomerOrdersQueryVariables>;
+export function refetchMyCustomerOrdersQuery(variables: MyCustomerOrdersQueryVariables) {
+      return { query: MyCustomerOrdersDocument, variables: variables }
     }
 export const GetProductBrandsDocument = gql`
     query GetProductBrands($input: GetProductBrandsInput!) {

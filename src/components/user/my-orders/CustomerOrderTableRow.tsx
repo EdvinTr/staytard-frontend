@@ -1,9 +1,9 @@
 import { HTMLMotionProps, motion } from "framer-motion";
 import React from "react";
-import { CustomerOrdersQuery } from "../../../lib/graphql";
+import { MyCustomerOrdersQuery } from "../../../lib/graphql";
 
 interface CustomerOrderTableRowProps extends HTMLMotionProps<"div"> {
-  customerOrder: CustomerOrdersQuery["customerOrders"]["items"][0];
+  customerOrder: MyCustomerOrdersQuery["myOrders"]["items"][0];
 }
 
 export const CustomerOrderTableRow = ({

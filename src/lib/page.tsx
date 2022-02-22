@@ -106,11 +106,11 @@ export const ssrGetOneCategory = {
       
       usePage: useGetOneCategory,
     }
-export async function getServerPageCustomerOrders
-    (options: Omit<Apollo.QueryOptions<Types.CustomerOrdersQueryVariables>, 'query'>, ctx?: any ){
+export async function getServerPageMyCustomerOrders
+    (options: Omit<Apollo.QueryOptions<Types.MyCustomerOrdersQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
         
-        const data = await apolloClient.query<Types.CustomerOrdersQuery>({ ...options, query: Operations.CustomerOrdersDocument });
+        const data = await apolloClient.query<Types.MyCustomerOrdersQuery>({ ...options, query: Operations.MyCustomerOrdersDocument });
         
         const apolloState = apolloClient.cache.extract();
 
@@ -122,17 +122,17 @@ export async function getServerPageCustomerOrders
             },
         };
       }
-export const useCustomerOrders = (
-  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.CustomerOrdersQuery, Types.CustomerOrdersQueryVariables>) => {
+export const useMyCustomerOrders = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.MyCustomerOrdersQuery, Types.MyCustomerOrdersQueryVariables>) => {
   const router = useRouter();
   const options = optionsFunc ? optionsFunc(router) : {};
-  return useQuery(Operations.CustomerOrdersDocument, options);
+  return useQuery(Operations.MyCustomerOrdersDocument, options);
 };
-export type PageCustomerOrdersComp = React.FC<{data?: Types.CustomerOrdersQuery, error?: Apollo.ApolloError}>;
-export const ssrCustomerOrders = {
-      getServerPage: getServerPageCustomerOrders,
+export type PageMyCustomerOrdersComp = React.FC<{data?: Types.MyCustomerOrdersQuery, error?: Apollo.ApolloError}>;
+export const ssrMyCustomerOrders = {
+      getServerPage: getServerPageMyCustomerOrders,
       
-      usePage: useCustomerOrders,
+      usePage: useMyCustomerOrders,
     }
 export async function getServerPageGetProductBrands
     (options: Omit<Apollo.QueryOptions<Types.GetProductBrandsQueryVariables>, 'query'>, ctx?: any ){

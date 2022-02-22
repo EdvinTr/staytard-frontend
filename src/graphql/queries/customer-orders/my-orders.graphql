@@ -1,5 +1,5 @@
-query CustomerOrders($input: FindCustomerOrdersInput!) {
-  customerOrders(input: $input) {
+query MyCustomerOrders($input: FindCustomerOrdersInput!) {
+  myOrders(input: $input) {
     totalCount
     hasMore
     items {

@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import React from "react";
-import { useCustomerOrdersQuery } from "../../../lib/graphql";
+import { useMyCustomerOrdersQuery } from "../../../lib/graphql";
 import { CustomerOrderTableRow } from "./CustomerOrderTableRow";
 
 export const CustomerOrderTable = () => {
-  const { data } = useCustomerOrdersQuery({
+  const { data } = useMyCustomerOrdersQuery({
     variables: {
       input: {
         limit: 50,
@@ -52,7 +52,7 @@ export const CustomerOrderTable = () => {
           initial="hidden"
           animate="show"
         >
-          {data?.customerOrders.items.map((order) => (
+          {data?.myOrders.items.map((order) => (
             <CustomerOrderTableRow
               key={order.id}
               variants={variantItem}
