@@ -50,6 +50,7 @@ export class Localized {
       updateProductSuccessMessage: "Product has been updated.",
       updateProductReviewSuccessMessage: "Review has been updated.",
       updateUserSuccessMessage: "User has been updated.",
+      updateCustomerOrderSuccessMessage: "Order has been updated.",
     },
   };
 }

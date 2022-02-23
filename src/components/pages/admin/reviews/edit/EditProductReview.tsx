@@ -169,7 +169,7 @@ export const EditProductReview = ({ review }: EditProductReviewProps) => {
             setSubmitting(false);
             setTimeout(() => {
               toast.hideAll();
-            }, 8000);
+            }, 5000);
           }
         }}
         initialValues={{

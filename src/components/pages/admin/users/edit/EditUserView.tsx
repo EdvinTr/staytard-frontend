@@ -130,7 +130,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
             setSubmitting(false);
             setTimeout(() => {
               toast.hideAll();
-            }, 8000);
+            }, 5000);
           }
         }}
         initialValues={{

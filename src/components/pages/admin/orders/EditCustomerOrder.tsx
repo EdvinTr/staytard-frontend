@@ -1,10 +1,16 @@
+import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { capitalize } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { toast, ToastContainer } from "react-toast";
 import * as Yup from "yup";
-import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../constants";
+import {
+  ADMIN_SUB_PAGE_ROUTE,
+  APP_PAGE_ROUTE,
+  successToastColors,
+} from "../../../../constants";
 import {
   Customer_Order_Status,
   FindOneCustomerOrderDocument,
@@ -12,6 +18,7 @@ import {
   UpdateCustomerOrderInput,
   useUpdateCustomerOrderMutation,
 } from "../../../../lib/graphql";
+import { Localized } from "../../../../Localized";
 import {
   addressValidationGenerator,
   cityValidation,
@@ -30,6 +37,8 @@ interface EditCustomerOrderProps {
   order: FindOneCustomerOrderQuery;
 }
 
+const { updateCustomerOrderSuccessMessage } = Localized.page.admin;
+
 const validationSchema = Yup.object().shape({
   ...cityValidation,
   ...addressValidationGenerator(
@@ -41,6 +50,11 @@ const validationSchema = Yup.object().shape({
 export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
   order,
 }) => {
+  const showSuccessToast = (): void =>
+    toast.success(updateCustomerOrderSuccessMessage, {
+      ...successToastColors,
+    });
+  const currentWindowWidth = useWindowWidth();
   const { user } = order.oneCustomerOrder;
   const {
     id: orderId,
@@ -98,10 +112,13 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
               if (!data || !data.updateCustomerOrder) {
                 throw new Error();
               }
-              // TODO: show success toast
+              showSuccessToast();
             } catch {
             } finally {
               setSubmitting(false);
+              setTimeout(() => {
+                toast.hideAll();
+              }, 5000);
             }
           }}
         >
@@ -365,6 +382,7 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
             );
           }}
         </Formik>
+
         <div className="space-y-16 pt-16">
           <section>
             <h3 className="text-2xl font-medium">Customer</h3>
@@ -393,6 +411,11 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
             purchaseCurrency={purchaseCurrency}
           />
         </div>
+      </div>
+      <div className="z-50">
+        <ToastContainer
+          position={currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"}
+        />
       </div>
     </div>
   );
