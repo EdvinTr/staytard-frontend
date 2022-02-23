@@ -652,7 +652,7 @@ export type User = {
   __typename?: 'User';
   address?: Maybe<UserAddress>;
   createdAt: Scalars['DateTime'];
-  deletedAt: Scalars['DateTime'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['String'];
@@ -836,7 +836,7 @@ export type FindOneCustomerOrderQueryVariables = Exact<{
 }>;
 
 
-export type FindOneCustomerOrderQuery = { __typename?: 'Query', oneCustomerOrder: { __typename?: 'FindOneCustomerOrderOutput', user?: { __typename?: 'User', id: string, firstName: string, lastName: string, deletedAt: any } | null | undefined, order: { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderItems: Array<{ __typename?: 'CustomerOrderItem', quantity: number, sku: string, product: { __typename?: 'Product', id: number, name: string, images: Array<{ __typename?: 'ProductImage', imageUrl: string }> } }>, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } } } };
+export type FindOneCustomerOrderQuery = { __typename?: 'Query', oneCustomerOrder: { __typename?: 'FindOneCustomerOrderOutput', user?: { __typename?: 'User', id: string, firstName: string, lastName: string, deletedAt?: any | null | undefined } | null | undefined, order: { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderItems: Array<{ __typename?: 'CustomerOrderItem', quantity: number, sku: string, product: { __typename?: 'Product', id: number, name: string, currentPrice: number, brand: { __typename?: 'ProductBrand', name: string }, images: Array<{ __typename?: 'ProductImage', imageUrl: string }>, attributes: Array<{ __typename?: 'ProductAttribute', sku: string }> } }>, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } } } };
 
 export type MyCustomerOrdersQueryVariables = Exact<{
   input: FindMyCustomerOrdersInput;
@@ -1768,8 +1768,15 @@ export const FindOneCustomerOrderDocument = gql`
         product {
           id
           name
+          currentPrice
+          brand {
+            name
+          }
           images {
             imageUrl
+          }
+          attributes {
+            sku
           }
         }
       }

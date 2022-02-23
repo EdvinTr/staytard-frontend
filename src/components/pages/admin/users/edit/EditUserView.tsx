@@ -1,5 +1,5 @@
 import { useWindowWidth } from "@react-hook/window-size";
-import { ErrorMessage, FieldAttributes, Form, Formik, useField } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toast";
@@ -7,7 +7,6 @@ import {
   ADMIN_PAGE_QUERY_KEY,
   ADMIN_SUB_PAGE_ROUTE,
   APP_PAGE_ROUTE,
-  editInputClassNames,
   successToastColors,
 } from "../../../../../constants";
 import {
@@ -19,9 +18,10 @@ import {
 import { Localized } from "../../../../../Localized";
 import { updateUserValidationSchema } from "../../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
-import { BaseInput, BaseInputProps } from "../../../../global/BaseInput";
+import { BaseInput } from "../../../../global/BaseInput";
 import { DeleteButton } from "../../../../global/DeleteButton";
 import { ConfirmDeletionModal } from "../../components/ConfirmDeletionModal";
+import { CustomInputField } from "../../components/CustomInputField";
 import {
   BasicInputLabel,
   DisabledInput,
@@ -150,7 +150,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
               <div className="space-y-6 pt-6">
                 <InputGroupContainer>
                   <div className="w-full space-y-2">
-                    <CustomTextField
+                    <CustomInputField
                       id="firstName"
                       aria-label="First name"
                       name="firstName"
@@ -168,7 +168,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     </ErrorMessage>
                   </div>
                   <div className="w-full space-y-2">
-                    <CustomTextField
+                    <CustomInputField
                       id="lastName"
                       name="lastName"
                       aria-label="Last name"
@@ -188,7 +188,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                 </InputGroupContainer>
                 <InputGroupContainer>
                   <div className="w-full space-y-2">
-                    <CustomTextField
+                    <CustomInputField
                       id="mobilePhoneNumber"
                       name="mobilePhoneNumber"
                       aria-label="Mobile phone number"
@@ -208,7 +208,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     </ErrorMessage>
                   </div>
                   <div className="w-full space-y-2">
-                    <CustomTextField
+                    <CustomInputField
                       id="email"
                       name="email"
                       aria-label="Email"
@@ -230,7 +230,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                   <h3 className="pb-4 pt-2 text-xl font-semibold">Address</h3>
                   <div className="space-y-6">
                     <div className="w-full space-y-2">
-                      <CustomTextField
+                      <CustomInputField
                         id="street"
                         name="street"
                         aria-label="Street"
@@ -251,7 +251,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                     </div>
                     <InputGroupContainer>
                       <div className="w-full space-y-2">
-                        <CustomTextField
+                        <CustomInputField
                           id="postalCode"
                           name="postalCode"
                           aria-label="Postal code"
@@ -271,7 +271,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
                         </ErrorMessage>
                       </div>
                       <div className="w-full space-y-2">
-                        <CustomTextField
+                        <CustomInputField
                           id="city"
                           name="city"
                           type="text"
@@ -323,28 +323,4 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
 
 const InputGroupContainer: React.FC = ({ children }) => {
   return <div className="flex w-full space-x-4">{children}</div>;
-};
-
-type CustomTextFieldProps = BaseInputProps & FieldAttributes<{}>;
-const CustomTextField: React.FC<CustomTextFieldProps> = ({
-  label,
-  id,
-  value,
-  ...props
-}) => {
-  const [field, meta] = useField(props);
-  return (
-    <BaseInput
-      {...field}
-      {...props}
-      className={`${editInputClassNames} text-13 ${
-        props.className ? props.className : ""
-      }`}
-      id={id}
-      name={field.name}
-      label={label}
-      hasError={!!meta.error && meta.touched}
-      value={value}
-    />
-  );
 };

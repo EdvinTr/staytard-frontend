@@ -262,20 +262,21 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
   );
 };
 
-interface DisabledInputProps {
-  value: string;
-  name: string;
-}
-export const DisabledInput = ({ name, value }: DisabledInputProps) => {
+interface DisabledInputProps {}
+export const DisabledInput = ({
+  ...props
+}: DisabledInputProps &
+  React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >) => {
   return (
     <div className="w-full opacity-50">
       <input
+        {...props}
         className="mt-2 block w-full border border-opacity-0 bg-blue-50 text-sm"
         type="text"
-        id={name}
-        name={name}
         disabled
-        value={value}
       />
     </div>
   );
