@@ -1,0 +1,24 @@
+query FindOneCustomerOrder($id: Float!) {
+  oneCustomerOrder(id: $id) {
+    user {
+      id
+      firstName
+      lastName
+      deletedAt
+    }
+    order {
+      ...CoreCustomerOrderFields
+      orderItems {
+        quantity
+        sku
+        product {
+          id
+          name
+          images {
+            imageUrl
+          }
+        }
+      }
+    }
+  }
+}

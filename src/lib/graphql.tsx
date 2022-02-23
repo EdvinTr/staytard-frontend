@@ -121,6 +121,7 @@ export type CustomerOrderFilter = {
 export type CustomerOrderItem = {
   __typename?: 'CustomerOrderItem';
   orderId: Scalars['Float'];
+  product: Product;
   productId: Scalars['Float'];
   quantity: Scalars['Float'];
   sku: Scalars['String'];
@@ -166,6 +167,12 @@ export type FindAllUsersInput = {
 export type FindMyCustomerOrdersInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
+};
+
+export type FindOneCustomerOrderOutput = {
+  __typename?: 'FindOneCustomerOrderOutput';
+  order: CustomerOrder;
+  user?: Maybe<User>;
 };
 
 export type FindProductsBySkusInput = {
@@ -480,6 +487,7 @@ export type Query = {
   hasPassword: Scalars['Boolean'];
   me: User;
   myOrders: PaginatedCustomerOrdersOutput;
+  oneCustomerOrder: FindOneCustomerOrderOutput;
   oneProductReview: ProductReview;
   product: Product;
   productBrands: Array<ProductBrand>;
@@ -509,6 +517,11 @@ export type QueryGetOneCategoryArgs = {
 
 export type QueryMyOrdersArgs = {
   input: FindMyCustomerOrdersInput;
+};
+
+
+export type QueryOneCustomerOrderArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -669,6 +682,8 @@ export type UserWithTokensDto = {
 
 export type CoreCategoryFieldsFragment = { __typename?: 'ProductCategory', id: number, name: string, path: string, slug: string };
 
+export type CoreCustomerOrderFieldsFragment = { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } };
+
 export type CoreAttributeFieldsFragment = { __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } };
 
 export type CoreProductFieldsFragment = { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> };
@@ -816,6 +831,13 @@ export type FindAllCustomerOrdersQueryVariables = Exact<{
 
 export type FindAllCustomerOrdersQuery = { __typename?: 'Query', customerOrders: { __typename?: 'PaginatedCustomerOrdersOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, grandTotal: number, purchaseCurrency: string, userId: string, createdAt: any, shippingCost: number, paymentType: string, totalAmount: number, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
 
+export type FindOneCustomerOrderQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type FindOneCustomerOrderQuery = { __typename?: 'Query', oneCustomerOrder: { __typename?: 'FindOneCustomerOrderOutput', user?: { __typename?: 'User', id: string, firstName: string, lastName: string, deletedAt: any } | null | undefined, order: { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderItems: Array<{ __typename?: 'CustomerOrderItem', quantity: number, sku: string, product: { __typename?: 'Product', id: number, name: string, images: Array<{ __typename?: 'ProductImage', imageUrl: string }> } }>, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } } } };
+
 export type MyCustomerOrdersQueryVariables = Exact<{
   input: FindMyCustomerOrdersInput;
 }>;
@@ -902,6 +924,25 @@ export const CoreCategoryFieldsFragmentDoc = gql`
   name
   path
   slug
+}
+    `;
+export const CoreCustomerOrderFieldsFragmentDoc = gql`
+    fragment CoreCustomerOrderFields on CustomerOrder {
+  id
+  orderNumber
+  deliveryAddress
+  city
+  postalCode
+  totalAmount
+  shippingCost
+  grandTotal
+  purchaseCurrency
+  paymentType
+  createdAt
+  updatedAt
+  orderStatus {
+    status
+  }
 }
     `;
 export const CoreAttributeFieldsFragmentDoc = gql`
@@ -1709,6 +1750,63 @@ export type FindAllCustomerOrdersLazyQueryHookResult = ReturnType<typeof useFind
 export type FindAllCustomerOrdersQueryResult = Apollo.QueryResult<FindAllCustomerOrdersQuery, FindAllCustomerOrdersQueryVariables>;
 export function refetchFindAllCustomerOrdersQuery(variables: FindAllCustomerOrdersQueryVariables) {
       return { query: FindAllCustomerOrdersDocument, variables: variables }
+    }
+export const FindOneCustomerOrderDocument = gql`
+    query FindOneCustomerOrder($id: Float!) {
+  oneCustomerOrder(id: $id) {
+    user {
+      id
+      firstName
+      lastName
+      deletedAt
+    }
+    order {
+      ...CoreCustomerOrderFields
+      orderItems {
+        quantity
+        sku
+        product {
+          id
+          name
+          images {
+            imageUrl
+          }
+        }
+      }
+    }
+  }
+}
+    ${CoreCustomerOrderFieldsFragmentDoc}`;
+
+/**
+ * __useFindOneCustomerOrderQuery__
+ *
+ * To run a query within a React component, call `useFindOneCustomerOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOneCustomerOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOneCustomerOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindOneCustomerOrderQuery(baseOptions: Apollo.QueryHookOptions<FindOneCustomerOrderQuery, FindOneCustomerOrderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindOneCustomerOrderQuery, FindOneCustomerOrderQueryVariables>(FindOneCustomerOrderDocument, options);
+      }
+export function useFindOneCustomerOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOneCustomerOrderQuery, FindOneCustomerOrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindOneCustomerOrderQuery, FindOneCustomerOrderQueryVariables>(FindOneCustomerOrderDocument, options);
+        }
+export type FindOneCustomerOrderQueryHookResult = ReturnType<typeof useFindOneCustomerOrderQuery>;
+export type FindOneCustomerOrderLazyQueryHookResult = ReturnType<typeof useFindOneCustomerOrderLazyQuery>;
+export type FindOneCustomerOrderQueryResult = Apollo.QueryResult<FindOneCustomerOrderQuery, FindOneCustomerOrderQueryVariables>;
+export function refetchFindOneCustomerOrderQuery(variables: FindOneCustomerOrderQueryVariables) {
+      return { query: FindOneCustomerOrderDocument, variables: variables }
     }
 export const MyCustomerOrdersDocument = gql`
     query MyCustomerOrders($input: FindMyCustomerOrdersInput!) {

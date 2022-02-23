@@ -1,0 +1,17 @@
+fragment CoreCustomerOrderFields on CustomerOrder {
+  id
+  orderNumber
+  deliveryAddress
+  city
+  postalCode
+  totalAmount
+  shippingCost
+  grandTotal
+  purchaseCurrency
+  paymentType
+  createdAt
+  updatedAt
+  orderStatus {
+    status
+  }
+}
