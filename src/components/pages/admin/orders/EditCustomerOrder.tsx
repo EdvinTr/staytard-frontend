@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../constants";
 import {
   Customer_Order_Status,
+  FindOneCustomerOrderDocument,
   FindOneCustomerOrderQuery,
   UpdateCustomerOrderInput,
   useUpdateCustomerOrderMutation,
@@ -63,7 +64,9 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
       name: status,
     })),
   ];
-  const [updateOrder, { data, error }] = useUpdateCustomerOrderMutation();
+  const { isEditable } = order.oneCustomerOrder;
+  const [updateOrder, { error: updateOrderError }] =
+    useUpdateCustomerOrderMutation();
   return (
     <div>
       <div>
@@ -77,9 +80,29 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
             postalCode: postalCode,
             orderStatus: orderStatus.status as Customer_Order_Status,
           }}
-          onSubmit={(values: UpdateCustomerOrderInput, { setSubmitting }) => {
-            console.log(values);
-            setSubmitting(false);
+          onSubmit={async (
+            values: UpdateCustomerOrderInput,
+            { setSubmitting }
+          ) => {
+            try {
+              const { data } = await updateOrder({
+                variables: {
+                  input: {
+                    ...values,
+                    orderStatus:
+                      values.orderStatus.toUpperCase() as Customer_Order_Status,
+                  },
+                },
+                refetchQueries: [FindOneCustomerOrderDocument],
+              });
+              if (!data || !data.updateCustomerOrder) {
+                throw new Error();
+              }
+              // TODO: show success toast
+            } catch {
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {({
@@ -171,70 +194,102 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
                       </div>
                     </MyWrapper>
                     <MyWrapper>
-                      <MyWrapper className={`${isValid ? "" : "pb-4"}`}>
+                      {/* address and stuff */}
+                      <MyWrapper className={`${isValid ? "" : "pb-4"} w-full`}>
                         <div className="w-full space-y-2">
                           <BasicInputLabel htmlFor="city">City</BasicInputLabel>
-                          <CustomInputField
-                            id="city"
-                            name="city"
-                            type="text"
-                            placeholder="City"
-                            value={values.city}
-                            hasError={!!touched.city && !!errors.city}
-                            autoComplete="off"
-                          />
-                          <ErrorMessage name="city">
-                            {(msg) => (
-                              <span className="absolute pt-0 text-[11px] text-red-600">
-                                {msg}
-                              </span>
-                            )}
-                          </ErrorMessage>
+                          {isEditable ? (
+                            <>
+                              <CustomInputField
+                                id="city"
+                                name="city"
+                                type="text"
+                                placeholder="City"
+                                value={values.city}
+                                hasError={!!touched.city && !!errors.city}
+                                autoComplete="off"
+                              />
+                              <ErrorMessage name="city">
+                                {(msg) => (
+                                  <span className="absolute pt-0 text-[11px] text-red-600">
+                                    {msg}
+                                  </span>
+                                )}
+                              </ErrorMessage>
+                            </>
+                          ) : (
+                            <DisabledInput
+                              value={values.city}
+                              id="city"
+                              name="city"
+                              type="text"
+                            />
+                          )}
                         </div>
                         <div className="w-full space-y-2">
                           <BasicInputLabel htmlFor="deliveryAddress">
                             Delivery address
                           </BasicInputLabel>
-                          <CustomInputField
-                            id="deliveryAddress"
-                            name="deliveryAddress"
-                            placeholder="Delivery address"
-                            value={values.deliveryAddress}
-                            autoComplete="off"
-                            hasError={
-                              !!touched.deliveryAddress &&
-                              !!errors.deliveryAddress
-                            }
-                          />
-                          <ErrorMessage name="deliveryAddress">
-                            {(msg) => (
-                              <span className="absolute pt-0 text-[11px] text-red-600">
-                                {msg}
-                              </span>
-                            )}
-                          </ErrorMessage>
+                          {isEditable ? (
+                            <>
+                              <CustomInputField
+                                id="deliveryAddress"
+                                name="deliveryAddress"
+                                placeholder="Delivery address"
+                                value={values.deliveryAddress}
+                                autoComplete="off"
+                                hasError={
+                                  !!touched.deliveryAddress &&
+                                  !!errors.deliveryAddress
+                                }
+                              />
+                              <ErrorMessage name="deliveryAddress">
+                                {(msg) => (
+                                  <span className="absolute pt-0 text-[11px] text-red-600">
+                                    {msg}
+                                  </span>
+                                )}
+                              </ErrorMessage>
+                            </>
+                          ) : (
+                            <DisabledInput
+                              value={values.deliveryAddress}
+                              id="deliveryAddress"
+                              name="deliveryAddress"
+                            />
+                          )}
                         </div>
                         <div className="w-full space-y-2">
                           <BasicInputLabel htmlFor="postalCode">
                             Postal code
                           </BasicInputLabel>
-                          <CustomInputField
-                            id="postalCode"
-                            name="postalCode"
-                            placeholder="Postal code"
-                            value={values.postalCode}
-                            autoComplete="off"
-                            hasError={
-                              !!touched.postalCode && !!errors.postalCode
-                            }
-                          />
-                          <ErrorMessage name="postalCode">
-                            {(msg) => (
-                              <span className="absolute pt-0 text-[11px] text-red-600">
-                                {msg}
-                              </span>
-                            )}
-                          </ErrorMessage>
+                          {isEditable ? (
+                            <>
+                              <CustomInputField
+                                id="postalCode"
+                                name="postalCode"
+                                placeholder="Postal code"
+                                value={values.postalCode}
+                                autoComplete="off"
+                                hasError={
+                                  !!touched.postalCode && !!errors.postalCode
+                                }
+                              />
+                              <ErrorMessage name="postalCode">
+                                {(msg) => (
+                                  <span className="absolute pt-0 text-[11px] text-red-600">
+                                    {msg}
+                                  </span>
+                                )}
+                              </ErrorMessage>
+                            </>
+                          ) : (
+                            <DisabledInput
+                              value={values.postalCode}
+                              id="postalCode"
+                              name="postalCode"
+                            />
+                          )}
                         </div>
                       </MyWrapper>
                     </MyWrapper>
@@ -261,41 +316,49 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
                         />
                       </div>
                       <div className="w-full space-y-2">
-                        <BasicInputLabel htmlFor="status" className="">
+                        <BasicInputLabel htmlFor="orderStatus">
                           Status
                         </BasicInputLabel>
-                        <Field
-                          as={MyListBox}
-                          name="orderStatus"
-                          id="orderStatus"
-                          items={orderStatusItems}
-                          initialValue={{
-                            id: Math.random(),
-                            name: values.orderStatus,
-                          }}
-                          onChange={(id: number) => {
-                            setFieldValue(
-                              "orderStatus",
-                              orderStatusItems.find((v) => v.id === id)?.name
-                            );
-                          }}
-                        />
-                        {/*  <ErrorMessage name="orderStatus">
-                        {(msg) => (
-                          <div className="pt-2 text-[11px] text-red-600">
-                            {msg}
-                          </div>
+                        {isEditable ? (
+                          <Field
+                            as={MyListBox}
+                            name="orderStatus"
+                            id="orderStatus"
+                            items={orderStatusItems}
+                            initialValue={{
+                              id: Math.random(),
+                              name: values.orderStatus,
+                            }}
+                            onChange={(id: number) => {
+                              setFieldValue(
+                                "orderStatus",
+                                orderStatusItems.find((v) => v.id === id)?.name
+                              );
+                            }}
+                          />
+                        ) : (
+                          <DisabledInput
+                            value={values.orderStatus}
+                            id="orderStatus"
+                            name="orderStatus"
+                          />
                         )}
-                      </ErrorMessage> */}
                       </div>
                     </MyWrapper>
-                    <BaseButton
-                      loading={isSubmitting}
-                      disabled={isSubmitting}
-                      type="submit"
-                    >
-                      Save
-                    </BaseButton>
+                    {updateOrderError && (
+                      <div className="text-xs text-red-600">
+                        {updateOrderError.message}
+                      </div>
+                    )}
+                    {isEditable && (
+                      <BaseButton
+                        loading={isSubmitting}
+                        disabled={isSubmitting}
+                        type="submit"
+                      >
+                        Save
+                      </BaseButton>
+                    )}
                   </div>
                 </div>
               </Form>

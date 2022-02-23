@@ -1,5 +1,6 @@
 query FindOneCustomerOrder($id: Float!) {
   oneCustomerOrder(id: $id) {
+    isEditable
     user {
       id
       firstName
