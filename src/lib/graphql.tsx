@@ -237,6 +237,7 @@ export type Mutation = {
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
   registerUser: UserWithTokensDto;
+  updateCustomerOrder: Scalars['Boolean'];
   updatePassword: Scalars['Boolean'];
   updateProduct: Product;
   updateProductReview: ProductReview;
@@ -293,6 +294,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterUserArgs = {
   input: RegisterUserDto;
+};
+
+
+export type MutationUpdateCustomerOrderArgs = {
+  input: UpdateCustomerOrderInput;
 };
 
 
@@ -609,6 +615,14 @@ export enum User_Sort_By {
   IsAdmin = 'IS_ADMIN'
 }
 
+export type UpdateCustomerOrderInput = {
+  city: Scalars['String'];
+  deliveryAddress: Scalars['String'];
+  orderId: Scalars['Float'];
+  orderStatus: Customer_Order_Status;
+  postalCode: Scalars['String'];
+};
+
 export type UpdateProductInput = {
   attributes: Array<CreateProductAttributeInput>;
   currentPrice: Scalars['Float'];
@@ -695,6 +709,13 @@ export type ProductReviewPartsFragment = { __typename?: 'ProductReview', id: num
 export type CoreAddressFieldsFragment = { __typename?: 'UserAddress', id: number, city: string, street: string, postalCode: string };
 
 export type CoreUserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, mobilePhoneNumber?: string | null | undefined, isRegisteredWithGoogle: boolean, isEmailConfirmed: boolean, isAdmin: boolean };
+
+export type UpdateCustomerOrderMutationVariables = Exact<{
+  input: UpdateCustomerOrderInput;
+}>;
+
+
+export type UpdateCustomerOrderMutation = { __typename?: 'Mutation', updateCustomerOrder: boolean };
 
 export type CreateOrderWithKlarnaMutationVariables = Exact<{
   input: InitKlarnaSessionInput;
@@ -1025,6 +1046,37 @@ export const CoreUserFieldsFragmentDoc = gql`
   isAdmin
 }
     `;
+export const UpdateCustomerOrderDocument = gql`
+    mutation UpdateCustomerOrder($input: UpdateCustomerOrderInput!) {
+  updateCustomerOrder(input: $input)
+}
+    `;
+export type UpdateCustomerOrderMutationFn = Apollo.MutationFunction<UpdateCustomerOrderMutation, UpdateCustomerOrderMutationVariables>;
+
+/**
+ * __useUpdateCustomerOrderMutation__
+ *
+ * To run a mutation, you first call `useUpdateCustomerOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCustomerOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCustomerOrderMutation, { data, loading, error }] = useUpdateCustomerOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCustomerOrderMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCustomerOrderMutation, UpdateCustomerOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCustomerOrderMutation, UpdateCustomerOrderMutationVariables>(UpdateCustomerOrderDocument, options);
+      }
+export type UpdateCustomerOrderMutationHookResult = ReturnType<typeof useUpdateCustomerOrderMutation>;
+export type UpdateCustomerOrderMutationResult = Apollo.MutationResult<UpdateCustomerOrderMutation>;
+export type UpdateCustomerOrderMutationOptions = Apollo.BaseMutationOptions<UpdateCustomerOrderMutation, UpdateCustomerOrderMutationVariables>;
 export const CreateOrderWithKlarnaDocument = gql`
     mutation CreateOrderWithKlarna($input: InitKlarnaSessionInput!, $authorizationToken: String!) {
   createOrderWithKlarna(input: $input, authorizationToken: $authorizationToken) {

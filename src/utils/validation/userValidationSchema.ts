@@ -13,7 +13,7 @@ const {
   zipCodeValidationErrorMessage,
   addressValidationErrorMessage,
 } = Localized.page.register;
-const firstNameValidation = {
+export const firstNameValidation = {
   firstName: Yup.string()
     .required("Required")
     .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
@@ -21,7 +21,7 @@ const firstNameValidation = {
     .max(100, "First name must be at most 100 characters"),
 };
 
-const lastNameValidation = {
+export const lastNameValidation = {
   lastName: Yup.string()
     .required("Required")
     .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
@@ -29,7 +29,7 @@ const lastNameValidation = {
     .max(100, "Last name must be at most 100 characters"),
 };
 
-const emailValidation = {
+export const emailValidation = {
   email: Yup.string()
     .required("Required")
     .matches(emailValidationRegex, emailInputErrorMessage),
@@ -41,7 +41,20 @@ const mobileNumberValidation = {
     .matches(mobilePhoneNumber, phoneNumberValidationErrorMessage),
 };
 
-const streetAddressValidation = {
+export const addressValidationGenerator = (
+  key: string,
+  errorMessage: string
+) => {
+  return {
+    [key]: Yup.string()
+      .required("Required")
+      .min(1)
+      .max(36)
+      .matches(new RegExp(/^[a-zA-ZåäöæøÅÄÖÆØ0-9\s]{1,36}$/), errorMessage),
+  };
+};
+
+export const streetAddressValidation = {
   street: Yup.string()
     .required("Required")
     .min(1)
@@ -52,13 +65,13 @@ const streetAddressValidation = {
     ),
 };
 
-const postalCodeValidation = {
+export const postalCodeValidation = {
   postalCode: Yup.string()
     .required("Required")
     .matches(/^[0-9]{3,3}\ ?[0-9]{2,2}$/, zipCodeValidationErrorMessage),
 };
 
-const cityValidation = {
+export const cityValidation = {
   city: Yup.string()
     .required("Required")
     .min(1)

@@ -22,6 +22,7 @@ import { getApolloClient } from './apolloClient';
 
 
 
+
 export async function getServerPageBasicCategories
     (options: Omit<Apollo.QueryOptions<Types.BasicCategoriesQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);

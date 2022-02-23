@@ -1,10 +1,21 @@
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { capitalize } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import * as Yup from "yup";
 import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../constants";
-import { FindOneCustomerOrderQuery } from "../../../../lib/graphql";
+import {
+  Customer_Order_Status,
+  FindOneCustomerOrderQuery,
+  UpdateCustomerOrderInput,
+  useUpdateCustomerOrderMutation,
+} from "../../../../lib/graphql";
+import {
+  addressValidationGenerator,
+  cityValidation,
+  postalCodeValidation,
+} from "../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../global/BaseButton";
 import { ORDER_STATUS } from "../../../user/my-orders/CustomerOrderTableRow";
 import { CustomInputField } from "../components/CustomInputField";
@@ -17,12 +28,15 @@ import { MyWrapper } from "../reviews/edit/EditProductReview";
 interface EditCustomerOrderProps {
   order: FindOneCustomerOrderQuery;
 }
-interface FormValues {
-  deliveryAddress: string;
-  city: string;
-  postalCode: string;
-  orderStatus: ORDER_STATUS;
-}
+
+const validationSchema = Yup.object().shape({
+  ...cityValidation,
+  ...addressValidationGenerator(
+    "deliveryAddress",
+    "Use only letters and numbers. Max 36 characters."
+  ),
+  ...postalCodeValidation,
+});
 export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
   order,
 }) => {
@@ -43,30 +57,39 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
     orderStatus,
     orderItems,
   } = order.oneCustomerOrder.order;
-
   const orderStatusItems = [
     ...Object.values(ORDER_STATUS).map((status, idx) => ({
       id: idx,
       name: status,
     })),
   ];
+  const [updateOrder, { data, error }] = useUpdateCustomerOrderMutation();
   return (
     <div>
       <div>
         <h2 className="text-2xl font-medium">General information</h2>
         <Formik
+          validationSchema={validationSchema}
           initialValues={{
+            orderId: orderId,
             deliveryAddress: deliveryAddress,
             city: city,
             postalCode: postalCode,
-            orderStatus: orderStatus.status as ORDER_STATUS,
+            orderStatus: orderStatus.status as Customer_Order_Status,
           }}
-          onSubmit={(values: FormValues, { setSubmitting }) => {
+          onSubmit={(values: UpdateCustomerOrderInput, { setSubmitting }) => {
             console.log(values);
             setSubmitting(false);
           }}
         >
-          {({ errors, values, isSubmitting, setFieldValue, touched }) => {
+          {({
+            errors,
+            values,
+            isSubmitting,
+            setFieldValue,
+            touched,
+            isValid,
+          }) => {
             return (
               <Form>
                 <div>
@@ -148,35 +171,70 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
                       </div>
                     </MyWrapper>
                     <MyWrapper>
-                      <MyWrapper>
-                        <div className="w-full">
+                      <MyWrapper className={`${isValid ? "" : "pb-4"}`}>
+                        <div className="w-full space-y-2">
                           <BasicInputLabel htmlFor="city">City</BasicInputLabel>
                           <CustomInputField
                             id="city"
                             name="city"
+                            type="text"
+                            placeholder="City"
                             value={values.city}
-                            className="mt-2"
+                            hasError={!!touched.city && !!errors.city}
+                            autoComplete="off"
                           />
+                          <ErrorMessage name="city">
+                            {(msg) => (
+                              <span className="absolute pt-0 text-[11px] text-red-600">
+                                {msg}
+                              </span>
+                            )}
+                          </ErrorMessage>
                         </div>
-                        <div className="w-full">
+                        <div className="w-full space-y-2">
                           <BasicInputLabel htmlFor="deliveryAddress">
                             Delivery address
                           </BasicInputLabel>
                           <CustomInputField
                             id="deliveryAddress"
                             name="deliveryAddress"
+                            placeholder="Delivery address"
                             value={values.deliveryAddress}
-                            className="mt-2"
+                            autoComplete="off"
+                            hasError={
+                              !!touched.deliveryAddress &&
+                              !!errors.deliveryAddress
+                            }
                           />
+                          <ErrorMessage name="deliveryAddress">
+                            {(msg) => (
+                              <span className="absolute pt-0 text-[11px] text-red-600">
+                                {msg}
+                              </span>
+                            )}
+                          </ErrorMessage>
                         </div>
-                        <div className="w-full">
-                          <BasicInputLabel htmlFor="zip>">Zip</BasicInputLabel>
+                        <div className="w-full space-y-2">
+                          <BasicInputLabel htmlFor="postalCode">
+                            Postal code
+                          </BasicInputLabel>
                           <CustomInputField
-                            id="zip>"
+                            id="postalCode"
                             name="postalCode"
+                            placeholder="Postal code"
                             value={values.postalCode}
-                            className="mt-2"
+                            autoComplete="off"
+                            hasError={
+                              !!touched.postalCode && !!errors.postalCode
+                            }
                           />
+                          <ErrorMessage name="postalCode">
+                            {(msg) => (
+                              <span className="absolute pt-0 text-[11px] text-red-600">
+                                {msg}
+                              </span>
+                            )}
+                          </ErrorMessage>
                         </div>
                       </MyWrapper>
                     </MyWrapper>
