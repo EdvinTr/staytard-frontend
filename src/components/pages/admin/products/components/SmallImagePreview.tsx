@@ -11,6 +11,7 @@ export const ImagePreviews = ({ imageUrls }: ImagePreviewsProps) => {
         imageUrls.map((url, index) => {
           return (
             url.length > 0 && (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 key={index}
                 src={url.replace("{size}", "100")}

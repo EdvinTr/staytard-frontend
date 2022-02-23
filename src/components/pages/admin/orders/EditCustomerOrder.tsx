@@ -401,7 +401,7 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
                 </div>
               ) : (
                 <div className="text-xl text-red-600">
-                  This user's account has been deleted.
+                  {`This user's account has been deleted.`}
                 </div>
               )}
             </div>

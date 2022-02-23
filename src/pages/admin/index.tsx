@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { Fragment, useEffect } from "react";
 import { AdminNavbarGroup } from "../../components/pages/admin/components/nav/AdminNavbarGroup";
 import { PageContentWrapper } from "../../components/pages/admin/components/PageContentWrapper";
@@ -19,12 +19,12 @@ const AdminPage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const showQuery = router.query[ADMIN_PAGE_QUERY_KEY.SHOW];
+    const showQuery = Router.query[ADMIN_PAGE_QUERY_KEY.SHOW];
     if (!showQuery) {
-      router.push({
-        pathname: router.pathname,
+      Router.push({
+        pathname: Router.pathname,
         query: {
-          ...router.query,
+          ...Router.query,
           [ADMIN_PAGE_QUERY_KEY.SHOW]: ADMIN_SUB_PAGE_ROUTE.PRODUCTS,
         },
       });
