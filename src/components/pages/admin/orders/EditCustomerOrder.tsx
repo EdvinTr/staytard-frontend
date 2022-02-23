@@ -3,7 +3,7 @@ import { capitalize } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { APP_PAGE_ROUTE } from "../../../../constants";
+import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../constants";
 import { FindOneCustomerOrderQuery } from "../../../../lib/graphql";
 import { BaseButton } from "../../../global/BaseButton";
 import { ORDER_STATUS } from "../../../user/my-orders/CustomerOrderTableRow";
@@ -26,6 +26,7 @@ interface FormValues {
 export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
   order,
 }) => {
+  const { user } = order.oneCustomerOrder;
   const {
     id: orderId,
     orderNumber,
@@ -243,10 +244,29 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
             );
           }}
         </Formik>
-        <div className="space-y-8 pt-7">
-          <div>
-            <h3 className="text-2xl font-medium">User details</h3>
-          </div>
+        <div className="space-y-16 pt-16">
+          <section>
+            <h3 className="text-2xl font-medium">Customer</h3>
+            <div className="pt-4">
+              {user && !user.deletedAt ? (
+                <div>
+                  <Link
+                    href={`${APP_PAGE_ROUTE.ADMIN}${ADMIN_SUB_PAGE_ROUTE.EDIT_USER}/${user.id}`}
+                  >
+                    <a className="text-blue-600 hover:underline">
+                      <span>
+                        {user.firstName} {user.lastName}
+                      </span>
+                    </a>
+                  </Link>
+                </div>
+              ) : (
+                <div className="text-xl text-red-600">
+                  This user's account has been deleted.
+                </div>
+              )}
+            </div>
+          </section>
           <ProductSectionDisplay
             orderItems={orderItems}
             purchaseCurrency={purchaseCurrency}

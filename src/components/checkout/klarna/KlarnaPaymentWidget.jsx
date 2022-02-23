@@ -48,7 +48,7 @@ export const KlarnaPaymentWidget = ({
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto min-h-[50rem]">
+    <div className="mx-auto min-h-[50rem] max-w-2xl p-4">
       <div className=" border border-black border-opacity-20">
         {/* klarna stuff */}
         <div
@@ -72,15 +72,15 @@ export const KlarnaPaymentWidget = ({
           style={{ width: "500px", margin: "auto" }}
         ></div>
 
-        <div className="w-[500px] mx-auto pb-8 pt-2">
+        <div className="mx-auto w-[500px] pb-8 pt-2">
           {error && (
-            <p className="text-red-500 text-sm pt-4">
+            <p className="pt-4 text-sm text-red-500">
               Something went wrong while creating the order. Please try again.
             </p>
           )}
           <BaseButton
             onClick={() => onKlarnaContinueClick()}
-            className="authorize uppercase w-full"
+            className="authorize w-full uppercase"
           >
             Continue
           </BaseButton>
