@@ -1,7 +1,7 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import { capitalize } from "lodash";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import Router, { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useDebounce } from "usehooks-ts";
 import {
   ADMIN_PAGE_QUERY_KEY,
@@ -10,11 +10,11 @@ import {
 } from "../../../../constants";
 import { useFindAllCustomerOrdersQuery } from "../../../../lib/graphql";
 import { BaseInput } from "../../../global/BaseInput";
-import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../../global/LoadMoreButton";
 import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
 import { ORDER_STATUS } from "../../../user/my-orders/CustomerOrderTableRow";
+import { ForbiddenResourceErrorCard } from "../components/ForbiddenResourceErrorCard";
 import { InformationDetailsCard } from "../components/InformationDetailsCard";
 import { MyGrid } from "../components/MyGrid";
 import { PaddingContainer } from "../components/PaddingContainer";
@@ -42,19 +42,27 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
       },
       notifyOnNetworkStatusChange: true,
     });
+
+  useEffect(() => {
+    Router.replace({
+      query: {
+        ...Router.query,
+        q: debouncedSearchTerm,
+      },
+    });
+    refetch({
+      input: {
+        limit: MAX_ORDERS_TO_FETCH,
+        offset: 0,
+        q: debouncedSearchTerm,
+      },
+    }).then(() => setOffset(0));
+  }, [debouncedSearchTerm, refetch]);
   return (
     <div className="relative pb-20">
       <SubPageHeader title="Orders" />
       <PaddingContainer className="text-sm">
-        {error && (
-          <BasicCard className="mx-auto max-w-xl p-4">
-            <h3 className="text-lg text-red-600">
-              {error.message.includes("Forbidden")
-                ? "You do not have sufficient permissions to view this page."
-                : error.message}
-            </h3>
-          </BasicCard>
-        )}
+        {error && <ForbiddenResourceErrorCard error={error} />}
         <div className="relative md:max-w-sm">
           <BaseInput
             type="text"

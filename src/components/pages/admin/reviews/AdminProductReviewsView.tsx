@@ -9,10 +9,10 @@ import {
 } from "../../../../constants";
 import { useFindAllProductReviewsQuery } from "../../../../lib/graphql";
 import { BaseInput } from "../../../global/BaseInput";
-import { BasicCard } from "../../../global/BasicCard";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../../global/LoadMoreButton";
 import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
+import { ForbiddenResourceErrorCard } from "../components/ForbiddenResourceErrorCard";
 import { InformationDetailsCard } from "../components/InformationDetailsCard";
 import { MyGrid } from "../components/MyGrid";
 import { PaddingContainer } from "../components/PaddingContainer";
@@ -60,15 +60,7 @@ export const AdminProductReviewsView = () => {
     <div className="relative pb-20">
       <SubPageHeader title="Reviews" />
       <PaddingContainer className="text-sm">
-        {error && (
-          <BasicCard className="mx-auto max-w-xl p-4">
-            <h3 className="text-lg text-red-600">
-              {error.message.includes("Forbidden")
-                ? "You do not have sufficient permissions to view this page."
-                : error.message}
-            </h3>
-          </BasicCard>
-        )}
+        {error && <ForbiddenResourceErrorCard error={error} />}
         <div className="relative md:max-w-sm">
           <BaseInput
             type="text"
