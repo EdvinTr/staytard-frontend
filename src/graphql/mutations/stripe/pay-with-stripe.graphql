@@ -1,0 +1,8 @@
+mutation PayWithStripe($input: PayWithStripeInput!) {
+  payWithStripe(input: $input) {
+    success
+    requires_action
+    payment_intent_client_secret
+    error
+  }
+}
