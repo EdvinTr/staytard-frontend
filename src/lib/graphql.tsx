@@ -109,6 +109,7 @@ export type CustomerOrder = {
   postalCode: Scalars['String'];
   purchaseCurrency: Scalars['String'];
   shippingCost: Scalars['Float'];
+  stripeSessionId?: Maybe<Scalars['String']>;
   totalAmount: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
@@ -228,6 +229,7 @@ export type LoginUserDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
+  createCustomerOrderWithStripe: CustomerOrder;
   createOrderWithKlarna: CustomerOrder;
   createProduct: Product;
   createProductReview: ProductReview;
@@ -237,7 +239,6 @@ export type Mutation = {
   initializeKlarnaSession: KlarnaSessionResponse;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
-  payWithStripe: PayWithStripeResponseOutput;
   registerUser: UserWithTokensDto;
   updateCustomerOrder: Scalars['Boolean'];
   updatePassword: Scalars['Boolean'];
@@ -250,6 +251,11 @@ export type Mutation = {
 
 export type MutationAuthenticateWithGoogleArgs = {
   googleAuthToken: Scalars['String'];
+};
+
+
+export type MutationCreateCustomerOrderWithStripeArgs = {
+  stripeSessionId: Scalars['String'];
 };
 
 
@@ -291,11 +297,6 @@ export type MutationInitializeKlarnaSessionArgs = {
 
 export type MutationLoginArgs = {
   input: LoginUserDto;
-};
-
-
-export type MutationPayWithStripeArgs = {
-  input: PayWithStripeInput;
 };
 
 
@@ -374,19 +375,6 @@ export type PaginatedUsersOutput = {
   hasMore: Scalars['Boolean'];
   items: Array<User>;
   totalCount: Scalars['Float'];
-};
-
-export type PayWithStripeInput = {
-  paymentIntentId?: InputMaybe<Scalars['String']>;
-  paymentMethodId?: InputMaybe<Scalars['String']>;
-};
-
-export type PayWithStripeResponseOutput = {
-  __typename?: 'PayWithStripeResponseOutput';
-  error?: Maybe<Scalars['String']>;
-  payment_intent_client_secret?: Maybe<Scalars['String']>;
-  requires_action?: Maybe<Scalars['Boolean']>;
-  success: Scalars['Boolean'];
 };
 
 export type PaymentMethodCategory = {
@@ -794,12 +782,12 @@ export type UpdateProductMutationVariables = Exact<{
 
 export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: number, name: string, originalPrice: number, currentPrice: number, currentPriceLabel: string, isDiscontinued: boolean, attributes: Array<{ __typename?: 'ProductAttribute', sku: string, quantity: number, size: { __typename?: 'ProductSize', id: number, value: string }, color: { __typename?: 'ProductColor', id: number, value: string } }>, brand: { __typename?: 'ProductBrand', id: number, name: string }, images: Array<{ __typename?: 'ProductImage', id: number, imageUrl: string }> } };
 
-export type PayWithStripeMutationVariables = Exact<{
-  input: PayWithStripeInput;
+export type CreateCustomerOrderWithStripeMutationVariables = Exact<{
+  stripeSessionId: Scalars['String'];
 }>;
 
 
-export type PayWithStripeMutation = { __typename?: 'Mutation', payWithStripe: { __typename?: 'PayWithStripeResponseOutput', success: boolean, requires_action?: boolean | null | undefined, payment_intent_client_secret?: string | null | undefined, error?: string | null | undefined } };
+export type CreateCustomerOrderWithStripeMutation = { __typename?: 'Mutation', createCustomerOrderWithStripe: { __typename?: 'CustomerOrder', stripeSessionId?: string | null | undefined, id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderItems: Array<{ __typename?: 'CustomerOrderItem', quantity: number, sku: string, product: { __typename?: 'Product', id: number, name: string, currentPrice: number, brand: { __typename?: 'ProductBrand', name: string }, images: Array<{ __typename?: 'ProductImage', imageUrl: string }>, attributes: Array<{ __typename?: 'ProductAttribute', sku: string }> } }>, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } } };
 
 export type AdminDeleteUserMutationVariables = Exact<{
   input: DeleteUserInput;
@@ -1389,42 +1377,58 @@ export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
 export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
-export const PayWithStripeDocument = gql`
-    mutation PayWithStripe($input: PayWithStripeInput!) {
-  payWithStripe(input: $input) {
-    success
-    requires_action
-    payment_intent_client_secret
-    error
+export const CreateCustomerOrderWithStripeDocument = gql`
+    mutation CreateCustomerOrderWithStripe($stripeSessionId: String!) {
+  createCustomerOrderWithStripe(stripeSessionId: $stripeSessionId) {
+    ...CoreCustomerOrderFields
+    stripeSessionId
+    orderItems {
+      quantity
+      sku
+      product {
+        id
+        name
+        currentPrice
+        brand {
+          name
+        }
+        images {
+          imageUrl
+        }
+        attributes {
+          sku
+        }
+      }
+    }
   }
 }
-    `;
-export type PayWithStripeMutationFn = Apollo.MutationFunction<PayWithStripeMutation, PayWithStripeMutationVariables>;
+    ${CoreCustomerOrderFieldsFragmentDoc}`;
+export type CreateCustomerOrderWithStripeMutationFn = Apollo.MutationFunction<CreateCustomerOrderWithStripeMutation, CreateCustomerOrderWithStripeMutationVariables>;
 
 /**
- * __usePayWithStripeMutation__
+ * __useCreateCustomerOrderWithStripeMutation__
  *
- * To run a mutation, you first call `usePayWithStripeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePayWithStripeMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateCustomerOrderWithStripeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCustomerOrderWithStripeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [payWithStripeMutation, { data, loading, error }] = usePayWithStripeMutation({
+ * const [createCustomerOrderWithStripeMutation, { data, loading, error }] = useCreateCustomerOrderWithStripeMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      stripeSessionId: // value for 'stripeSessionId'
  *   },
  * });
  */
-export function usePayWithStripeMutation(baseOptions?: Apollo.MutationHookOptions<PayWithStripeMutation, PayWithStripeMutationVariables>) {
+export function useCreateCustomerOrderWithStripeMutation(baseOptions?: Apollo.MutationHookOptions<CreateCustomerOrderWithStripeMutation, CreateCustomerOrderWithStripeMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PayWithStripeMutation, PayWithStripeMutationVariables>(PayWithStripeDocument, options);
+        return Apollo.useMutation<CreateCustomerOrderWithStripeMutation, CreateCustomerOrderWithStripeMutationVariables>(CreateCustomerOrderWithStripeDocument, options);
       }
-export type PayWithStripeMutationHookResult = ReturnType<typeof usePayWithStripeMutation>;
-export type PayWithStripeMutationResult = Apollo.MutationResult<PayWithStripeMutation>;
-export type PayWithStripeMutationOptions = Apollo.BaseMutationOptions<PayWithStripeMutation, PayWithStripeMutationVariables>;
+export type CreateCustomerOrderWithStripeMutationHookResult = ReturnType<typeof useCreateCustomerOrderWithStripeMutation>;
+export type CreateCustomerOrderWithStripeMutationResult = Apollo.MutationResult<CreateCustomerOrderWithStripeMutation>;
+export type CreateCustomerOrderWithStripeMutationOptions = Apollo.BaseMutationOptions<CreateCustomerOrderWithStripeMutation, CreateCustomerOrderWithStripeMutationVariables>;
 export const AdminDeleteUserDocument = gql`
     mutation AdminDeleteUser($input: DeleteUserInput!) {
   deleteUser(input: $input)

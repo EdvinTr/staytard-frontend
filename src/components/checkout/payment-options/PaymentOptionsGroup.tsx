@@ -117,6 +117,7 @@ interface StripeOrderLine {
       name: string;
       description: string;
       images: string[];
+      metadata?: Record<string, string | number>;
     };
   };
 }
@@ -136,6 +137,7 @@ const PayWithStripeComponent = () => {
       const quantity =
         cart.find((item) => item.sku === product.attributes[0].sku)?.quantity ||
         0;
+
       return {
         quantity: quantity,
         price_data: {
@@ -145,15 +147,20 @@ const PayWithStripeComponent = () => {
             name: product.name,
             description: product.brand.name,
             images: [product.images[0].imageUrl.replace("{size}", "400")],
+            metadata: {
+              sku: product.attributes[0].sku,
+              productId: product.id,
+            },
           },
         },
       };
     });
   }, [cartProducts, cart]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<null | string>(null);
   const startSession = async () => {
-    console.log(orderLines);
     try {
+      setError(null);
       setLoading(true);
       const res = await axios.post<CreateStripeSessionResponse>(
         process.env.NEXT_PUBLIC_REST_API_ENDPOINT + "/stripe/create-session",
@@ -169,15 +176,16 @@ const PayWithStripeComponent = () => {
           sessionId: res.data.id,
         });
       });
-      console.log("----------------------");
       setLoading(false);
-    } catch (err) {
+    } catch (err: any) {
+      console.log(err?.response);
       setLoading(false);
-      console.log(err);
+      setError(err?.response?.data?.message || "Something went wrong");
     }
   };
   return (
     <div className="pt-6 pl-4">
+      {error && <div className="py-3 text-xs text-red-600">{error}</div>}
       <BaseButton
         disabled={loading}
         variant="outline"

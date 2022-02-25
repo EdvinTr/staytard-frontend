@@ -1,0 +1,24 @@
+mutation CreateCustomerOrderWithStripe($stripeSessionId: String!) {
+  createCustomerOrderWithStripe(stripeSessionId: $stripeSessionId) {
+    ...CoreCustomerOrderFields
+    stripeSessionId
+    orderItems {
+      quantity
+      sku
+      product {
+        id
+        name
+        currentPrice
+        brand {
+          name
+        }
+        images {
+          imageUrl
+        }
+        attributes {
+          sku
+        }
+      }
+    }
+  }
+}
