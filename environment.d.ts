@@ -6,6 +6,7 @@ declare global {
       readonly NEXT_PUBLIC_GRAPHQL_API_ENDPOINT: string;
       readonly NEXT_PUBLIC_GOOGLE_CLIENT_ID: string;
       readonly NEXT_PUBLIC_REST_API_ENDPOINT: string;
+      readonly NEXT_PUBLIC_STRIPE_PUBLIC_KEY: string;
     }
   }
 }

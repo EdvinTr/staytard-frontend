@@ -11,17 +11,13 @@ import CartContext from "../../../contexts/CartContext";
 import { useFindProductsBySkusQuery } from "../../../lib/graphql";
 import { CreateStripeSessionResponse } from "../../../typings/StripeSessionResponse.interface";
 import { BaseButton } from "../../global/BaseButton";
-import { KlarnaPaymentControls } from "../klarna/KlarnaPaymentControls";
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  "pk_test_51KWgCBIgZ4CKdcTmxGN6i7axd5axnOVQILMYUn7qOY5bFvXbUj2GgOy0QiPaJWexQOYIfJ74VgqkbWuZkKcrtd7y00cCNQrfBU"
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 interface PaymentOptionsGroupProps {}
 
 enum PAYMENT_PROVIDER {
-  KLARNA = "klarna",
   PAYPAL = "paypal",
   STRIPE = "stripe",
 }
@@ -39,7 +35,6 @@ export const PaymentOptionsGroup: React.FC<PaymentOptionsGroupProps> = ({}) => {
 
   return (
     <Fragment>
-      {/* radio buttons */}
       <div className="mt-4 flex flex-col space-y-2 text-sm">
         <div>
           <input
@@ -54,19 +49,6 @@ export const PaymentOptionsGroup: React.FC<PaymentOptionsGroupProps> = ({}) => {
             PayPal
           </label>
         </div>
-        {/*  <div>
-          <input
-            checked={selectedPaymentProvider === PAYMENT_PROVIDER.KLARNA}
-            type="radio"
-            id="klarna"
-            name="klarna"
-            value="klarna"
-            onChange={(e) => handlePaymentSelectionChange(e)}
-          />
-          <label htmlFor="klarna" className="font-semibold tracking-wide ml-4">
-            Klarna
-          </label>
-        </div> */}
         <div>
           <input
             checked={selectedPaymentProvider === PAYMENT_PROVIDER.STRIPE}
@@ -82,32 +64,12 @@ export const PaymentOptionsGroup: React.FC<PaymentOptionsGroupProps> = ({}) => {
         </div>
       </div>
       {selectedPaymentProvider === PAYMENT_PROVIDER.STRIPE && (
-        /*  <StripeCheckoutForm /> */
         <PayWithStripeComponent />
-      )}
-      {/* TODO: should only be visible as well when there is user data and the user has an address */}
-      {selectedPaymentProvider === PAYMENT_PROVIDER.KLARNA && (
-        <KlarnaPaymentControls />
       )}
     </Fragment>
   );
 };
 
-/* {
-  // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-  quantity: 1,
-  price_data: {
-    currency: 'EUR',
-    unit_amount: 1000,
-    product_data: {
-      name: 'Solid Jeans',
-      description: 'Category goes here',
-      images: [
-        'https://images.unsplash.com/photo-1645653025752-d6604441e9de?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1865&q=80',
-      ],
-    },
-  },
-}, */
 interface StripeOrderLine {
   quantity: number;
   price_data: {
