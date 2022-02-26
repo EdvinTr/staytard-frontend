@@ -11,7 +11,6 @@ export enum APP_PAGE_ROUTE {
   MY_ORDERS = "/my-orders",
   MY_OFFERS = "/my-offers",
   PRODUCT = "/product",
-  CONFIRMATION = "/confirmation",
   CHECKOUT = "/checkout",
   ADMIN = "/admin",
   ORDER = "/order",
