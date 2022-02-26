@@ -41,30 +41,20 @@ const OrderSuccessPage: NextPage = () => {
   if (error) {
     return <OrderSuccessDisplay error={error} />;
   }
-  if (!data) {
-    return (
-      <OrderSuccessDisplay
-        error={{
-          message:
-            "Could not load data for some reason. Please try refreshing the page.",
-        }}
-      />
-    );
-  }
-  const {
-    order: { grandTotal, orderNumber, paymentType, purchaseCurrency },
-    user,
-  } = data.createOrGetCustomerOrderWithStripe;
-  return (
+  return data ? (
     <OrderSuccessDisplay
       data={{
-        orderNumber,
-        totalAmount: grandTotal,
-        paymentMethod: paymentType,
-        purchaseCurrency,
-        userEmail: user?.email,
+        orderNumber: data.createOrGetCustomerOrderWithStripe.order.orderNumber,
+        totalAmount: data.createOrGetCustomerOrderWithStripe.order.grandTotal,
+        paymentMethod:
+          data.createOrGetCustomerOrderWithStripe.order.paymentType,
+        purchaseCurrency:
+          data.createOrGetCustomerOrderWithStripe.order.purchaseCurrency,
+        userEmail: data.createOrGetCustomerOrderWithStripe.user?.email,
       }}
     />
+  ) : (
+    <></>
   );
 };
 
