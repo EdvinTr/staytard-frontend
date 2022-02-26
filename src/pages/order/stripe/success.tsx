@@ -35,8 +35,21 @@ const OrderSuccessPage: NextPage = () => {
     };
     createOrder();
   }, [sessionId, createOrderWithStripe]);
-  if (!data) {
+  if (loading) {
+    return <OrderSuccessDisplay loading={loading} />;
+  }
+  if (error) {
     return <OrderSuccessDisplay error={error} />;
+  }
+  if (!data) {
+    return (
+      <OrderSuccessDisplay
+        error={{
+          message:
+            "Could not load data for some reason. Please try refreshing the page.",
+        }}
+      />
+    );
   }
   const {
     order: { grandTotal, orderNumber, paymentType, purchaseCurrency },
@@ -44,7 +57,6 @@ const OrderSuccessPage: NextPage = () => {
   } = data.createOrGetCustomerOrderWithStripe;
   return (
     <OrderSuccessDisplay
-      loading={loading}
       data={{
         orderNumber,
         totalAmount: grandTotal,
