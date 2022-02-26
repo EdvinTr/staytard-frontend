@@ -3,6 +3,7 @@ query FindAllCustomerOrders($input: FindAllCustomerOrdersInput!) {
     hasMore
     totalCount
     items {
+      stripeSessionId
       id
       orderNumber
       grandTotal

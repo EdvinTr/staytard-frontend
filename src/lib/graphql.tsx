@@ -17,12 +17,6 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type AssetUrl = {
-  __typename?: 'AssetUrl';
-  descriptive: Scalars['String'];
-  standard: Scalars['String'];
-};
-
 export type AttributeValueType = {
   value: Scalars['String'];
 };
@@ -36,19 +30,6 @@ export type BasicCategory = {
   __typename?: 'BasicCategory';
   id: Scalars['Float'];
   name: Scalars['String'];
-};
-
-export type BillingAddressInput = {
-  city: Scalars['String'];
-  country?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
-  family_name?: InputMaybe<Scalars['String']>;
-  given_name?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  postal_code: Scalars['String'];
-  region?: InputMaybe<Scalars['String']>;
-  street_address: Scalars['String'];
-  title?: InputMaybe<Scalars['String']>;
 };
 
 export enum Customer_Order_Sort_By {
@@ -211,23 +192,6 @@ export type GetProductBrandsInput = {
   sortDirection?: InputMaybe<Sort_Direction>;
 };
 
-export type InitKlarnaSessionInput = {
-  billing_address: BillingAddressInput;
-  locale: Scalars['String'];
-  order_amount: Scalars['Float'];
-  order_lines: Array<OrderLineInput>;
-  order_tax_amount: Scalars['Float'];
-  purchase_country: Scalars['String'];
-  purchase_currency: Scalars['String'];
-};
-
-export type KlarnaSessionResponse = {
-  __typename?: 'KlarnaSessionResponse';
-  client_token: Scalars['String'];
-  payment_method_categories: Array<PaymentMethodCategory>;
-  session_id: Scalars['String'];
-};
-
 export type LoginUserDto = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -237,13 +201,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   authenticateWithGoogle: UserWithTokensDto;
   createOrGetCustomerOrderWithStripe: CreateOrGetOrderWithStripeOutput;
-  createOrderWithKlarna: CustomerOrder;
   createProduct: Product;
   createProductReview: ProductReview;
   deleteProduct: Scalars['Boolean'];
   deleteProductReview: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
-  initializeKlarnaSession: KlarnaSessionResponse;
   login: UserWithTokensDto;
   logout: Scalars['Boolean'];
   registerUser: UserWithTokensDto;
@@ -263,12 +225,6 @@ export type MutationAuthenticateWithGoogleArgs = {
 
 export type MutationCreateOrGetCustomerOrderWithStripeArgs = {
   stripeSessionId: Scalars['String'];
-};
-
-
-export type MutationCreateOrderWithKlarnaArgs = {
-  authorizationToken: Scalars['String'];
-  input: InitKlarnaSessionInput;
 };
 
 
@@ -294,11 +250,6 @@ export type MutationDeleteProductReviewArgs = {
 
 export type MutationDeleteUserArgs = {
   input: DeleteUserInput;
-};
-
-
-export type MutationInitializeKlarnaSessionArgs = {
-  input: InitKlarnaSessionInput;
 };
 
 
@@ -341,20 +292,6 @@ export type MutationUpdateUserAddressArgs = {
   input: UpdateUserAddressInput;
 };
 
-export type OrderLineInput = {
-  image_url: Scalars['String'];
-  name: Scalars['String'];
-  productId: Scalars['Float'];
-  product_url: Scalars['String'];
-  quantity: Scalars['Float'];
-  sku: Scalars['String'];
-  tax_rate: Scalars['Float'];
-  total_amount: Scalars['Float'];
-  total_discount_amount: Scalars['Float'];
-  total_tax_amount: Scalars['Float'];
-  unit_price: Scalars['Float'];
-};
-
 export enum Product_Review_Filter {
   IsPublished = 'IS_PUBLISHED'
 }
@@ -382,13 +319,6 @@ export type PaginatedUsersOutput = {
   hasMore: Scalars['Boolean'];
   items: Array<User>;
   totalCount: Scalars['Float'];
-};
-
-export type PaymentMethodCategory = {
-  __typename?: 'PaymentMethodCategory';
-  asset_urls: AssetUrl;
-  identifier: Scalars['String'];
-  name: Scalars['String'];
 };
 
 /** The permissions of the user */
@@ -732,21 +662,6 @@ export type UpdateCustomerOrderMutationVariables = Exact<{
 
 export type UpdateCustomerOrderMutation = { __typename?: 'Mutation', updateCustomerOrder: boolean };
 
-export type CreateOrderWithKlarnaMutationVariables = Exact<{
-  input: InitKlarnaSessionInput;
-  authorizationToken: Scalars['String'];
-}>;
-
-
-export type CreateOrderWithKlarnaMutation = { __typename?: 'Mutation', createOrderWithKlarna: { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, shippingCost: number, userId: string, paymentType: string, orderStatusId: number } };
-
-export type InitializeKlarnaSessionMutationVariables = Exact<{
-  input: InitKlarnaSessionInput;
-}>;
-
-
-export type InitializeKlarnaSessionMutation = { __typename?: 'Mutation', initializeKlarnaSession: { __typename?: 'KlarnaSessionResponse', session_id: string, client_token: string, payment_method_categories: Array<{ __typename?: 'PaymentMethodCategory', identifier: string, name: string, asset_urls: { __typename?: 'AssetUrl', descriptive: string, standard: string } }> } };
-
 export type CreateProductReviewMutationVariables = Exact<{
   input: CreateProductReviewInput;
 }>;
@@ -872,14 +787,14 @@ export type FindAllCustomerOrdersQueryVariables = Exact<{
 }>;
 
 
-export type FindAllCustomerOrdersQuery = { __typename?: 'Query', customerOrders: { __typename?: 'PaginatedCustomerOrdersOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, grandTotal: number, purchaseCurrency: string, userId: string, createdAt: any, shippingCost: number, paymentType: string, totalAmount: number, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
+export type FindAllCustomerOrdersQuery = { __typename?: 'Query', customerOrders: { __typename?: 'PaginatedCustomerOrdersOutput', hasMore: boolean, totalCount: number, items: Array<{ __typename?: 'CustomerOrder', stripeSessionId?: string | null | undefined, id: number, orderNumber: string, grandTotal: number, purchaseCurrency: string, userId: string, createdAt: any, shippingCost: number, paymentType: string, totalAmount: number, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
 
 export type FindOneCustomerOrderQueryVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
 
-export type FindOneCustomerOrderQuery = { __typename?: 'Query', oneCustomerOrder: { __typename?: 'FindOneCustomerOrderOutput', isEditable: boolean, user?: { __typename?: 'User', id: string, firstName: string, lastName: string, deletedAt?: any | null | undefined } | null | undefined, order: { __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderItems: Array<{ __typename?: 'CustomerOrderItem', quantity: number, sku: string, product: { __typename?: 'Product', id: number, name: string, currentPrice: number, brand: { __typename?: 'ProductBrand', name: string }, images: Array<{ __typename?: 'ProductImage', imageUrl: string }>, attributes: Array<{ __typename?: 'ProductAttribute', sku: string }> } }>, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } } } };
+export type FindOneCustomerOrderQuery = { __typename?: 'Query', oneCustomerOrder: { __typename?: 'FindOneCustomerOrderOutput', isEditable: boolean, user?: { __typename?: 'User', id: string, firstName: string, lastName: string, deletedAt?: any | null | undefined } | null | undefined, order: { __typename?: 'CustomerOrder', stripeSessionId?: string | null | undefined, id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, paymentType: string, createdAt: any, updatedAt: any, orderItems: Array<{ __typename?: 'CustomerOrderItem', quantity: number, sku: string, product: { __typename?: 'Product', id: number, name: string, currentPrice: number, brand: { __typename?: 'ProductBrand', name: string }, images: Array<{ __typename?: 'ProductImage', imageUrl: string }>, attributes: Array<{ __typename?: 'ProductAttribute', sku: string }> } }>, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } } } };
 
 export type MyCustomerOrdersQueryVariables = Exact<{
   input: FindMyCustomerOrdersInput;
@@ -1099,90 +1014,6 @@ export function useUpdateCustomerOrderMutation(baseOptions?: Apollo.MutationHook
 export type UpdateCustomerOrderMutationHookResult = ReturnType<typeof useUpdateCustomerOrderMutation>;
 export type UpdateCustomerOrderMutationResult = Apollo.MutationResult<UpdateCustomerOrderMutation>;
 export type UpdateCustomerOrderMutationOptions = Apollo.BaseMutationOptions<UpdateCustomerOrderMutation, UpdateCustomerOrderMutationVariables>;
-export const CreateOrderWithKlarnaDocument = gql`
-    mutation CreateOrderWithKlarna($input: InitKlarnaSessionInput!, $authorizationToken: String!) {
-  createOrderWithKlarna(input: $input, authorizationToken: $authorizationToken) {
-    id
-    orderNumber
-    deliveryAddress
-    city
-    postalCode
-    shippingCost
-    userId
-    paymentType
-    orderStatusId
-  }
-}
-    `;
-export type CreateOrderWithKlarnaMutationFn = Apollo.MutationFunction<CreateOrderWithKlarnaMutation, CreateOrderWithKlarnaMutationVariables>;
-
-/**
- * __useCreateOrderWithKlarnaMutation__
- *
- * To run a mutation, you first call `useCreateOrderWithKlarnaMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrderWithKlarnaMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOrderWithKlarnaMutation, { data, loading, error }] = useCreateOrderWithKlarnaMutation({
- *   variables: {
- *      input: // value for 'input'
- *      authorizationToken: // value for 'authorizationToken'
- *   },
- * });
- */
-export function useCreateOrderWithKlarnaMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderWithKlarnaMutation, CreateOrderWithKlarnaMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateOrderWithKlarnaMutation, CreateOrderWithKlarnaMutationVariables>(CreateOrderWithKlarnaDocument, options);
-      }
-export type CreateOrderWithKlarnaMutationHookResult = ReturnType<typeof useCreateOrderWithKlarnaMutation>;
-export type CreateOrderWithKlarnaMutationResult = Apollo.MutationResult<CreateOrderWithKlarnaMutation>;
-export type CreateOrderWithKlarnaMutationOptions = Apollo.BaseMutationOptions<CreateOrderWithKlarnaMutation, CreateOrderWithKlarnaMutationVariables>;
-export const InitializeKlarnaSessionDocument = gql`
-    mutation InitializeKlarnaSession($input: InitKlarnaSessionInput!) {
-  initializeKlarnaSession(input: $input) {
-    session_id
-    client_token
-    payment_method_categories {
-      identifier
-      name
-      asset_urls {
-        descriptive
-        standard
-      }
-    }
-  }
-}
-    `;
-export type InitializeKlarnaSessionMutationFn = Apollo.MutationFunction<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>;
-
-/**
- * __useInitializeKlarnaSessionMutation__
- *
- * To run a mutation, you first call `useInitializeKlarnaSessionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInitializeKlarnaSessionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [initializeKlarnaSessionMutation, { data, loading, error }] = useInitializeKlarnaSessionMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useInitializeKlarnaSessionMutation(baseOptions?: Apollo.MutationHookOptions<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>(InitializeKlarnaSessionDocument, options);
-      }
-export type InitializeKlarnaSessionMutationHookResult = ReturnType<typeof useInitializeKlarnaSessionMutation>;
-export type InitializeKlarnaSessionMutationResult = Apollo.MutationResult<InitializeKlarnaSessionMutation>;
-export type InitializeKlarnaSessionMutationOptions = Apollo.BaseMutationOptions<InitializeKlarnaSessionMutation, InitializeKlarnaSessionMutationVariables>;
 export const CreateProductReviewDocument = gql`
     mutation CreateProductReview($input: CreateProductReviewInput!) {
   createProductReview(input: $input) {
@@ -1821,6 +1652,7 @@ export const FindAllCustomerOrdersDocument = gql`
     hasMore
     totalCount
     items {
+      stripeSessionId
       id
       orderNumber
       grandTotal
@@ -1880,6 +1712,7 @@ export const FindOneCustomerOrderDocument = gql`
     }
     order {
       ...CoreCustomerOrderFields
+      stripeSessionId
       orderItems {
         quantity
         sku

@@ -9,6 +9,7 @@ query FindOneCustomerOrder($id: Float!) {
     }
     order {
       ...CoreCustomerOrderFields
+      stripeSessionId
       orderItems {
         quantity
         sku

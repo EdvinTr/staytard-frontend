@@ -70,6 +70,7 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
     city,
     updatedAt,
     orderStatus,
+    stripeSessionId,
     orderItems,
   } = order.oneCustomerOrder.order;
   const orderStatusItems = [
@@ -156,6 +157,20 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
                         />
                       </div>
                     </MyWrapper>
+                    {stripeSessionId && (
+                      <MyWrapper>
+                        <div className="w-full">
+                          <BasicInputLabel htmlFor="stripeSessionId">
+                            Stripe Session ID
+                          </BasicInputLabel>
+                          <DisabledInput
+                            id="stripeSessionId"
+                            name="stripeSessionId"
+                            value={stripeSessionId}
+                          />
+                        </div>
+                      </MyWrapper>
+                    )}
                     <MyWrapper>
                       <div className="w-full">
                         <BasicInputLabel htmlFor="purchaseCurrency">

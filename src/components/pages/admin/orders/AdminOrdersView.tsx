@@ -96,6 +96,12 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
                       { label: "Order number", value: order.orderNumber },
                       { label: "User ID", value: order.userId },
                       {
+                        label: "Stripe Session ID",
+                        value: order.stripeSessionId
+                          ? order.stripeSessionId
+                          : "N/A",
+                      },
+                      {
                         label: "Payment type",
                         value: capitalize(order.paymentType),
                       },
