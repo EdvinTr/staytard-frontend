@@ -2,6 +2,7 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { NextPage } from "next";
 import Image from "next/image";
 import { FadeInContainer } from "../components/global/FadeInContainer";
+import { ShopByBrandSection } from "../components/pages/index/ShopByBrandSection";
 import { useSsrCompatible } from "../hooks/useSsrCompatible";
 const IndexPage: NextPage = () => {
   const windowWidth = useSsrCompatible(useWindowWidth(), 0);
@@ -12,11 +13,11 @@ const IndexPage: NextPage = () => {
           <Image
             width={1600}
             height={400}
-            alt="winter sale"
-            /* //? objectFit contain here too? */
-            priority
+            alt="Icon brand"
+            objectFit="contain"
             layout="responsive"
-            src="/img/staytard-winter-sale-full-screen.png"
+            priority
+            src="/img/front-page/2208_icon_fullwide_ny_1.jpg"
           />
         ) : (
           <Image
@@ -26,10 +27,11 @@ const IndexPage: NextPage = () => {
             objectFit="contain"
             priority
             layout="responsive"
-            src="/img/staytard-winter-sale-mobile-size.png"
+            src="/img/front-page/2208_icon_fullwith_mobil_1.jpg"
             className="max-h-[2rem]"
           />
         )}
+        <ShopByBrandSection />
       </div>
     </FadeInContainer>
   );

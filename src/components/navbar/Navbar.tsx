@@ -87,7 +87,7 @@ export const Navbar = () => {
                   </Link>
                 )}
                 <Link href={APP_PAGE_ROUTE.CHECKOUT}>
-                  <a className="relative">
+                  <a className="relative" aria-label="Cart">
                     <MyCartIcon className="w-6" />
                     {totalCartItems > 0 && (
                       <span className="bg-staytard-yellow absolute -top-2 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ">
