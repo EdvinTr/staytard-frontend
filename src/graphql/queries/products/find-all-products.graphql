@@ -1,0 +1,12 @@
+query FindProducts($input: FindProductsInput!) {
+  products(input: $input) {
+    items {
+      ...CoreProductFields
+      attributes {
+        ...CoreAttributeFields
+      }
+    }
+    totalCount
+    hasMore
+  }
+}
