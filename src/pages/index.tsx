@@ -13,7 +13,7 @@ import { FindProductsDocument, FindProductsQuery } from "../lib/graphql";
 import { ProductItem } from "../typings/GetProductsResponse.interface";
 
 interface HomePageProps {
-  products: FindProductsQuery["products"];
+  products?: FindProductsQuery["products"];
 }
 const IndexPage: NextPage<HomePageProps> = ({ products }) => {
   const hasProducts = products && products.items?.length > 0;
@@ -156,7 +156,7 @@ const CallToActionProductCardList = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const revalidate = 10;
+  const revalidate = 60; // 60 seconds
   try {
     const apollo = initializeApollo();
     const products = await apollo.query({
@@ -173,7 +173,7 @@ export const getStaticProps: GetStaticProps = async () => {
       props: {
         products: products.data?.products,
       },
-      revalidate: 10,
+      revalidate,
     };
   } catch (err) {
     return {
