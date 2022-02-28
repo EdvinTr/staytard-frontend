@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Router, useRouter } from "next/router";
 import NProgress from "nprogress";
 import { Fragment, useEffect, useState } from "react";
+import CookieConsent from "react-cookie-consent";
 import "react-loading-skeleton/dist/skeleton.css";
 import "swiper/css";
 import { Footer } from "../components/footer/Footer";
@@ -82,6 +83,46 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             css="display:flex; justify-content:center; padding: 4rem 0; min-height: 100vh;"
           />
         )} */}
+          <CookieConsent
+            location="bottom"
+            buttonText="ACCEPT"
+            buttonWrapperClasses="text-red-600"
+            expires={7}
+            style={{ backgroundColor: "white" }}
+            overlay
+            disableButtonStyles
+            containerClasses="flex"
+            ButtonComponent={({ ...props }) => {
+              return (
+                <button
+                  {...props}
+                  className="bg-staytard-dark px-6 py-3 font-medium uppercase text-white"
+                >
+                  Accept
+                </button>
+              );
+            }}
+            visible="show"
+          >
+            <div className="text-staytard-dark min-h-[12rem] lg:py-4 lg:px-20">
+              <div className="">
+                <div className="font-bold uppercase tracking-wide lg:text-xl">
+                  Your cookies, your choice!
+                </div>
+                {/*  <Image
+                  width={36}
+                  height={36}
+                  src="/img/cookie.png"
+                  className="text-white"
+                /> */}
+                <p className="pt-3 text-xs font-light leading-5 lg:max-w-xl lg:text-sm">
+                  {APP_NAME} uses cookies to give you customized content and a
+                  better experience on our website. By accepting, you confirm
+                  that you agree to our use of cookies.
+                </p>
+              </div>
+            </div>
+          </CookieConsent>
           <Component {...pageProps} />
           {pathsWithoutFooter.includes(
             ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
