@@ -14,7 +14,11 @@ const MyOffers: NextPage = () => {
       </Head>
       <AppHeader />
       <UserSettingsNavbar />
-      <div>My offers page</div>
+      <h1 className="py-20 text-center text-2xl font-medium tracking-wide">
+        This page is currently under{" "}
+        <span className="underline">construction</span>.{" "}
+        <span className="block">Please come back at a later date.</span>
+      </h1>
     </div>
   );
 };

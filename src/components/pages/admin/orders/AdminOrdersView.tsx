@@ -7,13 +7,13 @@ import {
   ADMIN_PAGE_QUERY_KEY,
   ADMIN_SUB_PAGE_ROUTE,
   APP_PAGE_ROUTE,
+  orderStatusColors,
 } from "../../../../constants";
 import { useFindAllCustomerOrdersQuery } from "../../../../lib/graphql";
 import { BaseInput } from "../../../global/BaseInput";
 import { CenteredBeatLoader } from "../../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../../global/LoadMoreButton";
 import { PaginationProgressTracker } from "../../../global/PaginationProgressTracker";
-import { ORDER_STATUS } from "../../../user/my-orders/CustomerOrderTableRow";
 import { ForbiddenResourceErrorCard } from "../components/ForbiddenResourceErrorCard";
 import { InformationDetailsCard } from "../components/InformationDetailsCard";
 import { MyGrid } from "../components/MyGrid";
@@ -163,15 +163,4 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
       </PaddingContainer>
     </div>
   );
-};
-
-const orderStatusColors: Record<string, string> = {
-  [ORDER_STATUS.PROCESSING]: "text-yellow-700",
-  [ORDER_STATUS.SHIPPED]: "text-blue-700",
-  [ORDER_STATUS.ON_HOLD]: "text-purple-700",
-  [ORDER_STATUS.COMPLETED]: "text-green-700",
-  [ORDER_STATUS.CANCELLED]: "text-red-600",
-  [ORDER_STATUS.FAILED]: "text-red-700",
-  [ORDER_STATUS.REFUNDED]: "text-orange-700",
-  [ORDER_STATUS.PENDING]: "text-yellow-700",
 };

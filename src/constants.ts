@@ -50,6 +50,27 @@ export enum LOCAL_STORAGE_KEY {
   PRODUCT_REVIEW_FORM = "product-review-form",
   CREATE_PRODUCT_FORM = "create-product-form",
 }
+export enum ORDER_STATUS {
+  PENDING = "Pending",
+  PROCESSING = "Processing",
+  SHIPPED = "Shipped",
+  COMPLETED = "Completed",
+  CANCELLED = "Cancelled",
+  REFUNDED = "Refunded",
+  FAILED = "Failed",
+  ON_HOLD = "On-Hold",
+}
+
+export const orderStatusColors: Record<string, string> = {
+  [ORDER_STATUS.PROCESSING]: "text-yellow-700",
+  [ORDER_STATUS.SHIPPED]: "text-blue-700",
+  [ORDER_STATUS.ON_HOLD]: "text-purple-700",
+  [ORDER_STATUS.COMPLETED]: "text-green-700",
+  [ORDER_STATUS.CANCELLED]: "text-red-600",
+  [ORDER_STATUS.FAILED]: "text-red-700",
+  [ORDER_STATUS.REFUNDED]: "text-orange-700",
+  [ORDER_STATUS.PENDING]: "text-yellow-700",
+};
 
 export const successToastColors = {
   backgroundColor: "black",

@@ -801,7 +801,7 @@ export type MyCustomerOrdersQueryVariables = Exact<{
 }>;
 
 
-export type MyCustomerOrdersQuery = { __typename?: 'Query', myOrders: { __typename?: 'PaginatedCustomerOrdersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, totalAmount: number, shippingCost: number, grandTotal: number, purchaseCurrency: string, createdAt: any, paymentType: string, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
+export type MyCustomerOrdersQuery = { __typename?: 'Query', myOrders: { __typename?: 'PaginatedCustomerOrdersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, grandTotal: number, purchaseCurrency: string, createdAt: any, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
 
 export type GetProductBrandsQueryVariables = Exact<{
   input: GetProductBrandsInput;
@@ -1785,12 +1785,9 @@ export const MyCustomerOrdersDocument = gql`
       deliveryAddress
       city
       postalCode
-      totalAmount
-      shippingCost
       grandTotal
       purchaseCurrency
       createdAt
-      paymentType
       orderStatus {
         status
       }

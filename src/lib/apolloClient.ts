@@ -62,6 +62,17 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
                 };
               },
             },
+            myOrders: {
+              keyArgs: false,
+              merge(existing, incoming) {
+                if (!incoming) return existing;
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
             customerOrders: {
               keyArgs: false,
               merge(existing, incoming) {

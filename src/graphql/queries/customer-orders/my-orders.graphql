@@ -8,12 +8,9 @@ query MyCustomerOrders($input: FindMyCustomerOrdersInput!) {
       deliveryAddress
       city
       postalCode
-      totalAmount
-      shippingCost
       grandTotal
       purchaseCurrency
       createdAt
-      paymentType
       orderStatus {
         status
       }
