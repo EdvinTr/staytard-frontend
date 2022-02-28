@@ -148,6 +148,11 @@ export const Navbar = () => {
                     </Link>
                   );
                 })}
+                <Link href={APP_PAGE_ROUTE.BRAND}>
+                  <a className="text-13 underline-from-center mx-3 font-medium">
+                    Brands AZ
+                  </a>
+                </Link>
               </FadeInContainer>
             )}
             {hoverMenuItems && (
