@@ -74,11 +74,11 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
         {({ open }) => (
           <>
             <Popover.Button className=" ">
-              <p className="flex relative">
+              <p className="relative flex">
                 {totalItems} hits. Sort on
-                <span className="font-bold pl-1">
+                <span className="pl-1 font-bold">
                   {
-                    Object.values(sortOptionsMap).find((v, i) => {
+                    Object.values(sortOptionsMap).find((v, _) => {
                       return v.alias === currentSortAlias;
                     })?.name
                   }
@@ -99,9 +99,9 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-4"
             >
-              <Popover.Panel className="absolute z-10 w-80 max-w-sm px-2 mt-3 transform -translate-x-1/3 left-6 md:left-2  ">
+              <Popover.Panel className="absolute -left-2 z-10 mt-3 w-80 max-w-sm -translate-x-1/2 transform px-2 ">
                 <div className="overflow-hidden shadow-lg ">
-                  <div className="relative grid gap-8 bg-white px-4 py-8 border-l-black border-r-black border-b-black border-opacity-5  ">
+                  <div className="relative grid gap-8 border-l-black border-r-black border-b-black border-opacity-5 bg-white px-4 py-8  ">
                     {Object.values(sortOptionsMap).map((sortItem, idx) => {
                       const isActiveLink = calculateIsActiveLink(
                         sortItem.alias
@@ -118,8 +118,8 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
                             }}
                           >
                             {isActiveLink ? (
-                              <a className="relative font-bold flex">
-                                <CheckIcon className="w-4 mt-[1.5px] absolute -left-5" />
+                              <a className="relative flex font-bold">
+                                <CheckIcon className="absolute -left-5 mt-[1.5px] w-4" />
                                 {sortItem.name}
                               </a>
                             ) : (
@@ -147,7 +147,7 @@ const PopoverItemContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       {...props}
-      className="ml-0 flex items-center justify-between p-2 px-4 -m-3 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
+      className="-m-3 ml-0 flex items-center justify-between p-2 px-4 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
     >
       {children}
     </div>
