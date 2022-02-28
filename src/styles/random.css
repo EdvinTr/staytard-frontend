@@ -24,6 +24,20 @@
   background: #222;
 }
 
+.underline-from-center {
+  background-image: linear-gradient(black, black), linear-gradient(white, white);
+  background-size: 0 1px, auto;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  padding-bottom: 2px;
+  transition: all 0.2s ease-out;
+}
+.underline-from-center:hover {
+  background-size: 100% 1px, auto;
+  /* The following line makes the underline only as wide as the text */
+  /* background-size: calc(100% - 2em) 5px, auto; */
+}
+
 .swiper-pagination .swiper-pagination-bullet {
   width: 0.875rem;
   height: 0.875rem;

@@ -27,7 +27,6 @@ export const Navbar = () => {
   >(null);
   const { scrollDirection } = useScrollDirection();
 
-  console.log(scrollDirection);
   const [activeScrollDirection, setActiveScrollDirection] = useState<
     string | null
   >(null);
@@ -131,7 +130,7 @@ export const Navbar = () => {
                   return (
                     <Link key={category.id} href={category.path}>
                       <a
-                        className="text-13 px-3 font-medium hover:underline"
+                        className="text-13 underline-from-center mx-3 font-medium"
                         onClick={() => setIsHoverMenuOpen(false)}
                         onMouseEnter={() => {
                           if (category.children) {
