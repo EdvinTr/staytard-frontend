@@ -20,7 +20,7 @@ export const CustomerOrderTableRow = ({
       {/* order id */}
       <td className="py-12 px-4 font-medium">{customerOrder.id}</td>
       {/* address */}
-      <td className=" pr-8 font-medium">
+      <td className="pr-8 font-medium">
         {customerOrder.deliveryAddress}, {customerOrder.city},{" "}
         {customerOrder.postalCode}
       </td>
@@ -31,7 +31,7 @@ export const CustomerOrderTableRow = ({
       {/* status */}
       <td className={`font-medium`}>
         <span
-          className={`rounded-md p-2 ${
+          className={`rounded-md p-2 tracking-wide ${
             orderStatusColors[customerOrder.orderStatus.status]
           }`}
         >

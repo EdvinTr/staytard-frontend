@@ -35,7 +35,8 @@ export type BasicCategory = {
 export enum Customer_Order_Sort_By {
   CreatedAt = 'CREATED_AT',
   GrandTotal = 'GRAND_TOTAL',
-  Id = 'ID'
+  Id = 'ID',
+  Status = 'STATUS'
 }
 
 export enum Customer_Order_Status {
@@ -156,6 +157,8 @@ export type FindAllUsersInput = {
 export type FindMyCustomerOrdersInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
+  sortBy?: InputMaybe<Customer_Order_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
 };
 
 export type FindOneCustomerOrderOutput = {
