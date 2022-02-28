@@ -34,7 +34,7 @@ const OrderSuccessPage: NextPage = () => {
       }
     };
     createOrder();
-  }, [sessionId, createOrderWithStripe]);
+  }, [sessionId, createOrderWithStripe]); // TODO: should have resetCart as dependency, but it needs to be memoized
   if (loading) {
     return <OrderSuccessDisplay loading={loading} />;
   }

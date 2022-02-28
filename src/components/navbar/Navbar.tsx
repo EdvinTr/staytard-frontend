@@ -1,9 +1,9 @@
 import { SearchIcon } from "@heroicons/react/outline";
-import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useScrollDirection } from "react-use-scroll-direction";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import {
@@ -25,7 +25,18 @@ export const Navbar = () => {
   const [hoverMenuItems, setHoverMenuItems] = useState<
     GetCategoriesQuery["categories"] | null
   >(null);
-  const currentWindowWidth = useWindowWidth();
+  const { scrollDirection } = useScrollDirection();
+
+  console.log(scrollDirection);
+  const [activeScrollDirection, setActiveScrollDirection] = useState<
+    string | null
+  >(null);
+  useEffect(() => {
+    if (scrollDirection) {
+      setActiveScrollDirection(scrollDirection);
+    }
+  }, [scrollDirection]);
+
   const [hoverMenuTitle, setHoverMenuTitle] = useState("");
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
   const router = useRouter();
@@ -38,7 +49,11 @@ export const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="sticky top-0 z-40 bg-white">
+    <div
+      className={`${activeScrollDirection === "UP" ? "opacity-100" : ""} ${
+        activeScrollDirection === "DOWN" ? "opacity-0" : ""
+      } sticky top-0 z-50 bg-white transition-all duration-200 ease-in-out`}
+    >
       <div className="text-sm">
         {router.pathname === APP_PAGE_ROUTE.INDEX && (
           <div className="bg-staytard-dark flex items-center justify-center  space-x-8 py-1 text-[10px] uppercase tracking-wider text-white">
