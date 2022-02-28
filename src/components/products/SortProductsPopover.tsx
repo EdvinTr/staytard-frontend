@@ -118,12 +118,14 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
                             }}
                           >
                             {isActiveLink ? (
-                              <a className="relative flex font-bold">
+                              <a className="underline-from-left-to-right relative flex font-bold ">
                                 <CheckIcon className="absolute -left-5 mt-[1.5px] w-4" />
                                 {sortItem.name}
                               </a>
                             ) : (
-                              <a>{sortItem.name}</a>
+                              <a className="underline-from-left-to-right">
+                                {sortItem.name}
+                              </a>
                             )}
                           </Link>
                         </PopoverItemContainer>
@@ -147,7 +149,7 @@ const PopoverItemContainer: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       {...props}
-      className="-m-3 ml-0 flex items-center justify-between p-2 px-4 transition duration-150 ease-in-out hover:underline focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
+      className="-m-3 ml-0 flex items-center justify-between p-2 px-4 transition duration-150 ease-in-out  focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-50"
     >
       {children}
     </div>

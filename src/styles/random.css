@@ -25,7 +25,8 @@
 }
 
 .underline-from-center {
-  background-image: linear-gradient(black, black), linear-gradient(white, white);
+  background-image: linear-gradient(#222222, #222222),
+    linear-gradient(white, white);
   background-size: 0 1px, auto;
   background-repeat: no-repeat;
   background-position: center bottom;
@@ -36,6 +37,18 @@
   background-size: 100% 1px, auto;
   /* The following line makes the underline only as wide as the text */
   /* background-size: calc(100% - 2em) 5px, auto; */
+}
+
+.underline-from-left-to-right {
+  background-image: linear-gradient(#222222, #222222),
+    linear-gradient(white, white);
+  background-size: 0 1px, auto;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: all 0.2s ease-out;
+}
+.underline-from-left-to-right:hover {
+  background-size: 100% 1px, auto;
 }
 
 .swiper-pagination .swiper-pagination-bullet {
