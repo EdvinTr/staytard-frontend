@@ -22,14 +22,14 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
     return (
       <li key={item.id} onClick={() => setIsCursorInMenu(false)}>
         <Link href={item.path}>
-          <a className="hover:underline cursor-pointer">{item.name}</a>
+          <a className="cursor-pointer hover:underline">{item.name}</a>
         </Link>
       </li>
     );
   };
 
   return (
-    <div className="w-full relative">
+    <div className="relative w-full">
       <div className="flex justify-center "></div>
       {/* menu */}
       <AnimatePresence>
@@ -46,9 +46,9 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             onMouseLeave={() => {
               setIsCursorInMenu(false);
             }}
-            className=" absolute w-full h-[30rem] flex justify-center bg-white pt-12 space-x-12 z-20 shadow-sm opacity-0  hover:opacity-100"
+            className=" absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white pt-12 opacity-0 shadow-sm  hover:opacity-100"
           >
-            <div className="border-r border-r-black border-opacity-20 pr-12 max-h-96">
+            <div className="max-h-96 border-r border-r-black border-opacity-20 pr-12">
               <h4 className=" text-2xl font-bold ">{title}</h4>
             </div>
             <ul className="relative w-[19%]  ">
@@ -68,7 +68,7 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
               </div>
             </ul>
             {/* brand images */}
-            <div className="grid grid-cols-2 text-center gap-y-4">
+            <div className="grid grid-cols-2 gap-y-4 text-center">
               {[...Array(4)].map((_, idx) => {
                 return (
                   <div key={idx}>
@@ -79,7 +79,7 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
                       objectFit="contain"
                       alt="brand"
                     />
-                    <div className="font-bold mt-1 uppercase">Les Deux</div>
+                    <div className="mt-1 font-bold uppercase">Les Deux</div>
                   </div>
                 );
               })}

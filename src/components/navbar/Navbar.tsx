@@ -111,12 +111,12 @@ export const Navbar = () => {
             {/* hover menu stuff */}
 
             {categoriesData && (
-              <FadeInContainer className="flex justify-center space-x-7 pt-8">
+              <FadeInContainer className="flex justify-center  pt-8">
                 {categoriesData?.categories.map((category) => {
                   return (
                     <Link key={category.id} href={category.path}>
                       <a
-                        className="underline"
+                        className="text-13 px-3 font-medium hover:underline"
                         onClick={() => setIsHoverMenuOpen(false)}
                         onMouseEnter={() => {
                           if (category.children) {
