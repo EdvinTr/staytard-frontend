@@ -32,7 +32,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
 
   return (
     <SWRConfig value={{ fallback }}>
-      <FadeInContainer className="text-staytard-dark min-h-screen pt-6 pb-40 relative">
+      <FadeInContainer className="text-staytard-dark relative min-h-screen pt-6 pb-40">
         <NextHead>
           <title>
             {categoryData?.name} | Large assortment for men - Buy online at{" "}
@@ -51,9 +51,9 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                     <div className="pt-8">
                       {/* navigate to previous breadcrumb link */}
                       <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
-                        <a>
-                          <h1 className="text-2xl md:text-3xl font-semibold flex">
-                            <ArrowLeftIcon className="w-6 text-staytard-dark" />
+                        <a className="inline-block">
+                          <h1 className="flex text-2xl font-semibold md:text-3xl">
+                            <ArrowLeftIcon className="text-staytard-dark w-6" />
                             <span className="pl-4">{categoryData?.name}</span>
                           </h1>
                         </a>
@@ -61,7 +61,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
                     </div>
                   </Fragment>
                 ) : (
-                  <h1 className="text-2xl md:text-3xl font-semibold">
+                  <h1 className="text-2xl font-semibold md:text-3xl">
                     {categoryData?.name}
                   </h1>
                 )}
@@ -71,15 +71,15 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
             {categoryData && categoryData.children && (
               <div className="overflow-x-auto overflow-y-hidden">
                 {/* sub category list */}
-                <ul className="py-4 flex items-start flex-shrink-0 space-x-2 text-sm">
+                <ul className="flex flex-shrink-0 items-start space-x-2 pt-5 pb-3 text-sm">
                   {categoryData.children.map((child, idx) => {
                     return (
                       <li
                         key={idx}
-                        className="p-3 border flex-shrink-0  font-medium border-black border-opacity-20"
+                        className="flex-shrink-0 border border-black  border-opacity-20 font-medium"
                       >
                         <Link href={child.path}>
-                          <a>{child.name}</a>
+                          <a className=" block p-3">{child.name}</a>
                         </Link>
                       </li>
                     );
@@ -88,7 +88,7 @@ const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
               </div>
             )}
           </div>
-          <div className="my-4 w-[99.2%] h-[1px] bg-black bg-opacity-10"></div>
+          <div className="my-4 h-[1px] w-[99.2%] bg-black bg-opacity-10"></div>
           <div className="mt-6">
             <ProductCardList
               categoryDescription={categoryData?.description || ""}
