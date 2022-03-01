@@ -8,9 +8,14 @@ import { APP_PAGE_ROUTE } from "../../../constants";
 import { useGetCategoriesQuery, useMeQuery } from "../../../lib/graphql";
 import { mobileMenuState } from "../../../store/mobileMenuState";
 import { MyUserIcon } from "../../global/icons/Icons";
-interface MobileNavbarProps {}
 
-export const MobileNavbar: React.FC<MobileNavbarProps> = ({}) => {
+enum MAIN_CATEGORY {
+  CLOTHES = "Clothes",
+  ACCESSORIES = "Accessories",
+  SHOES = "Shoes",
+  LIFESTYLE = "Lifestyle",
+}
+export const MobileNavbar = () => {
   const [menuState, setMenuState] = useRecoilState(mobileMenuState);
   const { data: userData } = useMeQuery();
   const { data: categoriesData, loading: categoriesLoading } =
@@ -41,11 +46,34 @@ export const MobileNavbar: React.FC<MobileNavbarProps> = ({}) => {
                     <>
                       <Disclosure.Button className="flex w-full justify-between rounded-lg text-left text-sm font-medium  focus-visible:outline-2 ">
                         <div className="relative">
-                          <img
-                            src="/img/mobile-menu/nav-clothes.webp"
-                            alt="Man in shirt looking shady af"
-                            className="w-full"
-                          />
+                          {category.name === MAIN_CATEGORY.CLOTHES && (
+                            <img
+                              src="/img/mobile-menu/nav-clothes.webp"
+                              alt={category.name}
+                              className="w-full"
+                            />
+                          )}
+                          {category.name === MAIN_CATEGORY.SHOES && (
+                            <img
+                              src="/img/mobile-menu/nav-shoes.webp"
+                              alt={category.name}
+                              className="w-full"
+                            />
+                          )}
+                          {category.name === MAIN_CATEGORY.ACCESSORIES && (
+                            <img
+                              src="/img/mobile-menu/nav-accessories.webp"
+                              alt={category.name}
+                              className="w-full"
+                            />
+                          )}
+                          {category.name === MAIN_CATEGORY.LIFESTYLE && (
+                            <img
+                              src="/img/mobile-menu/nav-lifestyle.webp"
+                              alt={category.name}
+                              className="w-full"
+                            />
+                          )}
                           <div className="absolute top-[3.25rem] ml-7 text-base font-semibold">
                             {category.name}
                           </div>
