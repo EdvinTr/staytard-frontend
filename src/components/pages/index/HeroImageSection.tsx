@@ -27,7 +27,7 @@ export const HeroImageSection = () => {
               <div className="mr-5">Introducing</div>
               <div className="flex font-semibold">
                 <div>Icon</div>
-                <sup className="text-xl ">TM</sup>
+                <sup className="text-sm">TM</sup>
               </div>
             </div>
             <p className="mx-auto max-w-xl pt-4 text-center text-sm tracking-normal">
@@ -53,12 +53,13 @@ export const HeroImageSection = () => {
               Introducing
             </div>
             <div className="relative flex justify-center ">
-              <span className="text-8xl font-bold uppercase tracking-widest">
+              <span className="text-7xl font-bold uppercase tracking-widest sm:text-8xl">
                 Icon
               </span>
-              <sub className="absolute top-0 right-16 text-base font-semibold">
+              {/*   <sub className="absolute top-0 right-10 text-base font-semibold sm:right-40 ">
                 TM
-              </sub>
+              </sub> */}
+              <sub className="text-xs font-semibold">TM</sub>
             </div>
             <p className="mx-auto max-w-xs pt-0 text-center text-xs leading-5 tracking-normal">
               {paragraphText}

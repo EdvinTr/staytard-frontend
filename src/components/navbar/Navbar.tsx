@@ -90,15 +90,14 @@ export const Navbar = () => {
                     aria-label="Search"
                   >
                     {/* open search modal button */}
-                    <SearchIcon className="w-5 " />
+                    <SearchIcon className="w-5" />
                     <div className="hidden opacity-[0.55] lg:block">Search</div>
                   </button>
                 </div>
-
                 {/* app name */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
                   <Link href={APP_PAGE_ROUTE.INDEX}>
-                    <a className="text-4xl font-bold uppercase tracking-wider">
+                    <a className="text-3xl font-bold uppercase tracking-wider md:text-4xl">
                       {APP_NAME}
                     </a>
                   </Link>
@@ -112,12 +111,14 @@ export const Navbar = () => {
                       />
                     </Fragment>
                   ) : (
-                    <Link href={APP_PAGE_ROUTE.LOGIN}>
-                      <a className="flex items-center space-x-3">
-                        <p className="font-medium">Sign In</p>
-                        <MyUserIcon className="w-6" />
-                      </a>
-                    </Link>
+                    <div className="hidden lg:block">
+                      <Link href={APP_PAGE_ROUTE.LOGIN}>
+                        <a className="flex items-center space-x-3">
+                          <p className="font-medium">Sign In</p>
+                          <MyUserIcon className="w-6" />
+                        </a>
+                      </Link>
+                    </div>
                   )}
                   <Link href={APP_PAGE_ROUTE.CHECKOUT}>
                     <a className="relative" aria-label="Cart">
@@ -186,11 +187,9 @@ export const Navbar = () => {
               <></>
             )}
           </div>
-
           <SearchModal onClose={() => setShowModal(false)} show={showModal} />
         </div>
       </div>
-      {/*   <MobileNavbar isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} /> */}
     </>
   );
 };
