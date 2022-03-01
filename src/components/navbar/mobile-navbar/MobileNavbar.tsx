@@ -1,5 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import CSS from "csstype";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
@@ -15,6 +16,19 @@ enum MAIN_CATEGORY {
   SHOES = "Shoes",
   LIFESTYLE = "Lifestyle",
 }
+const containerVariant = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.02,
+    },
+  },
+};
+const variantItem = {
+  hidden: { opacity: 0, height: 0 },
+  show: { opacity: 1, height: "auto" },
+};
 export const MobileNavbar = () => {
   const [menuState, setMenuState] = useRecoilState(mobileMenuState);
   const { data: userData } = useMeQuery();
@@ -28,7 +42,7 @@ export const MobileNavbar = () => {
       onClose={() => setMenuState(false)}
       width={400}
     >
-      <div className="w-full px-3">
+      <div className=" w-full px-3">
         <div className="inline-block">
           <Link href={APP_PAGE_ROUTE.LOGIN}>
             <a className=" flex items-center space-x-2 font-semibold">
@@ -80,15 +94,28 @@ export const MobileNavbar = () => {
                         </div>
                       </Disclosure.Button>
                       <Disclosure.Panel className="px-2 pb-2">
-                        <ul className="space-y-5 text-base font-medium">
+                        <motion.ul
+                          className="h-auto space-y-5 text-base font-medium"
+                          key="menu-content"
+                          variants={containerVariant}
+                          initial="hidden"
+                          animate="show"
+                        >
                           {category.children?.map((child, idx) => {
                             return (
-                              <li key={idx} className="text-base">
-                                {child.name}
-                              </li>
+                              <motion.li
+                                onClick={() => setMenuState(false)}
+                                variants={variantItem}
+                                key={idx}
+                                className="text-base"
+                              >
+                                <Link href={child.path}>
+                                  <a>{child.name}</a>
+                                </Link>
+                              </motion.li>
                             );
                           })}
-                        </ul>
+                        </motion.ul>
                       </Disclosure.Panel>
                     </>
                   )}
