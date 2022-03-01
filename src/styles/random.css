@@ -36,7 +36,7 @@
 .underline-from-center:hover {
   background-size: 100% 1px, auto;
   /* The following line makes the underline only as wide as the text */
-  /* background-size: calc(100% - 2em) 5px, auto; */
+  /* background-size: calc(100% - 2em) 1px, auto; */
 }
 
 .underline-from-left-to-right {

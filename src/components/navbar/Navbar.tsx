@@ -130,7 +130,7 @@ export const Navbar = () => {
                   return (
                     <Link key={category.id} href={category.path}>
                       <a
-                        className="text-13 underline-from-center mx-3 font-medium"
+                        className="text-13 underline-from-center mx-2 font-medium"
                         onClick={() => setIsHoverMenuOpen(false)}
                         onMouseEnter={() => {
                           if (category.children) {
