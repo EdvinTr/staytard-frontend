@@ -24,11 +24,6 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           <link rel="shortcut icon" href="/img/favicon-32x32.png" />
-          <script
-            type="text/javascript"
-            src="https://x.klarnacdn.net/kp/lib/v1/api.js"
-            async
-          ></script>
         </Head>
         <body>
           <Main />
