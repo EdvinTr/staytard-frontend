@@ -5,39 +5,12 @@ import Link from "next/link";
 import React, { Fragment } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
 import { MeQuery, useLogoutMutation } from "../../../lib/graphql";
-import {
-  LogoutIcon,
-  MyOrdersIcon,
-  MyPriceTagIcon,
-  MyUserIcon,
-} from "../../global/icons/Icons";
+import { LogoutIcon, MyUserIcon } from "../../global/icons/Icons";
 import { LoadingSpinner } from "../../global/LoadingSpinner";
+import { userMenuItems } from "../userMenuItems";
 interface MyPagesPopoverProps extends React.HTMLAttributes<HTMLDivElement> {
   currentUser?: MeQuery["me"];
 }
-
-interface PopoverItem {
-  name: string;
-  href: APP_PAGE_ROUTE;
-  icon: any;
-}
-const popoverItems: PopoverItem[] = [
-  {
-    name: "My orders",
-    href: APP_PAGE_ROUTE.MY_ORDERS,
-    icon: MyOrdersIcon,
-  },
-  {
-    name: "My offers",
-    href: APP_PAGE_ROUTE.MY_OFFERS,
-    icon: MyPriceTagIcon,
-  },
-  {
-    name: "My profile",
-    href: APP_PAGE_ROUTE.MY_PROFILE,
-    icon: MyUserIcon,
-  },
-];
 
 export const MyPagesPopover = ({
   currentUser,
@@ -67,7 +40,7 @@ export const MyPagesPopover = ({
               <Popover.Panel className="absolute -left-14 z-10 mt-12 w-80 max-w-sm -translate-x-1/2 transform px-2 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden shadow-lg ">
                   <div className="relative grid gap-6 border-l-black border-r-black border-b-black border-opacity-5 bg-white px-4 py-8  ">
-                    {popoverItems.map((item) => (
+                    {userMenuItems.map((item) => (
                       <Link href={item.href} key={item.name}>
                         <a>
                           <PopoverItemContainer>

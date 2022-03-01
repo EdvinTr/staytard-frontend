@@ -4,12 +4,22 @@ import React, { useState } from "react";
 
 interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
+  buttonClassName?: string;
+  childrenAnimationDuration?: number;
+  inlineBlock?: boolean;
 }
 
 const chevronClassNames = "w-6 transition-all duration-[400ms] ease-out ";
 export const Accordion: React.FC<AccordionProps> & {
   Body: typeof Body;
-} = ({ children, title, ...rest }) => {
+} = ({
+  children,
+  title,
+  buttonClassName,
+  inlineBlock,
+  childrenAnimationDuration = 0.3,
+  ...rest
+}) => {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   return (
@@ -18,9 +28,15 @@ export const Accordion: React.FC<AccordionProps> & {
       onMouseEnter={() => setIsHovered(true)} // TODO: refactor with useCallback?
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="border-t border-white border-opacity-10">
+      <div
+        className={`${
+          inlineBlock ? "inline-block" : ""
+        } border-t border-white border-opacity-10`}
+      >
         <button
-          className="flex justify-between w-full py-5 px-8 "
+          className={`flex w-full items-center justify-between  ${
+            buttonClassName ? buttonClassName : ""
+          }`}
           onClick={() => setIsAccordionOpen(!isAccordionOpen)}
         >
           <div className="font-bold">{title}</div>
@@ -50,7 +66,10 @@ export const Accordion: React.FC<AccordionProps> & {
                 opacity: 0,
               },
             }}
-            transition={{ duration: 0.3, easings: "easeIn" }}
+            transition={{
+              duration: childrenAnimationDuration,
+              easings: "easeIn",
+            }}
           >
             {children}
           </motion.div>

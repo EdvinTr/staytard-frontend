@@ -6,15 +6,23 @@ import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import { useRecoilState } from "recoil";
 import { APP_PAGE_ROUTE } from "../../../constants";
-import { useGetCategoriesQuery, useMeQuery } from "../../../lib/graphql";
+import {
+  useGetCategoriesQuery,
+  useLogoutMutation,
+  useMeQuery,
+} from "../../../lib/graphql";
 import { mobileMenuState } from "../../../store/mobileMenuState";
+import { Accordion } from "../../global/Accordion";
 import {
   FacebookIcon,
   InstagramIcon,
+  LogoutIcon,
   MyUserIcon,
   TikTokIcon,
   YouTubeIcon,
 } from "../../global/icons/Icons";
+import { LoadingSpinner } from "../../global/LoadingSpinner";
+import { userMenuItems } from "../userMenuItems";
 
 enum MAIN_CATEGORY {
   CLOTHES = "Clothes",
@@ -37,21 +45,75 @@ const variantItem = {
 };
 export const MobileNavbar = () => {
   const [menuState, setMenuState] = useRecoilState(mobileMenuState);
+
   const { data: userData } = useMeQuery();
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
+  const [logoutUser, { loading: isLogoutUserLoading, client }] =
+    useLogoutMutation();
   return (
     <Menu
-      styles={{ ...styles }}
+      styles={{ ...menuStyles }}
       isOpen={menuState}
       onOpen={() => setMenuState(true)}
       onClose={() => setMenuState(false)}
       width={400}
     >
       <ContentContainer>
-        <div className="inline-block">
+        <div className="">
           {userData?.me ? (
-            <div>logged in</div>
+            <div>
+              <Accordion
+                title="My pages"
+                buttonClassName="space-x-1 pb-8"
+                childrenAnimationDuration={0}
+                inlineBlock
+              >
+                <Accordion.Body>
+                  {/*  <div className="bg-staytard-dark my-6 h-[1px] w-full opacity-30"></div> */}
+                  <div className="border-staytard-dark space-y-6 border-t border-opacity-30 py-8">
+                    {userMenuItems.map((item, idx) => {
+                      return (
+                        <Link href={item.href} key={idx}>
+                          <a className="flex items-center justify-between">
+                            <p className="text-staytard-dark text-base">
+                              {item.name}
+                            </p>
+                            <item.icon aria-hidden="true" className="w-8" />
+                          </a>
+                        </Link>
+                      );
+                    })}
+                    <button
+                      disabled={isLogoutUserLoading}
+                      className="flex w-full items-center justify-between"
+                      onClick={async () => {
+                        try {
+                          await client.resetStore();
+                          const response = await logoutUser();
+                          if (response.data) {
+                            window.location.reload();
+                          }
+                        } catch {
+                          // TODO: handle logout error
+                        }
+                      }}
+                    >
+                      <span className="text-staytard-dark text-base">
+                        Log out
+                      </span>
+                      <div>
+                        {isLogoutUserLoading ? (
+                          <LoadingSpinner size={30} />
+                        ) : (
+                          <LogoutIcon className="w-8" />
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                </Accordion.Body>
+              </Accordion>
+            </div>
           ) : (
             <Link href={APP_PAGE_ROUTE.LOGIN}>
               <a className=" flex items-center space-x-2 font-semibold">
@@ -61,7 +123,7 @@ export const MobileNavbar = () => {
             </Link>
           )}
         </div>
-        <div className="w-full pt-4">
+        <div className="min-h-[75vh] w-full pt-4">
           <div className="mx-auto w-full space-y-5 rounded-2xl bg-white ">
             {categoriesData?.categories.map((category, idx) => {
               return (
@@ -101,9 +163,7 @@ export const MobileNavbar = () => {
                               className="w-full"
                             />
                           )}
-                          <div className="absolute top-[3.25rem] ml-7 text-base font-semibold">
-                            {category.name}
-                          </div>
+                          <ImageText text={category.name} />
                         </div>
                       </Disclosure.Button>
                       <Disclosure.Panel className="px-2 pb-2">
@@ -135,10 +195,22 @@ export const MobileNavbar = () => {
                 </Disclosure>
               );
             })}
+            <div className="relative">
+              <Link href={APP_PAGE_ROUTE.BRAND}>
+                <a onClick={() => setMenuState(false)}>
+                  <img
+                    src="/img/mobile-menu/nav-brands.webp"
+                    alt="Brands"
+                    className="w-full"
+                  />
+                  <ImageText text="Brands A-Z" />
+                </a>
+              </Link>
+            </div>
           </div>
         </div>
       </ContentContainer>
-      <div className="bg-staytard-dark absolute bottom-0 min-h-[10rem] w-full px-5 py-8 text-white">
+      <div className="bg-staytard-dark mt-8  w-full px-5 py-8 text-white">
         <div className="space-y-8">
           <Link href={APP_PAGE_ROUTE.MY_PROFILE}>
             <a className="block font-semibold">My pages</a>
@@ -157,12 +229,19 @@ export const MobileNavbar = () => {
     </Menu>
   );
 };
+const ImageText = ({ text }: { text: string }) => {
+  return (
+    <div className="absolute top-[3.05rem] ml-7 text-base font-semibold">
+      {text}
+    </div>
+  );
+};
 
 const ContentContainer: React.FC = ({ children }) => {
   return <div className="w-full px-5 ">{children}</div>;
 };
 
-const styles: { [key: string]: CSS.Properties } = {
+const menuStyles: { [key: string]: CSS.Properties } = {
   bmBurgerButton: {
     display: "none", // using a custom button to open it
   },
