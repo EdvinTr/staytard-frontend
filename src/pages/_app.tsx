@@ -6,9 +6,11 @@ import { Router, useRouter } from "next/router";
 import NProgress from "nprogress";
 import { Fragment, useEffect, useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { RecoilRoot } from "recoil";
 import "swiper/css";
 import { Footer } from "../components/footer/Footer";
 import { MyCookieConsent } from "../components/global/MyCookieConsent";
+import { MobileNavbar } from "../components/navbar/mobile-navbar/MobileNavbar";
 import { Navbar } from "../components/navbar/Navbar";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { CartProvider } from "../contexts/CartContext";
@@ -61,30 +63,35 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <ApolloProvider client={apolloClient}>
-      <CartProvider>
-        <Head>
-          <meta charSet="utf-8" />
-          <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
-          <meta
-            name="description"
-            content="Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands."
-          />
-        </Head>
-        <Fragment>
-          <MyCookieConsent />
-          {pathsWithoutMainNavbar.includes(
-            ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
-          ) ? null : (
-            <Navbar />
-          )}
-          <Component {...pageProps} />
-          {pathsWithoutFooter.includes(
-            ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
-          ) ? null : (
-            <Footer />
-          )}
-        </Fragment>
-      </CartProvider>
+      <RecoilRoot>
+        <CartProvider>
+          <Head>
+            <meta charSet="utf-8" />
+            <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
+            <meta
+              name="description"
+              content="Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands."
+            />
+          </Head>
+          <Fragment>
+            <MyCookieConsent />
+            {pathsWithoutMainNavbar.includes(
+              ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+            ) ? null : (
+              <>
+                <MobileNavbar />
+                <Navbar />
+              </>
+            )}
+            <Component {...pageProps} />
+            {pathsWithoutFooter.includes(
+              ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+            ) ? null : (
+              <Footer />
+            )}
+          </Fragment>
+        </CartProvider>
+      </RecoilRoot>
     </ApolloProvider>
   );
 }
