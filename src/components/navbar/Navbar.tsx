@@ -125,7 +125,7 @@ export const Navbar = () => {
             {/* hover menu stuff */}
 
             {categoriesData && (
-              <FadeInContainer className="flex justify-center  pt-8">
+              <FadeInContainer className="flex justify-center pt-6">
                 {categoriesData?.categories.map((category) => {
                   return (
                     <Link key={category.id} href={category.path}>
@@ -150,7 +150,7 @@ export const Navbar = () => {
                 })}
                 <Link href={APP_PAGE_ROUTE.BRAND}>
                   <a className="text-13 underline-from-center mx-3 font-medium">
-                    Brands AZ
+                    Brands A-Z
                   </a>
                 </Link>
               </FadeInContainer>
