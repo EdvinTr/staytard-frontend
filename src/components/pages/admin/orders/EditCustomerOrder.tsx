@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import {
   ADMIN_SUB_PAGE_ROUTE,
   APP_PAGE_ROUTE,
+  ORDER_STATUS,
   successToastColors,
 } from "../../../../constants";
 import {
@@ -25,7 +26,6 @@ import {
   postalCodeValidation,
 } from "../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../global/BaseButton";
-import { ORDER_STATUS } from "../../../user/my-orders/CustomerOrderTableRow";
 import { CustomInputField } from "../components/CustomInputField";
 import { MyListBox } from "../products/components/CreateProductModal";
 import {

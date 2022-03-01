@@ -81,7 +81,9 @@ export const Navbar = () => {
               {/* app name */}
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
                 <Link href={APP_PAGE_ROUTE.INDEX}>
-                  <a className="text-4xl font-bold uppercase">{APP_NAME}</a>
+                  <a className="text-4xl font-bold uppercase tracking-wider">
+                    {APP_NAME}
+                  </a>
                 </Link>
               </div>
               <div className="flex items-center space-x-9">
