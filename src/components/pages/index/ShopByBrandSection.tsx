@@ -18,6 +18,7 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Les Deux"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_polo.webp"}
@@ -25,13 +26,15 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Polo"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_newbalance.webp"}
           width={IMAGE_SIZE}
           height={IMAGE_SIZE}
           objectFit="contain"
-          alt="Polo"
+          alt="New Balance"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_gant.webp"}
@@ -39,6 +42,7 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Gant"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_levis.webp"}
@@ -46,6 +50,7 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Levis"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_dickies.webp"}
@@ -53,6 +58,7 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Dickies"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_carhartt.webp"}
@@ -60,6 +66,7 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Carhartt"
+          quality={100}
         />
         <Image
           src={"/img/front-page/brands/2205_brand_perry.webp"}
@@ -67,6 +74,7 @@ export const ShopByBrandSection: React.FC<ShopByBrandSectionProps> = ({}) => {
           height={IMAGE_SIZE}
           objectFit="contain"
           alt="Fred Perry"
+          quality={100}
         />
       </div>
     </section>

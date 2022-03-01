@@ -117,6 +117,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               blurDataURL={product.images[0].imageUrl}
               objectFit="contain"
               width={400}
+              quality={90}
               onMouseEnter={onMouseEnter}
               height={600}
               alt={`${product.brand.name} - ${product.name}`}
@@ -188,31 +189,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             >
               {/* names and price */}
               <h2>
-                <b className="text-xs block w-full uppercase">
+                <b className="block w-full text-xs uppercase">
                   {product.brand.name}
                 </b>
-                <span className="text-[10px] block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+                <span className="block w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-[10px]">
                   {product.name}
                 </span>
               </h2>
 
               {product.currentPrice === product.originalPrice ? (
-                <strong className="text-13 font-semibold flex">
+                <strong className="text-13 flex font-semibold">
                   {product.currentPrice} EUR
                 </strong>
               ) : (
-                <div className="flex items-center justify-between lg:justify-start space-x-2 lg:space-x-3">
+                <div className="flex items-center justify-between space-x-2 lg:justify-start lg:space-x-3">
                   <div className="space-x-2">
                     <strong className="text-13 text-staytard-red">
                       {product.currentPrice} EUR
                     </strong>
-                    <del className="text-gray-400  text-[10px]">
+                    <del className="text-[10px]  text-gray-400">
                       {product.originalPrice} EUR
                     </del>
                   </div>
                   {/* discount percentage calculation */}
                   <div>
-                    <span className="text-xs text-staytard-red tracking-wide lg:text-[11px] font-semibold">
+                    <span className="text-staytard-red text-xs font-semibold tracking-wide lg:text-[11px]">
                       {Math.ceil(
                         ((product.currentPrice - product.originalPrice) /
                           product.originalPrice) *
@@ -224,7 +225,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 </div>
               )}
               {currentWindowWidth < 768 && (
-                <div className="text-[8px] uppercase pt-1">
+                <div className="pt-1 text-[8px] uppercase">
                   + {product.attributes.length} colors
                 </div>
               )}

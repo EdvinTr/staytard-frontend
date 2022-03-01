@@ -127,6 +127,7 @@ const CallToActionProductCardList = ({
               objectFit="contain"
               className="w-full"
               alt={image.alt}
+              quality={100}
             />
             <div className="pt-4 pb-8 text-center uppercase lg:pb-0 lg:pt-2 lg:text-left">
               <h4 className="text-xl font-semibold tracking-wide lg:text-2xl">

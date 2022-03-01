@@ -70,6 +70,7 @@ const NewsCard = ({
             height={740}
             objectFit="contain"
             alt={image.alt}
+            quality={100}
           />
           <div>
             <h2 className="text-base font-semibold">{title}</h2>

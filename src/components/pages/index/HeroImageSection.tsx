@@ -16,6 +16,7 @@ export const HeroImageSection = () => {
             width={1600}
             height={400}
             alt="Icon brand"
+            quality={100}
             objectFit="contain"
             layout="responsive"
             priority
@@ -39,9 +40,10 @@ export const HeroImageSection = () => {
           <Image
             width={580}
             height={580}
-            alt="winter sale"
+            alt="Icon brand"
             objectFit="contain"
             priority
+            quality={100}
             layout="responsive"
             src="/img/front-page/2208_icon_fullwith_mobil_1.jpg"
             className="max-h-[2rem]"
