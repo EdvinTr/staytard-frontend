@@ -37,34 +37,30 @@ const CheckoutPage: NextPage = () => {
             <CartItemList />
             <div className="md:bg-staytard-light-gray mt-8 md:px-8 md:py-4">
               <div className="flex justify-between font-bold">
-                <div className="uppercase text-13">Your products</div>
+                <div className="text-13 uppercase">Your products</div>
                 <div>{totalCartPrice} EUR</div>
               </div>
-              <div className="w-full flex py-4 md:py-2 text-13 space-x-3">
-                <button className="w-full tracking-wider border-staytard-dark border-2 border-opacity-20 py-3 hover:border-black">
+              <div className="text-13 flex w-full space-x-3 py-4 md:py-2">
+                <button className="border-staytard-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
                   Discount code
                 </button>
-                <button className="w-full tracking-wider border-staytard-dark border-2 border-opacity-20 py-3 hover:border-black">
+                <button className="border-staytard-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
                   Gift card
                 </button>
               </div>
             </div>
           </SectionWrapper>
-          <h2 className="py-8 text-center text-xl md:text-2xl uppercase font-light tracking-widest">
+          <h2 className="py-8 text-center text-xl font-light uppercase tracking-widest md:text-2xl">
             Complete Purchase
           </h2>
-          <div className="space-y-6 min-h-screen">
+          <div className="min-h-screen space-y-6">
             <SectionWrapper>
               {/* user information */}
               <StepBadge step="2" />
-              <div className="uppercase text-sm font-bold tracking-wider">
+              <div className="text-sm font-bold uppercase tracking-wider">
                 Your Information
               </div>
-              {!meData?.me && (
-                <RegisterForm
-                  onSuccess={() => console.log("Register user done")}
-                />
-              )}
+              {!meData?.me && <RegisterForm onSuccess={() => {}} />}
               {meData?.me && <CustomerInformation customerData={meData.me} />}
               {meData?.me && !meData.me.address && (
                 <UpdateUserAddressInputGroup />
@@ -73,14 +69,14 @@ const CheckoutPage: NextPage = () => {
             <SectionWrapper>
               {/* shipping method */}
               <StepBadge step="3" />
-              <div className="uppercase text-sm font-bold tracking-wider">
+              <div className="text-sm font-bold uppercase tracking-wider">
                 Shipping Method
               </div>
             </SectionWrapper>
             <SectionWrapper>
               {/* payment selection */}
               <StepBadge step="4" />
-              <div className="uppercase text-sm font-bold tracking-wider">
+              <div className="text-sm font-bold uppercase tracking-wider">
                 Pay
               </div>
               {meData?.me && meData.me.address && <PaymentOptionsGroup />}
@@ -102,16 +98,16 @@ const NoItemsInCartComponent = () => {
       <div className="bg-staytard-light-gray min-h-[75vh]">
         <SectionWrapper className="bg-staytard-light-gray text-center xl:max-w-7xl">
           <ShoppingCartHeading />
-          <div className="bg-white lg:bg-inherit py-2 lg:py-0 lg:border-b lg:border-t lg:border-black lg:border-opacity-[0.09]">
-            <h2 className="text-2xl lg:text-4xl py-4 lg:py-8">
+          <div className="bg-white py-2 lg:border-b lg:border-t lg:border-black lg:border-opacity-[0.09] lg:bg-inherit lg:py-0">
+            <h2 className="py-4 text-2xl lg:py-8 lg:text-4xl">
               Your cart is empty
             </h2>
-            <div className="space-y-2 lg:py-4 lg:border-t lg:border-black lg:border-opacity-[0.09]">
+            <div className="space-y-2 lg:border-t lg:border-black lg:border-opacity-[0.09] lg:py-4">
               <h3>
                 Your cart is empty - go to the start page for more shopping!
               </h3>
               <Link href={APP_PAGE_ROUTE.INDEX}>
-                <a className="lg:text-lg inline-block uppercase tracking-widest hover:underline">
+                <a className="inline-block uppercase tracking-widest hover:underline lg:text-lg">
                   Back to main page
                 </a>
               </Link>
@@ -125,7 +121,7 @@ const NoItemsInCartComponent = () => {
 
 const ShoppingCartHeading = () => {
   return (
-    <h1 className="py-8 text-center text-xl md:text-2xl uppercase font-light tracking-widest">
+    <h1 className="py-8 text-center text-xl font-light uppercase tracking-widest md:text-2xl">
       Your shopping cart
     </h1>
   );
@@ -138,7 +134,7 @@ const SectionWrapper: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   return (
     <section
       {...props}
-      className={`relative bg-white p-2 max-w-5xl lg:max-w-4xl mx-auto lg:px-16 lg:py-6 ${
+      className={`relative mx-auto max-w-5xl bg-white p-2 lg:max-w-4xl lg:px-16 lg:py-6 ${
         props.className ? props.className : ""
       }`}
     >

@@ -28,7 +28,7 @@ export const CustomerInformation = ({
         <span>{`${obfuscateField(lastName, lastName.length - 2)} `}</span>
       </div>
       {/* address */}
-      <div className="text-13 text-[#808285] leading-6">
+      <div className="text-13 leading-6 text-[#686a6d]">
         {address && (
           <div>
             <span> {address.street}</span>
