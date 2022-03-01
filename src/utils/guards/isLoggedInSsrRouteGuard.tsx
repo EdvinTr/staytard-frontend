@@ -8,7 +8,8 @@ import { ssrMe } from "../../lib/page";
  * Route guard for checking if the user is allowed to visit a page depending on the validity of the user's cookies.
  *  */
 export const isUserLoggedInRouteGuard = async (
-  ctx: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
+  ctx: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>,
+  redirectDestination?: string
 ) => {
   const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
   if (!accessToken) {
@@ -16,7 +17,9 @@ export const isUserLoggedInRouteGuard = async (
     return {
       props: {},
       redirect: {
-        destination: APP_PAGE_ROUTE.INDEX,
+        destination: redirectDestination
+          ? redirectDestination
+          : APP_PAGE_ROUTE.INDEX,
       },
     };
   }
@@ -35,7 +38,9 @@ export const isUserLoggedInRouteGuard = async (
     return {
       props: {},
       redirect: {
-        destination: APP_PAGE_ROUTE.INDEX,
+        destination: redirectDestination
+          ? redirectDestination
+          : APP_PAGE_ROUTE.INDEX,
       },
     };
   }

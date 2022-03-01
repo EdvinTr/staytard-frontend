@@ -3,7 +3,7 @@ import Head from "next/head";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
-import { APP_NAME } from "../constants";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";
 
 const MyOffers: NextPage = () => {
@@ -23,7 +23,7 @@ const MyOffers: NextPage = () => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return await isUserLoggedInRouteGuard(ctx);
+  return await isUserLoggedInRouteGuard(ctx, APP_PAGE_ROUTE.LOGIN);
 };
 
 export default MyOffers;

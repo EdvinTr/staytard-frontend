@@ -4,7 +4,7 @@ import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { CustomerOrderTable } from "../components/user/my-orders/CustomerOrderTable";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
-import { APP_NAME } from "../constants";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";
 
 const MyOrders: NextPage = () => {
@@ -16,7 +16,7 @@ const MyOrders: NextPage = () => {
       <AppHeader />
       <UserSettingsNavbar />
       <section>
-        <h2 className="text-center text-2xl font-semibold uppercase py-12">
+        <h2 className="py-12 text-center text-2xl font-semibold uppercase">
           My orders
         </h2>
         <CustomerOrderTable />
@@ -26,7 +26,7 @@ const MyOrders: NextPage = () => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return await isUserLoggedInRouteGuard(ctx);
+  return await isUserLoggedInRouteGuard(ctx, APP_PAGE_ROUTE.LOGIN);
 };
 
 export default MyOrders;

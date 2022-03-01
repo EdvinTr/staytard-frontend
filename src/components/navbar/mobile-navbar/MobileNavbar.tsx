@@ -1,4 +1,5 @@
 import { Disclosure } from "@headlessui/react";
+import { XIcon } from "@heroicons/react/solid";
 import CSS from "csstype";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -44,41 +45,46 @@ const variantItem = {
   visible: { opacity: 1, height: "auto" },
 };
 export const MobileNavbar = () => {
-  const [menuState, setMenuState] = useRecoilState(mobileMenuState);
+  const [isMenuOpen, setIsMenuOpen] = useRecoilState(mobileMenuState);
 
   const { data: userData } = useMeQuery();
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
   const [logoutUser, { loading: isLogoutUserLoading, client }] =
     useLogoutMutation();
+
+  const closeMenu = () => () => setIsMenuOpen(false);
   return (
     <Menu
       styles={{ ...menuStyles }}
-      isOpen={menuState}
-      onOpen={() => setMenuState(true)}
-      onClose={() => setMenuState(false)}
+      isOpen={isMenuOpen}
+      onOpen={() => setIsMenuOpen(true)}
+      onClose={closeMenu()}
       width={400}
     >
-      <ContentContainer>
-        <div className="">
-          {userData?.me ? (
-            <div>
+      <div>
+        <ContentContainer>
+          <div className="flex w-full items-start justify-between">
+            {userData?.me ? (
               <Accordion
                 title="My pages"
-                buttonClassName="space-x-1 pb-8"
+                buttonClassName="space-x-2 pb-8"
                 childrenAnimationDuration={0}
                 inlineBlock
+                className="w-full"
               >
                 <Accordion.Body>
-                  {/*  <div className="bg-staytard-dark my-6 h-[1px] w-full opacity-30"></div> */}
                   <div className="border-staytard-dark space-y-6 border-t border-opacity-30 py-8">
                     {userMenuItems.map((item, idx) => {
                       return (
                         <Link href={item.href} key={idx}>
-                          <a className="flex items-center justify-between">
-                            <p className="text-staytard-dark text-base">
+                          <a
+                            className="flex items-center justify-between"
+                            onClick={closeMenu()}
+                          >
+                            <span className="text-staytard-dark text-base">
                               {item.name}
-                            </p>
+                            </span>
                             <item.icon aria-hidden="true" className="w-8" />
                           </a>
                         </Link>
@@ -92,6 +98,7 @@ export const MobileNavbar = () => {
                           await client.resetStore();
                           const response = await logoutUser();
                           if (response.data) {
+                            setIsMenuOpen(false);
                             window.location.reload();
                           }
                         } catch {
@@ -113,117 +120,133 @@ export const MobileNavbar = () => {
                   </div>
                 </Accordion.Body>
               </Accordion>
-            </div>
-          ) : (
-            <Link href={APP_PAGE_ROUTE.LOGIN}>
-              <a className=" flex items-center space-x-2 font-semibold">
-                <MyUserIcon className="h-[1.65rem] w-[1.65rem]" aria-hidden />
-                <span className="border-staytard-dark border-b ">Sign in</span>
-              </a>
-            </Link>
-          )}
-        </div>
-        <div className="min-h-[75vh] w-full pt-4">
-          <div className="mx-auto w-full space-y-5 rounded-2xl bg-white ">
-            {categoriesData?.categories.map((category, idx) => {
-              return (
-                <Disclosure key={idx}>
-                  {({ open }) => (
-                    <>
-                      <Disclosure.Button
-                        aria-label={category.name}
-                        className="flex w-full justify-between rounded-lg text-left text-sm font-medium focus-visible:outline-2 "
-                      >
-                        <div className="relative">
-                          {category.name === MAIN_CATEGORY.CLOTHES && (
-                            <img
-                              src="/img/mobile-menu/nav-clothes.webp"
-                              alt={category.name}
-                              className="w-full"
-                            />
-                          )}
-                          {category.name === MAIN_CATEGORY.SHOES && (
-                            <img
-                              src="/img/mobile-menu/nav-shoes.webp"
-                              alt={category.name}
-                              className="w-full"
-                            />
-                          )}
-                          {category.name === MAIN_CATEGORY.ACCESSORIES && (
-                            <img
-                              src="/img/mobile-menu/nav-accessories.webp"
-                              alt={category.name}
-                              className="w-full"
-                            />
-                          )}
-                          {category.name === MAIN_CATEGORY.LIFESTYLE && (
-                            <img
-                              src="/img/mobile-menu/nav-lifestyle.webp"
-                              alt={category.name}
-                              className="w-full"
-                            />
-                          )}
-                          <ImageText text={category.name} />
-                        </div>
-                      </Disclosure.Button>
-                      <Disclosure.Panel className="px-2 pb-2">
-                        <motion.ul
-                          className="h-auto space-y-5 text-base font-medium"
-                          key="menu-content"
-                          variants={containerVariant}
-                          initial="hidden"
-                          animate="visible"
-                        >
-                          {category.children?.map((child, idx) => {
-                            return (
-                              <motion.li
-                                onClick={() => setMenuState(false)}
-                                variants={variantItem}
-                                key={idx}
-                                className="text-base"
-                              >
-                                <Link href={child.path}>
-                                  <a>{child.name}</a>
-                                </Link>
-                              </motion.li>
-                            );
-                          })}
-                        </motion.ul>
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
-              );
-            })}
-            <div className="relative">
-              <Link href={APP_PAGE_ROUTE.BRAND}>
-                <a onClick={() => setMenuState(false)}>
-                  <img
-                    src="/img/mobile-menu/nav-brands.webp"
-                    alt="Brands"
-                    className="w-full"
-                  />
-                  <ImageText text="Brands A-Z" />
+            ) : (
+              <Link href={APP_PAGE_ROUTE.LOGIN}>
+                <a
+                  className=" mb-8 flex items-center space-x-2 font-semibold"
+                  onClick={closeMenu()}
+                >
+                  <MyUserIcon className="h-[1.65rem] w-[1.65rem]" aria-hidden />
+                  <span className="border-staytard-dark border-b ">
+                    Sign in
+                  </span>
                 </a>
               </Link>
+            )}
+            <button
+              aria-label="Close menu"
+              className="-m-4 p-4"
+              onClick={closeMenu()}
+            >
+              <XIcon className="h-5 w-5" aria-hidden />
+            </button>
+          </div>
+          <div className="min-h-[75vh] w-full pt-0">
+            <div className="mx-auto w-full space-y-5 rounded-2xl bg-white ">
+              {categoriesData?.categories.map((category, idx) => {
+                return (
+                  <Disclosure key={idx}>
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button
+                          aria-label={category.name}
+                          className="flex w-full justify-between rounded-lg text-left text-sm font-medium focus-visible:outline-2 "
+                        >
+                          <div className="relative">
+                            {category.name === MAIN_CATEGORY.CLOTHES && (
+                              <img
+                                src="/img/mobile-menu/nav-clothes.webp"
+                                alt={category.name}
+                                className="w-full"
+                              />
+                            )}
+                            {category.name === MAIN_CATEGORY.SHOES && (
+                              <img
+                                src="/img/mobile-menu/nav-shoes.webp"
+                                alt={category.name}
+                                className="w-full"
+                              />
+                            )}
+                            {category.name === MAIN_CATEGORY.ACCESSORIES && (
+                              <img
+                                src="/img/mobile-menu/nav-accessories.webp"
+                                alt={category.name}
+                                className="w-full"
+                              />
+                            )}
+                            {category.name === MAIN_CATEGORY.LIFESTYLE && (
+                              <img
+                                src="/img/mobile-menu/nav-lifestyle.webp"
+                                alt={category.name}
+                                className="w-full"
+                              />
+                            )}
+                            <ImageText text={category.name} />
+                          </div>
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="px-2 pb-2">
+                          <motion.ul
+                            className="h-auto space-y-5 text-base font-medium"
+                            key="menu-content"
+                            variants={containerVariant}
+                            initial="hidden"
+                            animate="visible"
+                          >
+                            {category.children?.map((child, idx) => {
+                              return (
+                                <motion.li
+                                  onClick={closeMenu()}
+                                  variants={variantItem}
+                                  key={idx}
+                                  className="text-base"
+                                >
+                                  <Link href={child.path}>
+                                    <a>{child.name}</a>
+                                  </Link>
+                                </motion.li>
+                              );
+                            })}
+                          </motion.ul>
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
+                );
+              })}
+              <div className="relative">
+                <Link href={APP_PAGE_ROUTE.BRAND}>
+                  <a onClick={closeMenu()}>
+                    <img
+                      src="/img/mobile-menu/nav-brands.webp"
+                      alt="Brands"
+                      className="w-full"
+                    />
+                    <ImageText text="Brands A-Z" />
+                  </a>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </ContentContainer>
-      <div className="bg-staytard-dark mt-8  w-full px-5 py-8 text-white">
-        <div className="space-y-8">
-          <Link href={APP_PAGE_ROUTE.MY_PROFILE}>
-            <a className="block font-semibold">My pages</a>
-          </Link>
-          <Link href={APP_PAGE_ROUTE.INDEX}>
-            <a className="block font-semibold">Customer service</a>
-          </Link>
-        </div>
-        <div className="mt-10 flex items-center justify-center space-x-12 opacity-30">
-          <InstagramIcon />
-          <FacebookIcon />
-          <TikTokIcon />
-          <YouTubeIcon />
+        </ContentContainer>
+        <div className="bg-staytard-dark mt-8 w-full px-5 py-8 text-white">
+          <div className="space-y-8">
+            <Link href={APP_PAGE_ROUTE.MY_PROFILE}>
+              <a className="block font-semibold" onClick={closeMenu()}>
+                My pages
+              </a>
+            </Link>
+            <Link href={APP_PAGE_ROUTE.INDEX}>
+              <a className="block font-semibold" onClick={closeMenu()}>
+                Customer service
+              </a>
+            </Link>
+          </div>
+          <div className="mt-10 flex items-center justify-center space-x-12 opacity-30">
+            <InstagramIcon />
+            <FacebookIcon />
+            <TikTokIcon />
+            <YouTubeIcon />
+          </div>
         </div>
       </div>
     </Menu>
@@ -254,11 +277,14 @@ const menuStyles: { [key: string]: CSS.Properties } = {
     background: "#a90000",
   },
   bmCrossButton: {
-    height: "24px",
+    /*     height: "24px",
     width: "24px",
+    marginRight: "29px",
+    marginTop: "25px", */
+    display: "none", // using custom one to close the menu
   },
   bmCross: {
-    background: "#222222",
+    // background: "#222222",
   },
   bmMenuWrap: {
     position: "fixed",
