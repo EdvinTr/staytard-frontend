@@ -8,7 +8,13 @@ import { useRecoilState } from "recoil";
 import { APP_PAGE_ROUTE } from "../../../constants";
 import { useGetCategoriesQuery, useMeQuery } from "../../../lib/graphql";
 import { mobileMenuState } from "../../../store/mobileMenuState";
-import { MyUserIcon } from "../../global/icons/Icons";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  MyUserIcon,
+  TikTokIcon,
+  YouTubeIcon,
+} from "../../global/icons/Icons";
 
 enum MAIN_CATEGORY {
   CLOTHES = "Clothes",
@@ -18,7 +24,7 @@ enum MAIN_CATEGORY {
 }
 const containerVariant = {
   hidden: { opacity: 0 },
-  show: {
+  visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.02,
@@ -27,7 +33,7 @@ const containerVariant = {
 };
 const variantItem = {
   hidden: { opacity: 0, height: 0 },
-  show: { opacity: 1, height: "auto" },
+  visible: { opacity: 1, height: "auto" },
 };
 export const MobileNavbar = () => {
   const [menuState, setMenuState] = useRecoilState(mobileMenuState);
@@ -42,23 +48,30 @@ export const MobileNavbar = () => {
       onClose={() => setMenuState(false)}
       width={400}
     >
-      <div className=" w-full px-3">
+      <ContentContainer>
         <div className="inline-block">
-          <Link href={APP_PAGE_ROUTE.LOGIN}>
-            <a className=" flex items-center space-x-2 font-semibold">
-              <MyUserIcon className="h-[1.65rem] w-[1.65rem]" aria-hidden />
-              <span className="border-staytard-dark border-b ">Sign in</span>
-            </a>
-          </Link>
+          {userData?.me ? (
+            <div>logged in</div>
+          ) : (
+            <Link href={APP_PAGE_ROUTE.LOGIN}>
+              <a className=" flex items-center space-x-2 font-semibold">
+                <MyUserIcon className="h-[1.65rem] w-[1.65rem]" aria-hidden />
+                <span className="border-staytard-dark border-b ">Sign in</span>
+              </a>
+            </Link>
+          )}
         </div>
         <div className="w-full pt-4">
-          <div className="mx-auto w-full space-y-5 rounded-2xl bg-white p-2">
+          <div className="mx-auto w-full space-y-5 rounded-2xl bg-white ">
             {categoriesData?.categories.map((category, idx) => {
               return (
                 <Disclosure key={idx}>
                   {({ open }) => (
                     <>
-                      <Disclosure.Button className="flex w-full justify-between rounded-lg text-left text-sm font-medium  focus-visible:outline-2 ">
+                      <Disclosure.Button
+                        aria-label={category.name}
+                        className="flex w-full justify-between rounded-lg text-left text-sm font-medium focus-visible:outline-2 "
+                      >
                         <div className="relative">
                           {category.name === MAIN_CATEGORY.CLOTHES && (
                             <img
@@ -99,7 +112,7 @@ export const MobileNavbar = () => {
                           key="menu-content"
                           variants={containerVariant}
                           initial="hidden"
-                          animate="show"
+                          animate="visible"
                         >
                           {category.children?.map((child, idx) => {
                             return (
@@ -124,9 +137,29 @@ export const MobileNavbar = () => {
             })}
           </div>
         </div>
+      </ContentContainer>
+      <div className="bg-staytard-dark absolute bottom-0 min-h-[10rem] w-full px-5 py-8 text-white">
+        <div className="space-y-8">
+          <Link href={APP_PAGE_ROUTE.MY_PROFILE}>
+            <a className="block font-semibold">My pages</a>
+          </Link>
+          <Link href={APP_PAGE_ROUTE.INDEX}>
+            <a className="block font-semibold">Customer service</a>
+          </Link>
+        </div>
+        <div className="mt-10 flex items-center justify-center space-x-12 opacity-30">
+          <InstagramIcon />
+          <FacebookIcon />
+          <TikTokIcon />
+          <YouTubeIcon />
+        </div>
       </div>
     </Menu>
   );
+};
+
+const ContentContainer: React.FC = ({ children }) => {
+  return <div className="w-full px-5 ">{children}</div>;
 };
 
 const styles: { [key: string]: CSS.Properties } = {

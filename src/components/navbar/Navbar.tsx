@@ -87,6 +87,7 @@ export const Navbar = () => {
                   <button
                     onClick={() => setShowModal(true)}
                     className="flex items-center space-x-2"
+                    aria-label="Search"
                   >
                     {/* open search modal button */}
                     <SearchIcon className="w-5 " />
