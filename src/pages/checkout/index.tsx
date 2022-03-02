@@ -2,18 +2,18 @@ import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React, { Fragment, useContext } from "react";
-import { CartItemList } from "../components/checkout/cart/CartItemList";
-import { StepBadge } from "../components/checkout/cart/StepBadge";
-import { CustomerInformation } from "../components/checkout/customer-information/CustomerInformation";
-import { PaymentOptionsGroup } from "../components/checkout/payment-options/PaymentOptionsGroup";
-import { UpdateUserAddressInputGroup } from "../components/checkout/update-address/UpdateUserAddressInputGroup";
-import { AppHeader } from "../components/global/AppHeader";
-import { FadeInContainer } from "../components/global/FadeInContainer";
-import { MyContainer } from "../components/global/MyContainer";
-import { RegisterForm } from "../components/register-form/RegisterForm";
-import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
-import CartContext from "../contexts/CartContext";
-import { useMeQuery } from "../lib/graphql";
+import { CartItemList } from "../../components/checkout/cart/CartItemList";
+import { StepBadge } from "../../components/checkout/cart/StepBadge";
+import { CustomerInformation } from "../../components/checkout/customer-information/CustomerInformation";
+import { PaymentOptionsGroup } from "../../components/checkout/payment-options/PaymentOptionsGroup";
+import { UpdateUserAddressInputGroup } from "../../components/checkout/update-address/UpdateUserAddressInputGroup";
+import { AppHeader } from "../../components/global/AppHeader";
+import { FadeInContainer } from "../../components/global/FadeInContainer";
+import { MyContainer } from "../../components/global/MyContainer";
+import { RegisterForm } from "../../components/register-form/RegisterForm";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
+import CartContext from "../../contexts/CartContext";
+import { useMeQuery } from "../../lib/graphql";
 
 const CheckoutPage: NextPage = () => {
   const { data: meData } = useMeQuery();
@@ -29,7 +29,7 @@ const CheckoutPage: NextPage = () => {
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <FadeInContainer className="text-staytard-dark bg-staytard-light-gray min-h-screen">
+      <FadeInContainer className="text-staytard-dark bg-staytard-light-gray">
         <MyContainer className="">
           <ShoppingCartHeading />
           <SectionWrapper>

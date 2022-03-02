@@ -27,7 +27,6 @@ const pathsWithoutMainNavbar = [
   APP_PAGE_ROUTE.MY_OFFERS,
   APP_PAGE_ROUTE.ADMIN,
   APP_PAGE_ROUTE.ORDER,
-  "/test",
 ];
 
 const pathsWithoutFooter = [
@@ -36,7 +35,7 @@ const pathsWithoutFooter = [
   APP_PAGE_ROUTE.MY_OFFERS,
   APP_PAGE_ROUTE.ADMIN,
   APP_PAGE_ROUTE.ORDER,
-  "/test",
+  APP_PAGE_ROUTE.CHECKOUT,
 ];
 
 const appTitle = `${APP_NAME}.com | Fashion & Designer clothes for men online`;
@@ -104,32 +103,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             />
             <meta name="twitter:card" content="summary_large_image" />
           </Head>
-          {/*    <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
-            <meta
-              name="description"
-              key="description"
-              content={appDescriptionMeta}
-            />
-
-            <meta
-              property="og:title"
-              content={`${APP_NAME}.com | Fashion & Designer clothes for men online`}
-              key="title"
-            />
-            <meta
-              property="og:description"
-              key="description"
-              content={appDescriptionMeta}
-            />
-            <meta
-              property="og:image"
-              content="/img/staytard-logo.png"
-              key="image"
-            />
-
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="/img/staytard-logo.png" />
-            <meta name="twitter:description" content={appDescriptionMeta} /> */}
           <Fragment>
             <MyCookieConsent />
             {pathsWithoutMainNavbar.includes(

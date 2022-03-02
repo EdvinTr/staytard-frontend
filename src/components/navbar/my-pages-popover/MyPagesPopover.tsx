@@ -71,23 +71,23 @@ export const MyPagesPopover = ({
                         </a>
                       </Link>
                     )}
-                    <button>
-                      <PopoverItemContainer
-                        onClick={async () => {
-                          if (isLogoutUserLoading) {
-                            return;
+                    <button
+                      onClick={async () => {
+                        if (isLogoutUserLoading) {
+                          return;
+                        }
+                        try {
+                          await apollo.resetStore();
+                          const response = await logoutUser();
+                          if (response.data) {
+                            window.location.reload();
                           }
-                          try {
-                            await apollo.resetStore();
-                            const response = await logoutUser();
-                            if (response.data) {
-                              window.location.reload();
-                            }
-                          } catch {
-                            // TODO: handle logout error
-                          }
-                        }}
-                      >
+                        } catch {
+                          // TODO: handle logout error
+                        }
+                      }}
+                    >
+                      <PopoverItemContainer>
                         <span className="text-staytard-dark text-base">
                           Log out
                         </span>
