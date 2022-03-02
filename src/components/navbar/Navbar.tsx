@@ -29,7 +29,7 @@ export const Navbar = () => {
   const [hoverMenuTitle, setHoverMenuTitle] = useState("");
   const [isHoverMenuOpen, setIsHoverMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [hoverMenuItems, setHoverMenuItems] = useState<
+  const [categories, setHoverMenuItems] = useState<
     GetCategoriesQuery["categories"] | null
   >(null);
   const [activeScrollDirection, setActiveScrollDirection] = useState<
@@ -179,9 +179,9 @@ export const Navbar = () => {
                     </Link>
                   </FadeInContainer>
                 )}
-                {hoverMenuItems && (
+                {categories && (
                   <HoverMenu
-                    items={hoverMenuItems}
+                    items={categories}
                     title={hoverMenuTitle}
                     isButtonHovered={isHoverMenuOpen}
                   />

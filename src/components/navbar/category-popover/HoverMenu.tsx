@@ -2,13 +2,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { GetCategoriesQuery } from "../../../lib/graphql";
 
-type CategoryItem = GetCategoriesQuery["categories"][0];
 interface HoverMenuProps {
-  items: GetCategoriesQuery["categories"];
+  items: HoverMenuItem[];
   isButtonHovered: boolean;
   title?: string;
+}
+
+export interface HoverMenuItem {
+  name: string;
+  path: string;
 }
 
 export const HoverMenu: React.FC<HoverMenuProps> = ({
@@ -17,29 +20,12 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
   title,
 }) => {
   const [isCursorInMenu, setIsCursorInMenu] = useState(false);
-
-  const renderListItem = (item: CategoryItem) => {
-    return (
-      <li key={item.id} onClick={() => setIsCursorInMenu(false)}>
-        <Link href={item.path}>
-          <a className=" cursor-pointer">
-            <div className="underline-from-center inline-block">
-              {item.name}
-            </div>
-          </a>
-        </Link>
-      </li>
-    );
-  };
-
   return (
     <div className="relative w-full">
-      <div className="flex justify-center "></div>
-      {/* menu */}
       <AnimatePresence>
         {(isButtonHovered || isCursorInMenu) && (
           <motion.div
-            key={items[0].id}
+            key="hover-menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -50,23 +36,23 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             onMouseLeave={() => {
               setIsCursorInMenu(false);
             }}
-            className=" absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white pt-12 opacity-0 shadow-sm  hover:opacity-100"
+            className="absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white pt-12 opacity-0 shadow-sm  hover:opacity-100"
           >
             <div className="max-h-96 border-r border-r-black border-opacity-20 pr-12">
-              <h4 className=" text-2xl font-bold ">{title}</h4>
+              <h4 className=" text-2xl font-bold">{title}</h4>
             </div>
             <ul className="relative w-[19%]  ">
               <div className="flex space-x-24">
                 <div className="space-y-6">
                   {/* left side categories */}
-                  {items.slice(0, 9).map((item) => {
-                    return renderListItem(item);
+                  {items.slice(0, 9).map((item, idx) => {
+                    return <HoverMenuListItem item={item} key={idx} />;
                   })}
                 </div>
                 {/* right side categories */}
                 <div className="space-y-6">
-                  {items.slice(9, items.length).map((item) => {
-                    return renderListItem(item);
+                  {items.slice(9, items.length).map((item, idx) => {
+                    return <HoverMenuListItem item={item} key={idx} />;
                   })}
                 </div>
               </div>
@@ -92,5 +78,25 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
         )}
       </AnimatePresence>
     </div>
+  );
+};
+
+interface HoverMenuListItemProps
+  extends React.DetailedHTMLProps<
+    React.LiHTMLAttributes<HTMLLIElement>,
+    HTMLLIElement
+  > {
+  item: HoverMenuItem;
+}
+
+const HoverMenuListItem = ({ item, ...props }: HoverMenuListItemProps) => {
+  return (
+    <li {...props}>
+      <Link href={item.path}>
+        <a className=" cursor-pointer">
+          <div className="underline-from-center inline-block">{item.name}</div>
+        </a>
+      </Link>
+    </li>
   );
 };
