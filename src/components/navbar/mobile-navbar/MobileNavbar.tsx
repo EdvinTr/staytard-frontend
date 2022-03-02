@@ -8,6 +8,7 @@ import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import { useRecoilState } from "recoil";
 import { APP_PAGE_ROUTE } from "../../../constants";
+import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
 import {
   useGetCategoriesQuery,
   useLogoutMutation,
@@ -48,7 +49,7 @@ const variantItem = {
 export const MobileNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useRecoilState(mobileMenuState);
 
-  const currentWindowWidth = useWindowWidth();
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const { data: userData } = useMeQuery();
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
@@ -275,7 +276,7 @@ const ImageText = ({
   return (
     <div
       className={`absolute ${
-        windowWidth >= 330 ? "top-[2.1rem]" : "top-[2.2rem]"
+        windowWidth >= 330 ? "top-[2.5rem]" : "top-[2.2rem]"
       } m-auto ml-7 text-base font-semibold`}
     >
       {text}

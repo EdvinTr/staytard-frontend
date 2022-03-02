@@ -1,7 +1,6 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
-import NextHead from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
@@ -9,6 +8,7 @@ import { SWRConfig } from "swr";
 import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/global/MyContainer";
+import MyMetaTags from "../components/global/MyMetaTags";
 import {
   getSortString,
   ProductCardList,
@@ -22,24 +22,26 @@ import { getPathFromParams } from "../utils/getPathFromParams";
 interface SlugPageProps {
   categoryData: GetOneCategoryQuery["getOneCategory"];
   fallback: any;
+  metaImage?: string;
 }
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
-const SlugPage: NextPage<SlugPageProps> = ({ fallback, categoryData }) => {
+const SlugPage: NextPage<SlugPageProps> = ({
+  fallback,
+  categoryData,
+  metaImage,
+}) => {
   const router = useRouter();
   const breadcrumbs = useBreadcrumbs(router);
-
   return (
     <SWRConfig value={{ fallback }}>
+      <MyMetaTags
+        description={categoryData?.description}
+        title={`${categoryData?.name} | Large assortment for men - Buy online at ${APP_NAME}.com`}
+        image={metaImage ? metaImage : "/img/staytard-logo.png"}
+      />
       <FadeInContainer className="text-staytard-dark relative min-h-screen pt-6 pb-40">
-        <NextHead>
-          <title>
-            {categoryData?.name} | Large assortment for men - Buy online at{" "}
-            {APP_NAME}.com
-          </title>
-          <meta name="description" content={categoryData?.name} />
-        </NextHead>
         <MyContainer className=" text-staytard-dark">
           <div className="px-3 md:px-0">
             <div className="">
@@ -115,12 +117,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         path: categoryPath,
       },
     });
+    const metaImage =
+      data && data.products.length > 0
+        ? data.products[0].images[0].imageUrl?.replace("{size}", "1200") +
+          "&h=630"
+        : null;
     return {
       props: {
         categoryData: categoryProps.data.getOneCategory,
         fallback: {
           [API_URL]: data,
         },
+        metaImage,
       },
     };
   } catch (err) {

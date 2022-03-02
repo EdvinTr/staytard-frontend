@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import React, { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
+import MyMetaTags from "../components/global/MyMetaTags";
 import { ChangePassword } from "../components/user/my-profile/ChangePassword";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
@@ -11,9 +11,7 @@ import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuar
 const MyProfile: NextPage = () => {
   return (
     <Fragment>
-      <Head>
-        <title>{APP_NAME}.com</title>
-      </Head>
+      <MyMetaTags title={`${APP_NAME}.com`} />
       <AppHeader />
       <UserSettingsNavbar />
       <FadeInContainer duration={0.7}>

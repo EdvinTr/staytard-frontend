@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
+import MyMetaTags from "../components/global/MyMetaTags";
 import { FormContainer } from "../components/register-form/FormContainer";
 import { RegisterForm } from "../components/register-form/RegisterForm";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
@@ -12,9 +12,7 @@ const RegisterPage: NextPage = () => {
 
   return (
     <Fragment>
-      <Head>
-        <title>{APP_NAME} - Register</title>
-      </Head>
+      <MyMetaTags title={`${APP_NAME} - Register`} />
       <AppHeader />
       <FadeInContainer className="min-h-screen">
         <FormContainer className="text-center">

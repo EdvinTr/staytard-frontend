@@ -38,6 +38,10 @@ const pathsWithoutFooter = [
   APP_PAGE_ROUTE.ORDER,
   "/test",
 ];
+
+const appTitle = `${APP_NAME}.com | Fashion & Designer clothes for men online`;
+const appDescriptionMeta =
+  "Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands.";
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const router = useRouter();
@@ -66,13 +70,66 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <CartProvider>
           <Head>
-            <meta charSet="utf-8" />
             <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
             <meta
               name="description"
-              content="Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands."
+              content={appDescriptionMeta}
+              key="description"
             />
+            <meta name="keywords" content="" key="keywords" />
+
+            <meta property="og:title" content={appTitle} key="ogTitle" />
+            <meta
+              property="og:image"
+              content="/img/staytard-logo.png"
+              key="ogImage"
+            />
+            <meta
+              property="og:description"
+              content={appDescriptionMeta}
+              key="ogDescription"
+            />
+            <meta property="og:type" content="website" key="ogType" />
+
+            <meta name="twitter:title" content={appTitle} key="twitterTitle" />
+            <meta
+              name="twitter:description"
+              content={appDescriptionMeta}
+              key="twitterDescription"
+            />
+            <meta
+              name="twitter:image"
+              content="/img/staytard-logo.png"
+              key="twitterImage"
+            />
+            <meta name="twitter:card" content="summary_large_image" />
           </Head>
+          {/*    <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
+            <meta
+              name="description"
+              key="description"
+              content={appDescriptionMeta}
+            />
+
+            <meta
+              property="og:title"
+              content={`${APP_NAME}.com | Fashion & Designer clothes for men online`}
+              key="title"
+            />
+            <meta
+              property="og:description"
+              key="description"
+              content={appDescriptionMeta}
+            />
+            <meta
+              property="og:image"
+              content="/img/staytard-logo.png"
+              key="image"
+            />
+
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="/img/staytard-logo.png" />
+            <meta name="twitter:description" content={appDescriptionMeta} /> */}
           <Fragment>
             <MyCookieConsent />
             {pathsWithoutMainNavbar.includes(

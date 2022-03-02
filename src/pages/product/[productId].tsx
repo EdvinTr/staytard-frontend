@@ -1,5 +1,4 @@
 import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -10,6 +9,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
+import MyMetaTags from "../../components/global/MyMetaTags";
 import { ProductReviewsDisplay } from "../../components/pages/product/ProductReviewsDisplay";
 import { APP_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
@@ -42,6 +42,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
   const { addToCart: addToContextCart } = useContext(CartContext);
 
   useEffect(() => {
+    // ? what is dis code dude?
     if (queryColor) {
       const attr = product.attributes.find(
         (attr) => attr.color.value === queryColor
@@ -75,36 +76,15 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
 
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen pb-40 pt-20">
-      <Head>
-        <title>
-          {product.name} - {APP_NAME}
-        </title>
-        <meta name="description" content={product.description} />
-        <meta property="og:title" content={product.name} />
-        <meta property="og:type" content="product" />
-        <meta property="og:description" content={product.description} />
-        <meta
-          property="og:image"
-          content={
-            product.images[0].imageUrl.replace("{size}", "1200") + "&h=630"
-          }
-        />
-        <meta
-          property="product:price:amount"
-          content={product.currentPrice.toString()}
-        />
-        <meta property="product:price:currency" content="EUR" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={product.name} />
-        <meta name="twitter:description" content={product.description} />
-        <meta
-          name="twitter:image"
-          content={
-            product.images[0].imageUrl.replace("{size}", "1200") + "&h=630"
-          }
-        />
-      </Head>
+      <MyMetaTags
+        title={`${product.name} - ${APP_NAME}`}
+        description={product.description}
+        image={product.images[0].imageUrl.replace("{size}", "1200") + "&h=630"}
+        productMeta={{
+          currency: "EUR",
+          priceAmount: product.currentPrice.toString(),
+        }}
+      />
       <MyContainer className=" text-staytard-dark">
         <div className="lg:flex">
           <div className="min-w-0 lg:w-1/2 xl:w-6/12">

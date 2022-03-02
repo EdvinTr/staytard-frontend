@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
+import MyMetaTags from "../components/global/MyMetaTags";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";
@@ -9,9 +9,7 @@ import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuar
 const MyOffers: NextPage = () => {
   return (
     <div>
-      <Head>
-        <title>{APP_NAME}.com</title>
-      </Head>
+      <MyMetaTags title={`${APP_NAME}.com`} />
       <AppHeader />
       <UserSettingsNavbar />
       <h1 className="py-20 text-center text-2xl font-medium tracking-wide">

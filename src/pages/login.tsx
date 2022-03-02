@@ -1,11 +1,11 @@
 import { useApolloClient } from "@apollo/client";
 import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
+import MyMetaTags from "../components/global/MyMetaTags";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
@@ -48,10 +48,8 @@ const LoginPage: NextPage = () => {
   return (
     <Fragment>
       <AppHeader />
-      <div className="min-h-screen sm:max-w-md lg:max-w-lg 2xl:max-w-4xl mx-auto px-8">
-        <Head>
-          <title>{`${APP_NAME} - Log in`}</title>
-        </Head>
+      <div className="mx-auto min-h-screen px-8 sm:max-w-md lg:max-w-lg 2xl:max-w-4xl">
+        <MyMetaTags title={`${APP_NAME} - Log in`} />
         <FadeInContainer>
           <div className="pt-10 text-center">
             {/* page titles */}
@@ -68,17 +66,17 @@ const LoginPage: NextPage = () => {
               onSubmit={onFormSubmit}
             />
             {/* divider */}
-            <div className="flex justify-center items-center py-4">
-              <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
-              <span className="px-8 opacity-75 text-sm">or</span>
-              <div className="w-1/2 h-[1px] bg-black opacity-20"></div>
+            <div className="flex items-center justify-center py-4">
+              <div className="h-[1px] w-1/2 bg-black opacity-20"></div>
+              <span className="px-8 text-sm opacity-75">or</span>
+              <div className="h-[1px] w-1/2 bg-black opacity-20"></div>
             </div>
             <LoginWithGoogleButton className="mb-7" />
-            <div className="h-[1px] w-full bg-black bg-opacity-10 mb-6"></div>
+            <div className="mb-6 h-[1px] w-full bg-black bg-opacity-10"></div>
 
             {/* register link */}
             <Link href={APP_PAGE_ROUTE.REGISTER}>
-              <a className="block p-4 w-full  border border-black text-sm border-opacity-40  hover:ring-1 hover:ring-black">
+              <a className="block w-full border  border-black border-opacity-40 p-4 text-sm  hover:ring-1 hover:ring-black">
                 New customer
               </a>
             </Link>
