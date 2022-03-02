@@ -50,8 +50,6 @@ export const Navbar = () => {
       setActiveScrollDirection(scrollDirection);
     }
   }, [scrollDirection]);
-
-  /*   className="bg-staytard-dark hidden space-x-8 py-1 text-[10px] uppercase tracking-wider text-white lg:flex lg:items-center lg:justify-center" */
   return (
     <>
       <div
@@ -61,7 +59,7 @@ export const Navbar = () => {
       >
         <div className="text-sm">
           {router.pathname === APP_PAGE_ROUTE.INDEX && (
-            <div className="bg-staytard-dark  hidden py-1 text-center text-[10px] uppercase text-white lg:block">
+            <div className="bg-staytard-dark hidden py-1 text-center text-[10px] uppercase text-white lg:block">
               <div className="relative mx-auto max-w-2xl">
                 <div className="absolute left-0 inline-block">
                   {freeShippingText}
