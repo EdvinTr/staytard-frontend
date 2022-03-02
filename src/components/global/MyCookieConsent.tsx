@@ -19,6 +19,7 @@ export const MyCookieConsent: React.FC<MyCookieConsentProps> = ({}) => {
       ButtonComponent={({ ...props }) => {
         return (
           <button
+            data-cy="cookie-consent-accept-button"
             {...props}
             className="bg-staytard-dark mx-4 mt-2 px-8 py-3 text-sm font-medium uppercase text-white "
           >

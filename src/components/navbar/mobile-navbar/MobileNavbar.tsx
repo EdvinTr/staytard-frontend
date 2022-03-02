@@ -1,5 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
+import { useWindowWidth } from "@react-hook/window-size";
 import CSS from "csstype";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -47,6 +48,7 @@ const variantItem = {
 export const MobileNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useRecoilState(mobileMenuState);
 
+  const currentWindowWidth = useWindowWidth();
   const { data: userData } = useMeQuery();
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
@@ -60,31 +62,31 @@ export const MobileNavbar = () => {
       isOpen={isMenuOpen}
       onOpen={() => setIsMenuOpen(true)}
       onClose={closeMenu()}
-      width={360}
+      width={currentWindowWidth >= 330 ? 360 : 320}
+      className="focus:outline-none"
     >
       <div>
         <ContentContainer>
-          <div className="flex w-full items-start justify-between">
+          <div className="relative flex w-full">
             {userData?.me ? (
+              /* logged in */
               <Accordion
                 title="My pages"
-                buttonClassName="space-x-2 pb-8"
+                buttonClassName="space-x-2 py-4 my-4"
                 childrenAnimationDuration={0}
                 inlineBlock
                 className="w-full"
               >
                 <Accordion.Body>
-                  <div className="border-staytard-dark space-y-6 border-t border-opacity-30 py-8">
+                  <div className="border-staytard-dark w-full space-y-6 border-t border-opacity-30 py-8">
                     {userMenuItems.map((item, idx) => {
                       return (
                         <Link href={item.href} key={idx}>
                           <a
-                            className="flex items-center justify-between"
+                            className="text-staytard-dark flex items-center justify-between text-base"
                             onClick={closeMenu()}
                           >
-                            <span className="text-staytard-dark text-base">
-                              {item.name}
-                            </span>
+                            {item.name}
                             <item.icon aria-hidden="true" className="w-8" />
                           </a>
                         </Link>
@@ -92,7 +94,7 @@ export const MobileNavbar = () => {
                     })}
                     <button
                       disabled={isLogoutUserLoading}
-                      className="flex w-full items-center justify-between"
+                      className="text-staytard-dark flex w-full items-center justify-between text-base"
                       onClick={async () => {
                         try {
                           await client.resetStore();
@@ -106,9 +108,7 @@ export const MobileNavbar = () => {
                         }
                       }}
                     >
-                      <span className="text-staytard-dark text-base">
-                        Log out
-                      </span>
+                      Log out
                       <div>
                         {isLogoutUserLoading ? (
                           <LoadingSpinner size={30} />
@@ -121,9 +121,10 @@ export const MobileNavbar = () => {
                 </Accordion.Body>
               </Accordion>
             ) : (
+              /* not logged in */
               <Link href={APP_PAGE_ROUTE.LOGIN}>
                 <a
-                  className=" mb-8 flex items-center space-x-2 font-semibold"
+                  className="my-8 flex items-center space-x-2 font-semibold"
                   onClick={closeMenu()}
                 >
                   <MyUserIcon className="h-[1.65rem] w-[1.65rem]" aria-hidden />
@@ -133,9 +134,10 @@ export const MobileNavbar = () => {
                 </a>
               </Link>
             )}
+            {/* close menu button */}
             <button
               aria-label="Close menu"
-              className="-m-4 p-4"
+              className="absolute -right-3 mt-4  flex h-14 w-14 items-center justify-center rounded-full"
               onClick={closeMenu()}
             >
               <XIcon className="h-5 w-5" aria-hidden />
@@ -181,7 +183,10 @@ export const MobileNavbar = () => {
                                 className="w-full"
                               />
                             )}
-                            <ImageText text={category.name} />
+                            <ImageText
+                              text={category.name}
+                              windowWidth={currentWindowWidth}
+                            />
                           </div>
                         </Disclosure.Button>
                         <Disclosure.Panel className="px-2 pb-2">
@@ -221,7 +226,10 @@ export const MobileNavbar = () => {
                       alt="Brands"
                       className="w-full"
                     />
-                    <ImageText text="Brands A-Z" />
+                    <ImageText
+                      text="Brands A-Z"
+                      windowWidth={currentWindowWidth}
+                    />
                   </a>
                 </Link>
               </div>
@@ -252,9 +260,19 @@ export const MobileNavbar = () => {
     </Menu>
   );
 };
-const ImageText = ({ text }: { text: string }) => {
+const ImageText = ({
+  text,
+  windowWidth,
+}: {
+  text: string;
+  windowWidth: number;
+}) => {
   return (
-    <div className="absolute top-[2.6rem] m-auto ml-7 text-base font-semibold">
+    <div
+      className={`absolute ${
+        windowWidth >= 330 ? "top-[2.6rem]" : "top-[2.2rem]"
+      } m-auto ml-7 text-base font-semibold`}
+    >
       {text}
     </div>
   );
@@ -293,7 +311,6 @@ const menuStyles: { [key: string]: CSS.Properties } = {
   bmMenu: {
     background: "#ffff",
     fontSize: "1.15em",
-    paddingTop: "2rem",
   },
   bmMorphShape: {
     fill: "#373a47",

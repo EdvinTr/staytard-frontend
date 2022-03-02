@@ -98,7 +98,7 @@ export const Navbar = () => {
                 {/* app name */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
                   <Link href={APP_PAGE_ROUTE.INDEX}>
-                    <a className="text-3xl font-bold uppercase tracking-wider md:text-4xl">
+                    <a className="text-2xl font-bold uppercase tracking-wider sm:text-3xl md:text-4xl">
                       {APP_NAME}
                     </a>
                   </Link>

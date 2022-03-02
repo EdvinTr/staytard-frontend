@@ -110,7 +110,7 @@ const PayWithStripeComponent = () => {
           <button
             disabled={loading}
             onClick={() => startSession()}
-            className="flex w-[19rem] items-center rounded-lg bg-[#3A3662] text-white"
+            className="flex w-[17rem] items-center rounded-lg bg-[#3A3662] text-white sm:w-[19rem]"
           >
             {loading ? (
               <div className="flex w-full items-center justify-center py-4">

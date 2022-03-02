@@ -17,6 +17,7 @@ interface HomePageProps {
 }
 const IndexPage: NextPage<HomePageProps> = ({ products }) => {
   const hasProducts = products && products.items?.length > 0;
+
   return (
     <FadeInContainer className="text-staytard-dark min-h-screen">
       <div className=" text-staytard-dark">
