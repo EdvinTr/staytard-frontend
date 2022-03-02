@@ -60,7 +60,7 @@ export const MobileNavbar = () => {
       isOpen={isMenuOpen}
       onOpen={() => setIsMenuOpen(true)}
       onClose={closeMenu()}
-      width={400}
+      width={360}
     >
       <div>
         <ContentContainer>
@@ -142,7 +142,7 @@ export const MobileNavbar = () => {
             </button>
           </div>
           <div className="min-h-[75vh] w-full pt-0">
-            <div className="mx-auto w-full space-y-5 rounded-2xl bg-white ">
+            <div className="mx-auto h-full w-full space-y-5 rounded-2xl bg-white ">
               {categoriesData?.categories.map((category, idx) => {
                 return (
                   <Disclosure key={idx}>
@@ -150,9 +150,9 @@ export const MobileNavbar = () => {
                       <>
                         <Disclosure.Button
                           aria-label={category.name}
-                          className="flex w-full justify-between rounded-lg text-left text-sm font-medium focus-visible:outline-2 "
+                          className="relative flex w-full justify-between rounded-lg text-left text-sm font-medium focus-visible:outline-2 "
                         >
-                          <div className="relative">
+                          <div>
                             {category.name === MAIN_CATEGORY.CLOTHES && (
                               <img
                                 src="/img/mobile-menu/nav-clothes.webp"
@@ -254,7 +254,7 @@ export const MobileNavbar = () => {
 };
 const ImageText = ({ text }: { text: string }) => {
   return (
-    <div className="absolute top-[3.05rem] ml-7 text-base font-semibold">
+    <div className="absolute top-[2.6rem] m-auto ml-7 text-base font-semibold">
       {text}
     </div>
   );

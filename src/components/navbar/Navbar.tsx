@@ -77,6 +77,7 @@ export const Navbar = () => {
                 <div className="flex items-center">
                   <div className="mr-3 lg:hidden">
                     <button
+                      data-cy="mobile-navbar-open-button"
                       aria-label="Open mobile menu"
                       onClick={() => setIsMobileMenuOpen(true)}
                       className="flex items-center"
