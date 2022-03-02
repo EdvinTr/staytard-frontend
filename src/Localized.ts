@@ -1,7 +1,7 @@
 export class Localized {
   static readonly page = {
     index: {
-      freeShippingText: "Free shipping over SEK 499 & FREE RETURNS",
+      freeShippingText: "Free shipping over 49 EUR & FREE RETURNS",
       deliveryTimeText: "1-3 days delivery",
       rightOfReturnText: "30 days right of return",
     },
