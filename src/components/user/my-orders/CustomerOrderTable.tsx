@@ -5,6 +5,7 @@ import { CenteredBeatLoader } from "../../global/CenteredBeatLoader";
 import { LoadMoreButton } from "../../global/LoadMoreButton";
 import { PaginationLoadMoreContainer } from "../../global/PaginationLoadMoreContainer";
 import { PaginationProgressTracker } from "../../global/PaginationProgressTracker";
+import { ScrollTopButton } from "../../global/ScrollTopButton";
 import { CustomerOrderTableRow } from "./CustomerOrderTableRow";
 
 const MAX_ORDER_PER_PAGE = 10;
@@ -34,7 +35,7 @@ export const CustomerOrderTable = () => {
     notifyOnNetworkStatusChange: true,
   });
   return (
-    <div className="mx-auto max-w-5xl overflow-auto px-4">
+    <div className="relative mx-auto max-w-5xl overflow-auto px-4">
       {data && data.myOrders.items.length > 0 && (
         <div>
           <table className={`mx-auto w-full ${loading ? "opacity-75" : ""}`}>
@@ -105,6 +106,7 @@ export const CustomerOrderTable = () => {
           )}
         </div>
       )}
+      <ScrollTopButton />
     </div>
   );
 };
