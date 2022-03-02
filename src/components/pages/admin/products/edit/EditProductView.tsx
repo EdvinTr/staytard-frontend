@@ -80,7 +80,7 @@ export const EditProductView: React.FC<EditProductViewProps> = ({
           <TrashIcon className="h-4" aria-hidden />
         </button>
         <ConfirmDeletionModal
-          heading={`Are you sure you want to delete ${product.name}?`}
+          heading={`Are you sure you want to delete "${product.name}?"`}
           loading={deleteProductLoading}
           onClose={() => setIsConfirmDeleteModalOpen(false)}
           show={isConfirmDeleteModalOpen}

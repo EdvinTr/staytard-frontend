@@ -60,7 +60,7 @@ export const EditUserView: React.FC<EditUserViewProps> = ({ user }) => {
           aria-label="Open delete user confirmation modal"
         />
         <ConfirmDeletionModal
-          heading={`Are you sure you want to delete this user?`}
+          heading={`Are you sure you want to delete "${user.firstName} ${user.lastName}"?`}
           loading={deleteUserLoading}
           onClose={() => setIsConfirmDeleteModalOpen(false)}
           show={isConfirmDeleteModalOpen}
