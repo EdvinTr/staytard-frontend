@@ -226,7 +226,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               )}
               {currentWindowWidth < 768 && (
                 <div className="pt-1 text-[8px] uppercase">
-                  + {product.attributes.length} colors
+                  +{" "}
+                  {
+                    product.attributes.reduce((acc: string[], val) => {
+                      if (!acc.includes(val.color.value)) {
+                        return [...acc, val.color.value];
+                      }
+                      return acc;
+                    }, []).length
+                  }{" "}
+                  colors
                 </div>
               )}
             </motion.div>
