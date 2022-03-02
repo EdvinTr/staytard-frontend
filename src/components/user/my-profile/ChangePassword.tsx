@@ -289,7 +289,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({}) => {
         </Fragment>
       </EditForm>
       <ToastContainer
-        position={currentWindowWidth <= 768 ? "bottom-center" : "top-right"}
+        position={currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"}
       />
     </Fragment>
   );
