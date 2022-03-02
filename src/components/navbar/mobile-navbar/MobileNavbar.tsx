@@ -71,6 +71,7 @@ export const MobileNavbar = () => {
             {userData?.me ? (
               /* logged in */
               <Accordion
+                data-cy="mobile-menu-accordion"
                 title="My pages"
                 buttonClassName="space-x-2 py-4 my-4"
                 childrenAnimationDuration={0}
@@ -137,6 +138,7 @@ export const MobileNavbar = () => {
             {/* close menu button */}
             <button
               aria-label="Close menu"
+              data-cy="mobile-menu-close-button"
               className="absolute -right-3 mt-4  flex h-14 w-14 items-center justify-center rounded-full"
               onClick={closeMenu()}
             >
@@ -151,6 +153,7 @@ export const MobileNavbar = () => {
                     {({ open }) => (
                       <>
                         <Disclosure.Button
+                          data-cy="mobile-menu-disclosure-button"
                           aria-label={category.name}
                           className="relative flex w-full justify-between rounded-lg text-left text-sm font-medium focus-visible:outline-2 "
                         >
@@ -206,7 +209,9 @@ export const MobileNavbar = () => {
                                   className="text-base"
                                 >
                                   <Link href={child.path}>
-                                    <a>{child.name}</a>
+                                    <a data-cy="mobile-menu-disclosure-link">
+                                      {child.name}
+                                    </a>
                                   </Link>
                                 </motion.li>
                               );
@@ -270,7 +275,7 @@ const ImageText = ({
   return (
     <div
       className={`absolute ${
-        windowWidth >= 330 ? "top-[2.6rem]" : "top-[2.2rem]"
+        windowWidth >= 330 ? "top-[2.1rem]" : "top-[2.2rem]"
       } m-auto ml-7 text-base font-semibold`}
     >
       {text}

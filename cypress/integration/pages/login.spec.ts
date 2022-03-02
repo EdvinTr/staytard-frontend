@@ -17,6 +17,7 @@ const cypressIds = {
 describe("LoginPage", () => {
   it("should display error messages when inputs do not pass validation", () => {
     cy.visit(APP_PAGE_ROUTE.LOGIN);
+    cy.get('[data-cy="cookie-consent-accept-button"]').click();
     // email input
     cy.get(`[data-cy=${cypressIds.emailInputErrorText}]`).should("not.exist");
     cy.get(`[data-cy=${cypressIds.emailInput}]`).type("!@").blur();
@@ -33,6 +34,7 @@ describe("LoginPage", () => {
 
   it("should not display errors when input passes validation", () => {
     cy.visit(APP_PAGE_ROUTE.LOGIN);
+    cy.get('[data-cy="cookie-consent-accept-button"]').click();
     // email input
     cy.get(`[data-cy=${cypressIds.emailInputErrorText}]`).should("not.exist");
     cy.get(`[data-cy=${cypressIds.emailInput}]`)
@@ -52,6 +54,7 @@ describe("LoginPage", () => {
 
   it("should not submit the form if data is not valid", () => {
     cy.visit(APP_PAGE_ROUTE.LOGIN);
+    cy.get('[data-cy="cookie-consent-accept-button"]').click();
     cy.get(`[data-cy=${cypressIds.emailInput}]`).type("something");
 
     cy.get("button[type=submit]").click();

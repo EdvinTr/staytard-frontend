@@ -29,6 +29,8 @@ const {
 describe("RegisterPage", () => {
   it("should display form errors when inputs do not pass validation", () => {
     cy.visit(APP_PAGE_ROUTE.REGISTER);
+    cy.get('[data-cy="cookie-consent-accept-button"]').click();
+
     // email input
     cy.get(`[data-cy=${cypressIds.emailInputError}]`).should("not.exist");
     cy.get(`[data-cy=${cypressIds.emailInput}]`).type("!@").blur();
