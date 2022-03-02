@@ -75,16 +75,19 @@ export const Navbar = () => {
             <MyContainer className="relative">
               <div className="flex justify-between">
                 <div className="flex items-center">
-                  <div className="mr-3 lg:hidden">
-                    <button
-                      data-cy="mobile-navbar-open-button"
-                      aria-label="Open mobile menu"
-                      onClick={() => setIsMobileMenuOpen(true)}
-                      className="flex items-center"
-                    >
-                      <MenuIcon className="h-6 w-6" aria-hidden />
-                    </button>
-                  </div>
+                  {currentWindowWidth <= 1024 && (
+                    <div className="mr-3">
+                      <button
+                        data-cy="mobile-navbar-open-button"
+                        aria-label="Open mobile menu"
+                        onClick={() => setIsMobileMenuOpen(true)}
+                        className="flex items-center"
+                      >
+                        <MenuIcon className="h-6 w-6" aria-hidden />
+                      </button>
+                    </div>
+                  )}
+
                   <button
                     onClick={() => setShowModal(true)}
                     className="flex items-center space-x-2"

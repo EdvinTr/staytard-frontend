@@ -9,6 +9,7 @@ import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/global/MyContainer";
 import MyMetaTags from "../components/global/MyMetaTags";
+import { ScrollTopButton } from "../components/global/ScrollTopButton";
 import {
   getSortString,
   ProductCardList,
@@ -98,6 +99,7 @@ const SlugPage: NextPage<SlugPageProps> = ({
           </div>
         </MyContainer>
       </FadeInContainer>
+      <ScrollTopButton />
     </SWRConfig>
   );
 };
