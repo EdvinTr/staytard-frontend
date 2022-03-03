@@ -12,14 +12,18 @@ const {
   cityInputValidationErrorMessage,
   zipCodeValidationErrorMessage,
   addressValidationErrorMessage,
+  passwordInputErrorMessage,
 } = Localized.page.register;
-export const firstNameValidation = {
-  firstName: Yup.string()
-    .required("Required")
-    .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
-    .min(2, "First name must be at least 2 character")
-    .max(100, "First name must be at most 100 characters"),
-};
+
+export const passwordValidation = Yup.string().matches(
+  /^((?=.*[a-zA-ZåäöæøÅÄÖÆØ])(?=.*[0-9]))[\S]{8,}$/,
+  passwordInputErrorMessage
+);
+export const firstNameValidation = Yup.string()
+  .required("Required")
+  .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
+  .min(2, "First name must be at least 2 character")
+  .max(100, "First name must be at most 100 characters");
 
 export const lastNameValidation = {
   lastName: Yup.string()
@@ -80,7 +84,7 @@ export const cityValidation = {
 };
 
 export const updateUserValidationSchema = Yup.object().shape({
-  ...firstNameValidation,
+  firstName: firstNameValidation,
   ...lastNameValidation,
   ...emailValidation,
   ...mobileNumberValidation,

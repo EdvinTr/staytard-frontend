@@ -1,4 +1,5 @@
 import { Disclosure } from "@headlessui/react";
+import { LockOpenIcon } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import CSS from "csstype";
@@ -95,6 +96,20 @@ export const MobileNavbar = () => {
                         </Link>
                       );
                     })}
+                    {userData.me && userData.me.isAdmin && (
+                      <Link href={APP_PAGE_ROUTE.ADMIN}>
+                        <a
+                          className="text-staytard-dark flex items-center justify-between text-base"
+                          onClick={closeMenu()}
+                        >
+                          Admin panel
+                          <LockOpenIcon
+                            aria-hidden="true"
+                            className="h-8 w-8 font-light text-black"
+                          />
+                        </a>
+                      </Link>
+                    )}
                     <button
                       disabled={isLogoutUserLoading}
                       className="text-staytard-dark flex w-full items-center justify-between text-base"
@@ -103,7 +118,7 @@ export const MobileNavbar = () => {
                           await client.resetStore();
                           const response = await logoutUser();
                           if (response.data) {
-                            setIsMenuOpen(false);
+                            closeMenu();
                             window.location.reload();
                           }
                         } catch {

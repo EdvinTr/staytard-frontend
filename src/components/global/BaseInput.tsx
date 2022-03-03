@@ -6,6 +6,7 @@ export interface BaseInputProps extends React.ComponentPropsWithRef<"input"> {
   hasError?: boolean;
   hasLeftIcon?: boolean;
   errorMessage?: string | null;
+  validate?: (value: any) => void;
 }
 
 export const BaseInput = ({
@@ -14,6 +15,7 @@ export const BaseInput = ({
   hasError,
   errorMessage,
   hasLeftIcon,
+  validate: _,
   ...props
 }: BaseInputProps) => {
   const currentValueLength = props.value?.toString().length ?? 0;

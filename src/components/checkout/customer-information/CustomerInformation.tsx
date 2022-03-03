@@ -11,10 +11,9 @@ export const CustomerInformation = ({
     customerData;
 
   const [streetName, ...rest] = address ? address.street.split(" ") : [];
-  const obfuscatedStreetAddress = `${obfuscateField(
-    streetName,
-    streetName.length - 2
-  )} ${rest.join(" ")}`;
+  const obfuscatedStreetAddress = streetName
+    ? `${obfuscateField(streetName, streetName.length - 2)} ${rest.join(" ")}`
+    : "";
   return (
     <div className="lg:pl-10">
       <div className="text-lg">
