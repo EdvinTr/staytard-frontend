@@ -36,7 +36,7 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             onMouseLeave={() => {
               setIsCursorInMenu(false);
             }}
-            className="absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white pt-12 opacity-0 shadow-sm  hover:opacity-100"
+            className="absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white px-5 pt-12 opacity-0 shadow-sm hover:opacity-100  xl:px-0"
           >
             <div className="max-h-96 border-r border-r-black border-opacity-20 pr-12">
               <h4 className=" text-2xl font-bold">{title}</h4>

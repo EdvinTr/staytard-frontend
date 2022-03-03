@@ -120,6 +120,7 @@ export const ProductReviewFormModal = ({
                   id="email"
                   name="email"
                   as={BaseInput}
+                  autoFocus
                   label="Email"
                   hasError={errors.email && touched.email}
                   value={values.email}
