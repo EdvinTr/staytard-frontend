@@ -13,7 +13,6 @@ import { MyCookieConsent } from "../components/global/MyCookieConsent";
 import { MobileNavbar } from "../components/navbar/mobile-navbar/MobileNavbar";
 import { Navbar } from "../components/navbar/Navbar";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
-import { CartProvider } from "../contexts/CartContext";
 import { useApollo } from "../lib/apolloClient";
 import "../styles/globals.css";
 NProgress.configure({ showSpinner: false, easing: "ease", speed: 500 });
@@ -67,60 +66,58 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
       <RecoilRoot>
-        <CartProvider>
-          <Head>
-            <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
-            <meta
-              name="description"
-              content={appDescriptionMeta}
-              key="description"
-            />
-            <meta name="keywords" content="" key="keywords" />
+        <Head>
+          <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
+          <meta
+            name="description"
+            content={appDescriptionMeta}
+            key="description"
+          />
+          <meta name="keywords" content="" key="keywords" />
 
-            <meta property="og:title" content={appTitle} key="ogTitle" />
-            <meta
-              property="og:image"
-              content="/img/staytard-logo.png"
-              key="ogImage"
-            />
-            <meta
-              property="og:description"
-              content={appDescriptionMeta}
-              key="ogDescription"
-            />
-            <meta property="og:type" content="website" key="ogType" />
+          <meta property="og:title" content={appTitle} key="ogTitle" />
+          <meta
+            property="og:image"
+            content="/img/staytard-logo.png"
+            key="ogImage"
+          />
+          <meta
+            property="og:description"
+            content={appDescriptionMeta}
+            key="ogDescription"
+          />
+          <meta property="og:type" content="website" key="ogType" />
 
-            <meta name="twitter:title" content={appTitle} key="twitterTitle" />
-            <meta
-              name="twitter:description"
-              content={appDescriptionMeta}
-              key="twitterDescription"
-            />
-            <meta
-              name="twitter:image"
-              content="/img/staytard-logo.png"
-              key="twitterImage"
-            />
-            <meta name="twitter:card" content="summary_large_image" />
-          </Head>
-          <Fragment>
-            <MyCookieConsent />
-            {pathsWithoutMainNavbar.includes(
-              ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
-            ) ? null : (
-              <>
-                <MobileNavbar />
-                <Navbar />
-              </>
-            )}
-            <Component {...pageProps} />
-            {pathsWithoutFooter.includes(
-              ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
-            ) ? null : (
-              <Footer />
-            )}
-          </Fragment>
-        </CartProvider>
+          <meta name="twitter:title" content={appTitle} key="twitterTitle" />
+          <meta
+            name="twitter:description"
+            content={appDescriptionMeta}
+            key="twitterDescription"
+          />
+          <meta
+            name="twitter:image"
+            content="/img/staytard-logo.png"
+            key="twitterImage"
+          />
+          <meta name="twitter:card" content="summary_large_image" />
+        </Head>
+        <Fragment>
+          <MyCookieConsent />
+          {pathsWithoutMainNavbar.includes(
+            ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+          ) ? null : (
+            <>
+              <MobileNavbar />
+              <Navbar />
+            </>
+          )}
+          <Component {...pageProps} />
+          {pathsWithoutFooter.includes(
+            ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+          ) ? null : (
+            <Footer />
+          )}
+        </Fragment>
       </RecoilRoot>
     </ApolloProvider>
   );

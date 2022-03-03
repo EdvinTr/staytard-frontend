@@ -1,9 +1,9 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
-import CartContext from "../../../contexts/CartContext";
+import { useCart } from "../../../hooks/useCart";
 import { FindProductsBySkusQuery } from "../../../lib/graphql";
 
 interface CartItemRowProps {
@@ -11,7 +11,7 @@ interface CartItemRowProps {
 }
 
 export const CartItemRow = ({ product }: CartItemRowProps) => {
-  const { cart, addToCart, removeFromCart } = useContext(CartContext);
+  const { cart, addToCart, removeFromCart } = useCart();
 
   // TODO: place this in cart context
   const getQuantityFromCartBySku = (sku: string): number => {
@@ -36,7 +36,7 @@ export const CartItemRow = ({ product }: CartItemRowProps) => {
         <div className="flex items-start justify-between">
           <div>
             {/* item name and brand */}
-            <div className="uppercase font-bold">{product.brand.name}</div>
+            <div className="font-bold uppercase">{product.brand.name}</div>
             <Link href={`${APP_PAGE_ROUTE.PRODUCT}/${product.id}`}>
               <a className="hover:underline">{product.name}</a>
             </Link>
@@ -51,7 +51,7 @@ export const CartItemRow = ({ product }: CartItemRowProps) => {
               </div> /* product has no discount */
             ) : (
               <div className="flex flex-col text-right">
-                <del className="text-gray-600 text-[10px]">
+                <del className="text-[10px] text-gray-600">
                   {product.originalPrice *
                     getQuantityFromCartBySku(product.attributes[0].sku)}{" "}
                   EUR
@@ -67,23 +67,23 @@ export const CartItemRow = ({ product }: CartItemRowProps) => {
         </div>
 
         {/* attributes */}
-        <dl className="hidden md:flex space-x-1 mt-6 text-xs">
+        <dl className="mt-6 hidden space-x-1 text-xs md:flex">
           <dt>Art.nr.</dt>
           <dd className="mr-1 font-bold">{product.attributes[0].sku}</dd>
         </dl>
-        <dl className="flex items-center text-xs mt-1">
+        <dl className="mt-1 flex items-center text-xs">
           {product.attributes.map((attribute, idx) => (
             <Fragment key={idx}>
               <dt className="mr-1 hidden md:block">Size</dt>
               <dd className="mr-1 font-bold">{attribute.size.value}</dd>
-              <dt className="mr-1 md:hidden text-gray-300">|</dt>
+              <dt className="mr-1 text-gray-300 md:hidden">|</dt>
               <dt className="mr-1 hidden md:block">-</dt>
               <dt className="mr-1 hidden md:block">Color</dt>
               <dd className="font-bold">{attribute.color.value}</dd>
             </Fragment>
           ))}
         </dl>
-        <div className="flex items-center space-x-4 mt-4">
+        <div className="mt-4 flex items-center space-x-4">
           {/* delete from cart button */}
           <CartActionButton
             ariaLabel="decrement quantity"
@@ -127,7 +127,7 @@ const CartActionButton = ({
     <button
       aria-label={ariaLabel}
       onClick={onClick}
-      className="border-2 p-1 inline-block hover:border-black transition-colors duration-150 ease-in-out"
+      className="inline-block border-2 p-1 transition-colors duration-150 ease-in-out hover:border-black"
     >
       {children}
     </button>

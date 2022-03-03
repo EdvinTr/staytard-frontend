@@ -2,22 +2,22 @@ import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
-import MyMetaTags from "../../components/global/MyMetaTags";
+import { MyMetaTags } from "../../components/global/MyMetaTags";
 import { ProductReviewsDisplay } from "../../components/pages/product/ProductReviewsDisplay";
 import { APP_NAME } from "../../constants";
-import CartContext from "../../contexts/CartContext";
+import { useCart } from "../../hooks/useCart";
 import {
   FindOneProductQuery,
   Product_Review_Sort_By,
   PublishedProductReviewsQuery,
-  Sort_Direction,
+  Sort_Direction
 } from "../../lib/graphql";
 import { ssrFindOneProduct, ssrPublishedProductReviews } from "../../lib/page";
 SwiperCore.use([Pagination]);
@@ -39,7 +39,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
   const currentPath = router.pathname;
   const queryColor = router.query.color;
 
-  const { addToCart: addToContextCart } = useContext(CartContext);
+  const { addToCart: addToCartStore } = useCart();
 
   useEffect(() => {
     // ? what is dis code dude?
@@ -52,11 +52,6 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
       setSelectedSize(product.attributes[0].size.value);
     }
   }, [queryColor, product.attributes]);
-  /*  if (!queryColor) {
-    router.push(
-      `/${APP_PAGE_ROUTE.PRODUCT}/${product.id}?color=${product.attributes[0].color.value}`
-    );
-  } */
 
   const addToCart = () => {
     const sku = product.attributes.find((attr) => {
@@ -67,7 +62,8 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
     if (!sku) {
       return; // TODO: show error of some sort
     }
-    addToContextCart({
+
+    addToCartStore({
       sku,
       quantity: 1,
       price: product.currentPrice,

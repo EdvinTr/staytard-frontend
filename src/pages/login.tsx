@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
-import MyMetaTags from "../components/global/MyMetaTags";
+import { MyMetaTags } from "../components/global/MyMetaTags";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";

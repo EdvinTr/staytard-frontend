@@ -1,9 +1,9 @@
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import Image from "next/image";
-import React, { Fragment, useContext, useMemo, useState } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
-import CartContext from "../../../contexts/CartContext";
+import { useCart } from "../../../hooks/useCart";
 import { useFindProductsBySkusQuery } from "../../../lib/graphql";
 import { CreateStripeSessionResponse } from "../../../typings/StripeSessionResponse.interface";
 
@@ -41,7 +41,7 @@ interface StripeOrderLine {
 }
 
 const PayWithStripeComponent = () => {
-  const { cart, totalCartPrice, resetCart } = useContext(CartContext);
+  const { cart, totalPrice, resetCart } = useCart();
   const { data: cartProducts } = useFindProductsBySkusQuery({
     variables: {
       input: { limit: 50, offset: 0, skus: cart.map((item) => item.sku) },
@@ -131,7 +131,7 @@ const PayWithStripeComponent = () => {
               </>
             )}
             <div className="w-24 rounded-r-lg bg-[#555177] py-4  font-medium">
-              €{totalCartPrice}
+              €{totalPrice}
             </div>
           </button>
           <div className="text-center">

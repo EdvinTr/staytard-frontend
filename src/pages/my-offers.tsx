@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
-import MyMetaTags from "../components/global/MyMetaTags";
+import { MyMetaTags } from "../components/global/MyMetaTags";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";

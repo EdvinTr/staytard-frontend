@@ -3,12 +3,12 @@ import { MenuIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useScrollDirection } from "react-use-scroll-direction";
 import { useRecoilState } from "recoil";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
-import CartContext from "../../contexts/CartContext";
+import { useCart } from "../../hooks/useCart";
 import {
   GetCategoriesQuery,
   useGetCategoriesQuery,
@@ -42,7 +42,7 @@ export const Navbar = () => {
   const { data: categoriesData, loading: categoriesLoading } =
     useGetCategoriesQuery();
   const { data: userData } = useMeQuery();
-  const { totalItems: totalCartItems } = useContext(CartContext);
+  const { totalItems: totalCartItems } = useCart();
   const currentWindowWidth = useWindowWidth();
 
   useEffect(() => {

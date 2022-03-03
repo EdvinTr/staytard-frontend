@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import CartContext from "../../../contexts/CartContext";
+import React from "react";
+import { useCart } from "../../../hooks/useCart";
 import { useFindProductsBySkusQuery } from "../../../lib/graphql";
 import { CartItemRow } from "./CartItemRow";
 interface CartItemListProps {}
 
 export const CartItemList: React.FC<CartItemListProps> = ({}) => {
-  const { cart, addToCart, removeFromCart } = useContext(CartContext);
+  const { cart } = useCart();
 
   const { data: cartProducts } = useFindProductsBySkusQuery({
     variables: {
