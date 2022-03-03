@@ -19,7 +19,7 @@ import { mobileMenuState } from "../../store/mobileMenuState";
 import { FadeInContainer } from "../global/FadeInContainer";
 import { MyCartIcon, MyUserIcon } from "../global/icons/Icons";
 import { MyContainer } from "../global/MyContainer";
-import { HoverMenu } from "./category-popover/HoverMenu";
+import { HoverMenu } from "./hover-menu/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
 import { SearchModal } from "./SearchModal";
 

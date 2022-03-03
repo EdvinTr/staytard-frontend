@@ -14,7 +14,7 @@ interface GenerateMetaTagProps {
 }
 export const MyMetaTags = ({
   title = "",
-  description = "",
+  description,
   keywords = "",
   productMeta,
   image,
@@ -27,7 +27,21 @@ export const MyMetaTags = ({
       <meta charSet="utf-8" />
 
       <title key="title">{title}</title>
-      <meta name="description" content={description} key="description" />
+      {description && (
+        <>
+          <meta name="description" content={description} key="description" />
+          <meta
+            property="og:description"
+            content={description}
+            key="ogDescription"
+          />
+          <meta
+            name="twitter:description"
+            content={description}
+            key="twitterDescription"
+          />
+        </>
+      )}
       <meta name="keywords" content={keywords} key="keywords" />
 
       <meta property="og:title" content={title} key="ogTitle" />
@@ -36,19 +50,11 @@ export const MyMetaTags = ({
         content={image || "/img/staytard-logo.png"}
         key="ogImage"
       />
-      <meta
-        property="og:description"
-        content={description}
-        key="ogDescription"
-      />
+
       <meta property="og:type" content="website" key="type" />
 
       <meta name="twitter:title" content={title} key="twitterTitle" />
-      <meta
-        name="twitter:description"
-        content={description}
-        key="twitterDescription"
-      />
+
       <meta name="twitter:image" content={image} key="twitterImage" />
       <meta name="twitter:card" content="summary_large_image" key="card" />
 

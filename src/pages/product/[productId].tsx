@@ -31,7 +31,6 @@ interface SelectOption {
   value: string;
 }
 
-// TODO: add meta tags and OG tags
 const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
   const [selectedSize, setSelectedSize] = useState<null | string>(null);
   const router = useRouter();
@@ -60,7 +59,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
       );
     })?.sku;
     if (!sku) {
-      return; // TODO: show error of some sort
+      return;
     }
 
     addToCartStore({

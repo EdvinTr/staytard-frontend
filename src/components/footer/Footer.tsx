@@ -37,7 +37,6 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </div>
           </div>
         </section>
-
         {/* customer service section*/}
         <section className="text-staytard-dark bg-[#ebebeb] ">
           <div className="mx-auto max-w-3xl space-y-8 py-12 text-center text-xl md:grid md:grid-cols-3 md:space-y-0 md:text-sm xl:py-7 ">
@@ -94,30 +93,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
               </a>
             </Link>
           </article>
-          {windowWidth <= 1024 ? (
-            /* accordions on device < lg */
-            <div>
-              {footerItems.map(({ listItems, title }, idx, arr) => {
-                const isLastItem = idx === arr.length - 1;
-                return (
-                  <Accordion
-                    title={title}
-                    key={idx}
-                    buttonClassName="py-5 px-8"
-                    className={`${isLastItem && "border-b border-opacity-10"}`}
-                  >
-                    <Accordion.Body>
-                      <ul className="space-y-5 px-14 pb-6">
-                        {listItems.map((item, idx) => (
-                          <li key={idx}>{item}</li>
-                        ))}
-                      </ul>
-                    </Accordion.Body>
-                  </Accordion>
-                );
-              })}
-            </div>
-          ) : (
+          {windowWidth >= 1024 ? (
             /* large device grid */
             <div className="flex justify-center">
               <div>
@@ -144,6 +120,29 @@ export const Footer: React.FC<FooterProps> = ({}) => {
                 </ul>
               </div>
             </div>
+          ) : (
+            /* accordions on device < lg */
+            <div>
+              {footerItems.map(({ listItems, title }, idx, arr) => {
+                const isLastItem = idx === arr.length - 1;
+                return (
+                  <Accordion
+                    title={title}
+                    key={idx}
+                    buttonClassName="py-5 px-8"
+                    className={`${isLastItem && "border-b border-opacity-10"}`}
+                  >
+                    <Accordion.Body>
+                      <ul className="space-y-5 px-14 pb-6">
+                        {listItems.map((item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ))}
+                      </ul>
+                    </Accordion.Body>
+                  </Accordion>
+                );
+              })}
+            </div>
           )}
         </div>
         <div className="mt-20 border-t border-white border-opacity-10 px-12">
@@ -162,7 +161,6 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </div>
           </div>
         </div>
-
         <div className="text-center">
           <a
             className="text-xs text-blue-600 hover:text-blue-700"

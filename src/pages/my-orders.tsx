@@ -10,7 +10,7 @@ import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuar
 const MyOrders: NextPage = () => {
   return (
     <div>
-      <MyMetaTags title={`${APP_NAME}.com`} />
+      <MyMetaTags title={`My orders | ${APP_NAME}`} />
       <AppHeader />
       <UserSettingsNavbar />
       <section>

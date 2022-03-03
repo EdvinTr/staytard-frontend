@@ -8,7 +8,10 @@ export const MyContainer: React.FC<MyContainerProps> = ({
   ...props
 }) => {
   return (
-    <div {...props} className={"container mx-auto px-4 " + className}>
+    <div
+      {...props}
+      className={`container mx-auto px-4 ${className ? className : ""}`}
+    >
       {children}
     </div>
   );

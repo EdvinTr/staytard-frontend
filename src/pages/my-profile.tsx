@@ -11,7 +11,7 @@ import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuar
 const MyProfile: NextPage = () => {
   return (
     <Fragment>
-      <MyMetaTags title={`${APP_NAME}.com`} />
+      <MyMetaTags title={`My profile | ${APP_NAME}`} />
       <AppHeader />
       <UserSettingsNavbar />
       <FadeInContainer duration={0.7}>

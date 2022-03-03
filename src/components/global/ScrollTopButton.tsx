@@ -12,7 +12,6 @@ export const ScrollTopButton: React.FC<ScrollTopButtonProps> = ({}) => {
   };
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };

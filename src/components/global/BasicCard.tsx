@@ -6,12 +6,13 @@ interface BasicCardProps
     HTMLDivElement
   > {}
 
-export const BasicCard: React.FC<BasicCardProps> = ({ children, ...props }) => {
+export const BasicCard: React.FC<BasicCardProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <div
-      {...props}
-      className={`shadow-md  ${props.className ? props.className : ""}`}
-    >
+    <div {...props} className={`shadow-md ${className ? className : ""}`}>
       {children}
     </div>
   );

@@ -112,7 +112,6 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
       onSuccess();
     } catch (err) {
       // TODO: show error when backend is offline
-      console.log("REGISTER ERROR:", err);
     }
   };
 
@@ -193,7 +192,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         <button
           type="button"
           onClick={() => setIsPasswordShown(!isPasswordShown)}
-          className="absolute top-4 right-10 text-13 font-light"
+          className="text-13 absolute top-4 right-10 font-light"
         >
           {isPasswordShown ? "Hide" : "Show"}
         </button>
@@ -377,7 +376,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         )}
       </div>
       {registerUserError && (
-        <div className="text-red-600 text-13 bg-red-50 p-4 mt-4">
+        <div className="text-13 mt-4 bg-red-50 p-4 text-red-600">
           <div data-cy="registration-failed-error">
             {registerUserError.message}
           </div>

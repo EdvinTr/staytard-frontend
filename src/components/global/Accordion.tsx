@@ -25,7 +25,7 @@ export const Accordion: React.FC<AccordionProps> & {
   return (
     <div
       {...rest}
-      onMouseEnter={() => setIsHovered(true)} // TODO: refactor with useCallback?
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div

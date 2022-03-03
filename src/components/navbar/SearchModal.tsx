@@ -62,9 +62,9 @@ export const SearchModal = ({ onClose, show }: SearchModalProps) => {
           </button>
         </form>
         {/* search results */}
-        {data && data.searchProducts.length > 0 && (
+        {data && data.searchProducts.length && (
           <div className="mt-6 space-y-6">
-            {data?.searchProducts.map((prod, idx) => {
+            {data.searchProducts.map((prod, idx) => {
               return (
                 <Link href={`${APP_PAGE_ROUTE.PRODUCT}/${prod.id}`} key={idx}>
                   <a
