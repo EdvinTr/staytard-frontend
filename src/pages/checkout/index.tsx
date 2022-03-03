@@ -11,6 +11,7 @@ import { AppHeader } from "../../components/global/AppHeader";
 import { CenteredBeatLoader } from "../../components/global/CenteredBeatLoader";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
+import { RampingCounter } from "../../components/global/RampingCounter";
 import { RegisterForm } from "../../components/register-form/RegisterForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import CartContext from "../../contexts/CartContext";
@@ -27,6 +28,7 @@ const CheckoutPage: NextPage = () => {
   if (totalItems === 0) {
     return <NoItemsInCartComponent />;
   }
+
   return (
     <Fragment>
       <AppHeader />
@@ -42,7 +44,10 @@ const CheckoutPage: NextPage = () => {
             <div className="md:bg-staytard-light-gray mt-8 md:px-8 md:py-4">
               <div className="flex justify-between font-bold">
                 <div className="text-13 uppercase">Your products</div>
-                <div>{totalCartPrice} EUR</div>
+                <RampingCounter to={totalCartPrice} from={0} duration={0.5}>
+                  {" "}
+                  EUR
+                </RampingCounter>
               </div>
               <div className="text-13 flex w-full space-x-3 py-4 md:py-2">
                 <button className="border-staytard-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
