@@ -1,13 +1,33 @@
-import React from "react";
-import { useCart } from "../../../hooks/useCart";
+import { motion } from "framer-motion";
+import React, { useContext } from "react";
+import CartContext from "../../../contexts/CartContext";
 import { useFindProductsBySkusQuery } from "../../../lib/graphql";
+import { CenteredBeatLoader } from "../../global/CenteredBeatLoader";
 import { CartItemRow } from "./CartItemRow";
 interface CartItemListProps {}
 
-export const CartItemList: React.FC<CartItemListProps> = ({}) => {
-  const { cart } = useCart();
+const containerVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+const variantItem = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
 
-  const { data: cartProducts } = useFindProductsBySkusQuery({
+export const CartItemList: React.FC<CartItemListProps> = ({}) => {
+  const { cart } = useContext(CartContext);
+
+  const {
+    data: cartProducts,
+    loading,
+    previousData,
+  } = useFindProductsBySkusQuery({
     variables: {
       input: { limit: 50, offset: 0, skus: cart.map((item) => item.sku) },
     },
@@ -15,10 +35,25 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
 
   return (
     <div className="">
-      <div className="space-y-8">
-        {cartProducts?.productsBySku.items.map((cartItem, idx) => (
-          <CartItemRow product={cartItem} key={idx} />
-        ))}
+      <div className="">
+        {loading && (
+          <>
+            {previousData?.productsBySku.items.map((cartItem, idx) => (
+              <CartItemRow product={cartItem} key={idx} loading={loading} />
+            ))}
+            <CenteredBeatLoader />
+          </>
+        )}
+        <motion.div
+          variants={containerVariant}
+          initial="hidden"
+          animate="visible"
+          className="space-y-8"
+        >
+          {cartProducts?.productsBySku.items.map((cartItem, idx) => (
+            <CartItemRow product={cartItem} key={idx} variants={variantItem} />
+          ))}
+        </motion.div>
       </div>
     </div>
   );

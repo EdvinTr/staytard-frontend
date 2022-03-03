@@ -1,36 +1,42 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/solid";
+import { HTMLMotionProps, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
-import { useCart } from "../../../hooks/useCart";
+import CartContext from "../../../contexts/CartContext";
 import { FindProductsBySkusQuery } from "../../../lib/graphql";
 
-interface CartItemRowProps {
+interface CartItemRowProps extends HTMLMotionProps<"div"> {
   product: FindProductsBySkusQuery["productsBySku"]["items"][0];
+  loading?: boolean;
 }
 
-export const CartItemRow = ({ product }: CartItemRowProps) => {
-  const { cart, addToCart, removeFromCart } = useCart();
+export const CartItemRow = ({
+  product,
+  loading,
+  ...props
+}: CartItemRowProps) => {
+  const { cart, addToCart, removeFromCart } = useContext(CartContext);
 
   // TODO: place this in cart context
   const getQuantityFromCartBySku = (sku: string): number => {
     const cartItem = cart.find((item) => item.sku === sku);
     if (!cartItem) {
-      return 0; // TODO: if item is not in cart, return 1 or 0?
+      return 0;
     }
     return cartItem.quantity;
   };
 
   return (
-    <div className="text-13 flex space-x-4">
+    <motion.div {...props} className="text-13 flex space-x-4">
       <Image
         src={product.images[0].imageUrl.replace("{size}", "120")}
         width={110}
         height={150}
         priority
         alt={`${product.brand.name} - ${product.name}`}
-        className="w-4"
+        className={`w-4 ${loading ? "opacity-60" : ""}`}
       />
       <div className="w-full">
         <div className="flex items-start justify-between">
@@ -110,7 +116,7 @@ export const CartItemRow = ({ product }: CartItemRowProps) => {
           </CartActionButton>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

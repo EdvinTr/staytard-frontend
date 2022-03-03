@@ -1,28 +1,32 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { CartItemList } from "../../components/checkout/cart/CartItemList";
 import { StepBadge } from "../../components/checkout/cart/StepBadge";
 import { CustomerInformation } from "../../components/checkout/customer-information/CustomerInformation";
 import { PaymentOptionsGroup } from "../../components/checkout/payment-options/PaymentOptionsGroup";
 import { UpdateUserAddressInputGroup } from "../../components/checkout/update-address/UpdateUserAddressInputGroup";
 import { AppHeader } from "../../components/global/AppHeader";
+import { CenteredBeatLoader } from "../../components/global/CenteredBeatLoader";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
 import { RegisterForm } from "../../components/register-form/RegisterForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
-import { useCart } from "../../hooks/useCart";
+import CartContext from "../../contexts/CartContext";
 import { useMeQuery } from "../../lib/graphql";
 
 const CheckoutPage: NextPage = () => {
-  const { data: meData } = useMeQuery();
-  const { totalPrice: totalCartPrice, totalItems } = useCart();
+  const { data: meData, loading } = useMeQuery();
+  const { totalCartPrice, totalItems } = useContext(CartContext);
+
+  if (loading) {
+    return <CenteredBeatLoader />;
+  }
 
   if (totalItems === 0) {
     return <NoItemsInCartComponent />;
   }
-
   return (
     <Fragment>
       <AppHeader />
