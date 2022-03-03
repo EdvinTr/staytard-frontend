@@ -12,7 +12,7 @@ interface GenerateMetaTagProps {
     currency: string;
   };
 }
-export default ({
+export const MyMetaTags = ({
   title = "",
   description = "",
   keywords = "",

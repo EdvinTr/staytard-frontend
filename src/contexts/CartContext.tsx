@@ -63,6 +63,16 @@ export const CartProvider = ({ children }: any) => {
 
   const getTotalCartPrice = (): number => {
     return cart.reduce((acc, item) => {
+      if (
+        !item.price ||
+        !item.quantity ||
+        item.price < 0 ||
+        item.quantity < 0 ||
+        isNaN(item.price) ||
+        isNaN(item.quantity)
+      ) {
+        return acc;
+      }
       return acc + item.price * item.quantity;
     }, 0);
   };

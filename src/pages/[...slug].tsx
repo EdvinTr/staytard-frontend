@@ -8,7 +8,7 @@ import { SWRConfig } from "swr";
 import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/global/MyContainer";
-import MyMetaTags from "../components/global/MyMetaTags";
+import { MyMetaTags } from "../components/global/MyMetaTags";
 import { ScrollTopButton } from "../components/global/ScrollTopButton";
 import {
   getSortString,

@@ -8,6 +8,7 @@ import { CustomerInformation } from "../../components/checkout/customer-informat
 import { PaymentOptionsGroup } from "../../components/checkout/payment-options/PaymentOptionsGroup";
 import { UpdateUserAddressInputGroup } from "../../components/checkout/update-address/UpdateUserAddressInputGroup";
 import { AppHeader } from "../../components/global/AppHeader";
+import { CenteredBeatLoader } from "../../components/global/CenteredBeatLoader";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
 import { RegisterForm } from "../../components/register-form/RegisterForm";
@@ -16,13 +17,16 @@ import CartContext from "../../contexts/CartContext";
 import { useMeQuery } from "../../lib/graphql";
 
 const CheckoutPage: NextPage = () => {
-  const { data: meData } = useMeQuery();
+  const { data: meData, loading } = useMeQuery();
   const { totalCartPrice, totalItems } = useContext(CartContext);
+
+  if (loading) {
+    return <CenteredBeatLoader />;
+  }
 
   if (totalItems === 0) {
     return <NoItemsInCartComponent />;
   }
-
   return (
     <Fragment>
       <AppHeader />
