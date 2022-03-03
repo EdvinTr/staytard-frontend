@@ -35,26 +35,24 @@ export const CartItemList: React.FC<CartItemListProps> = ({}) => {
 
   return (
     <div className="">
-      <div className="">
-        {loading && (
-          <>
-            {previousData?.productsBySku.items.map((cartItem, idx) => (
-              <CartItemRow product={cartItem} key={idx} loading={loading} />
-            ))}
-            <CenteredBeatLoader />
-          </>
-        )}
-        <motion.div
-          variants={containerVariant}
-          initial="hidden"
-          animate="visible"
-          className="space-y-8"
-        >
-          {cartProducts?.productsBySku.items.map((cartItem, idx) => (
-            <CartItemRow product={cartItem} key={idx} variants={variantItem} />
+      {loading && (
+        <>
+          {previousData?.productsBySku.items.map((cartItem, idx) => (
+            <CartItemRow product={cartItem} key={idx} loading={loading} />
           ))}
-        </motion.div>
-      </div>
+          <CenteredBeatLoader />
+        </>
+      )}
+      <motion.div
+        variants={containerVariant}
+        initial="hidden"
+        animate="visible"
+        className="space-y-8"
+      >
+        {cartProducts?.productsBySku.items.map((cartItem, idx) => (
+          <CartItemRow product={cartItem} key={idx} variants={variantItem} />
+        ))}
+      </motion.div>
     </div>
   );
 };

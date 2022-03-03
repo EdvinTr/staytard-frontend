@@ -1,14 +1,14 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { OrderSuccessDisplay } from "../../../components/global/OrderSuccessDisplay";
-import { useCart } from "../../../hooks/useCart";
+import CartContext from "../../../contexts/CartContext";
 import { useCreateOrGetCustomerOrderWithStripeMutation } from "../../../lib/graphql";
 const OrderSuccessPage: NextPage = () => {
   const router = useRouter();
   const sessionId = router.query.session_id;
 
-  const { resetCart } = useCart();
+  const { resetCart } = useContext(CartContext);
   const [createOrderWithStripe, { loading, error, data }] =
     useCreateOrGetCustomerOrderWithStripeMutation({
       notifyOnNetworkStatusChange: true,

@@ -1,9 +1,9 @@
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import Image from "next/image";
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useContext, useMemo, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
-import { useCart } from "../../../hooks/useCart";
+import CartContext from "../../../contexts/CartContext";
 import { useFindProductsBySkusQuery } from "../../../lib/graphql";
 import { CreateStripeSessionResponse } from "../../../typings/StripeSessionResponse.interface";
 
@@ -41,7 +41,7 @@ interface StripeOrderLine {
 }
 
 const PayWithStripeComponent = () => {
-  const { cart, totalPrice, resetCart } = useCart();
+  const { cart, totalCartPrice: totalPrice } = useContext(CartContext);
   const { data: cartProducts } = useFindProductsBySkusQuery({
     variables: {
       input: { limit: 50, offset: 0, skus: cart.map((item) => item.sku) },
