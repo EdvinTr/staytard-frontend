@@ -94,7 +94,6 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </Link>
           </article>
           {windowWidth >= 1024 ? (
-            /* large device grid */
             <div className="flex justify-center">
               <div>
                 <ul className="grid grid-cols-4 gap-x-32 px-12">
@@ -121,7 +120,6 @@ export const Footer: React.FC<FooterProps> = ({}) => {
               </div>
             </div>
           ) : (
-            /* accordions on device < lg */
             <div>
               {footerItems.map(({ listItems, title }, idx, arr) => {
                 const isLastItem = idx === arr.length - 1;
@@ -152,8 +150,8 @@ export const Footer: React.FC<FooterProps> = ({}) => {
                 {APP_NAME}
               </a>
             </Link>
-            {/* social media icons */}
             <div className="flex items-center justify-center space-x-12">
+              {/* social media icons */}
               <InstagramIcon />
               <FacebookIcon />
               <TikTokIcon />

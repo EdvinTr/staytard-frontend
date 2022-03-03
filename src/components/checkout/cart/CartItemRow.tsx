@@ -92,18 +92,18 @@ export const CartItemRow = ({
         <div className="mt-4 flex items-center space-x-4">
           {/* delete from cart button */}
           <CartActionButton
-            ariaLabel="decrement quantity"
+            ariaLabel="Decrement quantity"
             onClick={() => removeFromCart(product.attributes[0].sku)}
           >
             <MinusIcon className="w-4" />
           </CartActionButton>
-          <div className="font-bold">
+          <p className="w-3 text-center font-bold">
             {cart.find((i) => i.sku === product.attributes[0].sku)?.quantity}
-          </div>
+          </p>
           {/* increment quantity button */}
 
           <CartActionButton
-            ariaLabel="increment quantity"
+            ariaLabel="Increment quantity"
             onClick={() =>
               addToCart({
                 quantity: 1,
