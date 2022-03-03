@@ -3,6 +3,7 @@ import { XIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import CSS from "csstype";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
@@ -160,31 +161,39 @@ export const MobileNavbar = () => {
                         >
                           <div>
                             {category.name === MAIN_CATEGORY.CLOTHES && (
-                              <img
+                              <Image
                                 src="/img/mobile-menu/nav-clothes.webp"
                                 alt={category.name}
-                                className="w-full"
+                                objectFit="contain"
+                                width={580}
+                                height={194}
                               />
                             )}
                             {category.name === MAIN_CATEGORY.SHOES && (
-                              <img
+                              <Image
                                 src="/img/mobile-menu/nav-shoes.webp"
                                 alt={category.name}
-                                className="w-full"
+                                objectFit="contain"
+                                width={580}
+                                height={194}
                               />
                             )}
                             {category.name === MAIN_CATEGORY.ACCESSORIES && (
-                              <img
+                              <Image
                                 src="/img/mobile-menu/nav-accessories.webp"
                                 alt={category.name}
-                                className="w-full"
+                                objectFit="contain"
+                                width={580}
+                                height={194}
                               />
                             )}
                             {category.name === MAIN_CATEGORY.LIFESTYLE && (
-                              <img
+                              <Image
                                 src="/img/mobile-menu/nav-lifestyle.webp"
                                 alt={category.name}
-                                className="w-full"
+                                objectFit="contain"
+                                width={580}
+                                height={194}
                               />
                             )}
                             <ImageText
@@ -227,10 +236,12 @@ export const MobileNavbar = () => {
               <div className="relative">
                 <Link href={APP_PAGE_ROUTE.BRAND}>
                   <a onClick={closeMenu()}>
-                    <img
+                    <Image
                       src="/img/mobile-menu/nav-brands.webp"
                       alt="Brands"
-                      className="w-full"
+                      objectFit="contain"
+                      width={580}
+                      height={194}
                     />
                     <ImageText
                       text="Brands A-Z"

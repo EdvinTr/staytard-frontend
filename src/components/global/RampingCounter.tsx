@@ -21,7 +21,7 @@ export const RampingCounter: React.FC<RampingCounterProps> = ({
       },
     });
     return () => controls.stop();
-  }, [from, to]);
+  }, [from, to, duration]);
 
   return (
     <div>
