@@ -1,6 +1,6 @@
 import { FieldAttributes, useField } from "formik";
-import { editInputClassNames } from "../../../../constants";
-import { BaseInput, BaseInputProps } from "../../../global/BaseInput";
+import { editInputClassNames } from "../../constants";
+import { BaseInput, BaseInputProps } from "./BaseInput";
 
 type CustomInputFieldProps = BaseInputProps & FieldAttributes<{}>;
 export const CustomInputField: React.FC<CustomInputFieldProps> = ({

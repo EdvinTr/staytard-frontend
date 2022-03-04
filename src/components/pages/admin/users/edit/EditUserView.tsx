@@ -19,9 +19,9 @@ import { Localized } from "../../../../../Localized";
 import { updateUserValidationSchema } from "../../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
 import { BaseInput } from "../../../../global/BaseInput";
+import { CustomInputField } from "../../../../global/CustomInputField";
 import { DeleteButton } from "../../../../global/DeleteButton";
 import { ConfirmDeletionModal } from "../../components/ConfirmDeletionModal";
-import { CustomInputField } from "../../components/CustomInputField";
 import {
   BasicInputLabel,
   DisabledInput,

@@ -12,8 +12,8 @@ import {
 import { Localized } from "../../../Localized";
 import { passwordValidation } from "../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../global/BaseButton";
+import { CustomInputField } from "../../global/CustomInputField";
 import { MyCheckbox } from "../../global/MyCheckbox";
-import { CustomInputField } from "../../pages/admin/components/CustomInputField";
 
 const { passwordInputErrorMessage } = Localized.page.register;
 

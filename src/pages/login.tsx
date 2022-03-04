@@ -14,19 +14,12 @@ import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 const LoginPage: NextPage = () => {
   const router = useRouter();
   const apolloClient = useApolloClient();
+  const [loginUser, { error: loginError }] = useLoginUserMutation();
 
-  const [loginUser, { loading: isLoginUserLoading, error: loginUserGqlError }] =
-    useLoginUserMutation();
-
-  const onFormSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    { email, password }: LoginUserDto,
-    hasUnresolvedFieldErrors: boolean
-  ): Promise<void> => {
-    e.preventDefault();
-    if (hasUnresolvedFieldErrors || isLoginUserLoading) {
-      return;
-    }
+  const onFormSubmit = async ({
+    email,
+    password,
+  }: LoginUserDto): Promise<void> => {
     try {
       await apolloClient.resetStore();
       const { data } = await loginUser({
@@ -40,7 +33,6 @@ const LoginPage: NextPage = () => {
       if (!data || !data.login) {
         throw new Error();
       }
-
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
@@ -52,20 +44,13 @@ const LoginPage: NextPage = () => {
         <MyMetaTags title={`${APP_NAME} - Log in`} />
         <FadeInContainer>
           <div className="pt-10 text-center">
-            {/* page titles */}
             <div className="space-y-6">
               <h1 className="text-2xl">Log in to {APP_NAME}.com</h1>
               <h2 className="text-13 font-light">
                 Log in by filling in your e-mail address and password
               </h2>
             </div>
-            {/* form */}
-            <LoginForm
-              isSubmitting={isLoginUserLoading}
-              loginError={loginUserGqlError?.message}
-              onSubmit={onFormSubmit}
-            />
-            {/* divider */}
+            <LoginForm onSubmit={onFormSubmit} loginError={!!loginError} />
             <div className="flex items-center justify-center py-4">
               <div className="h-[1px] w-1/2 bg-black opacity-20"></div>
               <span className="px-8 text-sm opacity-75">or</span>
@@ -73,8 +58,6 @@ const LoginPage: NextPage = () => {
             </div>
             <LoginWithGoogleButton className="mb-7" />
             <div className="mb-6 h-[1px] w-full bg-black bg-opacity-10"></div>
-
-            {/* register link */}
             <Link href={APP_PAGE_ROUTE.REGISTER}>
               <a className="block w-full border  border-black border-opacity-40 p-4 text-sm  hover:ring-1 hover:ring-black">
                 New customer

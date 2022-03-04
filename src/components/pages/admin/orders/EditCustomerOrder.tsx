@@ -26,7 +26,7 @@ import {
   postalCodeValidation,
 } from "../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../global/BaseButton";
-import { CustomInputField } from "../components/CustomInputField";
+import { CustomInputField } from "../../../global/CustomInputField";
 import { MyListBox } from "../products/components/CreateProductModal";
 import {
   BasicInputLabel,
