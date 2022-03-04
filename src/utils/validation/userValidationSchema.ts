@@ -76,13 +76,13 @@ export const cityValidation = Yup.string()
   .matches(containsLettersRegex, cityInputValidationErrorMessage);
 
 export const updateUserValidationSchema = Yup.object().shape({
-  firstName: firstNameValidation,
-  lastNameValidation: lastNameValidation,
-  email: emailValidation,
-  mobilePhoneNumber: mobilePhoneNumberValidation,
-  street: streetAddressValidation,
-  postalCode: postalCodeValidation,
-  city: cityValidation,
+  firstName: firstNameValidation.required("Required"),
+  lastNameValidation: lastNameValidation.required("Required"),
+  email: emailValidation.required("Required"),
+  mobilePhoneNumber: mobilePhoneNumberValidation.required("Required"),
+  street: streetAddressValidation.required("Required"),
+  postalCode: postalCodeValidation.required("Required"),
+  city: cityValidation.required("Required"),
 });
 
 export const registerUserValidationSchema = Yup.object().shape({
