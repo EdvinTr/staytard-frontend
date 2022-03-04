@@ -12,7 +12,7 @@ import { CenteredBeatLoader } from "../../components/global/CenteredBeatLoader";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
 import { RampingCounter } from "../../components/global/RampingCounter";
-import { RegisterForm } from "../../components/register-form/RegisterForm";
+import { RegisterForm } from "../../components/register-form/RegisterFormOld";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import { useMeQuery } from "../../lib/graphql";

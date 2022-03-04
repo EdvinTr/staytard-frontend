@@ -6,11 +6,29 @@ import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
 import { FormContainer } from "../components/register-form/FormContainer";
 import { RegisterForm } from "../components/register-form/RegisterForm";
-import { RegisterForm as RegisterFormRefactored } from "../components/register-form/RegisterFormRefactored";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
+import { RegisterUserDto, useRegisterUserMutation } from "../lib/graphql";
 const RegisterPage: NextPage = () => {
   const router = useRouter();
 
+  const [registerUser, { error: registerUserError, client }] =
+    useRegisterUserMutation();
+  const onFormSubmit = async (values: RegisterUserDto) => {
+    try {
+      const { data } = await registerUser({
+        variables: {
+          input: {
+            ...values,
+          },
+        },
+      });
+      if (!data || !data.registerUser) {
+        throw new Error();
+      }
+      await client.resetStore();
+      await router.push(APP_PAGE_ROUTE.INDEX);
+    } catch {}
+  };
   return (
     <Fragment>
       <MyMetaTags title={`${APP_NAME} - Register`} />
@@ -18,20 +36,17 @@ const RegisterPage: NextPage = () => {
       <FadeInContainer className="min-h-screen">
         <FormContainer className="text-center">
           <div>
-            <div className="space-y-6 pt-10">
+            <div className="space-y-6 pt-10 pb-4">
               <h1 className="text-2xl">Register</h1>
               <h2 className="text-13">
                 Fill in the information below to register an account with{" "}
                 {APP_NAME}.
               </h2>
             </div>
-            <RegisterForm onSuccess={() => router.push(APP_PAGE_ROUTE.INDEX)} />
-
-            <div className="mt-40">
-              <RegisterFormRefactored
-                onSuccess={() => console.log("success")}
-              />
-            </div>
+            <RegisterForm
+              onSubmit={onFormSubmit}
+              errorMessage={registerUserError?.message}
+            />
           </div>
         </FormContainer>
       </FadeInContainer>

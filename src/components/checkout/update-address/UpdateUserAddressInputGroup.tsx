@@ -6,7 +6,7 @@ import {
   AddressInputField,
   CityInputField,
   ZipCodeInputField,
-} from "../../register-form/RegisterForm";
+} from "../../register-form/RegisterFormOld";
 import { InputState } from "../../register-form/types";
 
 const { updateUserAddressErrorMessage } = Localized.page.checkout;
@@ -76,7 +76,7 @@ export const UpdateUserAddressInputGroup = () => {
         </div>
       </div>
       {isShowErrorMessage && (
-        <span className="text-red-500 text-xs">
+        <span className="text-xs text-red-500">
           {updateUserAddressErrorMessage}
         </span>
       )}
