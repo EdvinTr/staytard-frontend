@@ -8,7 +8,7 @@ import { Form, Formik } from "formik";
 import React, { Fragment, useState } from "react";
 import * as Yup from "yup";
 import { Localized } from "../../Localized";
-import { emailRegex } from "../../utils/validation/userValidationSchema";
+import { emailRegex } from "../../utils/validation/regex";
 import { BaseButton } from "../global/BaseButton";
 import { CustomInputField } from "../global/CustomInputField";
 import { InputFieldErrorText } from "../global/InputFieldErrorText";
