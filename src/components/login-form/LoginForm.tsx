@@ -38,7 +38,6 @@ export const LoginForm = ({ onSubmit, loginError }: LoginFormProps) => {
   const [focusedInput, setFocusedInput] = useState<keyof FormValues | null>(
     null
   );
-
   return (
     <Formik
       onSubmit={async (values: FormValues, { setSubmitting }) => {

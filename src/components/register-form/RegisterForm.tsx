@@ -8,7 +8,6 @@ interface RegisterFormProps {
   onSubmit: (values: FormValues) => Promise<void>;
   errorMessage?: string;
 }
-
 interface FormValues {
   email: string;
   password: string;
@@ -112,7 +111,6 @@ export const RegisterForm = ({ onSubmit, errorMessage }: RegisterFormProps) => {
                 </InputFieldErrorText>
               )}
             </div>
-
             <div className="grid grid-cols-2 gap-x-3 ">
               <div>
                 <CustomInputField
@@ -170,32 +168,30 @@ export const RegisterForm = ({ onSubmit, errorMessage }: RegisterFormProps) => {
                 )}
               </div>
             </div>
-            <div>
-              <CustomInputField
-                name="street"
-                type="text"
-                data-cy="address-input"
-                aria-label="Address"
-                placeholder="Address"
-                required
-                label="Address"
-                className={hasFieldError(errors.street)}
-                errorMessage={errors.street}
-                hasError={!!errors.street && touched.street}
-                value={values.street}
-                isFocused={focusedInput === "street"}
-                onFocus={() => setFocusedInput("street")}
-                onBlur={() => setFocusedInput(null)}
-              />
-              {errors.street && (
-                <InputFieldErrorText
-                  data-cy="address-error-message"
-                  isInputFocused={focusedInput === "street"}
-                >
-                  {errors.street}
-                </InputFieldErrorText>
-              )}
-            </div>
+            <CustomInputField
+              name="street"
+              type="text"
+              data-cy="address-input"
+              aria-label="Address"
+              placeholder="Address"
+              required
+              label="Address"
+              className={hasFieldError(errors.street)}
+              errorMessage={errors.street}
+              hasError={!!errors.street && touched.street}
+              value={values.street}
+              isFocused={focusedInput === "street"}
+              onFocus={() => setFocusedInput("street")}
+              onBlur={() => setFocusedInput(null)}
+            />
+            {errors.street && (
+              <InputFieldErrorText
+                data-cy="address-error-message"
+                isInputFocused={focusedInput === "street"}
+              >
+                {errors.street}
+              </InputFieldErrorText>
+            )}
             <div className="grid grid-cols-2 gap-x-3 ">
               <div>
                 <CustomInputField
