@@ -1,11 +1,14 @@
 import * as Yup from "yup";
-import {
-  containsLettersRegex,
-  emailValidationRegex,
-  mobilePhoneNumber,
-} from "../../components/register-form/utils/validation";
 import { Localized } from "../../Localized";
-
+import {
+  addressRegex,
+  containsLettersRegex,
+  emailRegex,
+  emailValidationRegex,
+  mobilePhoneNumberRegex,
+  passwordRegex,
+  swedishPostalCodeRegex,
+} from "./regex";
 const {
   emailInputErrorMessage,
   phoneNumberValidationErrorMessage,
@@ -13,13 +16,13 @@ const {
   zipCodeValidationErrorMessage,
   addressValidationErrorMessage,
   passwordInputErrorMessage,
-  firstNameFieldErrorMessage,
 } = Localized.page.register;
 
 export const passwordValidation = Yup.string().matches(
-  /^((?=.*[a-zA-ZåäöæøÅÄÖÆØ])(?=.*[0-9]))[\S]{8,}$/,
+  passwordRegex,
   passwordInputErrorMessage
 );
+
 export const firstNameValidation = Yup.string()
   .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
   .min(2, "First name must be at least 2 character")
@@ -36,12 +39,8 @@ export const emailValidation = Yup.string().matches(
 );
 
 export const mobilePhoneNumberValidation = Yup.string().matches(
-  mobilePhoneNumber,
+  mobilePhoneNumberRegex,
   phoneNumberValidationErrorMessage
-);
-
-export const emailRegex = new RegExp(
-  /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/
 );
 
 export const addressValidationGenerator = (
@@ -53,20 +52,17 @@ export const addressValidationGenerator = (
       .required("Required")
       .min(1)
       .max(36)
-      .matches(new RegExp(/^[a-zA-ZåäöæøÅÄÖÆØ0-9\s]{1,36}$/), errorMessage),
+      .matches(addressRegex, errorMessage),
   };
 };
 
 export const streetAddressValidation = Yup.string()
   .min(1)
   .max(36)
-  .matches(
-    new RegExp(/^[a-zA-ZåäöæøÅÄÖÆØ0-9\s]{1,36}$/),
-    addressValidationErrorMessage
-  );
+  .matches(addressRegex, addressValidationErrorMessage);
 
 export const postalCodeValidation = Yup.string().matches(
-  /^[0-9]{3,3}\ ?[0-9]{2,2}$/,
+  swedishPostalCodeRegex,
   zipCodeValidationErrorMessage
 );
 

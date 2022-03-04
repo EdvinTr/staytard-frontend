@@ -21,9 +21,9 @@ import {
 } from "../../../../lib/graphql";
 import { Localized } from "../../../../Localized";
 import {
-  addressValidationGenerator,
   cityValidation,
   postalCodeValidation,
+  streetAddressValidation,
 } from "../../../../utils/validation/userValidationSchema";
 import { BaseButton } from "../../../global/BaseButton";
 import { CustomInputField } from "../../../global/CustomInputField";
@@ -40,12 +40,9 @@ interface EditCustomerOrderProps {
 const { updateCustomerOrderSuccessMessage } = Localized.page.admin;
 
 const validationSchema = Yup.object().shape({
-  ...cityValidation,
-  ...addressValidationGenerator(
-    "deliveryAddress",
-    "Use only letters and numbers. Max 36 characters."
-  ),
-  ...postalCodeValidation,
+  city: cityValidation,
+  deliveryAddress: streetAddressValidation,
+  postalCode: postalCodeValidation,
 });
 export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
   order,

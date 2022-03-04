@@ -32,7 +32,7 @@ export class Localized {
 
     checkout: {
       updateUserAddressErrorMessage:
-        "Could not update your address. Please try again later.",
+        "Your address could not be updated. Please try again.",
     },
     myProfile: {
       oldPasswordErrorMessage: "Enter your old password.",

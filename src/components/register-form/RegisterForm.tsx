@@ -1,25 +1,16 @@
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
+import { RegisterUserDto } from "../../lib/graphql";
 import { registerUserValidationSchema } from "../../utils/validation/userValidationSchema";
 import { BaseButton } from "../global/BaseButton";
 import { CustomInputField } from "../global/CustomInputField";
 import { InputFieldErrorText } from "../global/InputFieldErrorText";
 interface RegisterFormProps {
-  onSubmit: (values: FormValues) => Promise<void>;
+  onSubmit: (values: RegisterUserDto) => Promise<void>;
   errorMessage?: string;
+  containerClassName?: string;
 }
-interface FormValues {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  street: string;
-  postalCode: string;
-  city: string;
-  mobilePhoneNumber: string;
-}
-
-const hasFieldError = (value?: string) => {
+const hasFieldError = (value?: string): string => {
   return `${
     value
       ? "border-red-600 placeholder:text-red-600 focus:placeholder:text-sm"
@@ -27,11 +18,15 @@ const hasFieldError = (value?: string) => {
   } text-xs placeholder:text-xs`;
 };
 
-export const RegisterForm = ({ onSubmit, errorMessage }: RegisterFormProps) => {
+export const RegisterForm = ({
+  onSubmit,
+  errorMessage,
+  containerClassName,
+}: RegisterFormProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<null | keyof FormValues>(
-    null
-  );
+  const [focusedInput, setFocusedInput] = useState<
+    null | keyof RegisterUserDto
+  >(null);
   return (
     <Formik
       initialValues={{
@@ -44,7 +39,7 @@ export const RegisterForm = ({ onSubmit, errorMessage }: RegisterFormProps) => {
         city: "",
         mobilePhoneNumber: "",
       }}
-      onSubmit={async (values: FormValues, { setSubmitting }) => {
+      onSubmit={async (values: RegisterUserDto, { setSubmitting }) => {
         await onSubmit(values);
         setSubmitting(false);
       }}
@@ -53,7 +48,7 @@ export const RegisterForm = ({ onSubmit, errorMessage }: RegisterFormProps) => {
     >
       {({ values, errors, touched, isSubmitting, handleBlur }) => {
         return (
-          <Form>
+          <Form className={`${containerClassName ? containerClassName : ""}`}>
             <CustomInputField
               data-cy="email-input"
               type="email"

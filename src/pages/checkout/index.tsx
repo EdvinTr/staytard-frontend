@@ -12,15 +12,16 @@ import { CenteredBeatLoader } from "../../components/global/CenteredBeatLoader";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
 import { RampingCounter } from "../../components/global/RampingCounter";
-import { RegisterForm } from "../../components/register-form/RegisterFormOld";
+import { RegisterForm } from "../../components/register-form/RegisterForm";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import CartContext from "../../contexts/CartContext";
-import { useMeQuery } from "../../lib/graphql";
+import { useMeQuery, useRegisterUserMutation } from "../../lib/graphql";
 
 const CheckoutPage: NextPage = () => {
   const { data: meData, loading } = useMeQuery();
   const { totalCartPrice, totalItems } = useContext(CartContext);
-
+  const [registerUser, { client, error, error: registerUserError }] =
+    useRegisterUserMutation();
   if (loading) {
     return <CenteredBeatLoader />;
   }
@@ -69,10 +70,30 @@ const CheckoutPage: NextPage = () => {
               <div className="text-sm font-bold uppercase tracking-wider">
                 Your Information
               </div>
-              {!meData?.me && <RegisterForm onSuccess={() => {}} />}
+              {!meData?.me && (
+                <RegisterForm
+                  containerClassName="pt-4"
+                  errorMessage={registerUserError?.message}
+                  onSubmit={async (values) => {
+                    try {
+                      const { data } = await registerUser({
+                        variables: {
+                          input: {
+                            ...values,
+                          },
+                        },
+                      });
+                      if (!data || !data.registerUser) {
+                        throw new Error();
+                      }
+                      await client.resetStore();
+                    } catch {}
+                  }}
+                />
+              )}
               {meData?.me && <CustomerInformation customerData={meData.me} />}
               {meData?.me && !meData.me.address && (
-                <UpdateUserAddressInputGroup />
+                <UpdateUserAddressInputGroup containerClassName="pt-4" />
               )}
             </SectionWrapper>
             <SectionWrapper>
