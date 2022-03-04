@@ -24,7 +24,7 @@ describe("LoginPage", () => {
     cy.get(`[data-cy=${cypressIds.emailInputErrorText}]`).should("exist");
 
     // password input
-    cy.get(`[data-cy=${cypressIds.passwordInputError}]`).should("not.exist");
+    cy.get(`[data-cy="${cypressIds.passwordInputError}"]`).should("not.exist");
     cy.get(`[data-cy=${cypressIds.passwordInput}]`)
       .type("removeme")
       .clear()

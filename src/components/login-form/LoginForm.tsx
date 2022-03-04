@@ -22,10 +22,8 @@ const {
   passwordInputErrorMessage,
 } = Localized.page.login;
 const loginValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .required(emailInputErrorMessage)
-    .matches(emailRegex, emailInputErrorMessage),
-  password: Yup.string().required(passwordInputErrorMessage),
+  email: Yup.string().matches(emailRegex, emailInputErrorMessage),
+  password: Yup.string(),
 });
 
 interface LoginFormProps {
@@ -37,7 +35,9 @@ interface FormValues {
   password: string;
 }
 export const LoginForm = ({ onSubmit, loginError }: LoginFormProps) => {
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [focusedInput, setFocusedInput] = useState<keyof FormValues | null>(
+    null
+  );
 
   return (
     <Formik
@@ -52,7 +52,7 @@ export const LoginForm = ({ onSubmit, loginError }: LoginFormProps) => {
       validateOnBlur
       validationSchema={loginValidationSchema}
     >
-      {({ values, errors, touched, isSubmitting }) => {
+      {({ values, errors, touched, isSubmitting, setFieldError }) => {
         return (
           <Form className="pt-6">
             <div className="space-y-3">
@@ -120,7 +120,12 @@ export const LoginForm = ({ onSubmit, loginError }: LoginFormProps) => {
                   isFocused={focusedInput === "password"}
                   value={values.password}
                   onFocus={() => setFocusedInput("password")}
-                  onBlur={() => setFocusedInput(null)}
+                  onBlur={() => {
+                    setFocusedInput(null);
+                    if (values.password.length === 0) {
+                      setFieldError("password", passwordInputErrorMessage);
+                    }
+                  }}
                 />
                 <LockClosedIcon
                   className={`${inputIconClassNames} ${
@@ -144,7 +149,7 @@ export const LoginForm = ({ onSubmit, loginError }: LoginFormProps) => {
                     </InputFieldErrorText>
                   </>
                 )}
-                {!errors.password && (
+                {!errors.password && values.password.length > 0 && (
                   <CheckIcon className="absolute top-[19px] right-4 w-4 opacity-40" />
                 )}
               </div>
