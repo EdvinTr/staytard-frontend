@@ -159,7 +159,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             </div>
           </div>
         </div>
-        <div className="text-center">
+        {/*     <div className="text-center">
           <a
             className="text-xs text-blue-600 hover:text-blue-700"
             href="https://icons8.com/license"
@@ -168,7 +168,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
           >
             icons8
           </a>
-        </div>
+        </div> */}
       </div>
     </Fragment>
   );

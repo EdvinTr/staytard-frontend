@@ -31,9 +31,10 @@ export const ScrollTopButton = ({}: ScrollTopButtonProps) => {
             onClick={() =>
               window.scroll({ behavior: "smooth", left: 0, top: 0 })
             }
+            aria-label="Scroll to top"
           >
             <span className="font-semibold">Top</span>
-            <ArrowUpIcon className="h-3 w-3 opacity-40" />
+            <ArrowUpIcon className="h-3 w-3 opacity-40" aria-hidden />
           </button>
         </motion.div>
       )}

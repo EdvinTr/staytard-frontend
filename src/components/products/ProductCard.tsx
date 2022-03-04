@@ -207,7 +207,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     <strong className="text-13 text-staytard-red">
                       {product.currentPrice} EUR
                     </strong>
-                    <del className="text-[10px]  text-gray-400">
+                    <del className="text-[10px] text-stone-500">
                       {product.originalPrice} EUR
                     </del>
                   </div>

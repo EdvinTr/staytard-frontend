@@ -14,19 +14,20 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
 
   return (
     <MyContainer>
-      <header className="relative text-center py-6 max-w-3xl mx-auto">
+      <header className="relative mx-auto max-w-3xl py-6 text-center">
         <div className="absolute top-8">
           <button
-            className="flex items-center hover:underline uppercase font-light text-13 tracking-widest"
+            className="text-13 flex items-center font-light uppercase tracking-widest hover:underline"
             onClick={() => router.back()}
             role="link"
+            aria-label="Go back"
           >
             <ChevronLeftIcon className="w-4" />
             {currentWindowWidth > 640 ? "Back" : ""}
           </button>
         </div>
         <Link href={APP_PAGE_ROUTE.INDEX}>
-          <a className="text-4xl uppercase font-bold">{APP_NAME}</a>
+          <a className="text-4xl font-bold uppercase">{APP_NAME}</a>
         </Link>
       </header>
     </MyContainer>

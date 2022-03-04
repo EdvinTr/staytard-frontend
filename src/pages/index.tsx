@@ -131,9 +131,9 @@ const CallToActionProductCardList = ({
               quality={100}
             />
             <div className="pt-4 pb-8 text-center uppercase lg:pb-0 lg:pt-2 lg:text-left">
-              <h4 className="text-xl font-semibold tracking-wide lg:text-2xl">
+              <h2 className="text-xl font-semibold tracking-wide lg:text-2xl">
                 {title}
-              </h4>
+              </h2>
               <div className="inline-block border-b border-black pt-1 font-light">
                 {subtitle}
               </div>
