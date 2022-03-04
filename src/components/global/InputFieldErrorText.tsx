@@ -16,7 +16,7 @@ export const InputFieldErrorText: React.FC<InputFieldErrorTextProps> = ({
       className={`py-2 text-left text-[11px] 
                   ${
                     isInputFocused
-                      ? "opacity-50 text-black"
+                      ? "text-black opacity-50"
                       : "text-red-600 opacity-100"
                   }`}
     >

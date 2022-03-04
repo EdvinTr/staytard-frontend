@@ -13,6 +13,7 @@ const {
   zipCodeValidationErrorMessage,
   addressValidationErrorMessage,
   passwordInputErrorMessage,
+  firstNameFieldErrorMessage,
 } = Localized.page.register;
 
 export const passwordValidation = Yup.string().matches(
@@ -20,30 +21,24 @@ export const passwordValidation = Yup.string().matches(
   passwordInputErrorMessage
 );
 export const firstNameValidation = Yup.string()
-  .required("Required")
+  .required(firstNameFieldErrorMessage)
   .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
   .min(2, "First name must be at least 2 character")
   .max(100, "First name must be at most 100 characters");
 
-export const lastNameValidation = {
-  lastName: Yup.string()
-    .required("Required")
-    .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
-    .min(2, "Last name must be at least 2 character")
-    .max(100, "Last name must be at most 100 characters"),
-};
+export const lastNameValidation = Yup.string()
+  .required("Required")
+  .matches(containsLettersRegex, "Use only letters. Max 100 characters.")
+  .min(2, "Last name must be at least 2 character")
+  .max(100, "Last name must be at most 100 characters");
 
-export const emailValidation = {
-  email: Yup.string()
-    .required("Required")
-    .matches(emailValidationRegex, emailInputErrorMessage),
-};
+export const emailValidation = Yup.string()
+  .required("Required")
+  .matches(emailValidationRegex, emailInputErrorMessage);
 
-const mobileNumberValidation = {
-  mobilePhoneNumber: Yup.string()
-    .required("Required")
-    .matches(mobilePhoneNumber, phoneNumberValidationErrorMessage),
-};
+const mobileNumberValidation = Yup.string()
+  .required("Required")
+  .matches(mobilePhoneNumber, phoneNumberValidationErrorMessage);
 
 export const emailRegex = new RegExp(
   /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/
@@ -62,37 +57,31 @@ export const addressValidationGenerator = (
   };
 };
 
-export const streetAddressValidation = {
-  street: Yup.string()
-    .required("Required")
-    .min(1)
-    .max(36)
-    .matches(
-      new RegExp(/^[a-zA-ZåäöæøÅÄÖÆØ0-9\s]{1,36}$/),
-      addressValidationErrorMessage
-    ),
-};
+export const streetAddressValidation = Yup.string()
+  .required("Required")
+  .min(1)
+  .max(36)
+  .matches(
+    new RegExp(/^[a-zA-ZåäöæøÅÄÖÆØ0-9\s]{1,36}$/),
+    addressValidationErrorMessage
+  );
 
-export const postalCodeValidation = {
-  postalCode: Yup.string()
-    .required("Required")
-    .matches(/^[0-9]{3,3}\ ?[0-9]{2,2}$/, zipCodeValidationErrorMessage),
-};
+export const postalCodeValidation = Yup.string()
+  .required("Required")
+  .matches(/^[0-9]{3,3}\ ?[0-9]{2,2}$/, zipCodeValidationErrorMessage);
 
-export const cityValidation = {
-  city: Yup.string()
-    .required("Required")
-    .min(1)
-    .max(100)
-    .matches(containsLettersRegex, cityInputValidationErrorMessage),
-};
+export const cityValidation = Yup.string()
+  .required("Required")
+  .min(1)
+  .max(100)
+  .matches(containsLettersRegex, cityInputValidationErrorMessage);
 
 export const updateUserValidationSchema = Yup.object().shape({
   firstName: firstNameValidation,
-  ...lastNameValidation,
-  ...emailValidation,
-  ...mobileNumberValidation,
-  ...streetAddressValidation,
-  ...postalCodeValidation,
-  ...cityValidation,
+  lastNameValidation: lastNameValidation,
+  email: emailValidation,
+  mobilePhoneNumber: mobileNumberValidation,
+  street: streetAddressValidation,
+  postalCode: postalCodeValidation,
+  city: cityValidation,
 });
