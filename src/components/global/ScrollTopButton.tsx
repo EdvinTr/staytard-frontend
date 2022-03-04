@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 interface ScrollTopButtonProps {}
 
-export const ScrollTopButton: React.FC<ScrollTopButtonProps> = ({}) => {
+export const ScrollTopButton = ({}: ScrollTopButtonProps) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
     const position = window.pageYOffset;

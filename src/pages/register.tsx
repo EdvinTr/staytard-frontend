@@ -4,7 +4,6 @@ import { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
-import { FormContainer } from "../components/register-form/FormContainer";
 import { RegisterForm } from "../components/register-form/RegisterForm";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
 import { RegisterUserDto, useRegisterUserMutation } from "../lib/graphql";
@@ -34,7 +33,7 @@ const RegisterPage: NextPage = () => {
       <MyMetaTags title={`${APP_NAME} - Register`} />
       <AppHeader />
       <FadeInContainer className="min-h-screen">
-        <FormContainer className="text-center">
+        <div className="mx-auto px-8 text-center sm:max-w-md lg:max-w-lg 2xl:max-w-3xl">
           <div>
             <div className="space-y-6 pt-10 pb-4">
               <h1 className="text-2xl">Register</h1>
@@ -48,7 +47,7 @@ const RegisterPage: NextPage = () => {
               errorMessage={registerUserError?.message}
             />
           </div>
-        </FormContainer>
+        </div>
       </FadeInContainer>
     </Fragment>
   );
