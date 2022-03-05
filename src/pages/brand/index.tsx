@@ -62,13 +62,11 @@ const API_URL = `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/brands`;
 
 const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
-// create array with lower case alphabet
 const alphabet = [
   "a",
   "b",
   "c",
   "d",
-
   "e",
   "f",
   "g",
@@ -93,7 +91,6 @@ const alphabet = [
   "z",
 ];
 const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
-  const { data } = useSWR<GetBrandsResponse>(API_URL, fetcher);
   const [activeScrollDirection, setActiveScrollDirection] = useState<
     string | null
   >(null);
@@ -103,8 +100,8 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
   const alphabetStartingPosition = useRef(0);
   const alphabetButtonRef = useRef<HTMLUListElement>(null);
 
+  const { data } = useSWR<GetBrandsResponse>(API_URL, fetcher);
   const { scrollDirection } = useScrollDirection();
-
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
 
   useEventListener("scroll", () => {
@@ -122,7 +119,7 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
       alphabetStartingPosition.current =
         brandNamesContainerRef.current.offsetTop;
     }
-  }, [brandNamesContainerRef]);
+  }, [brandNamesContainerRef, currentWindowWidth]);
 
   return (
     <SWRConfig value={{ fallback }}>
@@ -199,8 +196,8 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
                       alt={brandImage.name}
                       priority
                       quality={100}
-                      width={400}
-                      height={264}
+                      width={360}
+                      height={242}
                     />
                     <div className="absolute -bottom-2 left-4">
                       <div className="bg-white p-2 ">
