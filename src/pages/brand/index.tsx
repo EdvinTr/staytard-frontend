@@ -1,9 +1,16 @@
-import { GetServerSideProps, NextPage } from "next";
+import axios from "axios";
+import { GetStaticProps, NextPage } from "next";
 import Image from "next/image";
+import useSWR, { SWRConfig } from "swr";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
-import { Brand_Sort_By, Sort_Direction } from "../../lib/graphql";
-import { ssrGetProductBrands } from "../../lib/page";
+import { MyMetaTags } from "../../components/global/MyMetaTags";
+import { BrandsList } from "../../components/pages/brand/BrandsList";
+import { APP_NAME } from "../../constants";
+import {
+  GetBrandsResponse,
+  SortedBrandKey,
+} from "../../typings/GetBrandsResponse";
 const brandImages = [
   {
     logoUrl:
@@ -42,83 +49,148 @@ const brandImages = [
   },
 ];
 
-const BrandPage: NextPage = () => {
-  const { data, error } = ssrGetProductBrands.usePage();
+interface BrandsPageProps {
+  fallback: any;
+}
 
-  console.log(
-    "BrandPage ERROR in client ssrGetProductBrand.usePage():",
-    error?.message
-  );
-  if (!data || error) {
-    return (
-      <div>
-        NO DATA
-        <span>{error?.message}</span>
-      </div>
-    );
-  }
-  const newData = data.productBrands.map((item) => {});
+const API_URL = `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/brands`;
+
+const fetcher = (url: string) => axios.get(url).then((r) => r.data);
+
+// create array with lower case alphabet
+const alphabet = [
+  "a",
+  "b",
+  "c",
+  "d",
+
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+  "å",
+  "ä",
+  "ö",
+];
+const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
+  const { data } = useSWR<GetBrandsResponse>(API_URL, fetcher);
   return (
-    <FadeInContainer className="text-stayhard-dark">
-      <MyContainer>
-        <div className=" text-staytard-dark ">
-          <div className="grid grid-cols-2 gap-4 ">
-            {brandImages.map((brandImage, idx) => {
+    <SWRConfig value={{ fallback }}>
+      <MyMetaTags
+        title={`A-Z Brands - Buy online - ${APP_NAME}.com`}
+        description={`Find more than 250 brands on ${APP_NAME}.com. See the full list of everything from sporty brands to luxury premium brands.`}
+      />
+      <FadeInContainer className="text-staytard-dark py-12">
+        <MyContainer>
+          <ul className="flex justify-center space-x-5 py-10">
+            {alphabet.map((letter) => {
+              const isDisabled = !data?.brands[letter as SortedBrandKey];
+              console.log(isDisabled);
               return (
-                <div key={idx} className="relative ">
-                  <Image
-                    src={brandImage.largeImgSrc}
-                    alt={brandImage.name}
-                    width={288}
-                    height={194}
-                  />
-                  <div className="absolute -bottom-2 left-4">
-                    <div className="p-2 bg-white ">
-                      <Image
-                        src={brandImage.logoUrl}
-                        alt={brandImage.name}
-                        width={118}
-                        height={30}
-                        objectFit="contain"
-                        className=""
-                      />
-                    </div>
-                  </div>
-                </div>
+                <li
+                  key={letter}
+                  className={`${isDisabled ? "opacity-30" : ""}`}
+                >
+                  <button
+                    onClick={() => {
+                      const element = document.getElementById(
+                        `alphabet-target-${letter}`
+                      );
+                      element?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    disabled={isDisabled}
+                    type="button"
+                    className="text-lg uppercase"
+                    aria-label={`Scroll to brands starting with the letter ${letter}`}
+                  >
+                    {letter}
+                  </button>
+                </li>
               );
             })}
+          </ul>
+          <div className="lg:flex">
+            <div className="hidden space-y-10 lg:mr-16 lg:block">
+              {brandImages.map((brandImage, idx) => {
+                return (
+                  <div key={idx} className="relative ">
+                    <Image
+                      src={brandImage.largeImgSrc}
+                      alt={brandImage.name}
+                      priority
+                      quality={100}
+                      width={400}
+                      height={264}
+                    />
+                    <div className="absolute -bottom-2 left-4">
+                      <div className="bg-white p-2 ">
+                        <Image
+                          src={brandImage.logoUrl}
+                          alt={brandImage.name}
+                          width={118}
+                          height={30}
+                          objectFit="contain"
+                          className=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="w-full">
+              {data &&
+                Object.keys(data.brands).map((key) => {
+                  return (
+                    <BrandsList
+                      brands={data.brands}
+                      brandsKey={key as SortedBrandKey}
+                      key={key}
+                    />
+                  );
+                })}
+            </div>
           </div>
-          <div className="flex items-center flex-wrap gap-8 mt-20">
-            <ul>
-              {data.productBrands.map((brand) => (
-                <li key={brand.id}>{brand.name}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </MyContainer>
-    </FadeInContainer>
+        </MyContainer>
+      </FadeInContainer>
+    </SWRConfig>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
+  const revalidate = 60; // 60 secs
   try {
-    const { props } = await ssrGetProductBrands.getServerPage({
-      variables: {
-        input: {
-          sortBy: Brand_Sort_By.Name,
-          sortDirection: Sort_Direction.Asc,
-        },
-      },
-    });
+    const data: GetBrandsResponse = await fetcher(API_URL);
     return {
       props: {
-        initialApolloState: props.apolloState,
+        fallback: {
+          [API_URL]: data,
+        },
       },
+      revalidate,
     };
   } catch {
     return {
       props: {},
+      revalidate,
     };
   }
 };

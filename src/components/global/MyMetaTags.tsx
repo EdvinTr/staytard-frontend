@@ -51,11 +51,15 @@ export const MyMetaTags = ({
         key="ogImage"
       />
 
-      <meta property="og:type" content="website" key="type" />
+      <meta property="og:type" content="website" key="ogType" />
 
       <meta name="twitter:title" content={title} key="twitterTitle" />
 
-      <meta name="twitter:image" content={image} key="twitterImage" />
+      <meta
+        name="twitter:image"
+        content={image || "/img/staytard-logo.png"}
+        key="twitterImage"
+      />
       <meta name="twitter:card" content="summary_large_image" key="card" />
 
       {productMeta && (
