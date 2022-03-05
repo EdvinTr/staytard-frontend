@@ -1,14 +1,17 @@
+import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { GetStaticProps, NextPage } from "next";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScrollDirection } from "react-use-scroll-direction";
 import useSWR, { SWRConfig } from "swr";
+import { useEventListener } from "usehooks-ts";
 import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
 import { MyMetaTags } from "../../components/global/MyMetaTags";
 import { BrandsList } from "../../components/pages/brand/BrandsList";
 import { APP_NAME } from "../../constants";
+import { useSsrCompatible } from "../../hooks/useSsrCompatible";
 import {
   GetBrandsResponse,
   SortedBrandKey,
@@ -94,25 +97,63 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
   const [activeScrollDirection, setActiveScrollDirection] = useState<
     string | null
   >(null);
+  const [currentScrollY, setCurrentScrollY] = useState(0);
+
+  const brandNamesContainerRef = useRef<HTMLDivElement>(null);
+  const alphabetStartingPosition = useRef(0);
+  const alphabetButtonRef = useRef<HTMLUListElement>(null);
+
   const { scrollDirection } = useScrollDirection();
+
+  const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
+
+  useEventListener("scroll", () => {
+    setCurrentScrollY(window.scrollY);
+  });
 
   useEffect(() => {
     if (scrollDirection) {
       setActiveScrollDirection(scrollDirection);
     }
   }, [scrollDirection]);
+
+  useEffect(() => {
+    if (brandNamesContainerRef.current) {
+      alphabetStartingPosition.current =
+        brandNamesContainerRef.current.offsetTop;
+    }
+  }, [brandNamesContainerRef]);
+
   return (
     <SWRConfig value={{ fallback }}>
       <MyMetaTags
         title={`A-Z Brands - Buy online - ${APP_NAME}.com`}
         description={`Find more than 250 brands on ${APP_NAME}.com. See the full list of everything from sporty brands to luxury premium brands.`}
       />
-      <FadeInContainer className="text-staytard-dark  py-12">
+      <FadeInContainer className="text-staytard-dark ">
         <MyContainer className="">
           <ul
-            className={`${
-              activeScrollDirection === "UP" ? "top-24" : "top-0"
-            } fixed right-0 translate-y-2 space-y-1 px-4 lg:static lg:flex lg:justify-center lg:space-y-0 lg:space-x-5 lg:px-0 lg:py-10`}
+            ref={alphabetButtonRef}
+            style={
+              currentWindowWidth >= 1024
+                ? {}
+                : {
+                    top:
+                      currentScrollY > alphabetStartingPosition.current - 100 // It is a bit unclear how all of this logic came into existence
+                        ? 0
+                        : alphabetStartingPosition.current,
+                    paddingTop:
+                      currentScrollY > alphabetStartingPosition.current - 100 &&
+                      activeScrollDirection === "UP"
+                        ? 90
+                        : 0,
+                    position:
+                      currentScrollY > alphabetStartingPosition.current - 100
+                        ? "fixed"
+                        : "absolute",
+                  }
+            }
+            className={`right-0 translate-y-2 space-y-1 px-4 lg:static lg:flex lg:justify-center lg:space-y-0 lg:space-x-5 lg:px-0 lg:pt-10 lg:pb-20`}
           >
             {alphabet.map((letter) => {
               const isDisabled = !data?.brands[letter as SortedBrandKey];
@@ -177,35 +218,7 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
                 );
               })}
             </div>
-            {/*        <div className="no-scrollbar flex space-x-4 overflow-x-scroll pb-5 lg:hidden">
-              {brandImages.map((brandImage, idx) => {
-                return (
-                  <div key={idx} className="relative flex flex-shrink-0">
-                    <Image
-                      src={brandImage.largeImgSrc}
-                      alt={brandImage.name}
-                      priority
-                      quality={100}
-                      width={250}
-                      height={200}
-                    />
-                    <div className="absolute -bottom-2 left-4">
-                      <div className="bg-white p-2 ">
-                        <Image
-                          src={brandImage.logoUrl}
-                          alt={brandImage.name}
-                          width={118}
-                          height={30}
-                          objectFit="contain"
-                          className=""
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div> */}
-            <div className="w-full">
+            <div className="w-full" ref={brandNamesContainerRef}>
               {data &&
                 Object.keys(data.brands).map((key) => {
                   return (
