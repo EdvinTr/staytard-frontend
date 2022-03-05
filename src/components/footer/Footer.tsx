@@ -24,14 +24,14 @@ export const Footer: React.FC<FooterProps> = ({}) => {
       <div className="bg-staytard-dark text-white">
         {/* newsletter section */}
         <section className="bg-staytard-yellow leading-8">
-          <div className="py-16 px-8 text-center md:mx-auto md:max-w-xl md:py-[4.5rem] xl:flex xl:max-w-[84rem] xl:items-center xl:space-x-36 xl:py-20 xl:px-0">
-            <h3 className="text-staytard-dark block text-[26px] font-medium">
-              Do not miss the latest, subscribe to our newsletter
+          <div className="py-16 px-8 text-center md:mx-auto md:max-w-xl md:py-[4.5rem] xl:flex xl:max-w-[84rem] xl:items-center xl:space-x-36 xl:py-20 xl:px-12 2xl:px-0">
+            <h3 className="text-staytard-dark block text-[26px] font-medium xl:w-full xl:text-left">
+              Welcome to {APP_NAME}
             </h3>
-            <div className="pt-10 xl:pt-0">
-              <Link href={APP_PAGE_ROUTE.REGISTER}>
+            <div className="w-full justify-start pt-10 xl:pt-0">
+              <Link href={APP_PAGE_ROUTE.INDEX}>
                 <a className="bg-staytard-dark py-4 px-5 text-sm font-medium text-white">
-                  Register here
+                  Homepage
                 </a>
               </Link>
             </div>

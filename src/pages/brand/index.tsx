@@ -90,6 +90,7 @@ const alphabet = [
   "y",
   "z",
 ];
+// TODO: when scrolling below container, the alphabet should be fixed at the bottom of the container
 const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
   const [activeScrollDirection, setActiveScrollDirection] = useState<
     string | null
@@ -100,7 +101,10 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
   const alphabetStartingPosition = useRef(0);
   const alphabetButtonRef = useRef<HTMLUListElement>(null);
 
-  const { data } = useSWR<GetBrandsResponse>(API_URL, fetcher);
+  const { data } = useSWR<GetBrandsResponse>(API_URL, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+  });
   const { scrollDirection } = useScrollDirection();
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
 
@@ -127,7 +131,7 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
         title={`A-Z Brands - Buy online - ${APP_NAME}.com`}
         description={`Find more than 250 brands on ${APP_NAME}.com. See the full list of everything from sporty brands to luxury premium brands.`}
       />
-      <FadeInContainer className="text-staytard-dark ">
+      <FadeInContainer className="text-staytard-dark pb-16">
         <MyContainer className="">
           <ul
             ref={alphabetButtonRef}
@@ -150,14 +154,14 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
                         : "absolute",
                   }
             }
-            className={`right-0 translate-y-2 space-y-1 px-4 lg:static lg:flex lg:justify-center lg:space-y-0 lg:space-x-5 lg:px-0 lg:pt-10 lg:pb-20`}
+            className={`right-0 translate-y-2 space-y-1 px-4 lg:static lg:flex lg:justify-center lg:space-y-0 lg:space-x-5 lg:px-0 lg:pt-10 lg:pb-8 `}
           >
             {alphabet.map((letter) => {
               const isDisabled = !data?.brands[letter as SortedBrandKey];
               return (
                 <li
                   key={letter}
-                  className={`flex select-none justify-center text-center text-xs uppercase lg:text-lg ${
+                  className={`underline-from-center flex select-none justify-center text-center text-xs uppercase lg:text-lg ${
                     isDisabled ? "opacity-30" : ""
                   }`}
                 >
@@ -173,7 +177,7 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
                       }}
                       disabled={isDisabled}
                       type="button"
-                      className="font-medium uppercase lg:font-normal"
+                      className="font-medium uppercase focus:outline-none lg:font-normal"
                       aria-label={`Scroll to brands starting with the letter ${letter}`}
                     >
                       {letter}
@@ -183,6 +187,9 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
               );
             })}
           </ul>
+          <h2 className="py-4 text-xl font-medium lg:pt-0 lg:pb-8">
+            Brands in focus
+          </h2>
           <div className="lg:flex">
             <div className="no-scrollbar flex space-x-4 overflow-x-scroll pb-5 lg:mr-16 lg:block lg:space-x-0 lg:space-y-10 lg:pb-0">
               {brandImages.map((brandImage, idx) => {
