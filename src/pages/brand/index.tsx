@@ -86,9 +86,6 @@ const alphabet = [
   "x",
   "y",
   "z",
-  "å",
-  "ä",
-  "ö",
 ];
 const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
   const { data } = useSWR<GetBrandsResponse>(API_URL, fetcher);
@@ -103,26 +100,31 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
           <ul className="flex justify-center space-x-5 py-10">
             {alphabet.map((letter) => {
               const isDisabled = !data?.brands[letter as SortedBrandKey];
-              console.log(isDisabled);
               return (
                 <li
                   key={letter}
-                  className={`${isDisabled ? "opacity-30" : ""}`}
+                  className={`select-none text-lg uppercase ${
+                    isDisabled ? "opacity-30" : ""
+                  }`}
                 >
-                  <button
-                    onClick={() => {
-                      const element = document.getElementById(
-                        `alphabet-target-${letter}`
-                      );
-                      element?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    disabled={isDisabled}
-                    type="button"
-                    className="text-lg uppercase"
-                    aria-label={`Scroll to brands starting with the letter ${letter}`}
-                  >
-                    {letter}
-                  </button>
+                  {isDisabled ? (
+                    <span className="">{letter}</span>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById(
+                          `alphabet-target-${letter}`
+                        );
+                        element?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      disabled={isDisabled}
+                      type="button"
+                      className="underline-from-center block uppercase"
+                      aria-label={`Scroll to brands starting with the letter ${letter}`}
+                    >
+                      {letter}
+                    </button>
+                  )}
                 </li>
               );
             })}
