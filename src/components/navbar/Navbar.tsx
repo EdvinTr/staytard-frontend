@@ -53,8 +53,10 @@ export const Navbar = () => {
   return (
     <>
       <div
-        className={`${activeScrollDirection === "UP" ? "opacity-100" : ""} ${
-          activeScrollDirection === "DOWN" ? "opacity-0" : ""
+        className={` ${
+          activeScrollDirection === "UP" ? "visible opacity-100" : ""
+        } ${
+          activeScrollDirection === "DOWN" ? "invisible opacity-0" : ""
         } sticky top-0 z-50 bg-white transition-all duration-200 ease-in-out`}
       >
         <div className="text-sm">
