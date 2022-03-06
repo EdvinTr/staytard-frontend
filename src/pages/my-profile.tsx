@@ -8,7 +8,6 @@ import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME } from "../constants";
 
 const MyProfile: NextPage = ({ cookies }: any) => {
-  console.log(cookies);
   return (
     <Fragment>
       <MyMetaTags title={`My profile | ${APP_NAME}`} />

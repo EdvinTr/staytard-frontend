@@ -16,10 +16,9 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
       ...init,
       headers: {
         ...init.headers,
-        /*     "Access-Control-Allow-Origin": "*", */
+        "Access-Control-Allow-Origin": "*",
         Cookie: headers?.cookie ?? "", // pass cookies
       },
-      credentials: "include",
     });
     return response;
   };
@@ -28,9 +27,9 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
     link: createHttpLink({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT,
       credentials: "include",
-      /*       fetchOptions: {
+      fetchOptions: {
         mode: "cors",
-      }, */
+      },
       fetch: enhancedFetch,
     }),
     cache: new InMemoryCache({
