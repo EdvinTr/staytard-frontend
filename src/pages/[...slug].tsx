@@ -42,8 +42,8 @@ const SlugPage: NextPage<SlugPageProps> = ({
         title={`${categoryData?.name} | Large assortment for men - Buy online at ${APP_NAME}.com`}
         image={metaImage ? metaImage : "/img/staytard-logo.png"}
       />
-      <FadeInContainer className="text-staytard-dark relative min-h-screen pt-6 pb-40">
-        <MyContainer className=" text-staytard-dark">
+      <FadeInContainer className="text-app-dark relative min-h-screen pt-6 pb-40">
+        <MyContainer className=" text-app-dark">
           <div className="px-3 md:px-0">
             <div className="">
               <div className="text-xs">
@@ -56,7 +56,7 @@ const SlugPage: NextPage<SlugPageProps> = ({
                       <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
                         <a className="inline-block">
                           <h1 className="flex text-2xl font-semibold md:text-3xl">
-                            <ArrowLeftIcon className="text-staytard-dark w-6" />
+                            <ArrowLeftIcon className="text-app-dark w-6" />
                             <span className="pl-4">{categoryData?.name}</span>
                           </h1>
                         </a>

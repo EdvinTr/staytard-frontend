@@ -36,13 +36,13 @@ const NotFoundPage: NextPage = () => {
               <div className="space-y-2 pt-4 lg:flex lg:justify-center lg:space-y-0 lg:space-x-4">
                 <button
                   onClick={() => router.back()}
-                  className="text-staytard-dark text-13  w-32 bg-white p-4 font-semibold"
+                  className="text-app-dark text-13  w-32 bg-white p-4 font-semibold"
                 >
                   Previous page
                 </button>
                 <div>
                   <Link href={APP_PAGE_ROUTE.INDEX}>
-                    <a className="bg-staytard-dark text-13 inline-block  w-32 p-4 font-semibold">
+                    <a className="bg-app-dark text-13 inline-block  w-32 p-4 font-semibold">
                       Home page
                     </a>
                   </Link>

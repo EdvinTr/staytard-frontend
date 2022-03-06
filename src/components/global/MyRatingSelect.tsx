@@ -14,11 +14,11 @@ export const MyRatingSelect = ({
     <Rating
       {...props}
       fullSymbol={
-        <SolidStarIcon className={`text-staytard-dark inline-block w-8`} />
+        <SolidStarIcon className={`text-app-dark inline-block w-8`} />
       }
       emptySymbol={
         <OutlineStarIcon
-          className={`text-staytard-dark inline-block w-8`}
+          className={`text-app-dark inline-block w-8`}
           stroke="0"
           fill="#d8d8d8"
         />

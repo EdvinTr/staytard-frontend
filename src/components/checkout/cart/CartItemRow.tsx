@@ -57,12 +57,12 @@ export const CartItemRow = ({
               </div> /* product has no discount */
             ) : (
               <div className="flex flex-col text-right">
-                <del className="text-[10px] text-gray-600">
+                <del className="text-xss text-gray-600">
                   {product.originalPrice *
                     getQuantityFromCartBySku(product.attributes[0].sku)}{" "}
                   EUR
                 </del>
-                <div className="text-staytard-red">
+                <div className="text-app-red">
                   {product.currentPrice *
                     getQuantityFromCartBySku(product.attributes[0].sku)}{" "}
                   EUR

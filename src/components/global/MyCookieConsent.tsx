@@ -21,14 +21,14 @@ export const MyCookieConsent: React.FC<MyCookieConsentProps> = ({}) => {
           <button
             data-cy="cookie-consent-accept-button"
             {...props}
-            className="bg-staytard-dark mx-4 mt-2 px-8 py-3 text-sm font-medium uppercase text-white "
+            className="bg-app-dark mx-4 mt-2 px-8 py-3 text-sm font-medium uppercase text-white "
           >
             Accept
           </button>
         );
       }}
     >
-      <div className="text-staytard-dark">
+      <div className="text-app-dark">
         <div className="flex items-center">
           <div className="mr-5 font-bold  uppercase tracking-wide sm:text-xl">
             Your cookies, your choice!

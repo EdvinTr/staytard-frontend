@@ -75,7 +75,7 @@ export const ProductViewRow = ({ product }: ProductViewRowProps) => {
                 <p>
                   <span
                     className={`${
-                      discountPercentage > 0 ? "text-staytard-red" : ""
+                      discountPercentage > 0 ? "text-app-red" : ""
                     } tracking-wide`}
                   >
                     {`-${discountPercentage.toFixed(0)}`}% discount

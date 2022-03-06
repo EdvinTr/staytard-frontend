@@ -16,7 +16,6 @@ import CartContext from "../../contexts/CartContext";
 import {
   FindOneProductQuery,
   Product_Review_Sort_By,
-  PublishedProductReviewsQuery,
   Sort_Direction,
 } from "../../lib/graphql";
 import { ssrFindOneProduct, ssrPublishedProductReviews } from "../../lib/page";
@@ -24,18 +23,15 @@ SwiperCore.use([Pagination]);
 SwiperCore.use([Navigation]);
 interface ProductPageProps {
   product: FindOneProductQuery["product"];
-  reviews: PublishedProductReviewsQuery["publishedProductReviews"];
 }
 interface SelectOption {
   label: string;
   value: string;
 }
 
-const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
+const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState<null | string>(null);
   const router = useRouter();
-  const productId = router.query.productId as string;
-  const currentPath = router.pathname;
   const queryColor = router.query.color;
 
   const { addToCart: addToCartStore } = useContext(CartContext);
@@ -70,7 +66,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
   };
 
   return (
-    <FadeInContainer className="text-staytard-dark min-h-screen pb-40 pt-20">
+    <FadeInContainer className="text-app-dark min-h-screen pb-40 pt-20">
       <MyMetaTags
         title={`${product.name} - ${APP_NAME}`}
         description={product.description}
@@ -80,7 +76,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
           priceAmount: product.currentPrice.toString(),
         }}
       />
-      <MyContainer className=" text-staytard-dark">
+      <MyContainer className=" text-app-dark">
         <div className="lg:flex">
           <div className="min-w-0 lg:w-1/2 xl:w-6/12">
             <Swiper
@@ -93,6 +89,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
                   <Image
                     width={1800}
                     height={2400}
+                    quality={100}
                     priority
                     objectFit="cover"
                     className=""
@@ -172,7 +169,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
 
               <button
                 onClick={() => addToCart()}
-                className="text-13 bg-staytard-dark w-1/2 py-4 font-semibold uppercase text-white xl:w-full "
+                className="text-13 bg-app-dark w-1/2 py-4 font-semibold uppercase text-white xl:w-full "
               >
                 Add to cart
               </button>
@@ -180,7 +177,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, reviews }) => {
           </div>
         </div>
         {/* product description */}
-        <div className="bg-staytard-light-gray mt-12 space-y-4 p-4 lg:w-1/2 lg:p-8 xl:w-6/12">
+        <div className="bg-app-light-gray mt-12 space-y-4 p-4 lg:w-1/2 lg:p-8 xl:w-6/12">
           <h3 className="text-sm font-semibold">Product description:</h3>
           <p className="text-13 font-light">{product.description}</p>
         </div>
@@ -214,7 +211,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         product: props.data.product,
-        reviews: productReviewsProps.data.publishedProductReviews,
         initialApolloState: productReviewsProps.apolloState,
       },
     };

@@ -34,7 +34,7 @@ export const OrderSuccessDisplay = ({
   }
   if (error) {
     return (
-      <FadeInContainer className="text-staytard-dark bg-staytard-light-gray min-h-[130vh] text-center">
+      <FadeInContainer className="text-app-dark bg-app-light-gray min-h-[130vh] text-center">
         <CustomHeader />
         <SectionContainer className="mt-20 px-4 py-8 md:px-10">
           <h1 className="text-red-600">{error.message}</h1>
@@ -43,14 +43,14 @@ export const OrderSuccessDisplay = ({
     );
   }
   return (
-    <FadeInContainer className="text-staytard-dark bg-staytard-light-gray min-h-[130vh]">
+    <FadeInContainer className="text-app-dark bg-app-light-gray min-h-[130vh]">
       <CustomHeader />
-      <div className="text-staytard-dark mt-20 space-y-6 text-center">
+      <div className="text-app-dark mt-20 space-y-6 text-center">
         {/* order success message info */}
         <SectionContainer className="px-4 md:px-10">
           <div className="mx-auto max-w-3xl py-10">
             <div className="flex justify-center">
-              <CheckIcon className="border-staytard-yellow text-staytard-yellow ring-staytard-yellow h-10 rounded-full border p-1 ring-2" />
+              <CheckIcon className="border-app-yellow text-app-yellow ring-app-yellow h-10 rounded-full border p-1 ring-2" />
             </div>
             <h1 className="py-4 text-3xl font-medium uppercase tracking-wider">
               Thanks for your order!
@@ -71,7 +71,7 @@ export const OrderSuccessDisplay = ({
         <SectionContainer className="px-4 py-4 text-left md:px-10 md:py-7">
           <div className="text-sm">Order number</div>
           <div className="font-bold">{data?.orderNumber}</div>
-          <div className="border-staytard-dark mt-5 border border-opacity-10 px-4 py-4 text-sm">
+          <div className="border-app-dark mt-5 border border-opacity-10 px-4 py-4 text-sm">
             <h2 className="font-bold">Order details</h2>
             <ul className="leading-6">
               <li className="flex">
@@ -95,7 +95,7 @@ export const OrderSuccessDisplay = ({
         <SectionContainer className=" px-4 text-center md:px-10 ">
           <div className="space-y-4 py-4 md:py-7">
             <div className="flex justify-center">
-              <QuestionMarkCircleIconOutline className="text-staytard-yellow h-12" />
+              <QuestionMarkCircleIconOutline className="text-app-yellow h-12" />
             </div>
             <h3 className="text-lg font-bold uppercase tracking-wider">
               Do you have questions about your order?
@@ -118,7 +118,7 @@ interface CustomLinkProps {
 }
 const CustomLink = ({ href, text }: CustomLinkProps) => {
   return (
-    <div className="border-t-staytard-dark border-t border-opacity-10 py-4 text-sm">
+    <div className="border-t-app-dark border-t border-opacity-10 py-4 text-sm">
       <Link href={href}>
         <a className="flex items-center justify-center space-x-2 hover:underline">
           <span>{text}</span>
@@ -139,7 +139,7 @@ const CustomHeader = () => {
         <div className="absolute top-2 right-0 hidden sm:block">
           <Link href={APP_PAGE_ROUTE.INDEX}>
             <a>
-              <div className="border-staytard-dark flex items-center space-x-2 border px-3 py-1">
+              <div className="border-app-dark flex items-center space-x-2 border px-3 py-1">
                 <ShoppingBagIcon className="h-4" aria-hidden />
                 <span>Shop</span>
               </div>

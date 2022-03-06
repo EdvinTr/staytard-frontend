@@ -61,7 +61,7 @@ export const FloatingLabel: React.FC<FloatingLabelProps> = ({
 }) => {
   return (
     <span
-      className={`absolute top-[6px] py-0 text-[10px] tracking-[1.6px] opacity-[0.62]
+      className={`text-xss absolute top-[6px] py-0 tracking-[1.6px] opacity-[0.62]
           ${hasLeftIcon ? "left-12" : "left-4"}  
           ${hasError && !isFocused && "text-red-600 opacity-100"}
           ${isFocused && "opacity-50"}

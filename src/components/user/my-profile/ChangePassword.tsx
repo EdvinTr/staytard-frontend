@@ -108,7 +108,7 @@ export const ChangePassword = () => {
           return (
             <Form
               className={`mx-auto mt-8 max-w-3xl border px-6 py-4 shadow-sm ${
-                toggleForm ? "border-t-staytard-yellow border-t-4" : ""
+                toggleForm ? "border-t-app-yellow border-t-4" : ""
               }`}
             >
               <div className="flex items-center justify-between border-b border-black border-opacity-10 py-4">
@@ -209,7 +209,7 @@ export const ChangePassword = () => {
                   </div>
                   {/* server response error */}
                   {error && (
-                    <div className="text-staytard-red pt-4 text-xs">
+                    <div className="text-app-red pt-4 text-xs">
                       {error.message}
                     </div>
                   )}

@@ -55,7 +55,7 @@ const styles: { [key: string]: CSS.Properties } = {
 };
 
 const anchorElementClassNames =
-  "hover:text-staytard-yellow text-stone-600 transition-all duration-150 ease-in-out";
+  "hover:text-app-yellow text-stone-600 transition-all duration-150 ease-in-out";
 export const MobileAdminNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -69,7 +69,7 @@ export const MobileAdminNavbar = () => {
         onClose={() => setIsOpen(false)}
       >
         <div className="w-full border-b border-stone-700">
-          <div className="border-staytard-yellow border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100 hover:bg-black">
+          <div className="border-app-yellow border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100 hover:bg-black">
             <Link
               shallow
               href={{
@@ -93,8 +93,8 @@ export const MobileAdminNavbar = () => {
                 key={idx}
                 className={`${
                   currentQuery === item.query.show
-                    ? "border-staytard-yellow border-l-2 border-opacity-100 bg-black"
-                    : "border-staytard-yellow border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100 hover:bg-black"
+                    ? "border-app-yellow border-l-2 border-opacity-100 bg-black"
+                    : "border-app-yellow border-l-2 border-opacity-0 transition-all duration-150 ease-in-out hover:border-opacity-100 hover:bg-black"
                 }`}
               >
                 <Link
@@ -109,7 +109,7 @@ export const MobileAdminNavbar = () => {
                       <item.icon
                         className={`w-6 ${
                           currentQuery === item.query.show
-                            ? "text-staytard-yellow"
+                            ? "text-app-yellow"
                             : ""
                         }`}
                       />
@@ -135,7 +135,7 @@ const HeaderTitle = ({ router }: { router: NextRouter }) => {
         .map((item, idx) => {
           return (
             <Fragment key={idx}>
-              <item.icon className="text-staytard-yellow w-6 transition-all duration-150" />
+              <item.icon className="text-app-yellow w-6 transition-all duration-150" />
               <div className="ml-2 text-xl font-semibold uppercase text-stone-200">
                 {item.query.show}
               </div>

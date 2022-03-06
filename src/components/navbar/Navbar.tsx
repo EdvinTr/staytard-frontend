@@ -61,7 +61,7 @@ export const Navbar = () => {
       >
         <div className="text-sm">
           {router.pathname === APP_PAGE_ROUTE.INDEX && (
-            <div className="bg-staytard-dark hidden py-1 text-center text-[10px] uppercase text-white lg:block">
+            <div className="bg-app-dark text-xss hidden py-1 text-center uppercase text-white lg:block">
               <div className="relative mx-auto max-w-2xl">
                 <div className="absolute left-0 inline-block">
                   {freeShippingText}
@@ -135,7 +135,7 @@ export const Navbar = () => {
                     <a className="relative" aria-label="Cart">
                       <MyCartIcon className="w-6" />
                       {totalCartItems > 0 && (
-                        <span className="bg-staytard-yellow absolute -top-2 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ">
+                        <span className="bg-app-yellow absolute -top-2 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ">
                           {totalCartItems}
                         </span>
                       )}

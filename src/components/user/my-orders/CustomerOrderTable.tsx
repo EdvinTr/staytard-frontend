@@ -41,19 +41,19 @@ export const CustomerOrderTable = () => {
           <table className={`mx-auto w-full ${loading ? "opacity-75" : ""}`}>
             <thead>
               <tr>
-                <th className="text-staytard-dark w-40 px-4 py-4 pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
+                <th className="text-app-dark w-40 px-4 py-4 pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
                   Order ID
                 </th>
-                <th className="text-staytard-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
+                <th className="text-app-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
                   Address
                 </th>
-                <th className="text-staytard-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
+                <th className="text-app-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
                   Date
                 </th>
-                <th className="text-staytard-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
+                <th className="text-app-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
                   Cost
                 </th>
-                <th className="text-staytard-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
+                <th className="text-app-dark pr-20 text-left text-sm  font-medium tracking-wide text-opacity-75">
                   Status
                 </th>
               </tr>

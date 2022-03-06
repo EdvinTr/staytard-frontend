@@ -192,7 +192,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 <b className="block w-full text-xs uppercase">
                   {product.brand.name}
                 </b>
-                <span className="block w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-[10px]">
+                <span className="text-xss block w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
                   {product.name}
                 </span>
               </h2>
@@ -204,16 +204,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               ) : (
                 <div className="flex items-center justify-between space-x-2 lg:justify-start lg:space-x-3">
                   <div className="space-x-2">
-                    <strong className="text-13 text-staytard-red">
+                    <strong className="text-13 text-app-red">
                       {product.currentPrice} EUR
                     </strong>
-                    <del className="text-[10px] text-stone-500">
+                    <del className="text-xss text-stone-500">
                       {product.originalPrice} EUR
                     </del>
                   </div>
                   {/* discount percentage calculation */}
                   <div>
-                    <span className="text-staytard-red text-xs font-semibold tracking-wide lg:text-[11px]">
+                    <span className="text-app-red text-xs font-semibold tracking-wide lg:text-[11px]">
                       {Math.ceil(
                         ((product.currentPrice - product.originalPrice) /
                           product.originalPrice) *

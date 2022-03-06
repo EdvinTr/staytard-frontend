@@ -21,16 +21,16 @@ export const Footer: React.FC<FooterProps> = ({}) => {
 
   return (
     <Fragment>
-      <div className="bg-staytard-dark text-white">
+      <div className="bg-app-dark text-white">
         {/* newsletter section */}
-        <section className="bg-staytard-yellow leading-8">
+        <section className="bg-app-yellow leading-8">
           <div className="py-16 px-8 text-center md:mx-auto md:max-w-xl md:py-[4.5rem] xl:flex xl:max-w-[84rem] xl:items-center xl:space-x-36 xl:py-20 xl:px-12 2xl:px-0">
-            <h3 className="text-staytard-dark block text-[26px] font-medium xl:w-full xl:text-left">
+            <h3 className="text-app-dark block text-[26px] font-medium xl:w-full xl:text-left">
               Welcome to {APP_NAME}
             </h3>
             <div className="w-full justify-start pt-10 xl:pt-0">
               <Link href={APP_PAGE_ROUTE.INDEX}>
-                <a className="bg-staytard-dark py-4 px-5 text-sm font-medium text-white">
+                <a className="bg-app-dark py-4 px-5 text-sm font-medium text-white">
                   Homepage
                 </a>
               </Link>
@@ -38,7 +38,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
           </div>
         </section>
         {/* customer service section*/}
-        <section className="text-staytard-dark bg-[#ebebeb] ">
+        <section className="text-app-dark bg-[#ebebeb] ">
           <div className="mx-auto max-w-3xl space-y-8 py-12 text-center text-xl md:grid md:grid-cols-3 md:space-y-0 md:text-sm xl:py-7 ">
             <div className="">
               {/* free shipping */}
@@ -85,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
           <article className="space-y-6 pb-14 pt-10 text-center font-bold xl:pt-0 xl:text-left">
             <p>Need help?</p>
             <Link href="#">
-              <a className="text-staytard-dark text-13 inline-block bg-white px-8 py-4 font-semibold">
+              <a className="text-app-dark text-13 inline-block bg-white px-8 py-4 font-semibold">
                 <div className="flex items-center">
                   <span>Customer service</span>
                   <ChevronRightIcon className="w-5" />

@@ -75,7 +75,7 @@ const NewsCard = ({
           <div>
             <h2 className="text-base font-semibold">{title}</h2>
             <p className="pt-2 pb-4 text-xs">{subTitle}</p>
-            <div className="bg-staytard-dark inline-block p-3 text-[11px] font-medium uppercase tracking-wider text-white">
+            <div className="bg-app-dark inline-block p-3 text-[11px] font-medium uppercase tracking-wider text-white">
               Shop here
             </div>
           </div>

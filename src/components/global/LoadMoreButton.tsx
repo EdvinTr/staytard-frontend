@@ -14,7 +14,7 @@ export const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
   return (
     <button
       {...props}
-      className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
+      className="bg-app-dark flex w-full items-center justify-center p-4 text-white"
     >
       {children}
       <ChevronDownIcon className="w-6" />

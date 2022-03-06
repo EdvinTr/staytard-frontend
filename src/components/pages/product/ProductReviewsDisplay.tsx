@@ -57,7 +57,7 @@ export const ProductReviewsDisplay = ({
       >
         <div className="flex items-center space-x-4">
           <h2 className="text-3xl font-bold lg:text-left">Reviews</h2>
-          <div className="bg-staytard-dark pointer-events-none hidden h-[1px] w-32 lg:block"></div>
+          <div className="bg-app-dark pointer-events-none hidden h-[1px] w-32 lg:block"></div>
         </div>
         <button
           onClick={() => setIsReviewModalOpen(true)}
@@ -98,7 +98,7 @@ export const ProductReviewsDisplay = ({
           </p>
           <button
             onClick={() => setIsReviewModalOpen(true)}
-            className="bg-staytard-dark p-5 text-xs uppercase tracking-wider text-white"
+            className="bg-app-dark p-5 text-xs uppercase tracking-wider text-white"
           >
             Write a review
           </button>
@@ -118,7 +118,7 @@ export const ProductReviewsDisplay = ({
               return (
                 <SolidStarIcon
                   key={idx}
-                  className="text-staytard-dark inline-block w-5"
+                  className="text-app-dark inline-block w-5"
                 />
               );
             })}
@@ -205,7 +205,7 @@ const ProductReviewCard = ({
           return (
             <SolidStarIcon
               key={idx}
-              className="text-staytard-dark inline-block w-4"
+              className="text-app-dark inline-block w-4"
             />
           );
         })}
@@ -213,7 +213,7 @@ const ProductReviewCard = ({
           return (
             <OutlineStarIcon
               key={idx}
-              className="text-staytard-dark inline-block w-4"
+              className="text-app-dark inline-block w-4"
               stroke="0"
               fill="#d8d8d8"
             />
@@ -240,8 +240,6 @@ const ProductReviewCard = ({
 
 const ReviewSectionContainer: React.FC = ({ children }) => {
   return (
-    <div className="bg-staytard-light-gray mt-24 py-10 text-center">
-      {children}
-    </div>
+    <div className="bg-app-light-gray mt-24 py-10 text-center">{children}</div>
   );
 };

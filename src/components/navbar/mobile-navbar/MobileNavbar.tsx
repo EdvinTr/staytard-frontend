@@ -82,12 +82,12 @@ export const MobileNavbar = () => {
                 className="w-full"
               >
                 <Accordion.Body>
-                  <div className="border-staytard-dark w-full space-y-6 border-t border-opacity-30 py-8">
+                  <div className="border-app-dark w-full space-y-6 border-t border-opacity-30 py-8">
                     {userMenuItems.map((item, idx) => {
                       return (
                         <Link href={item.href} key={idx}>
                           <a
-                            className="text-staytard-dark flex items-center justify-between text-base"
+                            className="text-app-dark flex items-center justify-between text-base"
                             onClick={closeMenu()}
                           >
                             {item.name}
@@ -99,7 +99,7 @@ export const MobileNavbar = () => {
                     {userData.me && userData.me.isAdmin && (
                       <Link href={APP_PAGE_ROUTE.ADMIN}>
                         <a
-                          className="text-staytard-dark flex items-center justify-between text-base"
+                          className="text-app-dark flex items-center justify-between text-base"
                           onClick={closeMenu()}
                         >
                           Admin panel
@@ -112,7 +112,7 @@ export const MobileNavbar = () => {
                     )}
                     <button
                       disabled={isLogoutUserLoading}
-                      className="text-staytard-dark flex w-full items-center justify-between text-base"
+                      className="text-app-dark flex w-full items-center justify-between text-base"
                       onClick={async () => {
                         try {
                           await client.resetStore();
@@ -146,9 +146,7 @@ export const MobileNavbar = () => {
                   onClick={closeMenu()}
                 >
                   <MyUserIcon className="h-[1.65rem] w-[1.65rem]" aria-hidden />
-                  <span className="border-staytard-dark border-b ">
-                    Sign in
-                  </span>
+                  <span className="border-app-dark border-b ">Sign in</span>
                 </a>
               </Link>
             )}
@@ -268,7 +266,7 @@ export const MobileNavbar = () => {
             </div>
           </div>
         </ContentContainer>
-        <div className="bg-staytard-dark mt-8 w-full px-5 py-8 text-white">
+        <div className="bg-app-dark mt-8 w-full px-5 py-8 text-white">
           <div className="space-y-8">
             <Link href={APP_PAGE_ROUTE.MY_PROFILE}>
               <a className="block font-semibold" onClick={closeMenu()}>

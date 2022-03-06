@@ -72,7 +72,7 @@ export const HeroImageSection = () => {
           <div className="flex items-center">
             Discover
             <span className="ml-2">
-              Icon <sup className="text-[10px]">TM</sup>
+              Icon <sup className="text-xss">TM</sup>
             </span>
             <ChevronRightIcon className="ml-1 h-7 w-7" />
           </div>

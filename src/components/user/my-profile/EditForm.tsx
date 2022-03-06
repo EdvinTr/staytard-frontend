@@ -29,12 +29,12 @@ export const EditForm: React.FC<EditFormProps> = ({
     <Fragment>
       <form
         onSubmit={handleOnSubmit}
-        className={`max-w-3xl border mx-auto px-6 py-4 mt-8 shadow-sm ${
-          childrenVisible ? "border-t-4 border-t-staytard-yellow" : ""
+        className={`mx-auto mt-8 max-w-3xl border px-6 py-4 shadow-sm ${
+          childrenVisible ? "border-t-app-yellow border-t-4" : ""
         }`}
       >
-        <div className="flex justify-between items-center border-b border-black py-4 border-opacity-10">
-          <div className="font-bold text-sm uppercase">{label}</div>
+        <div className="flex items-center justify-between border-b border-black border-opacity-10 py-4">
+          <div className="text-sm font-bold uppercase">{label}</div>
           {!childrenVisible && (
             <BaseButton
               variant="outline"
@@ -49,10 +49,8 @@ export const EditForm: React.FC<EditFormProps> = ({
             <div className="border-b border-black border-opacity-10">
               {children}
             </div>
-            {error && (
-              <div className="text-xs text-staytard-red pt-4">{error}</div>
-            )}
-            <div className="pt-4 space-x-2">
+            {error && <div className="text-app-red pt-4 text-xs">{error}</div>}
+            <div className="space-x-2 pt-4">
               <BaseButton type="submit" loading={loading}>
                 Save
               </BaseButton>

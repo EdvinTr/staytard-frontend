@@ -130,7 +130,7 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
         title={`A-Z Brands - Buy online - ${APP_NAME}.com`}
         description={`Find more than 250 brands on ${APP_NAME}.com. See the full list of everything from sporty brands to luxury premium brands.`}
       />
-      <FadeInContainer className="text-staytard-dark pb-16">
+      <FadeInContainer className="text-app-dark pb-16">
         <MyContainer className="">
           <ul
             ref={alphabetButtonRef}

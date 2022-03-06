@@ -36,13 +36,13 @@ const CheckoutPage: NextPage = () => {
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <FadeInContainer className="text-staytard-dark bg-staytard-light-gray">
+      <FadeInContainer className="text-app-dark bg-app-light-gray">
         <MyContainer className="">
           <ShoppingCartHeading />
           <SectionWrapper>
             <StepBadge step="1" />
             <CartItemList />
-            <div className="md:bg-staytard-light-gray mt-8 md:px-8 md:py-4">
+            <div className="md:bg-app-light-gray mt-8 md:px-8 md:py-4">
               <div className="flex justify-between font-bold">
                 <div className="text-13 uppercase">Your products</div>
                 <RampingCounter to={totalCartPrice} from={0} duration={0.5}>
@@ -51,10 +51,10 @@ const CheckoutPage: NextPage = () => {
                 </RampingCounter>
               </div>
               <div className="text-13 flex w-full space-x-3 py-4 md:py-2">
-                <button className="border-staytard-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
+                <button className="border-app-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
                   Discount code
                 </button>
-                <button className="border-staytard-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
+                <button className="border-app-dark w-full border-2 border-opacity-20 py-3 tracking-wider hover:border-black">
                   Gift card
                 </button>
               </div>
@@ -125,8 +125,8 @@ const NoItemsInCartComponent = () => {
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <div className="bg-staytard-light-gray min-h-[75vh]">
-        <SectionWrapper className="bg-staytard-light-gray text-center xl:max-w-7xl">
+      <div className="bg-app-light-gray min-h-[75vh]">
+        <SectionWrapper className="bg-app-light-gray text-center xl:max-w-7xl">
           <ShoppingCartHeading />
           <div className="bg-white py-2 lg:border-b lg:border-t lg:border-black lg:border-opacity-[0.09] lg:bg-inherit lg:py-0">
             <h2 className="py-4 text-2xl lg:py-8 lg:text-4xl">

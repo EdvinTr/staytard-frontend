@@ -44,7 +44,7 @@ export const MyPagesPopover = ({
                       <Link href={item.href} key={item.name}>
                         <a>
                           <PopoverItemContainer>
-                            <p className="text-staytard-dark text-base">
+                            <p className="text-app-dark text-base">
                               {item.name}
                             </p>
                             <PopoverIconContainer>
@@ -58,7 +58,7 @@ export const MyPagesPopover = ({
                       <Link href={APP_PAGE_ROUTE.ADMIN}>
                         <a>
                           <PopoverItemContainer>
-                            <p className="text-staytard-dark text-base">
+                            <p className="text-app-dark text-base">
                               Admin panel
                             </p>
                             <PopoverIconContainer>
@@ -88,9 +88,7 @@ export const MyPagesPopover = ({
                       }}
                     >
                       <PopoverItemContainer>
-                        <span className="text-staytard-dark text-base">
-                          Log out
-                        </span>
+                        <span className="text-app-dark text-base">Log out</span>
                         <PopoverIconContainer>
                           {isLogoutUserLoading ? (
                             <LoadingSpinner size={30} />

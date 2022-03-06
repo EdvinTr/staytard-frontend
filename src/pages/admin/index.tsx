@@ -35,7 +35,7 @@ const AdminPage: NextPage = () => {
       <Head>
         <title>{APP_NAME}.com</title>
       </Head>
-      <div className="text-staytard-dark">
+      <div className="text-app-dark">
         <AdminNavbarGroup />
         <PageContentWrapper>
           {router.query.show === ADMIN_SUB_PAGE_ROUTE.USERS && (

@@ -167,7 +167,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
         {nextPage && !isLoadingMore && (
           <button
             disabled={isLoadingMore}
-            className="bg-staytard-dark flex w-full items-center justify-center p-4 text-white"
+            className="bg-app-dark flex w-full items-center justify-center p-4 text-white"
             onClick={() => {
               setSize(size + 1); // controls pageIndex variable in SWR
             }}

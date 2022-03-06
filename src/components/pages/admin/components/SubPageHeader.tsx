@@ -10,7 +10,7 @@ interface SubPageHeaderProps {
 
 export const SubPageHeader = ({ title }: SubPageHeaderProps) => {
   return (
-    <header className="bg-staytard-semi-light-gray">
+    <header className="bg-app-semi-light-gray">
       <PaddingContainer className="flex items-center space-x-5">
         <button aria-label="Navigate back" onClick={() => router.back()}>
           <ArrowLeftIcon className="h-6" aria-hidden />

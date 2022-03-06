@@ -19,13 +19,13 @@ const IndexPage: NextPage<HomePageProps> = ({ products }) => {
   const hasProducts = products && products.items?.length > 0;
 
   return (
-    <FadeInContainer className="text-staytard-dark min-h-screen">
-      <div className=" text-staytard-dark">
+    <FadeInContainer className="text-app-dark min-h-screen">
+      <div className=" text-app-dark">
         <HeroImageSection />
         <MyContainer>
           <div className="py-12 text-center uppercase leading-8 lg:pt-24">
             <h2 className="font-semibold lg:text-3xl ">
-              Icon <sup className="text-[10px] lg:text-sm">TM</sup>{" "}
+              Icon <sup className="text-xss lg:text-sm">TM</sup>{" "}
               <span>Styles</span>
             </h2>
             <Link href="/clothes">

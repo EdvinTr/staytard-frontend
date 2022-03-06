@@ -17,7 +17,7 @@ const outlineClassNames =
   "border-2 border-black hover:border-black border-opacity-25";
 
 const solidClassNames =
-  "bg-staytard-yellow transition-all duration-300 ease-out hover:bg-black hover:text-white";
+  "bg-app-yellow transition-all duration-300 ease-out hover:bg-black hover:text-white";
 export const BaseButton: React.FC<BaseButtonProps> = ({
   children,
   loading,
@@ -38,7 +38,7 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
     "tracking-wider",
     loading
       ? variant === "solid"
-        ? "hover:bg-staytard-yellow focus-visible:bg-staytard-yellow focus-visible:text-black"
+        ? "hover:bg-app-yellow focus-visible:bg-app-yellow focus-visible:text-black"
         : "focus-visible:text-white"
       : "",
   ].join(" ");

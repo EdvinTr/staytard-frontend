@@ -34,12 +34,12 @@ export const DefaultAdminNavbar = () => {
   return (
     <Fragment>
       <div className="relative min-w-[5rem] max-w-[5rem]">
-        <div className="bg-staytard-dark fixed h-full min-h-screen min-w-[5rem] max-w-[5rem]">
+        <div className="bg-app-dark fixed h-full min-h-screen min-w-[5rem] max-w-[5rem]">
           <div className="flex flex-col items-center justify-center overflow-hidden">
             <div className="flex w-full justify-center bg-black py-4 text-center">
               <Link href={APP_PAGE_ROUTE.INDEX}>
                 <a aria-label={`Home page`}>
-                  <HomeIcon className="hover:text-staytard-yellow w-6 text-gray-200  transition-all duration-150" />
+                  <HomeIcon className="hover:text-app-yellow w-6 text-gray-200  transition-all duration-150" />
                 </a>
               </Link>
             </div>
@@ -50,7 +50,7 @@ export const DefaultAdminNavbar = () => {
                   key={idx}
                   className={`${
                     currentQuery === item.query.show
-                      ? "border-staytard-yellow border-l-2 bg-black"
+                      ? "border-app-yellow border-l-2 bg-black"
                       : ""
                   }`}
                 >
@@ -63,9 +63,9 @@ export const DefaultAdminNavbar = () => {
                   >
                     <a aria-label={`${item.query.show}`}>
                       <item.icon
-                        className={`hover:text-staytard-yellow w-6  transition-all duration-150 ${
+                        className={`hover:text-app-yellow w-6  transition-all duration-150 ${
                           currentQuery === item.query.show
-                            ? "text-staytard-yellow"
+                            ? "text-app-yellow"
                             : "text-stone-600"
                         }`}
                       />
