@@ -90,7 +90,6 @@ const alphabet = [
   "y",
   "z",
 ];
-// TODO: when scrolling below container, the alphabet should be fixed at the bottom of the container
 const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
   const [activeScrollDirection, setActiveScrollDirection] = useState<
     string | null
