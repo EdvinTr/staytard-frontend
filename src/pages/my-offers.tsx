@@ -1,12 +1,24 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
 import React from "react";
 import { AppHeader } from "../components/global/AppHeader";
+import { CenteredBeatLoader } from "../components/global/CenteredBeatLoader";
 import { MyMetaTags } from "../components/global/MyMetaTags";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
 import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
-import { isUserLoggedInRouteGuard } from "../utils/guards/isLoggedInSsrRouteGuard";
+import { useMeQuery } from "../lib/graphql";
 
 const MyOffers: NextPage = () => {
+  const { data, loading } = useMeQuery();
+  const router = useRouter();
+
+  if (loading) {
+    return <CenteredBeatLoader />;
+  }
+  if (!data || !data.me) {
+    router.push(APP_PAGE_ROUTE.LOGIN);
+    return <></>;
+  }
   return (
     <div>
       <MyMetaTags title={`My offers | ${APP_NAME}`} />
@@ -19,9 +31,6 @@ const MyOffers: NextPage = () => {
       </h1>
     </div>
   );
-};
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return await isUserLoggedInRouteGuard(ctx, APP_PAGE_ROUTE.LOGIN);
 };
 
 export default MyOffers;

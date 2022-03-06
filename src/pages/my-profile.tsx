@@ -1,13 +1,26 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { AppHeader } from "../components/global/AppHeader";
+import { CenteredBeatLoader } from "../components/global/CenteredBeatLoader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
 import { ChangePassword } from "../components/user/my-profile/ChangePassword";
 import { UserSettingsNavbar } from "../components/user/UserSettingsNavbar";
-import { APP_NAME } from "../constants";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
+import { useMeQuery } from "../lib/graphql";
 
 const MyProfile: NextPage = ({ cookies }: any) => {
+  const { data, loading } = useMeQuery();
+  const router = useRouter();
+
+  if (loading) {
+    return <CenteredBeatLoader />;
+  }
+  if (!data || !data.me) {
+    router.push(APP_PAGE_ROUTE.LOGIN);
+    return <></>;
+  }
   return (
     <Fragment>
       <MyMetaTags title={`My profile | ${APP_NAME}`} />
@@ -21,43 +34,6 @@ const MyProfile: NextPage = ({ cookies }: any) => {
       </FadeInContainer>
     </Fragment>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  /* return await isUserLoggedInRouteGuard(ctx, APP_PAGE_ROUTE.LOGIN); */
-  /*  try { */
-  return {
-    props: {
-      cookies: ctx.req.headers,
-    },
-  };
-  // fetch user by passing the cookies in the request header
-  /*    const apollo = initializeApollo();
-    const props = await apollo.query({
-      query: MeDocument,
-      context: { headers: ctx.req.headers },
-    }); */
-  /*   const { props } = await ssrMe.getServerPage({
-      context: { headers: ctx.req.headers },
-
-    }); */
-  /*  if (!props.data || !props.data.me) {
-      throw new Error(); // redirect to index page
-    }
-    return {
-      props: {
-        ...props,
-        ctx: ctx.req.headers,
-      },
-    };
-  } catch (err) {
-    return {
-      props: {},
-      redirect: {
-        destination: APP_PAGE_ROUTE.INDEX,
-      },
-    }; */
-  /*  } */
 };
 
 export default MyProfile;
