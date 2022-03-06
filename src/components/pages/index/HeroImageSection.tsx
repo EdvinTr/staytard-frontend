@@ -42,7 +42,6 @@ export const HeroImageSection = () => {
             height={580}
             alt="Icon brand"
             objectFit="contain"
-            priority
             quality={100}
             layout="responsive"
             src="/img/front-page/2208_icon_fullwith_mobil_1.jpg"
