@@ -21,6 +21,7 @@ import { MyCartIcon, MyUserIcon } from "../global/icons/Icons";
 import { MyContainer } from "../global/MyContainer";
 import { HoverMenu } from "./hover-menu/HoverMenu";
 import { MyPagesPopover } from "./my-pages-popover/MyPagesPopover";
+import { SearchModal } from "./SearchModal";
 
 const { deliveryTimeText, freeShippingText, rightOfReturnText } =
   Localized.page.index;
@@ -198,6 +199,7 @@ export const Navbar = () => {
             )}
           </div>
         </div>
+        <SearchModal onClose={() => setShowModal(false)} show={showModal} />
       </div>
     </>
   );
