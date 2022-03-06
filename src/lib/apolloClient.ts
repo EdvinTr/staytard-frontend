@@ -19,6 +19,7 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
         "Access-Control-Allow-Origin": "*",
         Cookie: headers?.cookie ?? "", // pass cookies
       },
+      credentials: "include",
     });
     return response;
   };
