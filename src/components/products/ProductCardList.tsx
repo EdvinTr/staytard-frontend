@@ -1,7 +1,6 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { BeatLoader } from "react-spinners";
@@ -93,34 +92,6 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
   }
   return (
     <div>
-      <Head>
-        {allProducts.length > 0 && (
-          <>
-            {/*   <meta
-              property="og:image"
-              content={
-                allProducts[0].images[0].imageUrl.replace("{size}", "1200") +
-                "&h=630"
-              }
-            />
-
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta
-              name="twitter:image"
-              content={
-                allProducts[0].images[0].imageUrl.replace("{size}", "1200") +
-                "&h=630"
-              }
-            /> */}
-            {/*  <MyMetaTags
-              image={
-                allProducts[0].images[0].imageUrl.replace("{size}", "1200") +
-                "&h=630"
-              }
-            /> */}
-          </>
-        )}
-      </Head>
       {/* sort */}
       <div className="my-4 flex justify-end text-sm">
         {!isLoadingMore && (
