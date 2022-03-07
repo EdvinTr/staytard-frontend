@@ -1,12 +1,8 @@
-// HOC/withAuth.jsx
 import { useRouter } from "next/router";
 import { useMeQuery } from "../lib/graphql";
-export const withAuth = (
-  WrappedComponent: any,
-  redirectPath: string,
-  checkIsAdmin: boolean = false
-) => {
-  return function WithAuth(props: any) {
+
+export const withIsLoggedIn = (WrappedComponent: any, redirectPath: string) => {
+  return function WithIsLoggedIn(props: any) {
     const router = useRouter();
     const { data, loading } = useMeQuery();
     // checks whether we are on client / browser or server.
@@ -15,16 +11,9 @@ export const withAuth = (
         return null;
       }
       // If there is an access token we check if it is valid.
-      if ((!data || !data.me) && !loading) {
+      if (data && data.me && !loading) {
         router.replace(redirectPath);
         return null;
-      }
-      if (checkIsAdmin) {
-        // If the user is not an admin we redirect to "/" page.
-        if (!data?.me.isAdmin) {
-          router.replace(redirectPath);
-          return null;
-        }
       }
       // return the wrapped component.
       return <WrappedComponent {...props} />;

@@ -5,8 +5,8 @@ import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
 import { RegisterForm } from "../components/register-form/RegisterForm";
-import { withHasCookie } from "../components/withHasCookie";
-import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
+import { withIsLoggedIn } from "../components/withIsLoggedIn";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { RegisterUserDto, useRegisterUserMutation } from "../lib/graphql";
 const RegisterPage: NextPage = () => {
   const router = useRouter();
@@ -54,8 +54,4 @@ const RegisterPage: NextPage = () => {
   );
 };
 
-export default withHasCookie(
-  RegisterPage,
-  COOKIE_NAME.ACCESS_TOKEN,
-  APP_PAGE_ROUTE.INDEX
-);
+export default withIsLoggedIn(RegisterPage, APP_PAGE_ROUTE.INDEX);

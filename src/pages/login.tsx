@@ -8,8 +8,8 @@ import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
-import { withHasCookie } from "../components/withHasCookie";
-import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
+import { withIsLoggedIn } from "../components/withIsLoggedIn";
+import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
 import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 
 const LoginPage: NextPage = () => {
@@ -71,8 +71,4 @@ const LoginPage: NextPage = () => {
   );
 };
 
-export default withHasCookie(
-  LoginPage,
-  COOKIE_NAME.ACCESS_TOKEN,
-  APP_PAGE_ROUTE.INDEX
-);
+export default withIsLoggedIn(LoginPage, APP_PAGE_ROUTE.INDEX);
