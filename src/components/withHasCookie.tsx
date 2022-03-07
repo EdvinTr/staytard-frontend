@@ -1,16 +1,17 @@
 // HOC/withAuth.jsx
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
-export const withHasCookie = (
+
+export function withHasCookie(
   WrappedComponent: any,
   cookieName: string,
   redirectPath: string
-) => {
-  return (props: any) => {
+) {
+  return function WithHasCookie(props: any) {
     const [cookies] = useCookies();
+    const router = useRouter();
     // checks whether we are on client / browser or server.
     if (typeof window !== "undefined") {
-      const router = useRouter();
       // If there is an access token we redirect
       if (cookies[cookieName]) {
         router.replace(redirectPath);
@@ -21,4 +22,4 @@ export const withHasCookie = (
     // If we are on server, return null
     return null;
   };
-};
+}

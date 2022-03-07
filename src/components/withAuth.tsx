@@ -8,14 +8,13 @@ export const withAuth = (
   redirectPath: string,
   checkIsAdmin: boolean = false
 ) => {
-  return (props: any) => {
+  return function WithAuth(props: any) {
     const [cookies] = useCookies();
+    const router = useRouter();
+    const { data, loading } = useMeQuery();
     // checks whether we are on client / browser or server.
     if (typeof window !== "undefined") {
-      const router = useRouter();
-      const { data, loading } = useMeQuery();
       const accessToken = cookies[COOKIE_NAME.ACCESS_TOKEN];
-
       // If there is no access token we redirect to "/" page.
       if (!accessToken) {
         router.replace(redirectPath);
