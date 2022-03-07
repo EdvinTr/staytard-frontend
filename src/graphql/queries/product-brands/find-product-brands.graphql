@@ -1,4 +1,4 @@
-query GetProductBrands($input: GetProductBrandsInput!) {
+query FindProductBrands($input: FindProductBrandsInput!) {
   productBrands(input: $input) {
     id
     name

@@ -168,6 +168,11 @@ export type FindOneCustomerOrderOutput = {
   user?: Maybe<User>;
 };
 
+export type FindProductBrandsInput = {
+  sortBy?: InputMaybe<Brand_Sort_By>;
+  sortDirection?: InputMaybe<Sort_Direction>;
+};
+
 export type FindProductsBySkusInput = {
   limit: Scalars['Float'];
   offset: Scalars['Float'];
@@ -187,11 +192,6 @@ export type FindPublishedProductReviewsInput = {
   offset: Scalars['Float'];
   productId: Scalars['Float'];
   sortBy?: InputMaybe<Product_Review_Sort_By>;
-  sortDirection?: InputMaybe<Sort_Direction>;
-};
-
-export type GetProductBrandsInput = {
-  sortBy?: InputMaybe<Brand_Sort_By>;
   sortDirection?: InputMaybe<Sort_Direction>;
 };
 
@@ -490,7 +490,7 @@ export type QueryProductArgs = {
 
 
 export type QueryProductBrandsArgs = {
-  input: GetProductBrandsInput;
+  input: FindProductBrandsInput;
 };
 
 
@@ -806,12 +806,12 @@ export type MyCustomerOrdersQueryVariables = Exact<{
 
 export type MyCustomerOrdersQuery = { __typename?: 'Query', myOrders: { __typename?: 'PaginatedCustomerOrdersOutput', totalCount: number, hasMore: boolean, items: Array<{ __typename?: 'CustomerOrder', id: number, orderNumber: string, deliveryAddress: string, city: string, postalCode: string, grandTotal: number, purchaseCurrency: string, createdAt: any, orderStatus: { __typename?: 'CustomerOrderStatus', status: string } }> } };
 
-export type GetProductBrandsQueryVariables = Exact<{
-  input: GetProductBrandsInput;
+export type FindProductBrandsQueryVariables = Exact<{
+  input: FindProductBrandsInput;
 }>;
 
 
-export type GetProductBrandsQuery = { __typename?: 'Query', productBrands: Array<{ __typename?: 'ProductBrand', id: number, name: string, path: string }> };
+export type FindProductBrandsQuery = { __typename?: 'Query', productBrands: Array<{ __typename?: 'ProductBrand', id: number, name: string, path: string }> };
 
 export type FindAllProductReviewsQueryVariables = Exact<{
   input: FindAllProductReviewsInput;
@@ -1829,8 +1829,8 @@ export type MyCustomerOrdersQueryResult = Apollo.QueryResult<MyCustomerOrdersQue
 export function refetchMyCustomerOrdersQuery(variables: MyCustomerOrdersQueryVariables) {
       return { query: MyCustomerOrdersDocument, variables: variables }
     }
-export const GetProductBrandsDocument = gql`
-    query GetProductBrands($input: GetProductBrandsInput!) {
+export const FindProductBrandsDocument = gql`
+    query FindProductBrands($input: FindProductBrandsInput!) {
   productBrands(input: $input) {
     id
     name
@@ -1840,34 +1840,34 @@ export const GetProductBrandsDocument = gql`
     `;
 
 /**
- * __useGetProductBrandsQuery__
+ * __useFindProductBrandsQuery__
  *
- * To run a query within a React component, call `useGetProductBrandsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProductBrandsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindProductBrandsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductBrandsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetProductBrandsQuery({
+ * const { data, loading, error } = useFindProductBrandsQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetProductBrandsQuery(baseOptions: Apollo.QueryHookOptions<GetProductBrandsQuery, GetProductBrandsQueryVariables>) {
+export function useFindProductBrandsQuery(baseOptions: Apollo.QueryHookOptions<FindProductBrandsQuery, FindProductBrandsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProductBrandsQuery, GetProductBrandsQueryVariables>(GetProductBrandsDocument, options);
+        return Apollo.useQuery<FindProductBrandsQuery, FindProductBrandsQueryVariables>(FindProductBrandsDocument, options);
       }
-export function useGetProductBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductBrandsQuery, GetProductBrandsQueryVariables>) {
+export function useFindProductBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindProductBrandsQuery, FindProductBrandsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProductBrandsQuery, GetProductBrandsQueryVariables>(GetProductBrandsDocument, options);
+          return Apollo.useLazyQuery<FindProductBrandsQuery, FindProductBrandsQueryVariables>(FindProductBrandsDocument, options);
         }
-export type GetProductBrandsQueryHookResult = ReturnType<typeof useGetProductBrandsQuery>;
-export type GetProductBrandsLazyQueryHookResult = ReturnType<typeof useGetProductBrandsLazyQuery>;
-export type GetProductBrandsQueryResult = Apollo.QueryResult<GetProductBrandsQuery, GetProductBrandsQueryVariables>;
-export function refetchGetProductBrandsQuery(variables: GetProductBrandsQueryVariables) {
-      return { query: GetProductBrandsDocument, variables: variables }
+export type FindProductBrandsQueryHookResult = ReturnType<typeof useFindProductBrandsQuery>;
+export type FindProductBrandsLazyQueryHookResult = ReturnType<typeof useFindProductBrandsLazyQuery>;
+export type FindProductBrandsQueryResult = Apollo.QueryResult<FindProductBrandsQuery, FindProductBrandsQueryVariables>;
+export function refetchFindProductBrandsQuery(variables: FindProductBrandsQueryVariables) {
+      return { query: FindProductBrandsDocument, variables: variables }
     }
 export const FindAllProductReviewsDocument = gql`
     query FindAllProductReviews($input: FindAllProductReviewsInput!) {

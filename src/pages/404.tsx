@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,7 +7,7 @@ import { APP_PAGE_ROUTE } from "../constants";
 const NotFoundPage: NextPage = () => {
   const router = useRouter();
   return (
-    <FadeInContainer className=" text-white">
+    <FadeInContainer className="text-white">
       <section className="relative h-[90vh] w-[90wh] ">
         <div className="absolute z-10 h-full w-full bg-black bg-opacity-20"></div>
         <Image
@@ -54,6 +54,12 @@ const NotFoundPage: NextPage = () => {
       </section>
     </FadeInContainer>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default NotFoundPage;

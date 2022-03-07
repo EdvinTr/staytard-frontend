@@ -10,7 +10,7 @@ import {
   Sort_Direction,
   useBasicCategoriesQuery,
   useCreateProductMutation,
-  useGetProductBrandsQuery,
+  useFindProductBrandsQuery,
 } from "../../../../../lib/graphql";
 import { createProductValidationSchema } from "../../../../../utils/validation/productValidationSchema";
 import { BaseButton } from "../../../../global/BaseButton";
@@ -44,7 +44,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
   onClose,
   show,
 }) => {
-  const { data: brandData } = useGetProductBrandsQuery({
+  const { data: brandData } = useFindProductBrandsQuery({
     variables: {
       input: {
         sortBy: Brand_Sort_By.Name,

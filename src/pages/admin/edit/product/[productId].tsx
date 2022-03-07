@@ -1,12 +1,12 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { EditPageWrapper } from "../../../../components/pages/admin/components/EditPageWrapper";
 import { EditProductView } from "../../../../components/pages/admin/products/edit/EditProductView";
-import { APP_NAME } from "../../../../constants";
+import { withAuth } from "../../../../components/withAuth";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../../../constants";
 import { useFindOneProductQuery } from "../../../../lib/graphql";
-import { isAdminSsrAuthGuard } from "../../../../utils/guards/isAdminSsrAuthGuard";
 
 const EditProductPage: NextPage = () => {
   const router = useRouter();
@@ -31,8 +31,4 @@ const EditProductPage: NextPage = () => {
     </EditPageWrapper>
   );
 };
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return isAdminSsrAuthGuard(ctx);
-};
-
-export default EditProductPage;
+export default withAuth(EditProductPage, APP_PAGE_ROUTE.NOT_FOUND, true);

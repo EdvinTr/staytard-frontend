@@ -1,5 +1,5 @@
 import { useApolloClient } from "@apollo/client";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
@@ -8,6 +8,7 @@ import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
+import { withHasCookie } from "../components/withHasCookie";
 import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
 import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 
@@ -70,19 +71,8 @@ const LoginPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const accessToken = ctx.req.cookies[COOKIE_NAME.ACCESS_TOKEN];
-  if (accessToken) {
-    return {
-      props: {},
-      redirect: {
-        destination: APP_PAGE_ROUTE.INDEX,
-      },
-    };
-  }
-  return {
-    props: {},
-  };
-};
-
-export default LoginPage;
+export default withHasCookie(
+  LoginPage,
+  COOKIE_NAME.ACCESS_TOKEN,
+  APP_PAGE_ROUTE.INDEX
+);

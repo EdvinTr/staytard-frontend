@@ -1,12 +1,12 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { EditPageWrapper } from "../../../../components/pages/admin/components/EditPageWrapper";
 import { EditUserView } from "../../../../components/pages/admin/users/edit/EditUserView";
-import { APP_NAME } from "../../../../constants";
+import { withAuth } from "../../../../components/withAuth";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../../../constants";
 import { useFindOneUserQuery, User } from "../../../../lib/graphql";
-import { isAdminSsrAuthGuard } from "../../../../utils/guards/isAdminSsrAuthGuard";
 
 const EditUserPage: NextPage = () => {
   const router = useRouter();
@@ -17,6 +17,7 @@ const EditUserPage: NextPage = () => {
       id: userId,
     },
   });
+
   return (
     <EditPageWrapper
       hasData={!!data && !!data.user}
@@ -33,8 +34,4 @@ const EditUserPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return isAdminSsrAuthGuard(ctx);
-};
-
-export default EditUserPage;
+export default withAuth(EditUserPage, APP_PAGE_ROUTE.NOT_FOUND, true);

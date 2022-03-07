@@ -17,6 +17,7 @@ export enum APP_PAGE_ROUTE {
   ORDER_SUCCESS = "/order/success",
   STRIPE_ORDER_SUCCESS = "/order/stripe/success",
   BRAND = "/brand",
+  NOT_FOUND = "/404",
 }
 
 export enum ADMIN_SUB_PAGE_ROUTE {

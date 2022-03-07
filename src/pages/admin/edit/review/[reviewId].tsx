@@ -1,12 +1,12 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { EditPageWrapper } from "../../../../components/pages/admin/components/EditPageWrapper";
 import { EditProductReview } from "../../../../components/pages/admin/reviews/edit/EditProductReview";
-import { APP_NAME } from "../../../../constants";
+import { withAuth } from "../../../../components/withAuth";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../../../constants";
 import { useFindOneProductReviewQuery } from "../../../../lib/graphql";
-import { isAdminSsrAuthGuard } from "../../../../utils/guards/isAdminSsrAuthGuard";
 
 const ProductReviewPage: NextPage = () => {
   const router = useRouter();
@@ -32,8 +32,5 @@ const ProductReviewPage: NextPage = () => {
     </EditPageWrapper>
   );
 };
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return isAdminSsrAuthGuard(ctx);
-};
 
-export default ProductReviewPage;
+export default withAuth(ProductReviewPage, APP_PAGE_ROUTE.NOT_FOUND, true);

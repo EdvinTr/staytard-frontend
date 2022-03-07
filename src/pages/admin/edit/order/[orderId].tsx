@@ -1,12 +1,12 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { EditPageWrapper } from "../../../../components/pages/admin/components/EditPageWrapper";
 import { EditCustomerOrder } from "../../../../components/pages/admin/orders/EditCustomerOrder";
-import { APP_NAME } from "../../../../constants";
+import { withAuth } from "../../../../components/withAuth";
+import { APP_NAME, APP_PAGE_ROUTE } from "../../../../constants";
 import { useFindOneCustomerOrderQuery } from "../../../../lib/graphql";
-import { isAdminSsrAuthGuard } from "../../../../utils/guards/isAdminSsrAuthGuard";
 const EditOrderPage: NextPage = () => {
   const router = useRouter();
   const orderId = router.query.orderId as string;
@@ -16,7 +16,6 @@ const EditOrderPage: NextPage = () => {
       id: +orderId,
     },
   });
-
   return (
     <EditPageWrapper
       hasData={!!data && !!data.oneCustomerOrder}
@@ -33,8 +32,4 @@ const EditOrderPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return isAdminSsrAuthGuard(ctx);
-};
-
-export default EditOrderPage;
+export default withAuth(EditOrderPage, APP_PAGE_ROUTE.NOT_FOUND, true);

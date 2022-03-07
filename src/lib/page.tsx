@@ -190,11 +190,11 @@ export const ssrMyCustomerOrders = {
       
       usePage: useMyCustomerOrders,
     }
-export async function getServerPageGetProductBrands
-    (options: Omit<Apollo.QueryOptions<Types.GetProductBrandsQueryVariables>, 'query'>, ctx?: any ){
+export async function getServerPageFindProductBrands
+    (options: Omit<Apollo.QueryOptions<Types.FindProductBrandsQueryVariables>, 'query'>, ctx?: any ){
         const apolloClient = getApolloClient(ctx);
         
-        const data = await apolloClient.query<Types.GetProductBrandsQuery>({ ...options, query: Operations.GetProductBrandsDocument });
+        const data = await apolloClient.query<Types.FindProductBrandsQuery>({ ...options, query: Operations.FindProductBrandsDocument });
         
         const apolloState = apolloClient.cache.extract();
 
@@ -206,17 +206,17 @@ export async function getServerPageGetProductBrands
             },
         };
       }
-export const useGetProductBrands = (
-  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.GetProductBrandsQuery, Types.GetProductBrandsQueryVariables>) => {
+export const useFindProductBrands = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.FindProductBrandsQuery, Types.FindProductBrandsQueryVariables>) => {
   const router = useRouter();
   const options = optionsFunc ? optionsFunc(router) : {};
-  return useQuery(Operations.GetProductBrandsDocument, options);
+  return useQuery(Operations.FindProductBrandsDocument, options);
 };
-export type PageGetProductBrandsComp = React.FC<{data?: Types.GetProductBrandsQuery, error?: Apollo.ApolloError}>;
-export const ssrGetProductBrands = {
-      getServerPage: getServerPageGetProductBrands,
+export type PageFindProductBrandsComp = React.FC<{data?: Types.FindProductBrandsQuery, error?: Apollo.ApolloError}>;
+export const ssrFindProductBrands = {
+      getServerPage: getServerPageFindProductBrands,
       
-      usePage: useGetProductBrands,
+      usePage: useFindProductBrands,
     }
 export async function getServerPageFindAllProductReviews
     (options: Omit<Apollo.QueryOptions<Types.FindAllProductReviewsQueryVariables>, 'query'>, ctx?: any ){
