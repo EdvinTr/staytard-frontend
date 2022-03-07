@@ -74,7 +74,7 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
         {({ open }) => (
           <>
             <Popover.Button className=" ">
-              <p className="relative flex">
+              <div className="relative flex items-center">
                 {totalItems} hits. Sort on
                 <span className="pl-1 font-bold">
                   {
@@ -88,7 +88,7 @@ export const SortProductsPopover: React.FC<SortProductsPopoverProps> = ({
                 ) : (
                   <ChevronDownIcon className="w-6" />
                 )}
-              </p>
+              </div>
             </Popover.Button>
             <Transition
               as={Fragment}

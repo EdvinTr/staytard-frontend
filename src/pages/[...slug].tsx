@@ -55,7 +55,7 @@ const SlugPage: NextPage<SlugPageProps> = ({
                       {/* navigate to previous breadcrumb link */}
                       <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
                         <a className="inline-block">
-                          <h1 className="flex text-2xl font-semibold md:text-3xl">
+                          <h1 className="flex items-center text-2xl font-semibold md:text-3xl">
                             <ArrowLeftIcon className="text-app-dark w-6" />
                             <span className="pl-4">{categoryData?.name}</span>
                           </h1>
