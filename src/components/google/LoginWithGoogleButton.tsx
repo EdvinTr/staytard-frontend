@@ -35,7 +35,7 @@ export const LoginWithGoogleButton = ({
           throw new Error();
         }
         await apollo.resetStore();
-        router.push(APP_PAGE_ROUTE.INDEX);
+        await router.push(APP_PAGE_ROUTE.INDEX);
       } catch (err) {
         setErrorMessage(
           "An error occurred while logging in with Google. Try again later."
@@ -51,7 +51,7 @@ export const LoginWithGoogleButton = ({
         buttonText="Login"
         render={(renderProps) => (
           <button
-            className={`w-full relative border ${props.className} py-4 text-sm font-semibold tracking-wide bg-blue-700 hover:bg-blue-600 text-white transition-all duration-300 ease-out`}
+            className={`relative w-full border ${props.className} bg-blue-700 py-4 text-sm font-semibold tracking-wide text-white transition-all duration-300 ease-out hover:bg-blue-600`}
             onClick={renderProps.onClick}
             disabled={renderProps.disabled}
           >

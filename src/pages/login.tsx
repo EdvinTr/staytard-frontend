@@ -22,7 +22,6 @@ const LoginPage: NextPage = () => {
     password,
   }: LoginUserDto): Promise<void> => {
     try {
-      await apolloClient.resetStore();
       const { data } = await loginUser({
         variables: {
           input: {
@@ -34,7 +33,8 @@ const LoginPage: NextPage = () => {
       if (!data || !data.login) {
         throw new Error();
       }
-      router.push(APP_PAGE_ROUTE.INDEX);
+      await apolloClient.resetStore();
+      await router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
 
