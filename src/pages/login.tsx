@@ -9,7 +9,7 @@ import { MyMetaTags } from "../components/global/MyMetaTags";
 import { LoginWithGoogleButton } from "../components/google/LoginWithGoogleButton";
 import { LoginForm } from "../components/login-form/LoginForm";
 import { withIsLoggedIn } from "../components/withIsLoggedIn";
-import { APP_NAME, APP_PAGE_ROUTE } from "../constants";
+import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../constants";
 import { LoginUserDto, useLoginUserMutation } from "../lib/graphql";
 
 const LoginPage: NextPage = () => {
@@ -33,8 +33,9 @@ const LoginPage: NextPage = () => {
       if (!data || !data.login) {
         throw new Error();
       }
+      localStorage.setItem(COOKIE_NAME.ACCESS_TOKEN, data.login.accessToken);
       await apolloClient.resetStore();
-      router.push(APP_PAGE_ROUTE.INDEX);
+      await router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
 

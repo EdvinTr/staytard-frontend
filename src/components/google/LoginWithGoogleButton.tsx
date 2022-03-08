@@ -7,7 +7,7 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { APP_PAGE_ROUTE } from "../../constants";
+import { APP_PAGE_ROUTE, COOKIE_NAME } from "../../constants";
 import { useAuthenticateWithGoogleMutation } from "../../lib/graphql";
 interface LoginWithGoogleButtonProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -34,8 +34,12 @@ export const LoginWithGoogleButton = ({
         if (!response || !response.data) {
           throw new Error();
         }
+        localStorage.setItem(
+          COOKIE_NAME.ACCESS_TOKEN,
+          response.data.authenticateWithGoogle.accessToken
+        );
         await apollo.resetStore();
-        router.push(APP_PAGE_ROUTE.INDEX);
+        await router.push(APP_PAGE_ROUTE.INDEX);
       } catch (err) {
         setErrorMessage(
           "An error occurred while logging in with Google. Try again later."
