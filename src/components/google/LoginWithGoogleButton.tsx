@@ -34,8 +34,8 @@ export const LoginWithGoogleButton = ({
         if (!response || !response.data) {
           throw new Error();
         }
-        await apollo.resetStore();
-        await router.push(APP_PAGE_ROUTE.INDEX);
+        // await apollo.resetStore();
+        router.push(APP_PAGE_ROUTE.INDEX);
       } catch (err) {
         setErrorMessage(
           "An error occurred while logging in with Google. Try again later."
