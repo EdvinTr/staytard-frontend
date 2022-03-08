@@ -115,10 +115,9 @@ export const MobileNavbar = () => {
                       className="text-app-dark flex w-full items-center justify-between text-base"
                       onClick={async () => {
                         try {
-                          await client.resetStore();
                           const response = await logoutUser();
                           if (response.data) {
-                            closeMenu();
+                            await client.resetStore();
                             localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
                             window.location.reload();
                           }
