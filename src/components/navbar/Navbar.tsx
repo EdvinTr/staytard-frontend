@@ -7,6 +7,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useScrollDirection } from "react-use-scroll-direction";
 import { useRecoilState } from "recoil";
+import { useEventListener } from "usehooks-ts";
 import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import {
@@ -35,6 +36,7 @@ export const Navbar = () => {
   const [activeScrollDirection, setActiveScrollDirection] = useState<
     string | null
   >(null);
+  const [currentScrollY, setCurrentScrollY] = useState(0);
 
   const router = useRouter();
   const [_, setIsMobileMenuOpen] = useRecoilState(mobileMenuState);
@@ -45,6 +47,9 @@ export const Navbar = () => {
   const { totalItems: totalCartItems } = useContext(CartContext);
   const currentWindowWidth = useWindowWidth();
 
+  useEventListener("scroll", () => {
+    setCurrentScrollY(window.scrollY);
+  });
   useEffect(() => {
     if (scrollDirection) {
       setActiveScrollDirection(scrollDirection);
@@ -56,7 +61,9 @@ export const Navbar = () => {
         className={` ${
           activeScrollDirection === "UP" ? "visible opacity-100" : ""
         } ${
-          activeScrollDirection === "DOWN" ? "invisible opacity-0" : ""
+          activeScrollDirection === "DOWN" && currentScrollY > 100
+            ? "invisible opacity-0"
+            : ""
         } sticky top-0 z-50 bg-white transition-all duration-200 ease-in-out`}
       >
         <div className="text-sm">
