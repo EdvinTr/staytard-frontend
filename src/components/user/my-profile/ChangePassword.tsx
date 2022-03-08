@@ -126,7 +126,7 @@ export const ChangePassword = () => {
               {toggleForm && (
                 <div className="mt-4">
                   <div className="border-b border-black border-opacity-10">
-                    <div className="md:flex md:space-x-4">
+                    <div className="space-y-4 md:flex md:space-y-0 md:space-x-4">
                       {hasPassword?.hasPassword && (
                         <div className="md:w-1/3">
                           <CustomInputField
