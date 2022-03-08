@@ -9,7 +9,7 @@ import Link from "next/link";
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import { useRecoilState } from "recoil";
-import { APP_PAGE_ROUTE } from "../../../constants";
+import { APP_PAGE_ROUTE, COOKIE_NAME } from "../../../constants";
 import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
 import {
   useGetCategoriesQuery,
@@ -119,6 +119,7 @@ export const MobileNavbar = () => {
                           const response = await logoutUser();
                           if (response.data) {
                             closeMenu();
+                            localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
                             window.location.reload();
                           }
                         } catch {

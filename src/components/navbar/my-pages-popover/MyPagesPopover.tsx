@@ -3,7 +3,7 @@ import { Popover, Transition } from "@headlessui/react";
 import { LockOpenIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { Fragment } from "react";
-import { APP_PAGE_ROUTE } from "../../../constants";
+import { APP_PAGE_ROUTE, COOKIE_NAME } from "../../../constants";
 import { MeQuery, useLogoutMutation } from "../../../lib/graphql";
 import { LogoutIcon, MyUserIcon } from "../../global/icons/Icons";
 import { LoadingSpinner } from "../../global/LoadingSpinner";
@@ -80,6 +80,7 @@ export const MyPagesPopover = ({
                           await apollo.resetStore();
                           const response = await logoutUser();
                           if (response.data) {
+                            localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
                             window.location.reload();
                           }
                         } catch {
