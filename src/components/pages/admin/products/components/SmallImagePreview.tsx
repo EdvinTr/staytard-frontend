@@ -6,7 +6,7 @@ interface ImagePreviewsProps {
 
 export const ImagePreviews = ({ imageUrls }: ImagePreviewsProps) => {
   return (
-    <div className="flex items-center space-x-4">
+    <div className="no-scrollbar flex items-center space-x-4 overflow-x-auto">
       {imageUrls &&
         imageUrls.map((url, index) => {
           return (
@@ -15,7 +15,7 @@ export const ImagePreviews = ({ imageUrls }: ImagePreviewsProps) => {
               <img
                 key={index}
                 src={url.replace("{size}", "100")}
-                className="mt-4 h-16 w-12 object-cover"
+                className="mt-4 h-16 w-12 flex-shrink-0 object-cover"
                 alt={`Product image ${index + 1}`}
               />
             )

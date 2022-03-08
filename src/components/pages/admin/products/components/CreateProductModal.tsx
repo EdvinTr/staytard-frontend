@@ -273,13 +273,13 @@ export const AddRemoveButton: React.FC<AddRemoveButtonProps> = ({
 }) => {
   if (variant === "remove") {
     return (
-      <button {...rest} className="h-8 w-8 bg-red-600 text-white">
+      <button {...rest} className="h-6 w-6 bg-red-600 text-white sm:h-8 sm:w-8">
         {children}
       </button>
     );
   }
   return (
-    <button {...rest} className="h-8 w-8 bg-green-600 text-white">
+    <button {...rest} className="h-6 w-6 bg-green-600 text-white sm:h-8 sm:w-8">
       {children}
     </button>
   );
