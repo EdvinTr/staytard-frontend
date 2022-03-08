@@ -73,7 +73,7 @@ export const cityValidation = Yup.string()
 
 export const updateUserValidationSchema = Yup.object().shape({
   firstName: firstNameValidation.required("Required"),
-  lastNameValidation: lastNameValidation.required("Required"),
+  lastName: lastNameValidation.required("Required"),
   email: emailValidation.required("Required"),
   mobilePhoneNumber: mobilePhoneNumberValidation.required("Required"),
   street: streetAddressValidation.required("Required"),

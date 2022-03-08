@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
+import { Footer } from "../components/footer/Footer";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
@@ -68,6 +69,7 @@ const LoginPage: NextPage = () => {
           </div>
         </FadeInContainer>
       </div>
+      <Footer />
     </Fragment>
   );
 };

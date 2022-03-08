@@ -13,7 +13,7 @@ import { FadeInContainer } from "../../components/global/FadeInContainer";
 import { MyContainer } from "../../components/global/MyContainer";
 import { RampingCounter } from "../../components/global/RampingCounter";
 import { RegisterForm } from "../../components/register-form/RegisterForm";
-import { APP_NAME, APP_PAGE_ROUTE } from "../../constants";
+import { APP_NAME, APP_PAGE_ROUTE, COOKIE_NAME } from "../../constants";
 import CartContext from "../../contexts/CartContext";
 import { useMeQuery, useRegisterUserMutation } from "../../lib/graphql";
 
@@ -86,6 +86,10 @@ const CheckoutPage: NextPage = () => {
                       if (!data || !data.registerUser) {
                         throw new Error();
                       }
+                      localStorage.setItem(
+                        COOKIE_NAME.ACCESS_TOKEN,
+                        data.registerUser.accessToken
+                      );
                       await client.resetStore();
                     } catch {}
                   }}

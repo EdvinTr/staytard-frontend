@@ -72,6 +72,7 @@ export const ProductReviewsDisplay = ({
     );
   };
   const handleOnReviewCreateSuccess = () => {
+    console.log("I show toast");
     showSuccessToast();
   };
   const reviewModal = (
@@ -102,6 +103,7 @@ export const ProductReviewsDisplay = ({
           >
             Write a review
           </button>
+          <MyToastContainer windowWidth={currentWindowWidth} />
         </MyContainer>
       </ReviewSectionContainer>
     );
@@ -175,17 +177,21 @@ export const ProductReviewsDisplay = ({
             </LoadMoreButton>
           )}
         </div>
-        <div className="z-50">
-          <ToastContainer
-            position={
-              currentWindowWidth <= 768 ? "bottom-center" : "bottom-left"
-            }
-          />
-        </div>
+        <MyToastContainer windowWidth={currentWindowWidth} />
       </MyContainer>
     </ReviewSectionContainer>
   );
 };
+const MyToastContainer = ({ windowWidth }: { windowWidth: number }) => {
+  return (
+    <div className="z-50">
+      <ToastContainer
+        position={windowWidth <= 768 ? "bottom-center" : "bottom-left"}
+      />
+    </div>
+  );
+};
+
 type Review =
   PublishedProductReviewsQuery["publishedProductReviews"]["items"][0];
 interface ProductReviewCardProps {

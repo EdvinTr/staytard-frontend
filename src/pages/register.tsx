@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
+import { Footer } from "../components/footer/Footer";
 import { AppHeader } from "../components/global/AppHeader";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyMetaTags } from "../components/global/MyMetaTags";
@@ -54,6 +55,7 @@ const RegisterPage: NextPage = () => {
           </div>
         </div>
       </FadeInContainer>
+      <Footer />
     </Fragment>
   );
 };

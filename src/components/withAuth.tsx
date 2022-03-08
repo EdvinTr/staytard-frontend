@@ -1,6 +1,7 @@
 // HOC/withAuth.jsx
 import { useRouter } from "next/router";
 import { useMeQuery } from "../lib/graphql";
+import { CenteredBeatLoader } from "./global/CenteredBeatLoader";
 export const withAuth = (
   WrappedComponent: any,
   redirectPath: string,
@@ -12,7 +13,7 @@ export const withAuth = (
     // checks whether we are on client / browser or server.
     if (typeof window !== "undefined") {
       if (loading) {
-        return null;
+        return <CenteredBeatLoader />;
       }
       // If there is an access token we check if it is valid.
       if ((!data || !data.me) && !loading) {

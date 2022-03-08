@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useMeQuery } from "../lib/graphql";
+import { CenteredBeatLoader } from "./global/CenteredBeatLoader";
 
 export const withIsLoggedIn = (WrappedComponent: any, redirectPath: string) => {
   return function WithIsLoggedIn(props: any) {
@@ -8,7 +9,7 @@ export const withIsLoggedIn = (WrappedComponent: any, redirectPath: string) => {
     // checks whether we are on client / browser or server.
     if (typeof window !== "undefined") {
       if (loading) {
-        return null;
+        return <CenteredBeatLoader />;
       }
       // If there is an access token we check if it is valid.
       if (data && data.me && !loading) {

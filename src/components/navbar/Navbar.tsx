@@ -41,8 +41,11 @@ export const Navbar = () => {
   const router = useRouter();
   const [_, setIsMobileMenuOpen] = useRecoilState(mobileMenuState);
   const { scrollDirection } = useScrollDirection();
-  const { data: categoriesData, loading: categoriesLoading } =
-    useGetCategoriesQuery();
+  const {
+    data: categoriesData,
+    loading: categoriesLoading,
+    previousData: previousCategoryData,
+  } = useGetCategoriesQuery();
   const { data: userData } = useMeQuery();
   const { totalItems: totalCartItems } = useContext(CartContext);
   const currentWindowWidth = useWindowWidth();
@@ -153,7 +156,7 @@ export const Navbar = () => {
             </MyContainer>
             {currentWindowWidth >= 1024 ? (
               <div>
-                {categoriesLoading && (
+                {categoriesLoading && !previousCategoryData && (
                   <div className="flex justify-center space-x-7 pt-8">
                     <Skeleton inline width={60} />
                     <Skeleton inline width={60} />
@@ -163,7 +166,10 @@ export const Navbar = () => {
                 )}
                 {/* hover menu stuff */}
                 {categoriesData && (
-                  <FadeInContainer className="flex justify-center pt-6">
+                  <FadeInContainer
+                    className="flex justify-center pt-6"
+                    duration={previousCategoryData ? 0 : 0.7}
+                  >
                     {categoriesData?.categories.map((category) => {
                       return (
                         <Link key={category.id} href={category.path}>
