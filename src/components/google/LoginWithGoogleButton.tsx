@@ -34,7 +34,7 @@ export const LoginWithGoogleButton = ({
         if (!response || !response.data) {
           throw new Error();
         }
-        // await apollo.resetStore();
+        await apollo.resetStore();
         router.push(APP_PAGE_ROUTE.INDEX);
       } catch (err) {
         setErrorMessage(

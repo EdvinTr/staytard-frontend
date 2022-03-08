@@ -33,7 +33,7 @@ const LoginPage: NextPage = () => {
       if (!data || !data.login) {
         throw new Error();
       }
-      // await apolloClient.resetStore();
+      await apolloClient.resetStore();
       router.push(APP_PAGE_ROUTE.INDEX);
     } catch {}
   };
