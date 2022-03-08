@@ -37,7 +37,7 @@ const authLink: ApolloLink = setContext(
     return {
       headers: {
         ...headers,
-        Cookie: `${COOKIE_NAME.ACCESS_TOKEN}=${accessToken}`,
+        authorization: accessToken ? `Bearer ${accessToken}` : "",
       },
     };
   }
@@ -46,17 +46,17 @@ const authLink: ApolloLink = setContext(
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function createApolloClient(headers: IncomingHttpHeaders | null = null) {
-  const enhancedFetch = async (url: RequestInfo, init: RequestInit) => {
+  /*  const enhancedFetch = async (url: RequestInfo, init: RequestInit) => {
     const response = await fetch(url, {
       ...init,
       headers: {
         ...init.headers,
         "Access-Control-Allow-Origin": "*",
-        Cookie: headers?.cookie ?? "", // pass cookies
+        // Cookie: headers?.cookie ?? "", // pass cookies
       },
     });
     return response;
-  };
+  }; */
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: authLink.concat(
@@ -66,7 +66,7 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
         fetchOptions: {
           mode: "cors",
         },
-        fetch: enhancedFetch,
+        /*   fetch: enhancedFetch, */
       })
     ),
     cache: new InMemoryCache({
