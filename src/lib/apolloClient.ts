@@ -17,29 +17,32 @@ import { COOKIE_NAME } from "../constants";
 const authLink: ApolloLink = setContext(
   (_: GraphQLRequest, { headers }: Request) => {
     // get the authentication token from cookie if it exists
-    const accessToken = localStorage.getItem(COOKIE_NAME.ACCESS_TOKEN);
+    if (typeof window !== "undefined") {
+      const accessToken = localStorage.getItem(COOKIE_NAME.ACCESS_TOKEN);
 
-    // check if jwt has expired
-    if (accessToken) {
-      const jwt: JwtPayload = jwtDecode(accessToken);
-      const tokenExpiration = jwt.exp;
-      const currentTime = new Date().getTime() / 1000;
+      // check if jwt has expired
+      if (accessToken) {
+        const jwt: JwtPayload = jwtDecode(accessToken);
+        const tokenExpiration = jwt.exp;
+        const currentTime = new Date().getTime() / 1000;
 
-      const difference = currentTime - (tokenExpiration ? tokenExpiration : 0);
-      // log the user out since token expired
-      if (difference > 0) {
-        localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
-        Cookies.remove(COOKIE_NAME.ACCESS_TOKEN);
-        window.location.reload();
+        const difference =
+          currentTime - (tokenExpiration ? tokenExpiration : 0);
+        // log the user out since token expired
+        if (difference > 0) {
+          localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
+          Cookies.remove(COOKIE_NAME.ACCESS_TOKEN);
+          window.location.reload();
+        }
       }
+      // return the headers to the context so httpLink can read them
+      return {
+        headers: {
+          ...headers,
+          authorization: accessToken ? `Bearer ${accessToken}` : "",
+        },
+      };
     }
-    // return the headers to the context so httpLink can read them
-    return {
-      headers: {
-        ...headers,
-        authorization: accessToken ? `Bearer ${accessToken}` : "",
-      },
-    };
   }
 );
 

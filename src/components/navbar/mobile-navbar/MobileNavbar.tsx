@@ -224,6 +224,18 @@ export const MobileNavbar = () => {
                             initial="hidden"
                             animate="visible"
                           >
+                            <motion.li
+                              onClick={closeMenu()}
+                              variants={variantItem}
+                              key={idx}
+                              className="text-base"
+                            >
+                              <Link href={category.path}>
+                                <a data-cy="mobile-menu-disclosure-link">
+                                  All {category.name}
+                                </a>
+                              </Link>
+                            </motion.li>
                             {category.children?.map((child, idx) => {
                               return (
                                 <motion.li
