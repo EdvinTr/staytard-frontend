@@ -6,6 +6,7 @@ import CSS from "csstype";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import { useRecoilState } from "recoil";
@@ -50,6 +51,7 @@ const variantItem = {
 };
 export const MobileNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useRecoilState(mobileMenuState);
+  const closeMenu = () => () => setIsMenuOpen(false);
 
   const currentWindowWidth = useSsrCompatible(useWindowWidth(), 0);
   const { data: userData } = useMeQuery();
@@ -57,8 +59,7 @@ export const MobileNavbar = () => {
     useGetCategoriesQuery();
   const [logoutUser, { loading: isLogoutUserLoading, client }] =
     useLogoutMutation();
-
-  const closeMenu = () => () => setIsMenuOpen(false);
+  const router = useRouter();
   return (
     <Menu
       styles={{ ...menuStyles }}
@@ -119,7 +120,7 @@ export const MobileNavbar = () => {
                           if (response.data) {
                             localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
                             await client.resetStore();
-                            window.location.reload();
+                            router.reload();
                           }
                         } catch {
                           // TODO: handle logout error

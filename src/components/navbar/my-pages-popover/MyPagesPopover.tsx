@@ -2,6 +2,7 @@ import { useApolloClient } from "@apollo/client";
 import { Popover, Transition } from "@headlessui/react";
 import { LockOpenIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { APP_PAGE_ROUTE, COOKIE_NAME } from "../../../constants";
 import { MeQuery, useLogoutMutation } from "../../../lib/graphql";
@@ -19,6 +20,7 @@ export const MyPagesPopover = ({
   const [logoutUser, { data, error, loading: isLogoutUserLoading }] =
     useLogoutMutation();
   const apollo = useApolloClient();
+  const router = useRouter();
   return (
     <div className={`px-4 ${props.className}`} {...props}>
       <Popover className="relative ">
@@ -81,7 +83,7 @@ export const MyPagesPopover = ({
                           if (response.data) {
                             localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
                             await apollo.resetStore();
-                            window.location.reload();
+                            router.reload();
                           }
                         } catch {
                           // TODO: handle logout error
