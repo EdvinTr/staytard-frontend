@@ -79,8 +79,8 @@ export const MyPagesPopover = ({
                         try {
                           const response = await logoutUser();
                           if (response.data) {
-                            await apollo.resetStore();
                             localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
+                            await apollo.resetStore();
                             window.location.reload();
                           }
                         } catch {

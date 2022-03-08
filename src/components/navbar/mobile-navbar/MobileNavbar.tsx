@@ -117,8 +117,8 @@ export const MobileNavbar = () => {
                         try {
                           const response = await logoutUser();
                           if (response.data) {
-                            await client.resetStore();
                             localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
+                            await client.resetStore();
                             window.location.reload();
                           }
                         } catch {
