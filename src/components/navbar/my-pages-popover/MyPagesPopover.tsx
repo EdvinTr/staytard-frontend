@@ -83,10 +83,11 @@ export const MyPagesPopover = ({
                           if (response.data) {
                             localStorage.removeItem(COOKIE_NAME.ACCESS_TOKEN);
                             await apollo.resetStore();
-                            router.reload();
                           }
                         } catch {
                           // TODO: handle logout error
+                        } finally {
+                          router.reload();
                         }
                       }}
                     >
