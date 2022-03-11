@@ -63,21 +63,23 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
       <SubPageHeader title="Orders" />
       <PaddingContainer className="text-sm">
         {error && <ForbiddenResourceErrorCard error={error} />}
-        <div className="relative md:max-w-sm">
-          <BaseInput
-            type="text"
-            aria-label="Search"
-            className="mb-3 border-opacity-[0.1]"
-            placeholder="Search by any order parameter"
-            label="Search"
-            name="search"
-            autoComplete="off"
-            hasLeftIcon
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <SearchIcon className="absolute top-3 left-3 w-6 text-stone-700" />
-        </div>
+        {!error && (
+          <div className="relative md:max-w-sm">
+            <BaseInput
+              type="text"
+              aria-label="Search"
+              className="mb-3 border-opacity-[0.1]"
+              placeholder="Search by any order parameter"
+              label="Search"
+              name="search"
+              autoComplete="off"
+              hasLeftIcon
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <SearchIcon className="absolute top-3 left-3 w-6 text-stone-700" />
+          </div>
+        )}
         {loading && <CenteredBeatLoader />}
         <MyGrid>
           {data?.customerOrders.items.map((order) => {
