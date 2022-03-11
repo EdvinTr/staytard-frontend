@@ -63,7 +63,7 @@ export const AdminOrdersView: React.FC<AdminOrdersViewProps> = ({}) => {
       <SubPageHeader title="Orders" />
       <PaddingContainer className="text-sm">
         {error && <ForbiddenResourceErrorCard error={error} />}
-        {!error && (
+        {!loading && !error && (
           <div className="relative md:max-w-sm">
             <BaseInput
               type="text"

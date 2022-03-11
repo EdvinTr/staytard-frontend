@@ -90,7 +90,7 @@ export const AdminUsersView: React.FC<AdminUsersViewProps> = ({}) => {
             </h3>
           </BasicCard>
         )}
-        {!error && (
+        {!loading && !error && (
           <div className="relative md:max-w-sm">
             <BaseInput
               type="text"

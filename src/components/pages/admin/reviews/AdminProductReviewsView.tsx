@@ -61,7 +61,7 @@ export const AdminProductReviewsView = () => {
       <SubPageHeader title="Reviews" />
       <PaddingContainer className="text-sm">
         {error && <ForbiddenResourceErrorCard error={error} />}
-        {!error && (
+        {!loading && !error && (
           <div className="relative md:max-w-sm">
             <BaseInput
               type="text"
