@@ -46,7 +46,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
         `${APP_PAGE_ROUTE.PRODUCT}/${product.id}?color=${product.attributes[0].color.value}`
       );
     }
-  }, [queryColor, product.attributes]);
+  }, [queryColor, product.attributes, product.id]);
 
   const addToCart = () => {
     const sku = product.attributes.find((attr) => {
@@ -123,6 +123,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
                         <Image
                           width={60}
                           height={100}
+                          priority
                           objectFit="contain"
                           src={imageUrl.replace("{size}", "100")}
                           alt={`${product.brand.name} - ${product.name}`}
