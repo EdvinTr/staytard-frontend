@@ -28,7 +28,7 @@ export const ProductReviewsDisplay = ({
   product: { id: productId, name },
 }: ProductReviewsDisplayProps) => {
   useEffect(() => {
-    if (typeof localStorage !== undefined) {
+    if (typeof localStorage !== "undefined") {
       localStorage.removeItem(LOCAL_STORAGE_KEY.PRODUCT_REVIEW_FORM); // clear the form when component first mounts
     }
   }, []);
@@ -72,7 +72,6 @@ export const ProductReviewsDisplay = ({
     );
   };
   const handleOnReviewCreateSuccess = () => {
-    console.log("I show toast");
     showSuccessToast();
   };
   const reviewModal = (
@@ -155,10 +154,8 @@ export const ProductReviewsDisplay = ({
           )}
           {reviews.hasMore && (
             <LoadMoreButton
+              disabled={isLoadingMore}
               onClick={async () => {
-                if (isLoadingMore) {
-                  return; // prevent spam
-                }
                 setIsLoadingMore(true);
                 await fetchMore({
                   variables: {

@@ -14,6 +14,13 @@ export interface HoverMenuItem {
   path: string;
 }
 
+const brands = [
+  { src: "/img/les-deux-thumb.webp", name: "Les Deux" },
+  { src: "/img/polo-thumb.webp", name: "Polo" },
+  { src: "/img/levis-thumb.webp", name: `Levi's` },
+  { src: "/img/studio-total-thumb.webp", name: "Studio Total" },
+];
+
 export const HoverMenu: React.FC<HoverMenuProps> = ({
   items,
   isButtonHovered,
@@ -38,8 +45,8 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             }}
             className="absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white px-5 pt-12 opacity-0 shadow-sm hover:opacity-100  xl:px-0"
           >
-            <div className="max-h-96 border-r border-r-black border-opacity-20 pr-12">
-              <h4 className=" text-2xl font-bold">{title}</h4>
+            <div className="max-h-96 w-[9rem]  border-r border-r-black border-opacity-20 pr-12">
+              <h4 className="text-2xl font-bold">{title}</h4>
             </div>
             <ul className="relative w-[19%]  ">
               <div className="flex space-x-24">
@@ -59,17 +66,19 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             </ul>
             {/* brand images */}
             <div className="grid grid-cols-2 gap-y-4 text-center">
-              {[...Array(4)].map((_, idx) => {
+              {brands.map(({ name, src }, idx) => {
                 return (
                   <div key={idx}>
                     <Image
-                      src="https://assets.ellosgroup.com/i/ellos/2140_navimg_studio?w=420&$sc$&fmt=webp"
+                      src={src}
                       width={300}
                       height={140}
                       objectFit="contain"
-                      alt="brand"
+                      alt={name}
                     />
-                    <div className="mt-1 font-bold uppercase">Les Deux</div>
+                    <div className="mt-1 text-[0.8125rem] font-bold uppercase">
+                      {name}
+                    </div>
                   </div>
                 );
               })}
