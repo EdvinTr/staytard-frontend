@@ -11,7 +11,9 @@ import { LOCAL_STORAGE_KEY } from "../../../constants";
 import { useSsrCompatible } from "../../../hooks/useSsrCompatible";
 import {
   FindOneProductQuery,
+  Product_Review_Sort_By,
   PublishedProductReviewsQuery,
+  Sort_Direction,
 } from "../../../lib/graphql";
 import { ssrPublishedProductReviews } from "../../../lib/page";
 import { Localized } from "../../../Localized";
@@ -163,6 +165,8 @@ export const ProductReviewsDisplay = ({
                       limit: 6,
                       offset: offset + 6,
                       productId,
+                      sortBy: Product_Review_Sort_By.CreatedAt,
+                      sortDirection: Sort_Direction.Desc,
                     },
                   },
                 });
