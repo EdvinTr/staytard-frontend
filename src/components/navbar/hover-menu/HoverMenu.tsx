@@ -45,9 +45,10 @@ export const HoverMenu: React.FC<HoverMenuProps> = ({
             }}
             className="absolute z-20 flex h-[30rem] w-full justify-center space-x-12 bg-white px-5 pt-12 opacity-0 shadow-sm hover:opacity-100  xl:px-0"
           >
-            <div className="max-h-96 w-[9rem]  border-r border-r-black border-opacity-20 pr-12">
+            <div className="max-h-96 w-2/12 text-right">
               <h4 className="text-2xl font-bold">{title}</h4>
             </div>
+            <div className=" h-[90%] w-[1px] bg-black opacity-20"></div>
             <ul className="relative w-[19%]  ">
               <div className="flex space-x-24">
                 <div className="space-y-6">
