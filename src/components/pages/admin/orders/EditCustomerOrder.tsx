@@ -101,8 +101,9 @@ export const EditCustomerOrder: React.FC<EditCustomerOrderProps> = ({
                 variables: {
                   input: {
                     ...values,
-                    orderStatus:
-                      values.orderStatus.toUpperCase() as Customer_Order_Status,
+                    orderStatus: values.orderStatus
+                      .toUpperCase()
+                      .replace("-", "_") as Customer_Order_Status,
                   },
                 },
                 refetchQueries: [FindOneCustomerOrderDocument],
