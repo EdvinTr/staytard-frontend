@@ -1,4 +1,7 @@
-This is the frontend for my clone of Stayhard which I created for a school project.
+## Description
+This is the frontend for my clone of https://stayhard.se which I created for a school project.
+
+The project is built using Next.js since in the real world, most eCommerce websites have SEO as a requirement which typically involves the usage of SSG or SSR which Next provides.
 
 ## If you want to run the project
 
