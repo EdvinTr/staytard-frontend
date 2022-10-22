@@ -1,6 +1,5 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/solid";
 import { HTMLMotionProps, motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, useContext } from "react";
 import { APP_PAGE_ROUTE } from "../../../constants";
@@ -30,13 +29,12 @@ export const CartItemRow = ({
 
   return (
     <motion.div {...props} className="text-13 flex space-x-4">
-      <Image
+      <img
         src={product.images[0].imageUrl.replace("{size}", "120")}
-        width={110}
-        height={150}
-        priority
         alt={`${product.brand.name} - ${product.name}`}
-        className={`w-4 ${loading ? "opacity-60" : ""}`}
+        className={`h-[150px] w-[110px] object-contain ${
+          loading ? "opacity-60" : ""
+        }`}
       />
       <div className="w-full">
         <div className="flex items-start justify-between">

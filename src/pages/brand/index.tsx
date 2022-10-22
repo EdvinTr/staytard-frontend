@@ -1,7 +1,6 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import axios from "axios";
 import { GetStaticProps, NextPage } from "next";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useScrollDirection } from "react-use-scroll-direction";
 import useSWR, { SWRConfig } from "swr";
@@ -197,23 +196,19 @@ const BrandPage: NextPage<BrandsPageProps> = ({ fallback }) => {
                     key={idx}
                     className="relative flex flex-shrink-0 lg:block"
                   >
-                    <Image
+                    <img
                       src={brandImage.largeImgSrc}
                       alt={brandImage.name}
-                      priority
-                      quality={100}
-                      width={360}
-                      height={242}
+                      className="h-full w-full object-contain lg:h-full"
                     />
                     <div className="absolute -bottom-2 left-4">
                       <div className="bg-white p-2 ">
-                        <Image
+                        <img
                           src={brandImage.logoUrl}
                           alt={brandImage.name}
                           width={118}
                           height={30}
-                          objectFit="contain"
-                          className=""
+                          className="h-[30px] w-[118px] object-contain"
                         />
                       </div>
                     </div>

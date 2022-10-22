@@ -86,13 +86,8 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
             >
               {product.images.map(({ imageUrl }, idx) => (
                 <SwiperSlide key={idx}>
-                  <Image
-                    width={1800}
-                    height={2400}
-                    quality={100}
-                    priority
-                    objectFit="cover"
-                    className=""
+                  <img
+                    className="object-cover"
                     src={imageUrl.replace("{size}", "600")}
                     alt={`${product.brand.name} - ${product.name}`}
                   />
@@ -124,6 +119,13 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
                           width={60}
                           height={100}
                           priority
+                          objectFit="contain"
+                          src={imageUrl.replace("{size}", "100")}
+                          alt={`${product.brand.name} - ${product.name}`}
+                        />
+                        <img
+                          width={60}
+                          height={100}
                           objectFit="contain"
                           src={imageUrl.replace("{size}", "100")}
                           alt={`${product.brand.name} - ${product.name}`}
