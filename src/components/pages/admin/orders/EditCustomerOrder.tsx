@@ -1,7 +1,6 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { capitalize } from "lodash";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { toast, ToastContainer } from "react-toast";
@@ -452,14 +451,12 @@ const ProductSectionDisplay = ({
             <article key={idx} className="relative bg-gray-50">
               <div className="py-4 md:p-4 ">
                 <div className="flex space-x-4">
-                  <Image
+                  <img
                     src={item.product.images[0].imageUrl.replace(
                       "{size}",
                       "150"
                     )}
-                    objectFit="contain"
-                    width={100}
-                    height={150}
+                    className="h-[150px] w-[100px] object-contain"
                     alt={`${product.brand.name} - ${product.name}`}
                   />
                   <div>

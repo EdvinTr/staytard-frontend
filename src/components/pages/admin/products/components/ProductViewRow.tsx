@@ -1,5 +1,4 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { ADMIN_SUB_PAGE_ROUTE, APP_PAGE_ROUTE } from "../../../../../constants";
@@ -35,11 +34,9 @@ export const ProductViewRow = ({ product }: ProductViewRowProps) => {
             key={product.id}
             className="flex items-center border-t border-gray-100 py-3 transition-all duration-100 hover:bg-gray-50 lg:text-xs xl:text-sm"
           >
-            <Image
-              width={30}
-              height={50}
+            <img
               src={imageUrl}
-              objectFit="contain"
+              className="h-[50px] w-[30px] object-contain"
               alt={`${product.brand.name} - ${product.name}`}
             />
             <div className="ml-4 lg:min-w-[15rem] xl:min-w-[18rem]">
