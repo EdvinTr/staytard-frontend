@@ -31,8 +31,7 @@ export const getSortString = (sortBy?: string, sortDirection?: string) => {
   return `&sortBy=${sortBy}&sortDirection=${sortDirection}`;
 };
 
-const BASE_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/products?limit=${MAX_PRODUCT_LIMIT}`;
-
+const BASE_API_URL = `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}/products?limit=${MAX_PRODUCT_LIMIT}`;
 export const ProductCardList: React.FC<ProductCardListProps> = ({
   categoryDescription,
   initialData,
@@ -54,6 +53,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = ({
         return data;
       },
       {
+        refetchOnWindowFocus: false,
         initialData: { pages: [initialData], pageParams: [1] },
       }
     );
