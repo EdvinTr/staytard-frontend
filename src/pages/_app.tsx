@@ -1,4 +1,5 @@
 import { ApolloProvider } from "@apollo/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppContext, AppProps } from "next/app";
 import App from "next/app";
 import Head from "next/head";
@@ -43,6 +44,8 @@ const pathsWithoutFooter = [
 const appTitle = `${APP_NAME}.com | Fashion & Designer clothes for men online`;
 const appDescriptionMeta =
   "Shop menswear, shoes and accessories online. Complete with skin and hair care, home range and technical gadgets. Get style inspiration for your wardrobe and find your favorite brands.";
+
+const queryClient = new QueryClient();
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const router = useRouter();
@@ -68,62 +71,68 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <ApolloProvider client={apolloClient}>
-      <CartProvider>
-        <RecoilRoot>
-          <Head>
-            <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
-            <meta
-              name="description"
-              content={appDescriptionMeta}
-              key="description"
-            />
-            <meta name="keywords" content="" key="keywords" />
+      <QueryClientProvider client={queryClient}>
+        <CartProvider>
+          <RecoilRoot>
+            <Head>
+              <title>{`${APP_NAME}.com | Fashion & Designer clothes for men online`}</title>
+              <meta
+                name="description"
+                content={appDescriptionMeta}
+                key="description"
+              />
+              <meta name="keywords" content="" key="keywords" />
 
-            <meta property="og:title" content={appTitle} key="ogTitle" />
-            <meta
-              property="og:image"
-              content="/img/staytard-logo.png"
-              key="ogImage"
-            />
-            <meta
-              property="og:description"
-              content={appDescriptionMeta}
-              key="ogDescription"
-            />
-            <meta property="og:type" content="website" key="ogType" />
+              <meta property="og:title" content={appTitle} key="ogTitle" />
+              <meta
+                property="og:image"
+                content="/img/staytard-logo.png"
+                key="ogImage"
+              />
+              <meta
+                property="og:description"
+                content={appDescriptionMeta}
+                key="ogDescription"
+              />
+              <meta property="og:type" content="website" key="ogType" />
 
-            <meta name="twitter:title" content={appTitle} key="twitterTitle" />
-            <meta
-              name="twitter:description"
-              content={appDescriptionMeta}
-              key="twitterDescription"
-            />
-            <meta
-              name="twitter:image"
-              content="/img/staytard-logo.png"
-              key="twitterImage"
-            />
-            <meta name="twitter:card" content="summary_large_image" />
-          </Head>
-          <Fragment>
-            <MyCookieConsent />
-            {pathsWithoutMainNavbar.includes(
-              ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
-            ) ? null : (
-              <>
-                <MobileNavbar />
-                <Navbar />
-              </>
-            )}
-            <Component {...pageProps} />
-            {pathsWithoutFooter.includes(
-              ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
-            ) ? null : (
-              <Footer />
-            )}
-          </Fragment>
-        </RecoilRoot>
-      </CartProvider>
+              <meta
+                name="twitter:title"
+                content={appTitle}
+                key="twitterTitle"
+              />
+              <meta
+                name="twitter:description"
+                content={appDescriptionMeta}
+                key="twitterDescription"
+              />
+              <meta
+                name="twitter:image"
+                content="/img/staytard-logo.png"
+                key="twitterImage"
+              />
+              <meta name="twitter:card" content="summary_large_image" />
+            </Head>
+            <Fragment>
+              <MyCookieConsent />
+              {pathsWithoutMainNavbar.includes(
+                ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+              ) ? null : (
+                <>
+                  <MobileNavbar />
+                  <Navbar />
+                </>
+              )}
+              <Component {...pageProps} />
+              {pathsWithoutFooter.includes(
+                ("/" + currentPath.split("/")[1]) as APP_PAGE_ROUTE
+              ) ? null : (
+                <Footer />
+              )}
+            </Fragment>
+          </RecoilRoot>
+        </CartProvider>
+      </QueryClientProvider>
     </ApolloProvider>
   );
 }

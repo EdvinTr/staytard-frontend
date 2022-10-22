@@ -3,8 +3,7 @@ import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
-import { SWRConfig } from "swr";
+import { Fragment } from "react";
 import { Breadcrumbs } from "../components/global/Breadcrumbs";
 import { FadeInContainer } from "../components/global/FadeInContainer";
 import { MyContainer } from "../components/global/MyContainer";
@@ -22,21 +21,19 @@ import { GetProductsResponse } from "../typings/GetProductsResponse.interface";
 import { getPathFromParams } from "../utils/getPathFromParams";
 interface SlugPageProps {
   categoryData: GetOneCategoryQuery["getOneCategory"];
-  fallback: any;
+  productData: GetProductsResponse;
   metaImage?: string;
 }
 
-const fetcher = (url: string) => axios.get(url).then((r) => r.data);
-
 const SlugPage: NextPage<SlugPageProps> = ({
-  fallback,
+  productData,
   categoryData,
   metaImage,
 }) => {
   const router = useRouter();
   const breadcrumbs = useBreadcrumbs(router);
   return (
-    <SWRConfig value={{ fallback }}>
+    <>
       <MyMetaTags
         description={categoryData?.description}
         title={`${categoryData?.name} | Large assortment for men - Buy online at ${APP_NAME}.com`}
@@ -49,10 +46,8 @@ const SlugPage: NextPage<SlugPageProps> = ({
               <div className="text-xs">
                 {breadcrumbs.length >= 2 ? (
                   <Fragment>
-                    {/* breadcrumbs */}
                     <Breadcrumbs />
                     <div className="pt-8">
-                      {/* navigate to previous breadcrumb link */}
                       <Link href={breadcrumbs[breadcrumbs.length - 2].href}>
                         <a className="inline-block">
                           <h1 className="flex items-center text-2xl font-semibold md:text-3xl">
@@ -70,10 +65,8 @@ const SlugPage: NextPage<SlugPageProps> = ({
                 )}
               </div>
             </div>
-            {/* sub categories */}
             {categoryData && categoryData.children && (
               <div className="overflow-x-auto overflow-y-hidden">
-                {/* sub category list */}
                 <ul className="flex flex-shrink-0 items-start space-x-2 pt-5 pb-3 text-sm">
                   {categoryData.children.map((child, idx) => {
                     return (
@@ -95,14 +88,17 @@ const SlugPage: NextPage<SlugPageProps> = ({
           <div className="mt-6">
             <ProductCardList
               categoryDescription={categoryData?.description || ""}
+              initialData={productData}
             />
           </div>
         </MyContainer>
       </FadeInContainer>
       <ScrollTopButton />
-    </SWRConfig>
+    </>
   );
 };
+
+const fetcher = (url: string) => axios.get(url).then((r) => r.data);
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { slug, sortBy, sortDirection } = ctx.query;
@@ -127,9 +123,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         categoryData: categoryProps.data.getOneCategory,
-        fallback: {
-          [API_URL]: data,
-        },
+        productData: data,
         metaImage,
       },
     };
