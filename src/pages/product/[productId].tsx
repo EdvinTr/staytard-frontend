@@ -1,6 +1,5 @@
 import { CheckIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -115,18 +114,14 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
                             : ""
                         }`}
                       >
-                        <Image
-                          width={60}
-                          height={100}
-                          priority
-                          objectFit="contain"
-                          src={imageUrl.replace("{size}", "100")}
-                          alt={`${product.brand.name} - ${product.name}`}
-                        />
                         <img
                           width={60}
                           height={100}
-                          objectFit="contain"
+                          className={`h-[100px] w-[60px] object-contain ${
+                            queryColor === attributeColor
+                              ? "outline outline-1"
+                              : ""
+                          }`}
                           src={imageUrl.replace("{size}", "100")}
                           alt={`${product.brand.name} - ${product.name}`}
                         />
