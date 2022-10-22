@@ -1,7 +1,6 @@
 import { useWindowWidth } from "@react-hook/window-size";
 import { AnimatePresence, motion } from "framer-motion";
 import { propertyOf, sortBy } from "lodash";
-import NextImage from "next/image";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSsrCompatible } from "../../hooks/useSsrCompatible";
@@ -110,18 +109,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <Link href={`/product/${product.id}`}>
         <a>
           {activeImage && (
-            <NextImage
-              src={activeImage.imageUrl}
-              placeholder="blur"
-              priority
-              blurDataURL={product.images[0].imageUrl}
-              objectFit="contain"
-              width={400}
-              quality={90}
-              onMouseEnter={onMouseEnter}
-              height={600}
-              alt={`${product.brand.name} - ${product.name}`}
-            />
+            <>
+              <img
+                src={activeImage.imageUrl}
+                onMouseEnter={onMouseEnter}
+                alt={`${product.brand.name} - ${product.name}`}
+                className="mb-2 w-full object-contain"
+              />
+            </>
           )}
         </a>
       </Link>
@@ -141,7 +136,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 },
               }}
             >
-              <div className="flex items-center space-x-2 ">
+              <div className="mb-2 flex items-center space-x-2 ">
                 {smallWebpImages.map((image, idx) => {
                   const smallImageUrl = image.imageUrl.replace(
                     "{size}",
@@ -149,16 +144,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   );
                   return (
                     <div key={idx} className="">
-                      <NextImage
+                      <img
                         src={smallImageUrl}
-                        placeholder="blur"
-                        blurDataURL={smallImageUrl}
                         key={idx}
-                        width={34}
-                        height={51}
+                        className="h-[51px] w-[34px]"
                         alt={`${product.brand.name} - ${product.name}`}
-                        objectFit="contain"
-                        quality={65}
                         onMouseEnter={() => {
                           setActiveImage(image);
                         }}
